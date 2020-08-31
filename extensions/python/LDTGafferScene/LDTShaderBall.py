@@ -1,32 +1,15 @@
 import IECore
 
 import Gaffer
-import GafferArnold
 import GafferScene
-import imath
+import GafferArnold
+from LDTGafferScene import LDTShaderBallScene
 
-# \todo Nice geometry
 
-
-class LDTShaderBall(GafferScene.SceneNode):
+class LDTShaderBall(LDTShaderBallScene.LDTShaderBallScene):
     def __init__(self, name="LDTShaderBall"):
 
-        GafferScene.SceneNode.__init__(self, name)
-
-        # Public plugs
-
-        self["shader"] = GafferScene.ShaderPlug()
-        self["resolution"] = Gaffer.IntPlug(defaultValue=512, minValue=0)
-
-        #Gaffer.Metadata.registerValue(self["scene"], "nodule:type", "")
-        #Gaffer.Metadata.registerValue(
-        #    self["scene"], "plugValueWidget:type", "GafferUI.PresetsPlugValueWidget"
-        #)
-        #Gaffer.Metadata.registerValue(self["scene"], "preset:shaderBall", 0)
-        #Gaffer.Metadata.registerValue(self["scene"], "preset:customGeo", 1)
-
-        # Private internal network
-
+        LDTShaderBallScene.LDTShaderBallScene.__init__(self, name)
         # ShaderBall reference node
         s = Gaffer.ScriptNode()
         __shaderBallReference = s["__shaderBallReference"] = Gaffer.Reference()
@@ -34,63 +17,27 @@ class LDTShaderBall(GafferScene.SceneNode):
 
         self.addChild(__shaderBallReference)
 
-        # Camera        
-        self["__camera"] = GafferScene.Camera()
-        self["__camera"]["transform"]["translate"].setValue(imath.V3f(0, 86, 225))
-        self["__camera"]["transform"]["rotate"].setValue(imath.V3f(-16, 0, 0))
-        self["__camera"]["fieldOfView"].setValue(20.0)
-
-        # Join ShaderBall and Camera
-        self["__parent"] = GafferScene.Parent()
-        self["__parent"]["in"].setInput(self["__shaderBallReference"]["out"])
-        self["__parent"]['children']['child0'].setInput(self["__camera"]["out"])
-        self["__parent"]["parent"].setValue("/")
+        self._inPlug().setInput(self["__shaderBallReference"]["out"])
 
 
-        self["__shaderAssignment"] = GafferScene.ShaderAssignment()
-        self["__shaderAssignment"]["in"].setInput(self["__parent"]["out"])
-        self["__shaderAssignment"]["shader"].setInput(self["shader"])
-        self["__shaderAssignmentFilter"] = GafferScene.SetFilter("SetFilter")
-        self["__shaderAssignmentFilter"]["setExpression"].setValue(
-            "ShaderBall:material"
-        )
+IECore.registerRunTimeTyped(
+    LDTShaderBall, typeName="GafferArnold::LDTShaderBall",
+)
 
-        self["__shaderAssignment"]["filter"].setInput(
-            self["__shaderAssignmentFilter"]["out"]
-        )
+class LDTShaderTeapot(LDTShaderBallScene.LDTShaderBallScene):
+    def __init__(self, name="LDTShaderTeapot"):
 
-        self["__options"] = GafferScene.StandardOptions()
-        self["__options"]["in"].setInput(self["__shaderAssignment"]["out"])
+        LDTShaderBallScene.LDTShaderBallScene.__init__(self, name)
+        # ShaderBall reference node
+        s = Gaffer.ScriptNode()
+        __shaderBallReference = s["__shaderBallReference"] = Gaffer.Reference()
+        __shaderBallReference.load("LDTShaderBallTeapot.grf")
 
-        self["__options"]["options"]["renderCamera"]["enabled"].setValue(True)
-        self["__options"]["options"]["renderCamera"]["value"].setValue("/camera")
+        self.addChild(__shaderBallReference)
 
-        self["__options"]["options"]["renderResolution"]["enabled"].setValue(True)
-        self["__options"]["options"]["renderResolution"]["value"][0].setInput(
-            self["resolution"]
-        )
-        self["__options"]["options"]["renderResolution"]["value"][1].setInput(
-            self["resolution"]
-        )
-        
-
-        self["__emptyScene"] = GafferScene.ScenePlug()
-        self["__enabler"] = Gaffer.Switch()
-        self["__enabler"].setup(GafferScene.ScenePlug())
-        self["__enabler"]["in"][0].setInput(self["__emptyScene"])
-        self["__enabler"]["in"][1].setInput(self["__options"]["out"])
-        self["__enabler"]["enabled"].setInput(self["enabled"])
-        self["__enabler"]["index"].setValue(1)
-
-        self["out"].setFlags(Gaffer.Plug.Flags.Serialisable, False)
-        self["out"].setInput(self["__enabler"]["out"])
-
-    # Internal plug which the final scene is connected into.
-    # Derived classes may insert additional nodes between this
-    # plug and its input to modify the scene.
-    def _outPlug(self):
-
-        return self["__enabler"]["in"][1]
+        self._inPlug().setInput(self["__shaderBallReference"]["out"])
 
 
-IECore.registerRunTimeTyped(LDTShaderBall, typeName="GafferScene::ShaderBall")
+IECore.registerRunTimeTyped(
+    LDTShaderBall, typeName="GafferArnold::LDTShaderTeapot",
+)

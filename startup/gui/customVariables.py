@@ -4,7 +4,6 @@ import IECore
 import Gaffer
 import GafferUI
 
-import ldtgafferutils
 
 print ("LDTGAFFER:startup:gui:customVariables")
 
@@ -22,4 +21,5 @@ def __scriptAdded( container, script ) :
 	Gaffer.MetadataAlgo.setReadOnly( variables["LDTGafferResources"]["name"], True )
 
 application.root()["scripts"].childAddedSignal().connect( __scriptAdded, scoped = False )
+
 

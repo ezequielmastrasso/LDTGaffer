@@ -1,0 +1,61 @@
+import Gaffer
+import GafferScene
+import IECore
+import imath
+
+Gaffer.Metadata.registerValue( parent, "serialiser:milestoneVersion", 0, persistent=False )
+Gaffer.Metadata.registerValue( parent, "serialiser:majorVersion", 57, persistent=False )
+Gaffer.Metadata.registerValue( parent, "serialiser:minorVersion", 3, persistent=False )
+Gaffer.Metadata.registerValue( parent, "serialiser:patchVersion", 0, persistent=False )
+
+__children = {}
+
+__children["__teapot"] = GafferScene.SceneReader( "__teapot" )
+parent.addChild( __children["__teapot"] )
+__children["__teapot"].addChild( Gaffer.V2fPlug( "__uiPosition", defaultValue = imath.V2f( 0, 0 ), flags = Gaffer.Plug.Flags.Default | Gaffer.Plug.Flags.Dynamic, ) )
+__children["__teapotMeshType"] = GafferScene.MeshType( "__teapotMeshType" )
+parent.addChild( __children["__teapotMeshType"] )
+__children["__teapotMeshType"].addChild( Gaffer.V2fPlug( "__uiPosition", defaultValue = imath.V2f( 0, 0 ), flags = Gaffer.Plug.Flags.Default | Gaffer.Plug.Flags.Dynamic, ) )
+__children["__teapotPathFilter"] = GafferScene.PathFilter( "__teapotPathFilter" )
+parent.addChild( __children["__teapotPathFilter"] )
+__children["__teapotPathFilter"].addChild( Gaffer.V2fPlug( "__uiPosition", defaultValue = imath.V2f( 0, 0 ), flags = Gaffer.Plug.Flags.Default | Gaffer.Plug.Flags.Dynamic, ) )
+__children["__teapotSet"] = GafferScene.Set( "__teapotSet" )
+parent.addChild( __children["__teapotSet"] )
+__children["__teapotSet"].addChild( Gaffer.V2fPlug( "__uiPosition", defaultValue = imath.V2f( 0, 0 ), flags = Gaffer.Plug.Flags.Default | Gaffer.Plug.Flags.Dynamic, ) )
+__children["out"] = GafferScene.ScenePlug( "out", direction = Gaffer.Plug.Direction.Out, flags = Gaffer.Plug.Flags.Default | Gaffer.Plug.Flags.Dynamic, )
+parent.addChild( __children["out"] )
+__children["BoxOut"] = Gaffer.BoxOut( "BoxOut" )
+parent.addChild( __children["BoxOut"] )
+__children["BoxOut"].setup( GafferScene.ScenePlug( "in", ) )
+__children["BoxOut"].addChild( Gaffer.V2fPlug( "__uiPosition", defaultValue = imath.V2f( 0, 0 ), flags = Gaffer.Plug.Flags.Default | Gaffer.Plug.Flags.Dynamic, ) )
+__children["__teapot"]["fileName"].setValue( '${LDTGAFFER}/resources/assets/teapot/teapot.abc' )
+__children["__teapot"]["__uiPosition"].setValue( imath.V2f( 135.023972, -193.120087 ) )
+__children["__teapotMeshType"]["in"].setInput( __children["__teapot"]["out"] )
+__children["__teapotMeshType"]["filter"].setInput( __children["__teapotPathFilter"]["out"] )
+__children["__teapotMeshType"]["meshType"].setValue( 'catmullClark' )
+__children["__teapotMeshType"]["__uiPosition"].setValue( imath.V2f( 135.025925, -201.382507 ) )
+__children["__teapotPathFilter"]["paths"].setValue( IECore.StringVectorData( [ '/...' ] ) )
+__children["__teapotPathFilter"]["__uiPosition"].setValue( imath.V2f( 150.301559, -195.300476 ) )
+__children["__teapotSet"]["in"].setInput( __children["__teapotMeshType"]["out"] )
+__children["__teapotSet"]["filter"].setInput( __children["__teapotPathFilter"]["out"] )
+__children["__teapotSet"]["name"].setValue( 'ShaderBall:material' )
+__children["__teapotSet"]["__uiPosition"].setValue( imath.V2f( 135.025925, -209.54657 ) )
+__children["out"].setInput( __children["BoxOut"]["__out"] )
+Gaffer.Metadata.registerValue( __children["out"], 'nodule:color', imath.Color3f( 0.240099996, 0.339399993, 0.485000014 ) )
+Gaffer.Metadata.registerValue( __children["out"], 'nodule:type', 'GafferUI::StandardNodule' )
+Gaffer.Metadata.registerValue( __children["out"], 'description', 'The processed output scene.' )
+__children["BoxOut"]["in"].setInput( __children["__teapotSet"]["out"] )
+Gaffer.Metadata.registerValue( __children["BoxOut"]["__out"], 'nodule:color', imath.Color3f( 0.240099996, 0.339399993, 0.485000014 ) )
+Gaffer.Metadata.registerValue( __children["BoxOut"]["__out"], 'deletable', True )
+Gaffer.Metadata.registerValue( __children["BoxOut"]["__out"], 'renameable', True )
+Gaffer.Metadata.registerValue( __children["BoxOut"]["__out"], 'nodule:type', 'GafferUI::StandardNodule' )
+Gaffer.Metadata.registerValue( __children["BoxOut"]["__out"], 'description', 'The processed output scene.' )
+__children["BoxOut"]["__uiPosition"].setValue( imath.V2f( 136.525253, -217.878601 ) )
+Gaffer.Metadata.registerValue( parent, 'noduleLayout:customGadget:addButtonTop:visible', False )
+Gaffer.Metadata.registerValue( parent, 'noduleLayout:customGadget:addButtonBottom:visible', False )
+Gaffer.Metadata.registerValue( parent, 'noduleLayout:customGadget:addButtonLeft:visible', False )
+Gaffer.Metadata.registerValue( parent, 'noduleLayout:customGadget:addButtonRight:visible', False )
+
+
+del __children
+
