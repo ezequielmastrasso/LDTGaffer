@@ -39,6 +39,7 @@ Based on an editable Box inside the resources folder.
 
 #### LightCreator
 <img width="50%" src="docs/LightCreator.png" alt="EZSurfacing Tools" style="" />
+
 #### Attribute Sets
 <img width="50%" src="docs/gafferSets.png" alt="EZSurfacing Tools" style="" />
 
@@ -49,14 +50,17 @@ Based on an editable Box inside the resources folder.
 ### contextEnabled Editscope and Box
 Contents will only be enabled when in the given context. Both Editscope and Box based.
 The EditScope based contains Edit TweaksNodes ready to use.
+
 <img width="50%" src="docs/contextEnabled.png" alt="EZSurfacing Tools" style="" />
 
 ### LightsMuteSolo
 Mutes/Solo lights, using intensity or prune.
+
 <img width="50%" src="docs/LightsMuteSolo.png" alt="EZSurfacing Tools" style="" />
 
 ### Center To Origin
 Centers the given objects to the origin.
+
 <img width="50%" src="docs/CenterToOrigin.png" alt="EZSurfacing Tools" style="" />
 
 ### UvSizeMultipler
@@ -65,6 +69,7 @@ for visualization instead of modifying the material tiling.
 
 ### Inspection Camera
 Inspection camera drop in.
+
 <img width="50%" src="docs/InpectionCamera.png" alt="EZSurfacing Tools" style="" />
 
 ## Boxes 2d
