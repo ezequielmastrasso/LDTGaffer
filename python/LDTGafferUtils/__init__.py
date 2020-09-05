@@ -9,6 +9,23 @@ logger = logging.getLogger(__name__)
 
 import os
 
+def registerAnnotation( menu):
+    scriptWindow = menu.ancestor( GafferUI.ScriptWindow )
+    script = scriptWindow.scriptNode()
+    mainWindow = GafferUI.ScriptWindow.acquire( script )
+
+    selected = script.selection()
+    if selected.size():
+        current_annotation = Gaffer.Metadata.value(selected[0], "annotation:greeting:text")
+        initial_text = current_annotation if current_annotation else ""
+        d = GafferUI.TextInputDialogue( initialText=initial_text, title="Annotation", confirmLabel="Set" )
+        text = d.waitForText( parentWindow =  mainWindow )
+        for node in selected:
+            if text:
+                Gaffer.Metadata.registerValue(node, "annotation:greeting:text", text)
+
+
+
 def export_extension( menu ) :
 	scriptWindow = menu.ancestor( GafferUI.ScriptWindow )
 	script = scriptWindow.scriptNode()

@@ -13,3 +13,12 @@ GafferUI.ScriptWindow.menuDefinition(application).append(
 		"label" : "Export Extension"
 	}
 )
+
+GafferUI.ScriptWindow.menuDefinition(application).append(
+	"/LDT/tools/" + "registerAnnotation",
+	{
+		"command" : functools.partial( LDTGafferUtils.registerAnnotation), #stream data during loop
+		"label" : "registerAnnotation"
+	}
+)
+

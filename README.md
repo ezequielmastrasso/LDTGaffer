@@ -6,9 +6,9 @@ My gaffer toolset, presets, and configs.
 ### Miscelaneous
 * Custom Variables LDT resources
 * Bookmarks LDT folders
-* LDT Menu: Export Extension
+* LDT Menu: Export Extension, Node Annotations
 * Gaffer Cache MemoryLimit
-* Arnold Outputs: Custom lightgroup_[a-g], and lightgroup[a-g]_denoise
+* Arnold Outputs: Custom lightgroup_[a-g], and lightgroup_denoise[a-g] using optix filter.
 
 ### NameSwitch and Spreadsheet Presets
 ```
@@ -25,6 +25,14 @@ Same as Gaffer Defaults (except lights, and filters), but easier on the eye.
 <img src="docs/nodeGadget_color.png" alt="EZSurfacing Tools" style="" />
 
 ## Python
+
+### LDT Menu
+##### Export Extension
+Default Gaffer export extension example. Might not work with Spreadsheets, etc.
+
+##### Annotation
+Set selected nodes Metadata `annotation:greeting:text`
+
 ### ShaderView:Shader Ball
 Based on an editable Box inside the resources folder.
 <img width="100%" src="docs/gafferShaderView2.png" alt="EZSurfacing Tools" style="" />
