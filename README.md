@@ -33,6 +33,12 @@ Default Gaffer export extension example. Might not work with Spreadsheets, etc.
 ##### Annotation
 Set selected nodes Metadata `annotation:greeting:text`
 
+### SceneView:PhongShader
+Tired of the facing ratio look?
+You can thank [Irene Hernández](https://www.linkedin.com/in/ireneher/) for this.
+
+<img width="100%" src="docs/sceneViewPhong.png" alt="EZSurfacing Tools" style="" />
+
 ### ShaderView:Shader Ball
 Based on an editable Box inside the resources folder.
 <img width="100%" src="docs/gafferShaderView2.png" alt="EZSurfacing Tools" style="" />
