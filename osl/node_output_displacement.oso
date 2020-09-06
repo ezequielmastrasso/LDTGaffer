@@ -1,0 +1,17 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+displacement node_output_displacement
+param	float	Displacement	0		%read{0,0} %write{2147483647,-1}
+global	point	P	%read{2,2} %write{2,2}
+global	normal	N	%read{0,0} %write{2147483647,-1}
+temp	normal	$tmp1	%read{1,1} %write{0,0}
+const	float	$const1	0.1		%read{1,1} %write{2147483647,-1}
+temp	normal	$tmp2	%read{2,2} %write{1,1}
+code ___main___
+# include/node_output_displacement.osl:22
+# }
+	mul		$tmp1 N Displacement 	%filename{"include/node_output_displacement.osl"} %line{22} %argrw{"wrr"}
+	mul		$tmp2 $tmp1 $const1 	%argrw{"wrr"}
+	add		P P $tmp2 	%argrw{"wrr"}
+	end

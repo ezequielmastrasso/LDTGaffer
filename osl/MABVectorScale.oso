@@ -1,0 +1,12 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader MABVectorScale
+param	vector	VectorIn	0 0 0		%read{0,0} %write{2147483647,-1}
+param	vector	Scale	1 1 1		%read{0,0} %write{2147483647,-1}
+oparam	vector	VectorOut	0 0 0		%read{2147483647,-1} %write{0,0}
+code ___main___
+# source/sambler-osl-shaders/MJABook/04MABVectorScale/MABVectorScale.osl:20
+# }
+	mul		VectorOut VectorIn Scale 	%filename{"source/sambler-osl-shaders/MJABook/04MABVectorScale/MABVectorScale.osl"} %line{20} %argrw{"wrr"}
+	end

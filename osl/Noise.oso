@@ -1,0 +1,99 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader Noise	%meta{string,help,"A shader for generating more advanced noise"} 
+param	point	UVW	0 0 0		%meta{string,help,"The UVW coordinate to use. When not connected, defaults to Object space"}  %read{2,2} %write{1,1} %derivs %initexpr
+param	float	Scale	25		%read{2,2} %write{2147483647,-1} %derivs
+param	string	Type	"uperlin"		%meta{string,widget,"popup"} %meta{string,help,"Use perlin, uperlin, cell, hash, simplex or gabor"} %meta{string,options,"perlin|uperlin|cell|hash|simplex|gabor"}  %read{12,12} %write{2147483647,-1}
+param	int	Octaves	4		%meta{string,help,"Hos many layers of noise are mixed together"}  %read{8,8} %write{2147483647,-1}
+param	float	Lacunarity	2		%meta{string,help,"How much the 'frequency' of the noise changes per layer"}  %read{18,18} %write{2147483647,-1} %derivs
+param	float	Gain	0.5		%meta{string,help,"How much the amplitude of the noise changes per layer. Higher numbers means higher noise frequencies have more effect."}  %read{19,19} %write{2147483647,-1}
+param	int	StepFunction	1		%meta{string,widget,"checkBox"} %meta{string,label,"Step Function"} %meta{string,help,"Enables a per-layer smoothstep curve in the noise, allowing you to increase the 'contrast' of the noise"}  %read{13,13} %write{2147483647,-1}
+param	float	LowStep	0.5		%meta{string,help,"Low threshold of the smoothstep function."} %meta{string,label,"Low Step"} %meta{float,min,-1} %meta{float,max,1}  %read{14,14} %write{2147483647,-1}
+param	float	HiStep	0.80000001		%meta{string,help,"High threshold of the smoothstep function."} %meta{string,label,"High Step"} %meta{float,min,-1} %meta{float,max,1}  %read{14,14} %write{2147483647,-1}
+param	int	Normalize	1		%meta{string,widget,"checkBox"} %meta{string,help,"If the noise is auto-normalized to Amplitude or not."}  %read{22,22} %write{2147483647,-1}
+param	float	Amplitude	1		%meta{string,help,"The amplitude of the noise."}  %read{5,23} %write{2147483647,-1}
+param	float	Phase	0		%meta{string,help,"The 'Phase' is just a 4th coordinate of the noise, can be used to allow it to evolve over time, for example."}  %read{11,11} %write{2147483647,-1} %derivs
+oparam	float	Out	0		%read{8,24} %write{8,24}
+global	point	P	%read{1,1} %write{2147483647,-1} %derivs
+local	point	pnt	%read{8,21} %write{2,2} %derivs
+local	float	sum	%read{8,23} %write{3,21}
+local	float	curFreq	%read{8,21} %write{4,21} %derivs
+local	float	curAmp	%read{8,21} %write{5,21}
+local	int	___322_i	%read{8,21} %write{7,21} %derivs
+local	float	___323_ns	%read{8,21} %write{8,21}
+const	string	$const1	"object"		%read{1,1} %write{2147483647,-1}
+const	string	$const2	"transform"		%read{0,0} %write{2147483647,-1}
+const	string	$const3	"common"		%read{1,1} %write{2147483647,-1}
+const	int	$const4	0		%read{3,7} %write{2147483647,-1}
+const	float	$const5	1		%read{4,4} %write{2147483647,-1}
+temp	int	$tmp1	%read{6,21} %write{7,21}
+temp	point	$tmp2	%read{8,21} %write{8,21} %derivs
+temp	float	$tmp3	%read{8,21} %write{8,21} %derivs
+temp	float	$tmp4	%read{8,21} %write{8,21} %derivs
+temp	float	$tmp5	%read{8,21} %write{8,21}
+const	int	$const6	1		%read{21,21} %write{2147483647,-1}
+temp	int	$tmp6	%read{2147483647,-1} %write{8,21}
+temp	float	$tmp7	%read{24,24} %write{23,23}
+code UVW
+# source/3dsMax-OSL-Shaders/Noise.osl:11
+# 		[[ string help = "The UVW coordinate to use. When not connected, defaults to Object space" ]],	
+	functioncall	$const2 2 	%filename{"source/3dsMax-OSL-Shaders/Noise.osl"} %line{11} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:267
+# point  transform (string to, point p)  { return transform("common",to,p); }
+	transform	UVW $const3 $const1 P 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{267} %argrw{"wrrr"}
+code ___main___
+# source/3dsMax-OSL-Shaders/Noise.osl:48
+# 	
+	div		pnt UVW Scale 	%filename{"source/3dsMax-OSL-Shaders/Noise.osl"} %line{48} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Noise.osl:50
+# 	float curFreq = 1.0;
+	assign		sum $const4 	%line{50} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Noise.osl:51
+# 	float curAmp = Amplitude;
+	assign		curFreq $const5 	%line{51} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Noise.osl:52
+# 	
+	assign		curAmp Amplitude 	%line{52} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Noise.osl:55
+# 	{			
+	for		$tmp1 8 9 20 22 	%line{55} %argrw{"r"}
+	assign		___322_i $const4 	%argrw{"wr"}
+	lt		$tmp1 ___322_i Octaves 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Noise.osl:58
+# 		
+	mul		$tmp2 pnt curFreq 	%line{58} %argrw{"wrr"}
+	assign		$tmp4 ___322_i 	%argrw{"wr"}
+	add		$tmp3 Phase $tmp4 	%argrw{"wrr"}
+	noise		___323_ns Type $tmp2 $tmp3 	%argrw{"wrrr"} %argderivs{2,3}
+# source/3dsMax-OSL-Shaders/Noise.osl:60
+# 			ns = smoothstep(LowStep, HiStep, ns);
+	if		StepFunction 15 15 	%line{60} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/Noise.osl:61
+# 
+	smoothstep	___323_ns LowStep HiStep ___323_ns 	%line{61} %argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/Noise.osl:64
+# 		// Add the amplitude to the normalizing sum
+	mul		$tmp5 ___323_ns curAmp 	%line{64} %argrw{"wrr"}
+	add		Out Out $tmp5 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Noise.osl:66
+# 
+	add		sum sum curAmp 	%line{66} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Noise.osl:69
+# 		curAmp  *= Gain;		
+	mul		curFreq curFreq Lacunarity 	%line{69} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Noise.osl:70
+# 	}
+	mul		curAmp curAmp Gain 	%line{70} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Noise.osl:55
+# 	{			
+	assign		$tmp6 ___322_i 	%line{55} %argrw{"wr"}
+	add		___322_i ___322_i $const6 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Noise.osl:73
+# 		Out /= sum / Amplitude;
+	if		Normalize 25 25 	%line{73} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/Noise.osl:74
+# }
+	div		$tmp7 sum Amplitude 	%line{74} %argrw{"wrr"}
+	div		Out Out $tmp7 	%argrw{"wrr"}
+	end

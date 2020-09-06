@@ -1,0 +1,54 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader Compare	%meta{string,help,"Return different colors/floats depending on whether the two values are less than, equal to or greater than each other."} %meta{string,label,"Compare"} %meta{string,category,"Switchers"} 
+param	float	A	0		%meta{string,label,"Input A"}  %read{0,5} %write{2147483647,-1}
+param	float	B	0		%meta{string,label,"Input B"}  %read{0,5} %write{2147483647,-1}
+param	float	Thresh	0.0099999998		%meta{string,label,"Equality threshold"}  %read{2,2} %write{2147483647,-1}
+param	color	Less	0 0 1		%meta{string,label,"Result if A < B"}  %read{7,7} %write{2147483647,-1}
+param	color	Equal	0 1 0		%meta{string,label,"Result if A = B"}  %read{4,4} %write{2147483647,-1}
+param	color	Greater	1 0 0		%meta{string,label,"Result if A > B"}  %read{8,8} %write{2147483647,-1}
+oparam	color	Out	0 0 0		%read{9,12} %write{4,8}
+oparam	float	Float	0		%read{2147483647,-1} %write{14,14}
+temp	float	$tmp1	%read{2,2} %write{1,1}
+temp	float	$tmp2	%read{1,1} %write{0,0}
+temp	int	$tmp3	%read{3,3} %write{2,2}
+temp	int	$tmp4	%read{6,6} %write{5,5}
+const	int	$const1	0		%read{9,9} %write{2147483647,-1}
+temp	float	$tmp5	%read{11,11} %write{9,9}
+const	int	$const2	1		%read{10,10} %write{2147483647,-1}
+temp	float	$tmp6	%read{11,11} %write{10,10}
+temp	float	$tmp7	%read{13,13} %write{11,11}
+const	int	$const3	2		%read{12,12} %write{2147483647,-1}
+temp	float	$tmp8	%read{13,13} %write{12,12}
+temp	float	$tmp9	%read{14,14} %write{13,13}
+const	float	$const4	3		%read{14,14} %write{2147483647,-1}
+code ___main___
+# source/3dsMax-OSL-Shaders/Compare.osl:25
+# 		Out = Equal;
+	sub		$tmp2 A B 	%filename{"source/3dsMax-OSL-Shaders/Compare.osl"} %line{25} %argrw{"wrr"}
+	fabs		$tmp1 $tmp2 	%argrw{"wr"}
+	le		$tmp3 $tmp1 Thresh 	%argrw{"wrr"}
+	if		$tmp3 5 9 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Compare.osl:26
+# 	else if (A < B)
+	assign		Out Equal 	%line{26} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Compare.osl:27
+# 		Out = Less;
+	lt		$tmp4 A B 	%line{27} %argrw{"wrr"}
+	if		$tmp4 8 9 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Compare.osl:28
+# 	else 
+	assign		Out Less 	%line{28} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Compare.osl:30
+# 		
+	assign		Out Greater 	%line{30} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Compare.osl:33
+# }
+	compref		$tmp5 Out $const1 	%line{33} %argrw{"wrr"}
+	compref		$tmp6 Out $const2 	%argrw{"wrr"}
+	add		$tmp7 $tmp5 $tmp6 	%argrw{"wrr"}
+	compref		$tmp8 Out $const3 	%argrw{"wrr"}
+	add		$tmp9 $tmp7 $tmp8 	%argrw{"wrr"}
+	div		Float $tmp9 $const4 	%argrw{"wrr"}
+	end

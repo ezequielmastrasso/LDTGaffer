@@ -1,0 +1,27 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader GetWireColor	%meta{string,help,"Get the Wireframe Color"} %meta{string,label,"Wire Color"} %meta{string,category,"Scene Attributes"} 
+oparam	color	Col	1 1 1		%read{1,3} %write{0,0}
+oparam	float	R	0		%read{2147483647,-1} %write{1,1}
+oparam	float	G	0		%read{2147483647,-1} %write{2,2}
+oparam	float	B	0		%read{2147483647,-1} %write{3,3}
+temp	int	$tmp1	%read{2147483647,-1} %write{0,0}
+const	string	$const1	"wireColor"		%read{0,0} %write{2147483647,-1}
+const	int	$const2	0		%read{1,1} %write{2147483647,-1}
+const	int	$const3	1		%read{2,2} %write{2147483647,-1}
+const	int	$const4	2		%read{3,3} %write{2147483647,-1}
+code ___main___
+# source/3dsMax-OSL-Shaders/GetWireColor.osl:19
+# 	R = Col[0];
+	getattribute	$tmp1 $const1 Col 	%filename{"source/3dsMax-OSL-Shaders/GetWireColor.osl"} %line{19} %argrw{"wrw"}
+# source/3dsMax-OSL-Shaders/GetWireColor.osl:20
+# 	G = Col[1];	
+	compref		R Col $const2 	%line{20} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/GetWireColor.osl:21
+# 	B = Col[2];	
+	compref		G Col $const3 	%line{21} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/GetWireColor.osl:22
+# }
+	compref		B Col $const4 	%line{22} %argrw{"wrr"}
+	end

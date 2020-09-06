@@ -1,0 +1,80 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader hardmix
+param	float	Factor	1		%read{3,23} %write{2147483647,-1}
+param	color	Color	1 1 1		%read{0,20} %write{2147483647,-1}
+param	color	Color2	1 1 1		%read{1,21} %write{2147483647,-1}
+oparam	color	Output	0 0 0		%read{2147483647,-1} %write{9,29}
+temp	float	$tmp1	%read{9,9} %write{6,7}
+const	int	$const1	0		%read{0,9} %write{2147483647,-1}
+temp	float	$tmp2	%read{3,3} %write{0,0}
+temp	float	$tmp3	%read{3,3} %write{1,1}
+const	string	$const2	"hardmix"		%read{2,22} %write{2147483647,-1}
+temp	float	$tmp4	%read{4,4} %write{3,3}
+const	float	$const3	0.5		%read{4,24} %write{2147483647,-1}
+temp	int	$tmp5	%read{5,5} %write{4,4}
+const	float	$const4	1		%read{6,26} %write{2147483647,-1}
+const	float	$const5	0		%read{7,27} %write{2147483647,-1}
+temp	float	$tmp6	%read{19,19} %write{16,17}
+const	int	$const6	1		%read{10,19} %write{2147483647,-1}
+temp	float	$tmp7	%read{13,13} %write{10,10}
+temp	float	$tmp8	%read{13,13} %write{11,11}
+temp	float	$tmp9	%read{14,14} %write{13,13}
+temp	int	$tmp10	%read{15,15} %write{14,14}
+temp	float	$tmp11	%read{29,29} %write{26,27}
+const	int	$const7	2		%read{20,29} %write{2147483647,-1}
+temp	float	$tmp12	%read{23,23} %write{20,20}
+temp	float	$tmp13	%read{23,23} %write{21,21}
+temp	float	$tmp14	%read{24,24} %write{23,23}
+temp	int	$tmp15	%read{25,25} %write{24,24}
+code ___main___
+# source/sambler-osl-shaders/lib/ChHardMix.osl:23
+#     Output[1] = hardmix(Color[1],Color2[1]);
+	compref		$tmp2 Color $const1 	%filename{"source/sambler-osl-shaders/lib/ChHardMix.osl"} %line{23} %argrw{"wrr"}
+	compref		$tmp3 Color2 $const1 	%argrw{"wrr"}
+	functioncall	$const2 9 	%argrw{"r"}
+# source/sambler-osl-shaders/lib/ChHardMix.osl:20
+#     }
+	mix		$tmp4 $tmp2 $tmp3 Factor 	%line{20} %argrw{"wrrr"}
+	gt		$tmp5 $tmp4 $const3 	%argrw{"wrr"}
+	if		$tmp5 7 8 	%argrw{"r"}
+	assign		$tmp1 $const4 	%argrw{"wr"}
+	assign		$tmp1 $const5 	%argrw{"wr"}
+	return
+# source/sambler-osl-shaders/lib/ChHardMix.osl:23
+#     Output[1] = hardmix(Color[1],Color2[1]);
+	compassign	Output $const1 $tmp1 	%line{23} %argrw{"wrr"}
+# source/sambler-osl-shaders/lib/ChHardMix.osl:24
+#     Output[2] = hardmix(Color[2],Color2[2]);
+	compref		$tmp7 Color $const6 	%line{24} %argrw{"wrr"}
+	compref		$tmp8 Color2 $const6 	%argrw{"wrr"}
+	functioncall	$const2 19 	%argrw{"r"}
+# source/sambler-osl-shaders/lib/ChHardMix.osl:20
+#     }
+	mix		$tmp9 $tmp7 $tmp8 Factor 	%line{20} %argrw{"wrrr"}
+	gt		$tmp10 $tmp9 $const3 	%argrw{"wrr"}
+	if		$tmp10 17 18 	%argrw{"r"}
+	assign		$tmp6 $const4 	%argrw{"wr"}
+	assign		$tmp6 $const5 	%argrw{"wr"}
+	return
+# source/sambler-osl-shaders/lib/ChHardMix.osl:24
+#     Output[2] = hardmix(Color[2],Color2[2]);
+	compassign	Output $const6 $tmp6 	%line{24} %argrw{"wrr"}
+# source/sambler-osl-shaders/lib/ChHardMix.osl:25
+# }
+	compref		$tmp12 Color $const7 	%line{25} %argrw{"wrr"}
+	compref		$tmp13 Color2 $const7 	%argrw{"wrr"}
+	functioncall	$const2 29 	%argrw{"r"}
+# source/sambler-osl-shaders/lib/ChHardMix.osl:20
+#     }
+	mix		$tmp14 $tmp12 $tmp13 Factor 	%line{20} %argrw{"wrrr"}
+	gt		$tmp15 $tmp14 $const3 	%argrw{"wrr"}
+	if		$tmp15 27 28 	%argrw{"r"}
+	assign		$tmp11 $const4 	%argrw{"wr"}
+	assign		$tmp11 $const5 	%argrw{"wr"}
+	return
+# source/sambler-osl-shaders/lib/ChHardMix.osl:25
+# }
+	compassign	Output $const7 $tmp11 	%line{25} %argrw{"wrr"}
+	end

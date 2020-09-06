@@ -1,0 +1,438 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader UberColorCorrect	%meta{string,label,"Color Correction"} %meta{string,help,"<h3>Color Correction</h3>Multi-stage color corrector, including<br>channel remapping, hue-range limiting, and<br>three-tone color tinting."} %meta{string,version,"1.0"} 
+param	color	Input	0.18000001 0.18000001 0.18000001		%read{1,157} %write{2147483647,-1}
+param	int	Bypass	0		%meta{string,widget,"checkBox"} %meta{string,widget,"null"}  %read{2,2} %write{2147483647,-1}
+param	float	Overall	1		%meta{float,min,0} %meta{float,max,1}  %read{0,0} %write{2147483647,-1}
+param	int	HueRange	0		%meta{string,widget,"checkBox"} %meta{string,widget,"null"}  %read{4,4} %write{2147483647,-1}
+param	color	AffectHue	1 0.40000001 0.30000001		%read{6,6} %write{2147483647,-1}
+param	float	HueRangeWidth	10		%meta{float,min,0} %meta{float,max,360} %meta{float,step,1}  %read{14,14} %write{2147483647,-1}
+param	float	HueRangeSoftness	10		%meta{float,min,0} %meta{float,max,360} %meta{float,step,1}  %read{16,16} %write{2147483647,-1}
+param	int	ChannelMapping	0		%meta{string,widget,"checkBox"} %meta{string,widget,"null"}  %read{27,27} %write{2147483647,-1}
+param	int	RedMapping	0		%meta{int,connectable,0} %meta{string,widget,"mapper"} %meta{string,options,"Red:0|Green:1|Blue:2|Red (Inverse):3|Green (Inverse):4|Blue (Inverse):5|Luminance:6|Luminance (Inverse):7|Zero:8|One:9"}  %read{29,48} %write{2147483647,-1}
+param	int	GreenMapping	1		%meta{int,connectable,0} %meta{string,widget,"mapper"} %meta{string,options,"Red:0|Green:1|Blue:2|Red (Inverse):3|Green (Inverse):4|Blue (Inverse):5|Luminance:6|Luminance (Inverse):7|Zero:8|One:9"}  %read{55,74} %write{2147483647,-1}
+param	int	BlueMapping	2		%meta{int,connectable,0} %meta{string,widget,"mapper"} %meta{string,options,"Red:0|Green:1|Blue:2|Red (Inverse):3|Green (Inverse):4|Blue (Inverse):5|Luminance:6|Luminance (Inverse):7|Zero:8|One:9"}  %read{81,100} %write{2147483647,-1}
+param	int	BrightnessAdjustment	1		%meta{string,widget,"checkBox"} %meta{string,widget,"null"}  %read{106,106} %write{2147483647,-1}
+param	int	Invert	0		%meta{string,widget,"checkBox"} %meta{int,connectable,0}  %read{107,107} %write{2147483647,-1}
+param	float	Brightness	1		%read{109,109} %write{2147483647,-1}
+param	float	Contrast	1		%read{111,111} %write{2147483647,-1}
+param	float	Lift	0		%read{113,113} %write{2147483647,-1}
+param	float	Pivot	0.5		%read{110,112} %write{2147483647,-1}
+param	int	InverseGamma	0		%meta{string,widget,"checkBox"} %meta{int,connectable,0}  %read{118,118} %write{2147483647,-1}
+param	float	Gamma	1		%read{114,120} %write{2147483647,-1}
+param	int	ColorAdjustment	0		%meta{string,widget,"checkBox"} %meta{int,connectable,0}  %read{122,122} %write{2147483647,-1}
+param	float	HueShift	0		%meta{float,min,-1} %meta{float,max,1}  %read{125,125} %write{2147483647,-1}
+param	float	Saturation	1		%meta{float,min,0} %meta{float,max,10}  %read{128,128} %write{2147483647,-1}
+param	color	TintColor	1 1 1		%read{132,132} %write{2147483647,-1}
+param	float	TintStrength	0		%meta{float,min,0} %meta{float,max,1}  %read{133,133} %write{2147483647,-1}
+param	int	OutputTint	0		%meta{string,widget,"checkBox"} %meta{int,connectable,0}  %read{134,134} %write{2147483647,-1}
+param	color	Shadows	0 0 0		%read{150,150} %write{2147483647,-1}
+param	color	Midtones	0.2 0.2 0.2		%read{149,149} %write{2147483647,-1}
+param	color	Highlights	1 1 1		%read{149,149} %write{2147483647,-1}
+param	float	MidtoneLum	0.2		%meta{float,min,0} %meta{float,max,1}  %read{135,142} %write{2147483647,-1}
+param	int	Clamp	1		%meta{string,widget,"checkBox"} %meta{int,connectable,0}  %read{151,151} %write{2147483647,-1}
+param	float	ClampLow	0		%read{152,152} %write{2147483647,-1}
+param	float	ClampHi	1		%read{153,153} %write{2147483647,-1}
+param	string	Reset	"Reset to Default Values"		%meta{string,widget,"max:actionButton"} %meta{string,actionID,"reset()"} %meta{int,connectable,0}  %read{2147483647,-1} %write{2147483647,-1}
+oparam	color	Out	0 0 0		%read{108,160} %write{1,157}
+oparam	float	R	0		%read{2147483647,-1} %write{158,158}
+oparam	float	G	0		%read{2147483647,-1} %write{159,159}
+oparam	float	B	0		%read{2147483647,-1} %write{160,160}
+local	float	effect	%read{25,157} %write{0,26}
+local	color	___324_hsv	%read{7,7} %write{5,5}
+local	color	___324_hsv2	%read{8,8} %write{6,6}
+local	float	___324_huedifference	%read{11,21} %write{10,13}
+local	float	___324_HRW	%read{17,21} %write{15,15}
+local	float	___324_HRS	%read{19,22} %write{16,16}
+local	color	___328_hsv	%read{124,131} %write{123,129}
+local	color	___329_below	%read{150,150} %write{140,140}
+local	color	___329_above	%read{149,149} %write{148,148}
+temp	int	$tmp1	%read{3,3} %write{2,2}
+const	int	$const1	0		%read{2,158} %write{2147483647,-1}
+const	string	$const2	"rgb"		%read{5,130} %write{2147483647,-1}
+const	string	$const3	"hsv"		%read{5,130} %write{2147483647,-1}
+temp	float	$tmp2	%read{9,9} %write{7,7}
+temp	float	$tmp3	%read{9,9} %write{8,8}
+temp	float	$tmp4	%read{10,10} %write{9,9}
+const	float	$const4	0.5		%read{11,11} %write{2147483647,-1}
+temp	int	$tmp5	%read{12,12} %write{11,11}
+const	float	$const5	1		%read{13,145} %write{2147483647,-1}
+const	float	$const6	360		%read{14,16} %write{2147483647,-1}
+temp	float	$tmp6	%read{15,15} %write{14,14}
+const	float	$const7	2		%read{15,15} %write{2147483647,-1}
+temp	int	$tmp7	%read{18,18} %write{17,17}
+const	float	$const8	0		%read{19,144} %write{2147483647,-1}
+temp	int	$tmp8	%read{20,20} %write{19,19}
+temp	float	$tmp9	%read{25,25} %write{24,24}
+temp	float	$tmp10	%read{22,22} %write{21,21}
+temp	float	$tmp11	%read{23,23} %write{22,22}
+temp	float	$tmp12	%read{24,24} %write{23,23}
+temp	float	$tmp13	%read{53,53} %write{31,52}
+const	string	$const9	"remap"		%read{28,80} %write{2147483647,-1}
+const	int	$const10	3		%read{29,87} %write{2147483647,-1}
+temp	int	$tmp14	%read{30,30} %write{29,29}
+const	int	$const11	6		%read{33,91} %write{2147483647,-1}
+temp	int	$tmp15	%read{34,34} %write{33,33}
+temp	int	$tmp16	%read{36,36} %write{35,35}
+temp	float	$tmp17	%read{37,37} %write{36,36}
+temp	int	$tmp18	%read{40,40} %write{39,39}
+const	int	$const12	7		%read{43,95} %write{2147483647,-1}
+temp	int	$tmp19	%read{44,44} %write{43,43}
+temp	float	$tmp20	%read{46,46} %write{45,45}
+const	int	$const13	8		%read{48,100} %write{2147483647,-1}
+temp	int	$tmp21	%read{49,49} %write{48,48}
+temp	float	$tmp22	%read{79,79} %write{57,78}
+temp	int	$tmp23	%read{56,56} %write{55,55}
+temp	int	$tmp24	%read{60,60} %write{59,59}
+temp	int	$tmp25	%read{62,62} %write{61,61}
+temp	float	$tmp26	%read{63,63} %write{62,62}
+temp	int	$tmp27	%read{66,66} %write{65,65}
+temp	int	$tmp28	%read{70,70} %write{69,69}
+temp	float	$tmp29	%read{72,72} %write{71,71}
+temp	int	$tmp30	%read{75,75} %write{74,74}
+const	int	$const14	1		%read{79,159} %write{2147483647,-1}
+temp	float	$tmp31	%read{105,105} %write{83,104}
+temp	int	$tmp32	%read{82,82} %write{81,81}
+temp	int	$tmp33	%read{86,86} %write{85,85}
+temp	int	$tmp34	%read{88,88} %write{87,87}
+temp	float	$tmp35	%read{89,89} %write{88,88}
+temp	int	$tmp36	%read{92,92} %write{91,91}
+temp	int	$tmp37	%read{96,96} %write{95,95}
+temp	float	$tmp38	%read{98,98} %write{97,97}
+temp	int	$tmp39	%read{101,101} %write{100,100}
+const	int	$const15	2		%read{105,160} %write{2147483647,-1}
+temp	color	$tmp40	%read{111,111} %write{110,110}
+temp	color	$tmp41	%read{112,112} %write{111,111}
+temp	int	$tmp42	%read{115,115} %write{114,114}
+temp	color	$tmp43	%read{121,121} %write{117,117}
+temp	color	$tmp44	%read{117,117} %write{116,116}
+temp	float	$tmp45	%read{121,121} %write{119,120}
+temp	float	$tmp46	%read{125,125} %write{124,124}
+temp	float	$tmp47	%read{126,126} %write{125,125}
+temp	float	$tmp48	%read{128,128} %write{127,127}
+temp	float	$tmp49	%read{129,129} %write{128,128}
+temp	float	$tmp50	%read{132,132} %write{131,131}
+temp	color	$tmp51	%read{133,133} %write{132,132}
+temp	color	$tmp52	%read{139,139} %write{135,135}
+temp	color	$tmp53	%read{140,140} %write{136,136}
+temp	color	$tmp54	%read{139,139} %write{137,137}
+const	string	$const16	"clamp"		%read{138,154} %write{2147483647,-1}
+temp	color	$tmp55	%read{140,140} %write{139,139}
+temp	color	$tmp56	%read{143,143} %write{141,141}
+temp	float	$tmp57	%read{143,143} %write{142,142}
+temp	color	$tmp58	%read{147,147} %write{143,143}
+temp	color	$tmp59	%read{148,148} %write{144,144}
+temp	color	$tmp60	%read{147,147} %write{145,145}
+temp	color	$tmp61	%read{148,148} %write{147,147}
+temp	color	$tmp62	%read{150,150} %write{149,149}
+temp	color	$tmp63	%read{156,156} %write{152,152}
+temp	color	$tmp64	%read{155,155} %write{153,153}
+temp	color	$tmp65	%read{156,156} %write{155,155}
+code ___main___
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:104
+# 	
+	assign		effect Overall 	%filename{"source/3dsMax-OSL-Shaders/ColorCorrect.osl"} %line{104} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:106
+# 	
+	assign		Out Input 	%line{106} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:108
+# 	{
+	eq		$tmp1 Bypass $const1 	%line{108} %argrw{"wrr"}
+	if		$tmp1 158 158 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:111
+# 		{
+	if		HueRange 27 27 	%line{111} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:114
+# 			// Tramsform to HSV space	
+	transformc	___324_hsv $const2 $const3 Input 	%line{114} %argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:116
+# 			
+	transformc	___324_hsv2 $const2 $const3 AffectHue 	%line{116} %argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:118
+# 			// If distance in hue is larger than half
+	compref		$tmp2 ___324_hsv $const1 	%line{118} %argrw{"wrr"}
+	compref		$tmp3 ___324_hsv2 $const1 	%argrw{"wrr"}
+	sub		$tmp4 $tmp2 $tmp3 	%argrw{"wrr"}
+	fabs		___324_huedifference $tmp4 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:121
+# 				huedifference = 1.0 - huedifference;
+	gt		$tmp5 ___324_huedifference $const4 	%line{121} %argrw{"wrr"}
+	if		$tmp5 14 14 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:122
+# 				
+	sub		___324_huedifference $const5 ___324_huedifference 	%line{122} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:124
+# 			float HRS = HueRangeSoftness / 360.0;
+	div		$tmp6 HueRangeWidth $const6 	%line{124} %argrw{"wrr"}
+	div		___324_HRW $tmp6 $const7 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:125
+# 			
+	div		___324_HRS HueRangeSoftness $const6 	%line{125} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:129
+# 			{
+	gt		$tmp7 ___324_huedifference ___324_HRW 	%line{129} %argrw{"wrr"}
+	if		$tmp7 27 27 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:132
+# 					effect *= smoothstep(0.0, 1.0, 1.0 - (huedifference - HRW) / HRS);
+	gt		$tmp8 ___324_HRS $const8 	%line{132} %argrw{"wrr"}
+	if		$tmp8 26 27 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:133
+# 				else
+	sub		$tmp10 ___324_huedifference ___324_HRW 	%line{133} %argrw{"wrr"}
+	div		$tmp11 $tmp10 ___324_HRS 	%argrw{"wrr"}
+	sub		$tmp12 $const5 $tmp11 	%argrw{"wrr"}
+	smoothstep	$tmp9 $const8 $const5 $tmp12 	%argrw{"wrrr"}
+	mul		effect effect $tmp9 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:135
+# 			}
+	assign		effect $const8 	%line{135} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:140
+# 		{
+	if		ChannelMapping 106 106 	%line{140} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:142
+# 			Out[1] = remap(Input, GreenMapping);
+	functioncall	$const9 53 	%line{142} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:10
+# 		return In[mapping];
+	lt		$tmp14 RedMapping $const10 	%line{10} %argrw{"wrr"}
+	if		$tmp14 33 33 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:11
+# 	if (mapping < 6)
+	compref		$tmp13 Input RedMapping 	%line{11} %argrw{"wrr"}
+	return
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:12
+# 		return 1.0 - In[mapping-3];
+	lt		$tmp15 RedMapping $const11 	%line{12} %argrw{"wrr"}
+	if		$tmp15 39 39 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:13
+# 	if (mapping == 6) return luminance(In);
+	sub		$tmp16 RedMapping $const10 	%line{13} %argrw{"wrr"}
+	compref		$tmp17 Input $tmp16 	%argrw{"wrr"}
+	sub		$tmp13 $const5 $tmp17 	%argrw{"wrr"}
+	return
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:14
+# 	if (mapping == 7) return 1.0 - luminance(In);
+	eq		$tmp18 RedMapping $const11 	%line{14} %argrw{"wrr"}
+	if		$tmp18 43 43 	%argrw{"r"}
+	luminance	$tmp13 Input 	%argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:15
+# 	if (mapping == 8) return 0.0;
+	eq		$tmp19 RedMapping $const12 	%line{15} %argrw{"wrr"}
+	if		$tmp19 48 48 	%argrw{"r"}
+	luminance	$tmp20 Input 	%argrw{"wr"}
+	sub		$tmp13 $const5 $tmp20 	%argrw{"wrr"}
+	return
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:16
+# 	return 1.0;
+	eq		$tmp21 RedMapping $const13 	%line{16} %argrw{"wrr"}
+	if		$tmp21 52 52 	%argrw{"r"}
+	assign		$tmp13 $const8 	%argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:17
+# }
+	assign		$tmp13 $const5 	%line{17} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:142
+# 			Out[1] = remap(Input, GreenMapping);
+	compassign	Out $const1 $tmp13 	%line{142} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:143
+# 			Out[2] = remap(Input, BlueMapping);
+	functioncall	$const9 79 	%line{143} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:10
+# 		return In[mapping];
+	lt		$tmp23 GreenMapping $const10 	%line{10} %argrw{"wrr"}
+	if		$tmp23 59 59 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:11
+# 	if (mapping < 6)
+	compref		$tmp22 Input GreenMapping 	%line{11} %argrw{"wrr"}
+	return
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:12
+# 		return 1.0 - In[mapping-3];
+	lt		$tmp24 GreenMapping $const11 	%line{12} %argrw{"wrr"}
+	if		$tmp24 65 65 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:13
+# 	if (mapping == 6) return luminance(In);
+	sub		$tmp25 GreenMapping $const10 	%line{13} %argrw{"wrr"}
+	compref		$tmp26 Input $tmp25 	%argrw{"wrr"}
+	sub		$tmp22 $const5 $tmp26 	%argrw{"wrr"}
+	return
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:14
+# 	if (mapping == 7) return 1.0 - luminance(In);
+	eq		$tmp27 GreenMapping $const11 	%line{14} %argrw{"wrr"}
+	if		$tmp27 69 69 	%argrw{"r"}
+	luminance	$tmp22 Input 	%argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:15
+# 	if (mapping == 8) return 0.0;
+	eq		$tmp28 GreenMapping $const12 	%line{15} %argrw{"wrr"}
+	if		$tmp28 74 74 	%argrw{"r"}
+	luminance	$tmp29 Input 	%argrw{"wr"}
+	sub		$tmp22 $const5 $tmp29 	%argrw{"wrr"}
+	return
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:16
+# 	return 1.0;
+	eq		$tmp30 GreenMapping $const13 	%line{16} %argrw{"wrr"}
+	if		$tmp30 78 78 	%argrw{"r"}
+	assign		$tmp22 $const8 	%argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:17
+# }
+	assign		$tmp22 $const5 	%line{17} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:143
+# 			Out[2] = remap(Input, BlueMapping);
+	compassign	Out $const14 $tmp22 	%line{143} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:144
+# 		}
+	functioncall	$const9 105 	%line{144} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:10
+# 		return In[mapping];
+	lt		$tmp32 BlueMapping $const10 	%line{10} %argrw{"wrr"}
+	if		$tmp32 85 85 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:11
+# 	if (mapping < 6)
+	compref		$tmp31 Input BlueMapping 	%line{11} %argrw{"wrr"}
+	return
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:12
+# 		return 1.0 - In[mapping-3];
+	lt		$tmp33 BlueMapping $const11 	%line{12} %argrw{"wrr"}
+	if		$tmp33 91 91 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:13
+# 	if (mapping == 6) return luminance(In);
+	sub		$tmp34 BlueMapping $const10 	%line{13} %argrw{"wrr"}
+	compref		$tmp35 Input $tmp34 	%argrw{"wrr"}
+	sub		$tmp31 $const5 $tmp35 	%argrw{"wrr"}
+	return
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:14
+# 	if (mapping == 7) return 1.0 - luminance(In);
+	eq		$tmp36 BlueMapping $const11 	%line{14} %argrw{"wrr"}
+	if		$tmp36 95 95 	%argrw{"r"}
+	luminance	$tmp31 Input 	%argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:15
+# 	if (mapping == 8) return 0.0;
+	eq		$tmp37 BlueMapping $const12 	%line{15} %argrw{"wrr"}
+	if		$tmp37 100 100 	%argrw{"r"}
+	luminance	$tmp38 Input 	%argrw{"wr"}
+	sub		$tmp31 $const5 $tmp38 	%argrw{"wrr"}
+	return
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:16
+# 	return 1.0;
+	eq		$tmp39 BlueMapping $const13 	%line{16} %argrw{"wrr"}
+	if		$tmp39 104 104 	%argrw{"r"}
+	assign		$tmp31 $const8 	%argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:17
+# }
+	assign		$tmp31 $const5 	%line{17} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:144
+# 		}
+	compassign	Out $const15 $tmp31 	%line{144} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:148
+# 		{
+	if		BrightnessAdjustment 122 122 	%line{148} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:151
+# 			// Multiply by Brightness
+	if		Invert 109 109 	%line{151} %argrw{"r"}
+	sub		Out $const5 Out 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:153
+# 			// Scale around Pivot by Contrast
+	mul		Out Out Brightness 	%line{153} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:155
+# 			// Add Lift
+	sub		$tmp40 Out Pivot 	%line{155} %argrw{"wrr"}
+	mul		$tmp41 $tmp40 Contrast 	%argrw{"wrr"}
+	add		Out $tmp41 Pivot 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:157
+# 			// Apply Gamma
+	add		Out Out Lift 	%line{157} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:159
+# 				Out = pow(max(0.0, Out), InverseGamma?1.0/Gamma:Gamma);
+	neq		$tmp42 Gamma $const5 	%line{159} %argrw{"wrr"}
+	if		$tmp42 122 122 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:160
+# 		}		
+	assign		$tmp44 $const8 	%line{160} %argrw{"wr"}
+	max		$tmp43 $tmp44 Out 	%argrw{"wrr"}
+	if		InverseGamma 120 121 	%argrw{"r"}
+	div		$tmp45 $const5 Gamma 	%argrw{"wrr"}
+	assign		$tmp45 Gamma 	%argrw{"wr"}
+	pow		Out $tmp43 $tmp45 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:163
+# 		{
+	if		ColorAdjustment 134 134 	%line{163} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:166
+# 		
+	transformc	___328_hsv $const2 $const3 Out 	%line{166} %argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:168
+# 			hsv[1] *= Saturation;
+	compref		$tmp46 ___328_hsv $const1 	%line{168} %argrw{"wrr"}
+	add		$tmp47 $tmp46 HueShift 	%argrw{"wrr"}
+	compassign	___328_hsv $const1 $tmp47 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:169
+# 			
+	compref		$tmp48 ___328_hsv $const14 	%line{169} %argrw{"wrr"}
+	mul		$tmp49 $tmp48 Saturation 	%argrw{"wrr"}
+	compassign	___328_hsv $const14 $tmp49 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:172
+# 
+	transformc	Out $const3 $const2 ___328_hsv 	%line{172} %argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:175
+# 		}
+	compref		$tmp50 ___328_hsv $const15 	%line{175} %argrw{"wrr"}
+	mul		$tmp51 TintColor $tmp50 	%argrw{"wrr"}
+	mix		Out Out $tmp51 TintStrength 	%argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:179
+# 		{
+	if		OutputTint 151 151 	%line{179} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:181
+# 			color above = clamp((Out - MidtoneLum) / (1.0 - MidtoneLum), 0.0, 1.0);
+	div		$tmp52 Out MidtoneLum 	%line{181} %argrw{"wrr"}
+	assign		$tmp53 $const8 	%argrw{"wr"}
+	assign		$tmp54 $const5 	%argrw{"wr"}
+	functioncall	$const16 141 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:144
+# color  clamp (color x, color minval, color maxval) { return max(min(x,maxval),minval); }
+	min		$tmp55 $tmp52 $tmp54 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{144} %argrw{"wrr"}
+	max		___329_below $tmp55 $tmp53 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:182
+# 			Out = mix(Shadows, mix(Midtones, Highlights, above), below);			
+	sub		$tmp56 Out MidtoneLum 	%filename{"source/3dsMax-OSL-Shaders/ColorCorrect.osl"} %line{182} %argrw{"wrr"}
+	sub		$tmp57 $const5 MidtoneLum 	%argrw{"wrr"}
+	div		$tmp58 $tmp56 $tmp57 	%argrw{"wrr"}
+	assign		$tmp59 $const8 	%argrw{"wr"}
+	assign		$tmp60 $const5 	%argrw{"wr"}
+	functioncall	$const16 149 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:144
+# color  clamp (color x, color minval, color maxval) { return max(min(x,maxval),minval); }
+	min		$tmp61 $tmp58 $tmp60 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{144} %argrw{"wrr"}
+	max		___329_above $tmp61 $tmp59 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:183
+# 		}										
+	mix		$tmp62 Midtones Highlights ___329_above 	%filename{"source/3dsMax-OSL-Shaders/ColorCorrect.osl"} %line{183} %argrw{"wrrr"}
+	mix		Out Shadows $tmp62 ___329_below 	%argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:186
+# 			Out = clamp(Out, ClampLow, ClampHi);
+	if		Clamp 157 157 	%line{186} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:187
+# 		
+	assign		$tmp63 ClampLow 	%line{187} %argrw{"wr"}
+	assign		$tmp64 ClampHi 	%argrw{"wr"}
+	functioncall	$const16 157 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:144
+# color  clamp (color x, color minval, color maxval) { return max(min(x,maxval),minval); }
+	min		$tmp65 Out $tmp64 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{144} %argrw{"wrr"}
+	max		Out $tmp65 $tmp63 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:190
+# 	}
+	mix		Out Input Out effect 	%filename{"source/3dsMax-OSL-Shaders/ColorCorrect.osl"} %line{190} %argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:194
+# 	G = Out[1];
+	compref		R Out $const1 	%line{194} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:195
+# 	B = Out[2];
+	compref		G Out $const14 	%line{195} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCorrect.osl:196
+# } 
+	compref		B Out $const15 	%line{196} %argrw{"wrr"}
+	end

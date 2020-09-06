@@ -1,0 +1,54 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader FourPointGradient	%meta{string,help,"Four Point Gradient"} %meta{string,categor,"Textures"} %meta{string,label,"4-point Gradient"} 
+param	point	UVW	0 0 0		%read{1,5} %write{0,0} %initexpr
+param	color	TopLeft	1 0.40000001 0.40000001		%read{9,9} %write{2147483647,-1}
+param	color	TopRight	0.2 1 0.60000002		%read{10,10} %write{2147483647,-1}
+param	color	BottomLeft	0.2 0.5 0.89999998		%read{9,9} %write{2147483647,-1}
+param	color	BottomRight	0.69999999 0.5 0.60000002		%read{10,10} %write{2147483647,-1}
+param	float	UCenter	0.5		%meta{float,min,0} %meta{float,max,1}  %read{2,2} %write{2147483647,-1}
+param	float	VCenter	0.5		%meta{float,min,0} %meta{float,max,1}  %read{6,6} %write{2147483647,-1}
+oparam	color	Out	0 0 0		%read{2147483647,-1} %write{11,11}
+global	float	u	%read{0,0} %write{2147483647,-1}
+global	float	v	%read{0,0} %write{2147483647,-1}
+local	float	x	%read{11,11} %write{4,4}
+local	float	y	%read{9,10} %write{8,8}
+const	int	$const1	0		%read{1,1} %write{2147483647,-1}
+const	float	$const2	0		%read{0,0} %write{2147483647,-1}
+temp	float	$tmp1	%read{4,4} %write{1,1}
+temp	float	$tmp2	%read{4,4} %write{3,3}
+const	float	$const3	50		%read{3,7} %write{2147483647,-1}
+const	float	$const4	0.5		%read{2,6} %write{2147483647,-1}
+temp	float	$tmp3	%read{3,3} %write{2,2}
+const	int	$const5	1		%read{5,5} %write{2147483647,-1}
+temp	float	$tmp4	%read{8,8} %write{5,5}
+temp	float	$tmp5	%read{8,8} %write{7,7}
+temp	float	$tmp6	%read{7,7} %write{6,6}
+temp	color	$tmp7	%read{11,11} %write{9,9}
+temp	color	$tmp8	%read{11,11} %write{10,10}
+code UVW
+# source/3dsMax-OSL-Shaders/FourPointGradient.osl:13
+# 	color TopLeft     = color(1,0.4,0.4),
+	point		UVW u v $const2 	%filename{"source/3dsMax-OSL-Shaders/FourPointGradient.osl"} %line{13} %argrw{"wrrr"}
+code ___main___
+# source/3dsMax-OSL-Shaders/FourPointGradient.osl:23
+# 	float y = pow(UVW[1], pow(50.0, VCenter - 0.5));
+	compref		$tmp1 UVW $const1 	%filename{"source/3dsMax-OSL-Shaders/FourPointGradient.osl"} %line{23} %argrw{"wrr"}
+	sub		$tmp3 UCenter $const4 	%argrw{"wrr"}
+	pow		$tmp2 $const3 $tmp3 	%argrw{"wrr"}
+	pow		x $tmp1 $tmp2 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/FourPointGradient.osl:24
+# 	
+	compref		$tmp4 UVW $const5 	%line{24} %argrw{"wrr"}
+	sub		$tmp6 VCenter $const4 	%argrw{"wrr"}
+	pow		$tmp5 $const3 $tmp6 	%argrw{"wrr"}
+	pow		y $tmp4 $tmp5 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/FourPointGradient.osl:26
+# 	          mix(BottomRight, TopRight, y), x);
+	mix		$tmp7 BottomLeft TopLeft y 	%line{26} %argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/FourPointGradient.osl:27
+# }
+	mix		$tmp8 BottomRight TopRight y 	%line{27} %argrw{"wrrr"}
+	mix		Out $tmp7 $tmp8 x 	%argrw{"wrrr"}
+	end

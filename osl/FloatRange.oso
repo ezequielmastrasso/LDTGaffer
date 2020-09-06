@@ -1,0 +1,59 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader FloatRange	%meta{string,help,"Maps one range of float numbers into another"} %meta{string,label,"Range/Remapper"} %meta{string,category,"Math Float"} 
+param	float	Input	0		%meta{string,label,"Input value"} %meta{string,help,"The value to be remapped. As this moves from the <b>Input Range Start</b> to <b>Input Range End</b> values the output will change from the <b>Output Range Start</b> to the <b>Output Range End</b> values following the shape dictated by <b>Curve</b>"}  %read{0,0} %write{2147483647,-1}
+param	int	Clamp	1		%meta{string,widget,"checkBox"} %meta{string,label,"Clamp to Output range"} %meta{string,help,"When on, restricts the output to remain between the start and end of the output range. When off, the remapping is extrapolated beyond the endpoints of the range."}  %read{8,8} %write{2147483647,-1}
+param	float	InStart	0		%meta{string,label,"Input Range Start"} %meta{string,help,"The start of the input range"}  %read{0,1} %write{2147483647,-1}
+param	float	InEnd	1		%meta{string,label,"Input Range End"} %meta{string,help,"The end of the input range"}  %read{1,1} %write{2147483647,-1}
+param	float	OutStart	0		%meta{string,label,"Output Range Start"} %meta{string,help,"The start of the output range."}  %read{5,15} %write{2147483647,-1}
+param	float	OutEnd	1		%meta{string,label,"Output Range End"} %meta{string,help,"The end value of the output range."}  %read{5,16} %write{2147483647,-1}
+param	float	Curve	1		%meta{string,label,"Remapping Curve"} %meta{string,help,"Apply a power function to the remapping. <ul><li>1.0 means a linear mapping. <li>A value lower than 1.0 will push the middle lower (closer to <b>Output Start Range</b>)<li>A value higher than 1.0 will push the middle higher (closer to <b>Output End Range</b>)</ul>"}  %read{3,3} %write{2147483647,-1}
+oparam	float	Out	1		%read{12,15} %write{7,16}
+local	float	fac	%read{4,4} %write{2,2}
+temp	float	$tmp1	%read{2,2} %write{0,0}
+temp	float	$tmp2	%read{2,2} %write{1,1}
+temp	float	$tmp3	%read{6,6} %write{4,4}
+const	float	$const1	1		%read{3,3} %write{2147483647,-1}
+temp	float	$tmp4	%read{4,4} %write{3,3}
+temp	float	$tmp5	%read{6,6} %write{5,5}
+temp	float	$tmp6	%read{7,7} %write{6,6}
+temp	int	$tmp7	%read{10,10} %write{9,9}
+const	string	$const2	"clamp"		%read{11,14} %write{2147483647,-1}
+temp	float	$tmp8	%read{13,13} %write{12,12}
+temp	float	$tmp9	%read{16,16} %write{15,15}
+code ___main___
+# source/3dsMax-OSL-Shaders/FloatRange.osl:48
+# 	Out = OutStart + pow(fac, 1.0 / Curve) * (OutEnd - OutStart);
+	sub		$tmp1 Input InStart 	%filename{"source/3dsMax-OSL-Shaders/FloatRange.osl"} %line{48} %argrw{"wrr"}
+	sub		$tmp2 InEnd InStart 	%argrw{"wrr"}
+	div		fac $tmp1 $tmp2 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/FloatRange.osl:49
+# 	
+	div		$tmp4 $const1 Curve 	%line{49} %argrw{"wrr"}
+	pow		$tmp3 fac $tmp4 	%argrw{"wrr"}
+	sub		$tmp5 OutEnd OutStart 	%argrw{"wrr"}
+	mul		$tmp6 $tmp3 $tmp5 	%argrw{"wrr"}
+	add		Out OutStart $tmp6 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/FloatRange.osl:51
+# 	{
+	if		Clamp 17 17 	%line{51} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/FloatRange.osl:53
+# 			Out = clamp(Out, OutStart, OutEnd);
+	lt		$tmp7 OutStart OutEnd 	%line{53} %argrw{"wrr"}
+	if		$tmp7 14 17 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/FloatRange.osl:54
+# 		else
+	functioncall	$const2 14 	%line{54} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:145
+# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
+	min		$tmp8 Out OutEnd 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{145} %argrw{"wrr"}
+	max		Out $tmp8 OutStart 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/FloatRange.osl:56
+# 	}
+	functioncall	$const2 17 	%filename{"source/3dsMax-OSL-Shaders/FloatRange.osl"} %line{56} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:145
+# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
+	min		$tmp9 Out OutStart 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{145} %argrw{"wrr"}
+	max		Out $tmp9 OutEnd 	%argrw{"wrr"}
+	end

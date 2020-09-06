@@ -1,0 +1,1158 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader node_image_texture
+param	int	use_mapping	0		%read{2,2} %write{2147483647,-1}
+param	matrix	mapping	0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0		%read{3,3} %write{2147483647,-1} %derivs
+param	point	Vector	0 0 0		%read{1,1} %write{0,0} %derivs %initexpr
+param	string	filename	""		%read{10,428} %write{2147483647,-1}
+param	string	color_space	"sRGB"		%read{27,445} %write{2147483647,-1}
+param	string	projection	"Flat"		%read{4,77} %write{2147483647,-1}
+param	string	interpolation	"smartcubic"		%read{10,428} %write{2147483647,-1}
+param	float	projection_blend	0		%read{94,94} %write{2147483647,-1}
+param	int	is_float	1		%read{23,441} %write{2147483647,-1}
+param	int	use_alpha	1		%read{11,429} %write{2147483647,-1}
+oparam	color	Color	0 0 0		%read{336,496} %write{76,496}
+oparam	float	Alpha	1		%read{13,499} %write{10,499}
+global	point	P	%read{0,0} %write{2147483647,-1} %derivs
+global	normal	N	%read{79,79} %write{2147483647,-1}
+local	color	___646_rgb	%read{20,494} %write{10,493}
+local	point	p	%read{3,425} %write{1,3} %derivs
+local	vector	___650_Nob	%read{80,250} %write{79,92}
+local	vector	___650_weight	%read{167,497} %write{93,257}
+local	float	___650_blend	%read{95,223} %write{94,94}
+local	float	___650_limit	%read{101,254} %write{96,96}
+local	float	___650_tmp_alpha	%read{271,498} %write{268,428}
+const	string	$const1	"Flat"		%read{4,4} %write{2147483647,-1}
+temp	int	$tmp1	%read{5,5} %write{4,4}
+const	int	$const2	0		%read{6,448} %write{2147483647,-1}
+temp	float	$tmp2	%read{10,10} %write{6,6} %derivs
+const	int	$const3	1		%read{7,463} %write{2147483647,-1}
+temp	float	$tmp3	%read{9,9} %write{7,7} %derivs
+const	string	$const4	"image_texture_lookup"		%read{8,426} %write{2147483647,-1}
+const	float	$const5	1		%read{9,489} %write{2147483647,-1}
+temp	float	$tmp4	%read{10,10} %write{9,9} %derivs
+const	string	$const6	"wrap"		%read{10,428} %write{2147483647,-1}
+const	string	$const7	"periodic"		%read{10,428} %write{2147483647,-1}
+const	string	$const8	"interp"		%read{10,428} %write{2147483647,-1}
+const	string	$const9	"alpha"		%read{10,428} %write{2147483647,-1}
+const	string	$const10	"color_unpremultiply"		%read{12,430} %write{2147483647,-1}
+temp	int	$tmp5	%read{14,14} %write{13,13}
+temp	int	$tmp6	%read{15,19} %write{14,18}
+const	float	$const11	0		%read{16,484} %write{2147483647,-1}
+temp	int	$tmp7	%read{17,17} %write{16,16}
+temp	int	$tmp8	%read{18,18} %write{17,17}
+temp	int	$tmp9	%read{24,24} %write{23,23}
+temp	color	$tmp10	%read{26,26} %write{25,25}
+const	string	$const12	"sRGB"		%read{27,445} %write{2147483647,-1}
+temp	int	$tmp11	%read{28,28} %write{27,27}
+const	string	$const13	"color_srgb_to_scene_linear"		%read{29,479} %write{2147483647,-1}
+temp	float	$tmp12	%read{75,75} %write{36,43}
+temp	float	$tmp13	%read{32,40} %write{30,30}
+const	float	$const14	0.040449999		%read{32,480} %write{2147483647,-1}
+temp	int	$tmp14	%read{33,33} %write{32,32}
+temp	int	$tmp15	%read{35,35} %write{34,34}
+const	float	$const15	12.92		%read{37,485} %write{2147483647,-1}
+temp	float	$tmp16	%read{38,38} %write{37,37}
+const	float	$const16	0.055		%read{40,488} %write{2147483647,-1}
+temp	float	$tmp17	%read{42,42} %write{40,40}
+const	float	$const17	1.0549999		%read{41,489} %write{2147483647,-1}
+temp	float	$tmp18	%read{42,42} %write{41,41}
+temp	float	$tmp19	%read{43,43} %write{42,42}
+const	float	$const18	2.4000001		%read{43,491} %write{2147483647,-1}
+temp	float	$tmp20	%read{75,75} %write{51,58}
+temp	float	$tmp21	%read{47,55} %write{45,45}
+temp	int	$tmp22	%read{48,48} %write{47,47}
+temp	int	$tmp23	%read{50,50} %write{49,49}
+temp	float	$tmp24	%read{53,53} %write{52,52}
+temp	float	$tmp25	%read{57,57} %write{55,55}
+temp	float	$tmp26	%read{57,57} %write{56,56}
+temp	float	$tmp27	%read{58,58} %write{57,57}
+temp	float	$tmp28	%read{75,75} %write{66,73}
+const	int	$const19	2		%read{60,497} %write{2147483647,-1}
+temp	float	$tmp29	%read{62,70} %write{60,60}
+temp	int	$tmp30	%read{63,63} %write{62,62}
+temp	int	$tmp31	%read{65,65} %write{64,64}
+temp	float	$tmp32	%read{68,68} %write{67,67}
+temp	float	$tmp33	%read{72,72} %write{70,70}
+temp	float	$tmp34	%read{72,72} %write{71,71}
+temp	float	$tmp35	%read{73,73} %write{72,72}
+const	string	$const20	"Box"		%read{77,77} %write{2147483647,-1}
+temp	int	$tmp36	%read{78,78} %write{77,77}
+const	string	$const21	"world"		%read{79,79} %write{2147483647,-1}
+const	string	$const22	"object"		%read{79,79} %write{2147483647,-1}
+temp	float	$tmp37	%read{86,86} %write{81,81}
+temp	float	$tmp38	%read{81,81} %write{80,80}
+temp	float	$tmp39	%read{86,86} %write{83,83}
+temp	float	$tmp40	%read{83,83} %write{82,82}
+temp	float	$tmp41	%read{86,86} %write{85,85}
+temp	float	$tmp42	%read{85,85} %write{84,84}
+temp	float	$tmp43	%read{89,89} %write{87,87}
+temp	float	$tmp44	%read{89,89} %write{88,88}
+temp	float	$tmp45	%read{91,91} %write{89,89}
+temp	float	$tmp46	%read{91,91} %write{90,90}
+temp	float	$tmp47	%read{92,92} %write{91,91}
+const	vector	$const23	0 0 0		%read{93,93} %write{2147483647,-1}
+const	float	$const24	0.5		%read{96,221} %write{2147483647,-1}
+temp	float	$tmp48	%read{96,96} %write{95,95}
+temp	float	$tmp49	%read{102,102} %write{97,97}
+temp	float	$tmp50	%read{100,100} %write{98,98}
+temp	float	$tmp51	%read{100,100} %write{99,99}
+temp	float	$tmp52	%read{101,101} %write{100,100}
+temp	float	$tmp53	%read{102,102} %write{101,101}
+temp	int	$tmp54	%read{103,103} %write{102,102}
+temp	int	$tmp55	%read{104,113} %write{103,112}
+temp	float	$tmp56	%read{110,110} %write{105,105}
+temp	float	$tmp57	%read{108,108} %write{106,106}
+temp	float	$tmp58	%read{108,108} %write{107,107}
+temp	float	$tmp59	%read{109,109} %write{108,108}
+temp	float	$tmp60	%read{110,110} %write{109,109}
+temp	int	$tmp61	%read{111,111} %write{110,110}
+temp	int	$tmp62	%read{112,112} %write{111,111}
+temp	float	$tmp63	%read{120,120} %write{115,115}
+temp	float	$tmp64	%read{118,118} %write{116,116}
+temp	float	$tmp65	%read{118,118} %write{117,117}
+temp	float	$tmp66	%read{119,119} %write{118,118}
+temp	float	$tmp67	%read{120,120} %write{119,119}
+temp	int	$tmp68	%read{121,121} %write{120,120}
+temp	int	$tmp69	%read{122,131} %write{121,130}
+temp	float	$tmp70	%read{128,128} %write{123,123}
+temp	float	$tmp71	%read{126,126} %write{124,124}
+temp	float	$tmp72	%read{126,126} %write{125,125}
+temp	float	$tmp73	%read{127,127} %write{126,126}
+temp	float	$tmp74	%read{128,128} %write{127,127}
+temp	int	$tmp75	%read{129,129} %write{128,128}
+temp	int	$tmp76	%read{130,130} %write{129,129}
+temp	float	$tmp77	%read{138,138} %write{133,133}
+temp	float	$tmp78	%read{136,136} %write{134,134}
+temp	float	$tmp79	%read{136,136} %write{135,135}
+temp	float	$tmp80	%read{137,137} %write{136,136}
+temp	float	$tmp81	%read{138,138} %write{137,137}
+temp	int	$tmp82	%read{139,139} %write{138,138}
+temp	int	$tmp83	%read{140,149} %write{139,148}
+temp	float	$tmp84	%read{146,146} %write{141,141}
+temp	float	$tmp85	%read{144,144} %write{142,142}
+temp	float	$tmp86	%read{144,144} %write{143,143}
+temp	float	$tmp87	%read{145,145} %write{144,144}
+temp	float	$tmp88	%read{146,146} %write{145,145}
+temp	int	$tmp89	%read{147,147} %write{146,146}
+temp	int	$tmp90	%read{148,148} %write{147,147}
+temp	int	$tmp91	%read{152,152} %write{151,151}
+temp	float	$tmp92	%read{159,159} %write{153,153}
+temp	float	$tmp93	%read{158,158} %write{154,154}
+temp	float	$tmp94	%read{157,157} %write{155,155}
+temp	float	$tmp95	%read{157,157} %write{156,156}
+temp	float	$tmp96	%read{158,158} %write{157,157}
+temp	float	$tmp97	%read{159,159} %write{158,158}
+temp	int	$tmp98	%read{160,160} %write{159,159}
+temp	float	$tmp99	%read{165,165} %write{161,161}
+temp	float	$tmp100	%read{164,164} %write{162,162}
+temp	float	$tmp101	%read{164,164} %write{163,163}
+temp	float	$tmp102	%read{165,165} %write{164,164}
+temp	float	$tmp103	%read{166,166} %write{165,165}
+temp	float	$tmp104	%read{175,175} %write{174,174}
+temp	float	$tmp105	%read{170,170} %write{167,167}
+temp	float	$tmp106	%read{169,169} %write{168,168}
+temp	float	$tmp107	%read{170,170} %write{169,169}
+temp	float	$tmp108	%read{171,171} %write{170,170}
+temp	float	$tmp109	%read{173,173} %write{171,171}
+const	string	$const25	"clamp"		%read{172,224} %write{2147483647,-1}
+temp	float	$tmp110	%read{174,174} %write{173,173}
+temp	float	$tmp111	%read{177,177} %write{176,176}
+temp	float	$tmp112	%read{178,178} %write{177,177}
+temp	float	$tmp113	%read{185,185} %write{179,179}
+temp	float	$tmp114	%read{184,184} %write{180,180}
+temp	float	$tmp115	%read{183,183} %write{181,181}
+temp	float	$tmp116	%read{183,183} %write{182,182}
+temp	float	$tmp117	%read{184,184} %write{183,183}
+temp	float	$tmp118	%read{185,185} %write{184,184}
+temp	int	$tmp119	%read{186,186} %write{185,185}
+temp	float	$tmp120	%read{191,191} %write{187,187}
+temp	float	$tmp121	%read{190,190} %write{188,188}
+temp	float	$tmp122	%read{190,190} %write{189,189}
+temp	float	$tmp123	%read{191,191} %write{190,190}
+temp	float	$tmp124	%read{192,192} %write{191,191}
+temp	float	$tmp125	%read{201,201} %write{200,200}
+temp	float	$tmp126	%read{196,196} %write{193,193}
+temp	float	$tmp127	%read{195,195} %write{194,194}
+temp	float	$tmp128	%read{196,196} %write{195,195}
+temp	float	$tmp129	%read{197,197} %write{196,196}
+temp	float	$tmp130	%read{199,199} %write{197,197}
+temp	float	$tmp131	%read{200,200} %write{199,199}
+temp	float	$tmp132	%read{203,203} %write{202,202}
+temp	float	$tmp133	%read{204,204} %write{203,203}
+temp	float	$tmp134	%read{211,211} %write{205,205}
+temp	float	$tmp135	%read{210,210} %write{206,206}
+temp	float	$tmp136	%read{209,209} %write{207,207}
+temp	float	$tmp137	%read{209,209} %write{208,208}
+temp	float	$tmp138	%read{210,210} %write{209,209}
+temp	float	$tmp139	%read{211,211} %write{210,210}
+temp	int	$tmp140	%read{212,212} %write{211,211}
+temp	float	$tmp141	%read{217,217} %write{213,213}
+temp	float	$tmp142	%read{216,216} %write{214,214}
+temp	float	$tmp143	%read{216,216} %write{215,215}
+temp	float	$tmp144	%read{217,217} %write{216,216}
+temp	float	$tmp145	%read{218,218} %write{217,217}
+temp	float	$tmp146	%read{227,227} %write{226,226}
+temp	float	$tmp147	%read{222,222} %write{219,219}
+temp	float	$tmp148	%read{221,221} %write{220,220}
+temp	float	$tmp149	%read{222,222} %write{221,221}
+temp	float	$tmp150	%read{223,223} %write{222,222}
+temp	float	$tmp151	%read{225,225} %write{223,223}
+temp	float	$tmp152	%read{226,226} %write{225,225}
+temp	float	$tmp153	%read{229,229} %write{228,228}
+temp	float	$tmp154	%read{230,230} %write{229,229}
+const	float	$const26	2		%read{231,254} %write{2147483647,-1}
+temp	float	$tmp155	%read{233,233} %write{231,231}
+temp	float	$tmp156	%read{233,233} %write{232,232}
+temp	float	$tmp157	%read{235,235} %write{233,233}
+temp	float	$tmp158	%read{235,235} %write{234,234}
+temp	float	$tmp159	%read{238,238} %write{235,235}
+temp	float	$tmp160	%read{237,237} %write{236,236}
+temp	float	$tmp161	%read{238,238} %write{237,237}
+temp	float	$tmp162	%read{239,239} %write{238,238}
+temp	float	$tmp163	%read{242,242} %write{240,240}
+temp	float	$tmp164	%read{242,242} %write{241,241}
+temp	float	$tmp165	%read{244,244} %write{242,242}
+temp	float	$tmp166	%read{244,244} %write{243,243}
+temp	float	$tmp167	%read{247,247} %write{244,244}
+temp	float	$tmp168	%read{246,246} %write{245,245}
+temp	float	$tmp169	%read{247,247} %write{246,246}
+temp	float	$tmp170	%read{248,248} %write{247,247}
+temp	float	$tmp171	%read{251,251} %write{249,249}
+temp	float	$tmp172	%read{251,251} %write{250,250}
+temp	float	$tmp173	%read{253,253} %write{251,251}
+temp	float	$tmp174	%read{253,253} %write{252,252}
+temp	float	$tmp175	%read{256,256} %write{253,253}
+temp	float	$tmp176	%read{255,255} %write{254,254}
+temp	float	$tmp177	%read{256,256} %write{255,255}
+temp	float	$tmp178	%read{257,257} %write{256,256}
+const	color	$const27	0 0 0		%read{258,258} %write{2147483647,-1}
+temp	float	$tmp179	%read{261,261} %write{260,260}
+temp	int	$tmp180	%read{262,262} %write{261,261}
+temp	float	$tmp181	%read{335,335} %write{263,263}
+temp	color	$tmp182	%read{335,335} %write{334,334}
+temp	float	$tmp183	%read{268,268} %write{264,264} %derivs
+temp	float	$tmp184	%read{267,267} %write{265,265} %derivs
+temp	float	$tmp185	%read{268,268} %write{267,267} %derivs
+temp	int	$tmp186	%read{272,272} %write{271,271}
+temp	int	$tmp187	%read{273,277} %write{272,276}
+temp	int	$tmp188	%read{275,275} %write{274,274}
+temp	int	$tmp189	%read{276,276} %write{275,275}
+temp	int	$tmp190	%read{282,282} %write{281,281}
+temp	color	$tmp191	%read{284,284} %write{283,283}
+temp	int	$tmp192	%read{286,286} %write{285,285}
+temp	float	$tmp193	%read{333,333} %write{294,301}
+temp	float	$tmp194	%read{290,298} %write{288,288}
+temp	int	$tmp195	%read{291,291} %write{290,290}
+temp	int	$tmp196	%read{293,293} %write{292,292}
+temp	float	$tmp197	%read{296,296} %write{295,295}
+temp	float	$tmp198	%read{300,300} %write{298,298}
+temp	float	$tmp199	%read{300,300} %write{299,299}
+temp	float	$tmp200	%read{301,301} %write{300,300}
+temp	float	$tmp201	%read{333,333} %write{309,316}
+temp	float	$tmp202	%read{305,313} %write{303,303}
+temp	int	$tmp203	%read{306,306} %write{305,305}
+temp	int	$tmp204	%read{308,308} %write{307,307}
+temp	float	$tmp205	%read{311,311} %write{310,310}
+temp	float	$tmp206	%read{315,315} %write{313,313}
+temp	float	$tmp207	%read{315,315} %write{314,314}
+temp	float	$tmp208	%read{316,316} %write{315,315}
+temp	float	$tmp209	%read{333,333} %write{324,331}
+temp	float	$tmp210	%read{320,328} %write{318,318}
+temp	int	$tmp211	%read{321,321} %write{320,320}
+temp	int	$tmp212	%read{323,323} %write{322,322}
+temp	float	$tmp213	%read{326,326} %write{325,325}
+temp	float	$tmp214	%read{330,330} %write{328,328}
+temp	float	$tmp215	%read{330,330} %write{329,329}
+temp	float	$tmp216	%read{331,331} %write{330,330}
+temp	color	$tmp217	%read{336,336} %write{335,335}
+temp	float	$tmp218	%read{338,338} %write{337,337}
+temp	float	$tmp219	%read{339,339} %write{338,338}
+temp	float	$tmp220	%read{341,341} %write{340,340}
+temp	int	$tmp221	%read{342,342} %write{341,341}
+temp	float	$tmp222	%read{415,415} %write{343,343}
+temp	color	$tmp223	%read{415,415} %write{414,414}
+temp	float	$tmp224	%read{348,348} %write{344,344} %derivs
+temp	float	$tmp225	%read{347,347} %write{345,345} %derivs
+temp	float	$tmp226	%read{348,348} %write{347,347} %derivs
+temp	int	$tmp227	%read{352,352} %write{351,351}
+temp	int	$tmp228	%read{353,357} %write{352,356}
+temp	int	$tmp229	%read{355,355} %write{354,354}
+temp	int	$tmp230	%read{356,356} %write{355,355}
+temp	int	$tmp231	%read{362,362} %write{361,361}
+temp	color	$tmp232	%read{364,364} %write{363,363}
+temp	int	$tmp233	%read{366,366} %write{365,365}
+temp	float	$tmp234	%read{413,413} %write{374,381}
+temp	float	$tmp235	%read{370,378} %write{368,368}
+temp	int	$tmp236	%read{371,371} %write{370,370}
+temp	int	$tmp237	%read{373,373} %write{372,372}
+temp	float	$tmp238	%read{376,376} %write{375,375}
+temp	float	$tmp239	%read{380,380} %write{378,378}
+temp	float	$tmp240	%read{380,380} %write{379,379}
+temp	float	$tmp241	%read{381,381} %write{380,380}
+temp	float	$tmp242	%read{413,413} %write{389,396}
+temp	float	$tmp243	%read{385,393} %write{383,383}
+temp	int	$tmp244	%read{386,386} %write{385,385}
+temp	int	$tmp245	%read{388,388} %write{387,387}
+temp	float	$tmp246	%read{391,391} %write{390,390}
+temp	float	$tmp247	%read{395,395} %write{393,393}
+temp	float	$tmp248	%read{395,395} %write{394,394}
+temp	float	$tmp249	%read{396,396} %write{395,395}
+temp	float	$tmp250	%read{413,413} %write{404,411}
+temp	float	$tmp251	%read{400,408} %write{398,398}
+temp	int	$tmp252	%read{401,401} %write{400,400}
+temp	int	$tmp253	%read{403,403} %write{402,402}
+temp	float	$tmp254	%read{406,406} %write{405,405}
+temp	float	$tmp255	%read{410,410} %write{408,408}
+temp	float	$tmp256	%read{410,410} %write{409,409}
+temp	float	$tmp257	%read{411,411} %write{410,410}
+temp	color	$tmp258	%read{416,416} %write{415,415}
+temp	float	$tmp259	%read{418,418} %write{417,417}
+temp	float	$tmp260	%read{419,419} %write{418,418}
+temp	float	$tmp261	%read{421,421} %write{420,420}
+temp	int	$tmp262	%read{422,422} %write{421,421}
+temp	float	$tmp263	%read{495,495} %write{423,423}
+temp	color	$tmp264	%read{495,495} %write{494,494}
+temp	float	$tmp265	%read{428,428} %write{424,424} %derivs
+temp	float	$tmp266	%read{427,427} %write{425,425} %derivs
+temp	float	$tmp267	%read{428,428} %write{427,427} %derivs
+temp	int	$tmp268	%read{432,432} %write{431,431}
+temp	int	$tmp269	%read{433,437} %write{432,436}
+temp	int	$tmp270	%read{435,435} %write{434,434}
+temp	int	$tmp271	%read{436,436} %write{435,435}
+temp	int	$tmp272	%read{442,442} %write{441,441}
+temp	color	$tmp273	%read{444,444} %write{443,443}
+temp	int	$tmp274	%read{446,446} %write{445,445}
+temp	float	$tmp275	%read{493,493} %write{454,461}
+temp	float	$tmp276	%read{450,458} %write{448,448}
+temp	int	$tmp277	%read{451,451} %write{450,450}
+temp	int	$tmp278	%read{453,453} %write{452,452}
+temp	float	$tmp279	%read{456,456} %write{455,455}
+temp	float	$tmp280	%read{460,460} %write{458,458}
+temp	float	$tmp281	%read{460,460} %write{459,459}
+temp	float	$tmp282	%read{461,461} %write{460,460}
+temp	float	$tmp283	%read{493,493} %write{469,476}
+temp	float	$tmp284	%read{465,473} %write{463,463}
+temp	int	$tmp285	%read{466,466} %write{465,465}
+temp	int	$tmp286	%read{468,468} %write{467,467}
+temp	float	$tmp287	%read{471,471} %write{470,470}
+temp	float	$tmp288	%read{475,475} %write{473,473}
+temp	float	$tmp289	%read{475,475} %write{474,474}
+temp	float	$tmp290	%read{476,476} %write{475,475}
+temp	float	$tmp291	%read{493,493} %write{484,491}
+temp	float	$tmp292	%read{480,488} %write{478,478}
+temp	int	$tmp293	%read{481,481} %write{480,480}
+temp	int	$tmp294	%read{483,483} %write{482,482}
+temp	float	$tmp295	%read{486,486} %write{485,485}
+temp	float	$tmp296	%read{490,490} %write{488,488}
+temp	float	$tmp297	%read{490,490} %write{489,489}
+temp	float	$tmp298	%read{491,491} %write{490,490}
+temp	color	$tmp299	%read{496,496} %write{495,495}
+temp	float	$tmp300	%read{498,498} %write{497,497}
+temp	float	$tmp301	%read{499,499} %write{498,498}
+code Vector
+# include/node_image_texture.osl:42
+# 	string filename = "",
+	assign		Vector P 	%filename{"include/node_image_texture.osl"} %line{42} %argrw{"wr"}
+code ___main___
+# include/node_image_texture.osl:53
+# 
+	assign		p Vector 	%filename{"include/node_image_texture.osl"} %line{53} %argrw{"wr"}
+# include/node_image_texture.osl:55
+# 		p = transform(mapping, p);
+	if		use_mapping 4 4 	%line{55} %argrw{"r"}
+# include/node_image_texture.osl:56
+# 	
+	transform	p mapping p 	%line{56} %argrw{"wrr"}
+# include/node_image_texture.osl:58
+# 		Color = image_texture_lookup(filename, color_space, p[0], p[1], Alpha, use_alpha, is_float, interpolation);
+	eq		$tmp1 projection $const1 	%line{58} %argrw{"wrr"}
+	if		$tmp1 77 500 	%argrw{"r"}
+# include/node_image_texture.osl:59
+# 	}
+	compref		$tmp2 p $const2 	%line{59} %argrw{"wrr"}
+	compref		$tmp3 p $const3 	%argrw{"wrr"}
+	functioncall	$const4 77 	%argrw{"r"}
+# include/node_image_texture.osl:23
+# 
+	sub		$tmp4 $const5 $tmp3 	%line{23} %argrw{"wrr"}
+	texture		___646_rgb filename $tmp2 $tmp4 $const6 $const7 $const8 interpolation $const9 Alpha 	%argrw{"wrrrrrrrrw"} %argderivs{2,3}
+# include/node_image_texture.osl:25
+# 		rgb = color_unpremultiply(rgb, Alpha);
+	if		use_alpha 27 27 	%line{25} %argrw{"r"}
+# include/node_image_texture.osl:26
+# 	
+	functioncall	$const10 23 	%line{26} %argrw{"r"}
+# include/node_color.h:51
+# 	if (alpha != 1.0 && alpha != 0.0)
+	neq		$tmp5 Alpha $const5 	%filename{"include/node_color.h"} %line{51} %argrw{"wrr"}
+	neq		$tmp6 $tmp5 $const2 	%argrw{"wrr"}
+	if		$tmp6 19 19 	%argrw{"r"}
+	neq		$tmp7 Alpha $const11 	%argrw{"wrr"}
+	neq		$tmp8 $tmp7 $const2 	%argrw{"wrr"}
+	assign		$tmp6 $tmp8 	%argrw{"wr"}
+	if		$tmp6 22 22 	%argrw{"r"}
+# include/node_color.h:52
+# 		return c / alpha;
+	div		___646_rgb ___646_rgb Alpha 	%line{52} %argrw{"wrr"}
+	return
+# include/node_color.h:54
+# 	return c;
+	assign		___646_rgb ___646_rgb 	%line{54} %argrw{"wr"}
+# include/node_image_texture.osl:28
+# 			rgb = min(rgb, 1.0);
+	eq		$tmp9 is_float $const2 	%filename{"include/node_image_texture.osl"} %line{28} %argrw{"wrr"}
+	if		$tmp9 27 27 	%argrw{"r"}
+# include/node_image_texture.osl:29
+# 	}
+	assign		$tmp10 $const5 	%line{29} %argrw{"wr"}
+	min		___646_rgb ___646_rgb $tmp10 	%argrw{"wrr"}
+# include/node_image_texture.osl:32
+# 		rgb = color_srgb_to_scene_linear(rgb);
+	eq		$tmp11 color_space $const12 	%line{32} %argrw{"wrr"}
+	if		$tmp11 76 76 	%argrw{"r"}
+# include/node_image_texture.osl:33
+# 	}
+	functioncall	$const13 76 	%line{33} %argrw{"r"}
+# include/node_color.h:36
+# 		color_srgb_to_scene_linear(c[0]),
+	compref		$tmp13 ___646_rgb $const2 	%filename{"include/node_color.h"} %line{36} %argrw{"wrr"}
+	functioncall	$const13 45 	%argrw{"r"}
+# include/node_color.h:19
+# 	if (c < 0.04045)
+	lt		$tmp14 $tmp13 $const14 	%line{19} %argrw{"wrr"}
+	if		$tmp14 40 45 	%argrw{"r"}
+# include/node_color.h:20
+# 		return (c < 0.0) ? 0.0 : c * (1.0 / 12.92);
+	lt		$tmp15 $tmp13 $const11 	%line{20} %argrw{"wrr"}
+	if		$tmp15 37 39 	%argrw{"r"}
+	assign		$tmp12 $const11 	%argrw{"wr"}
+	div		$tmp16 $const5 $const15 	%argrw{"wrr"}
+	mul		$tmp12 $tmp13 $tmp16 	%argrw{"wrr"}
+	return
+# include/node_color.h:22
+# 		return pow((c + 0.055) * (1.0 / 1.055), 2.4);
+	add		$tmp17 $tmp13 $const16 	%line{22} %argrw{"wrr"}
+	div		$tmp18 $const5 $const17 	%argrw{"wrr"}
+	mul		$tmp19 $tmp17 $tmp18 	%argrw{"wrr"}
+	pow		$tmp12 $tmp19 $const18 	%argrw{"wrr"}
+	return
+# include/node_color.h:37
+# 		color_srgb_to_scene_linear(c[1]),
+	compref		$tmp21 ___646_rgb $const3 	%line{37} %argrw{"wrr"}
+	functioncall	$const13 60 	%argrw{"r"}
+# include/node_color.h:19
+# 	if (c < 0.04045)
+	lt		$tmp22 $tmp21 $const14 	%line{19} %argrw{"wrr"}
+	if		$tmp22 55 60 	%argrw{"r"}
+# include/node_color.h:20
+# 		return (c < 0.0) ? 0.0 : c * (1.0 / 12.92);
+	lt		$tmp23 $tmp21 $const11 	%line{20} %argrw{"wrr"}
+	if		$tmp23 52 54 	%argrw{"r"}
+	assign		$tmp20 $const11 	%argrw{"wr"}
+	div		$tmp24 $const5 $const15 	%argrw{"wrr"}
+	mul		$tmp20 $tmp21 $tmp24 	%argrw{"wrr"}
+	return
+# include/node_color.h:22
+# 		return pow((c + 0.055) * (1.0 / 1.055), 2.4);
+	add		$tmp25 $tmp21 $const16 	%line{22} %argrw{"wrr"}
+	div		$tmp26 $const5 $const17 	%argrw{"wrr"}
+	mul		$tmp27 $tmp25 $tmp26 	%argrw{"wrr"}
+	pow		$tmp20 $tmp27 $const18 	%argrw{"wrr"}
+	return
+# include/node_color.h:38
+# 		color_srgb_to_scene_linear(c[2]));
+	compref		$tmp29 ___646_rgb $const19 	%line{38} %argrw{"wrr"}
+	functioncall	$const13 75 	%argrw{"r"}
+# include/node_color.h:19
+# 	if (c < 0.04045)
+	lt		$tmp30 $tmp29 $const14 	%line{19} %argrw{"wrr"}
+	if		$tmp30 70 75 	%argrw{"r"}
+# include/node_color.h:20
+# 		return (c < 0.0) ? 0.0 : c * (1.0 / 12.92);
+	lt		$tmp31 $tmp29 $const11 	%line{20} %argrw{"wrr"}
+	if		$tmp31 67 69 	%argrw{"r"}
+	assign		$tmp28 $const11 	%argrw{"wr"}
+	div		$tmp32 $const5 $const15 	%argrw{"wrr"}
+	mul		$tmp28 $tmp29 $tmp32 	%argrw{"wrr"}
+	return
+# include/node_color.h:22
+# 		return pow((c + 0.055) * (1.0 / 1.055), 2.4);
+	add		$tmp33 $tmp29 $const16 	%line{22} %argrw{"wrr"}
+	div		$tmp34 $const5 $const17 	%argrw{"wrr"}
+	mul		$tmp35 $tmp33 $tmp34 	%argrw{"wrr"}
+	pow		$tmp28 $tmp35 $const18 	%argrw{"wrr"}
+	return
+# include/node_color.h:38
+# 		color_srgb_to_scene_linear(c[2]));
+	color		___646_rgb $tmp12 $tmp20 $tmp28 	%line{38} %argrw{"wrrr"}
+# include/node_image_texture.osl:36
+# }
+	assign		Color ___646_rgb 	%filename{"include/node_image_texture.osl"} %line{36} %argrw{"wr"}
+# include/node_image_texture.osl:61
+# 		/* object space normal */
+	eq		$tmp36 projection $const20 	%line{61} %argrw{"wrr"}
+	if		$tmp36 500 500 	%argrw{"r"}
+# include/node_image_texture.osl:63
+# 
+	transformn	___650_Nob $const21 $const22 N 	%line{63} %argrw{"wrrr"}
+# include/node_image_texture.osl:66
+# 		Nob /= (Nob[0] + Nob[1] + Nob[2]);
+	compref		$tmp38 ___650_Nob $const2 	%line{66} %argrw{"wrr"}
+	fabs		$tmp37 $tmp38 	%argrw{"wr"}
+	compref		$tmp40 ___650_Nob $const3 	%argrw{"wrr"}
+	fabs		$tmp39 $tmp40 	%argrw{"wr"}
+	compref		$tmp42 ___650_Nob $const19 	%argrw{"wrr"}
+	fabs		$tmp41 $tmp42 	%argrw{"wr"}
+	vector		___650_Nob $tmp37 $tmp39 $tmp41 	%argrw{"wrrr"}
+# include/node_image_texture.osl:67
+# 
+	compref		$tmp43 ___650_Nob $const2 	%line{67} %argrw{"wrr"}
+	compref		$tmp44 ___650_Nob $const3 	%argrw{"wrr"}
+	add		$tmp45 $tmp43 $tmp44 	%argrw{"wrr"}
+	compref		$tmp46 ___650_Nob $const19 	%argrw{"wrr"}
+	add		$tmp47 $tmp45 $tmp46 	%argrw{"wrr"}
+	div		___650_Nob ___650_Nob $tmp47 	%argrw{"wrr"}
+# include/node_image_texture.osl:79
+# 		float blend = projection_blend;
+	assign		___650_weight $const23 	%line{79} %argrw{"wr"}
+# include/node_image_texture.osl:80
+# 		float limit = 0.5 * (1.0 + blend);
+	assign		___650_blend projection_blend 	%line{80} %argrw{"wr"}
+# include/node_image_texture.osl:81
+# 
+	add		$tmp48 $const5 ___650_blend 	%line{81} %argrw{"wrr"}
+	mul		___650_limit $const24 $tmp48 	%argrw{"wrr"}
+# include/node_image_texture.osl:84
+# 			weight[0] = 1.0;
+	compref		$tmp49 ___650_Nob $const2 	%line{84} %argrw{"wrr"}
+	compref		$tmp50 ___650_Nob $const2 	%argrw{"wrr"}
+	compref		$tmp51 ___650_Nob $const3 	%argrw{"wrr"}
+	add		$tmp52 $tmp50 $tmp51 	%argrw{"wrr"}
+	mul		$tmp53 ___650_limit $tmp52 	%argrw{"wrr"}
+	gt		$tmp54 $tmp49 $tmp53 	%argrw{"wrr"}
+	neq		$tmp55 $tmp54 $const2 	%argrw{"wrr"}
+	if		$tmp55 113 113 	%argrw{"r"}
+	compref		$tmp56 ___650_Nob $const2 	%argrw{"wrr"}
+	compref		$tmp57 ___650_Nob $const2 	%argrw{"wrr"}
+	compref		$tmp58 ___650_Nob $const19 	%argrw{"wrr"}
+	add		$tmp59 $tmp57 $tmp58 	%argrw{"wrr"}
+	mul		$tmp60 ___650_limit $tmp59 	%argrw{"wrr"}
+	gt		$tmp61 $tmp56 $tmp60 	%argrw{"wrr"}
+	neq		$tmp62 $tmp61 $const2 	%argrw{"wrr"}
+	assign		$tmp55 $tmp62 	%argrw{"wr"}
+	if		$tmp55 115 258 	%argrw{"r"}
+# include/node_image_texture.osl:85
+# 		}
+	compassign	___650_weight $const2 $const5 	%line{85} %argrw{"wrr"}
+# include/node_image_texture.osl:87
+# 			weight[1] = 1.0;
+	compref		$tmp63 ___650_Nob $const3 	%line{87} %argrw{"wrr"}
+	compref		$tmp64 ___650_Nob $const2 	%argrw{"wrr"}
+	compref		$tmp65 ___650_Nob $const3 	%argrw{"wrr"}
+	add		$tmp66 $tmp64 $tmp65 	%argrw{"wrr"}
+	mul		$tmp67 ___650_limit $tmp66 	%argrw{"wrr"}
+	gt		$tmp68 $tmp63 $tmp67 	%argrw{"wrr"}
+	neq		$tmp69 $tmp68 $const2 	%argrw{"wrr"}
+	if		$tmp69 131 131 	%argrw{"r"}
+	compref		$tmp70 ___650_Nob $const3 	%argrw{"wrr"}
+	compref		$tmp71 ___650_Nob $const3 	%argrw{"wrr"}
+	compref		$tmp72 ___650_Nob $const19 	%argrw{"wrr"}
+	add		$tmp73 $tmp71 $tmp72 	%argrw{"wrr"}
+	mul		$tmp74 ___650_limit $tmp73 	%argrw{"wrr"}
+	gt		$tmp75 $tmp70 $tmp74 	%argrw{"wrr"}
+	neq		$tmp76 $tmp75 $const2 	%argrw{"wrr"}
+	assign		$tmp69 $tmp76 	%argrw{"wr"}
+	if		$tmp69 133 258 	%argrw{"r"}
+# include/node_image_texture.osl:88
+# 		}
+	compassign	___650_weight $const3 $const5 	%line{88} %argrw{"wrr"}
+# include/node_image_texture.osl:90
+# 			weight[2] = 1.0;
+	compref		$tmp77 ___650_Nob $const19 	%line{90} %argrw{"wrr"}
+	compref		$tmp78 ___650_Nob $const2 	%argrw{"wrr"}
+	compref		$tmp79 ___650_Nob $const19 	%argrw{"wrr"}
+	add		$tmp80 $tmp78 $tmp79 	%argrw{"wrr"}
+	mul		$tmp81 ___650_limit $tmp80 	%argrw{"wrr"}
+	gt		$tmp82 $tmp77 $tmp81 	%argrw{"wrr"}
+	neq		$tmp83 $tmp82 $const2 	%argrw{"wrr"}
+	if		$tmp83 149 149 	%argrw{"r"}
+	compref		$tmp84 ___650_Nob $const19 	%argrw{"wrr"}
+	compref		$tmp85 ___650_Nob $const3 	%argrw{"wrr"}
+	compref		$tmp86 ___650_Nob $const19 	%argrw{"wrr"}
+	add		$tmp87 $tmp85 $tmp86 	%argrw{"wrr"}
+	mul		$tmp88 ___650_limit $tmp87 	%argrw{"wrr"}
+	gt		$tmp89 $tmp84 $tmp88 	%argrw{"wrr"}
+	neq		$tmp90 $tmp89 $const2 	%argrw{"wrr"}
+	assign		$tmp83 $tmp90 	%argrw{"wr"}
+	if		$tmp83 151 258 	%argrw{"r"}
+# include/node_image_texture.osl:91
+# 		}
+	compassign	___650_weight $const19 $const5 	%line{91} %argrw{"wrr"}
+# include/node_image_texture.osl:93
+# 			/* in case of blending, test for mixes between two textures */
+	gt		$tmp91 ___650_blend $const11 	%line{93} %argrw{"wrr"}
+	if		$tmp91 258 258 	%argrw{"r"}
+# include/node_image_texture.osl:95
+# 				weight[0] = Nob[0] / (Nob[0] + Nob[1]);
+	compref		$tmp92 ___650_Nob $const19 	%line{95} %argrw{"wrr"}
+	sub		$tmp93 $const5 ___650_limit 	%argrw{"wrr"}
+	compref		$tmp94 ___650_Nob $const3 	%argrw{"wrr"}
+	compref		$tmp95 ___650_Nob $const2 	%argrw{"wrr"}
+	add		$tmp96 $tmp94 $tmp95 	%argrw{"wrr"}
+	mul		$tmp97 $tmp93 $tmp96 	%argrw{"wrr"}
+	lt		$tmp98 $tmp92 $tmp97 	%argrw{"wrr"}
+	if		$tmp98 179 258 	%argrw{"r"}
+# include/node_image_texture.osl:96
+# 				weight[0] = clamp((weight[0] - 0.5 * (1.0 - blend)) / blend, 0.0, 1.0);
+	compref		$tmp99 ___650_Nob $const2 	%line{96} %argrw{"wrr"}
+	compref		$tmp100 ___650_Nob $const2 	%argrw{"wrr"}
+	compref		$tmp101 ___650_Nob $const3 	%argrw{"wrr"}
+	add		$tmp102 $tmp100 $tmp101 	%argrw{"wrr"}
+	div		$tmp103 $tmp99 $tmp102 	%argrw{"wrr"}
+	compassign	___650_weight $const2 $tmp103 	%argrw{"wrr"}
+# include/node_image_texture.osl:97
+# 				weight[1] = 1.0 - weight[0];
+	compref		$tmp105 ___650_weight $const2 	%line{97} %argrw{"wrr"}
+	sub		$tmp106 $const5 ___650_blend 	%argrw{"wrr"}
+	mul		$tmp107 $const24 $tmp106 	%argrw{"wrr"}
+	sub		$tmp108 $tmp105 $tmp107 	%argrw{"wrr"}
+	div		$tmp109 $tmp108 ___650_blend 	%argrw{"wrr"}
+	functioncall	$const25 175 	%argrw{"r"}
+# include/stdosl.h:144
+# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
+	min		$tmp110 $tmp109 $const5 	%filename{"include/stdosl.h"} %line{144} %argrw{"wrr"}
+	max		$tmp104 $tmp110 $const11 	%argrw{"wrr"}
+# include/node_image_texture.osl:97
+# 				weight[1] = 1.0 - weight[0];
+	compassign	___650_weight $const2 $tmp104 	%filename{"include/node_image_texture.osl"} %line{97} %argrw{"wrr"}
+# include/node_image_texture.osl:98
+# 			}
+	compref		$tmp111 ___650_weight $const2 	%line{98} %argrw{"wrr"}
+	sub		$tmp112 $const5 $tmp111 	%argrw{"wrr"}
+	compassign	___650_weight $const3 $tmp112 	%argrw{"wrr"}
+# include/node_image_texture.osl:100
+# 				weight[1] = Nob[1] / (Nob[1] + Nob[2]);
+	compref		$tmp113 ___650_Nob $const2 	%line{100} %argrw{"wrr"}
+	sub		$tmp114 $const5 ___650_limit 	%argrw{"wrr"}
+	compref		$tmp115 ___650_Nob $const3 	%argrw{"wrr"}
+	compref		$tmp116 ___650_Nob $const19 	%argrw{"wrr"}
+	add		$tmp117 $tmp115 $tmp116 	%argrw{"wrr"}
+	mul		$tmp118 $tmp114 $tmp117 	%argrw{"wrr"}
+	lt		$tmp119 $tmp113 $tmp118 	%argrw{"wrr"}
+	if		$tmp119 205 258 	%argrw{"r"}
+# include/node_image_texture.osl:101
+# 				weight[1] = clamp((weight[1] - 0.5 * (1.0 - blend)) / blend, 0.0, 1.0);
+	compref		$tmp120 ___650_Nob $const3 	%line{101} %argrw{"wrr"}
+	compref		$tmp121 ___650_Nob $const3 	%argrw{"wrr"}
+	compref		$tmp122 ___650_Nob $const19 	%argrw{"wrr"}
+	add		$tmp123 $tmp121 $tmp122 	%argrw{"wrr"}
+	div		$tmp124 $tmp120 $tmp123 	%argrw{"wrr"}
+	compassign	___650_weight $const3 $tmp124 	%argrw{"wrr"}
+# include/node_image_texture.osl:102
+# 				weight[2] = 1.0 - weight[1];
+	compref		$tmp126 ___650_weight $const3 	%line{102} %argrw{"wrr"}
+	sub		$tmp127 $const5 ___650_blend 	%argrw{"wrr"}
+	mul		$tmp128 $const24 $tmp127 	%argrw{"wrr"}
+	sub		$tmp129 $tmp126 $tmp128 	%argrw{"wrr"}
+	div		$tmp130 $tmp129 ___650_blend 	%argrw{"wrr"}
+	functioncall	$const25 201 	%argrw{"r"}
+# include/stdosl.h:144
+# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
+	min		$tmp131 $tmp130 $const5 	%filename{"include/stdosl.h"} %line{144} %argrw{"wrr"}
+	max		$tmp125 $tmp131 $const11 	%argrw{"wrr"}
+# include/node_image_texture.osl:102
+# 				weight[2] = 1.0 - weight[1];
+	compassign	___650_weight $const3 $tmp125 	%filename{"include/node_image_texture.osl"} %line{102} %argrw{"wrr"}
+# include/node_image_texture.osl:103
+# 			}
+	compref		$tmp132 ___650_weight $const3 	%line{103} %argrw{"wrr"}
+	sub		$tmp133 $const5 $tmp132 	%argrw{"wrr"}
+	compassign	___650_weight $const19 $tmp133 	%argrw{"wrr"}
+# include/node_image_texture.osl:105
+# 				weight[0] = Nob[0] / (Nob[0] + Nob[2]);
+	compref		$tmp134 ___650_Nob $const3 	%line{105} %argrw{"wrr"}
+	sub		$tmp135 $const5 ___650_limit 	%argrw{"wrr"}
+	compref		$tmp136 ___650_Nob $const2 	%argrw{"wrr"}
+	compref		$tmp137 ___650_Nob $const19 	%argrw{"wrr"}
+	add		$tmp138 $tmp136 $tmp137 	%argrw{"wrr"}
+	mul		$tmp139 $tmp135 $tmp138 	%argrw{"wrr"}
+	lt		$tmp140 $tmp134 $tmp139 	%argrw{"wrr"}
+	if		$tmp140 231 258 	%argrw{"r"}
+# include/node_image_texture.osl:106
+# 				weight[0] = clamp((weight[0] - 0.5 * (1.0 - blend)) / blend, 0.0, 1.0);
+	compref		$tmp141 ___650_Nob $const2 	%line{106} %argrw{"wrr"}
+	compref		$tmp142 ___650_Nob $const2 	%argrw{"wrr"}
+	compref		$tmp143 ___650_Nob $const19 	%argrw{"wrr"}
+	add		$tmp144 $tmp142 $tmp143 	%argrw{"wrr"}
+	div		$tmp145 $tmp141 $tmp144 	%argrw{"wrr"}
+	compassign	___650_weight $const2 $tmp145 	%argrw{"wrr"}
+# include/node_image_texture.osl:107
+# 				weight[2] = 1.0 - weight[0];
+	compref		$tmp147 ___650_weight $const2 	%line{107} %argrw{"wrr"}
+	sub		$tmp148 $const5 ___650_blend 	%argrw{"wrr"}
+	mul		$tmp149 $const24 $tmp148 	%argrw{"wrr"}
+	sub		$tmp150 $tmp147 $tmp149 	%argrw{"wrr"}
+	div		$tmp151 $tmp150 ___650_blend 	%argrw{"wrr"}
+	functioncall	$const25 227 	%argrw{"r"}
+# include/stdosl.h:144
+# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
+	min		$tmp152 $tmp151 $const5 	%filename{"include/stdosl.h"} %line{144} %argrw{"wrr"}
+	max		$tmp146 $tmp152 $const11 	%argrw{"wrr"}
+# include/node_image_texture.osl:107
+# 				weight[2] = 1.0 - weight[0];
+	compassign	___650_weight $const2 $tmp146 	%filename{"include/node_image_texture.osl"} %line{107} %argrw{"wrr"}
+# include/node_image_texture.osl:108
+# 			}
+	compref		$tmp153 ___650_weight $const2 	%line{108} %argrw{"wrr"}
+	sub		$tmp154 $const5 $tmp153 	%argrw{"wrr"}
+	compassign	___650_weight $const19 $tmp154 	%argrw{"wrr"}
+# include/node_image_texture.osl:112
+# 				weight[1] = ((2.0 - limit) * Nob[1] + (limit - 1.0)) / (2.0 * limit - 1.0);
+	sub		$tmp155 $const26 ___650_limit 	%line{112} %argrw{"wrr"}
+	compref		$tmp156 ___650_Nob $const2 	%argrw{"wrr"}
+	mul		$tmp157 $tmp155 $tmp156 	%argrw{"wrr"}
+	sub		$tmp158 ___650_limit $const5 	%argrw{"wrr"}
+	add		$tmp159 $tmp157 $tmp158 	%argrw{"wrr"}
+	mul		$tmp160 $const26 ___650_limit 	%argrw{"wrr"}
+	sub		$tmp161 $tmp160 $const5 	%argrw{"wrr"}
+	div		$tmp162 $tmp159 $tmp161 	%argrw{"wrr"}
+	compassign	___650_weight $const2 $tmp162 	%argrw{"wrr"}
+# include/node_image_texture.osl:113
+# 				weight[2] = ((2.0 - limit) * Nob[2] + (limit - 1.0)) / (2.0 * limit - 1.0);
+	sub		$tmp163 $const26 ___650_limit 	%line{113} %argrw{"wrr"}
+	compref		$tmp164 ___650_Nob $const3 	%argrw{"wrr"}
+	mul		$tmp165 $tmp163 $tmp164 	%argrw{"wrr"}
+	sub		$tmp166 ___650_limit $const5 	%argrw{"wrr"}
+	add		$tmp167 $tmp165 $tmp166 	%argrw{"wrr"}
+	mul		$tmp168 $const26 ___650_limit 	%argrw{"wrr"}
+	sub		$tmp169 $tmp168 $const5 	%argrw{"wrr"}
+	div		$tmp170 $tmp167 $tmp169 	%argrw{"wrr"}
+	compassign	___650_weight $const3 $tmp170 	%argrw{"wrr"}
+# include/node_image_texture.osl:114
+# 			}
+	sub		$tmp171 $const26 ___650_limit 	%line{114} %argrw{"wrr"}
+	compref		$tmp172 ___650_Nob $const19 	%argrw{"wrr"}
+	mul		$tmp173 $tmp171 $tmp172 	%argrw{"wrr"}
+	sub		$tmp174 ___650_limit $const5 	%argrw{"wrr"}
+	add		$tmp175 $tmp173 $tmp174 	%argrw{"wrr"}
+	mul		$tmp176 $const26 ___650_limit 	%argrw{"wrr"}
+	sub		$tmp177 $tmp176 $const5 	%argrw{"wrr"}
+	div		$tmp178 $tmp175 $tmp177 	%argrw{"wrr"}
+	compassign	___650_weight $const19 $tmp178 	%argrw{"wrr"}
+# include/node_image_texture.osl:118
+# 		Alpha = 0.0;
+	assign		Color $const27 	%line{118} %argrw{"wr"}
+# include/node_image_texture.osl:119
+# 
+	assign		Alpha $const11 	%line{119} %argrw{"wr"}
+# include/node_image_texture.osl:123
+# 			Color += weight[0] * image_texture_lookup(filename, color_space, p[1], p[2], tmp_alpha, use_alpha, is_float, interpolation);
+	compref		$tmp179 ___650_weight $const2 	%line{123} %argrw{"wrr"}
+	gt		$tmp180 $tmp179 $const11 	%argrw{"wrr"}
+	if		$tmp180 340 340 	%argrw{"r"}
+# include/node_image_texture.osl:124
+# 			Alpha += weight[0] * tmp_alpha;
+	compref		$tmp181 ___650_weight $const2 	%line{124} %argrw{"wrr"}
+	compref		$tmp183 p $const3 	%argrw{"wrr"}
+	compref		$tmp184 p $const19 	%argrw{"wrr"}
+	functioncall	$const4 335 	%argrw{"r"}
+# include/node_image_texture.osl:23
+# 
+	sub		$tmp185 $const5 $tmp184 	%line{23} %argrw{"wrr"}
+	texture		___646_rgb filename $tmp183 $tmp185 $const6 $const7 $const8 interpolation $const9 ___650_tmp_alpha 	%argrw{"wrrrrrrrrw"} %argderivs{2,3}
+# include/node_image_texture.osl:25
+# 		rgb = color_unpremultiply(rgb, Alpha);
+	if		use_alpha 285 285 	%line{25} %argrw{"r"}
+# include/node_image_texture.osl:26
+# 	
+	functioncall	$const10 281 	%line{26} %argrw{"r"}
+# include/node_color.h:51
+# 	if (alpha != 1.0 && alpha != 0.0)
+	neq		$tmp186 ___650_tmp_alpha $const5 	%filename{"include/node_color.h"} %line{51} %argrw{"wrr"}
+	neq		$tmp187 $tmp186 $const2 	%argrw{"wrr"}
+	if		$tmp187 277 277 	%argrw{"r"}
+	neq		$tmp188 ___650_tmp_alpha $const11 	%argrw{"wrr"}
+	neq		$tmp189 $tmp188 $const2 	%argrw{"wrr"}
+	assign		$tmp187 $tmp189 	%argrw{"wr"}
+	if		$tmp187 280 280 	%argrw{"r"}
+# include/node_color.h:52
+# 		return c / alpha;
+	div		___646_rgb ___646_rgb ___650_tmp_alpha 	%line{52} %argrw{"wrr"}
+	return
+# include/node_color.h:54
+# 	return c;
+	assign		___646_rgb ___646_rgb 	%line{54} %argrw{"wr"}
+# include/node_image_texture.osl:28
+# 			rgb = min(rgb, 1.0);
+	eq		$tmp190 is_float $const2 	%filename{"include/node_image_texture.osl"} %line{28} %argrw{"wrr"}
+	if		$tmp190 285 285 	%argrw{"r"}
+# include/node_image_texture.osl:29
+# 	}
+	assign		$tmp191 $const5 	%line{29} %argrw{"wr"}
+	min		___646_rgb ___646_rgb $tmp191 	%argrw{"wrr"}
+# include/node_image_texture.osl:32
+# 		rgb = color_srgb_to_scene_linear(rgb);
+	eq		$tmp192 color_space $const12 	%line{32} %argrw{"wrr"}
+	if		$tmp192 334 334 	%argrw{"r"}
+# include/node_image_texture.osl:33
+# 	}
+	functioncall	$const13 334 	%line{33} %argrw{"r"}
+# include/node_color.h:36
+# 		color_srgb_to_scene_linear(c[0]),
+	compref		$tmp194 ___646_rgb $const2 	%filename{"include/node_color.h"} %line{36} %argrw{"wrr"}
+	functioncall	$const13 303 	%argrw{"r"}
+# include/node_color.h:19
+# 	if (c < 0.04045)
+	lt		$tmp195 $tmp194 $const14 	%line{19} %argrw{"wrr"}
+	if		$tmp195 298 303 	%argrw{"r"}
+# include/node_color.h:20
+# 		return (c < 0.0) ? 0.0 : c * (1.0 / 12.92);
+	lt		$tmp196 $tmp194 $const11 	%line{20} %argrw{"wrr"}
+	if		$tmp196 295 297 	%argrw{"r"}
+	assign		$tmp193 $const11 	%argrw{"wr"}
+	div		$tmp197 $const5 $const15 	%argrw{"wrr"}
+	mul		$tmp193 $tmp194 $tmp197 	%argrw{"wrr"}
+	return
+# include/node_color.h:22
+# 		return pow((c + 0.055) * (1.0 / 1.055), 2.4);
+	add		$tmp198 $tmp194 $const16 	%line{22} %argrw{"wrr"}
+	div		$tmp199 $const5 $const17 	%argrw{"wrr"}
+	mul		$tmp200 $tmp198 $tmp199 	%argrw{"wrr"}
+	pow		$tmp193 $tmp200 $const18 	%argrw{"wrr"}
+	return
+# include/node_color.h:37
+# 		color_srgb_to_scene_linear(c[1]),
+	compref		$tmp202 ___646_rgb $const3 	%line{37} %argrw{"wrr"}
+	functioncall	$const13 318 	%argrw{"r"}
+# include/node_color.h:19
+# 	if (c < 0.04045)
+	lt		$tmp203 $tmp202 $const14 	%line{19} %argrw{"wrr"}
+	if		$tmp203 313 318 	%argrw{"r"}
+# include/node_color.h:20
+# 		return (c < 0.0) ? 0.0 : c * (1.0 / 12.92);
+	lt		$tmp204 $tmp202 $const11 	%line{20} %argrw{"wrr"}
+	if		$tmp204 310 312 	%argrw{"r"}
+	assign		$tmp201 $const11 	%argrw{"wr"}
+	div		$tmp205 $const5 $const15 	%argrw{"wrr"}
+	mul		$tmp201 $tmp202 $tmp205 	%argrw{"wrr"}
+	return
+# include/node_color.h:22
+# 		return pow((c + 0.055) * (1.0 / 1.055), 2.4);
+	add		$tmp206 $tmp202 $const16 	%line{22} %argrw{"wrr"}
+	div		$tmp207 $const5 $const17 	%argrw{"wrr"}
+	mul		$tmp208 $tmp206 $tmp207 	%argrw{"wrr"}
+	pow		$tmp201 $tmp208 $const18 	%argrw{"wrr"}
+	return
+# include/node_color.h:38
+# 		color_srgb_to_scene_linear(c[2]));
+	compref		$tmp210 ___646_rgb $const19 	%line{38} %argrw{"wrr"}
+	functioncall	$const13 333 	%argrw{"r"}
+# include/node_color.h:19
+# 	if (c < 0.04045)
+	lt		$tmp211 $tmp210 $const14 	%line{19} %argrw{"wrr"}
+	if		$tmp211 328 333 	%argrw{"r"}
+# include/node_color.h:20
+# 		return (c < 0.0) ? 0.0 : c * (1.0 / 12.92);
+	lt		$tmp212 $tmp210 $const11 	%line{20} %argrw{"wrr"}
+	if		$tmp212 325 327 	%argrw{"r"}
+	assign		$tmp209 $const11 	%argrw{"wr"}
+	div		$tmp213 $const5 $const15 	%argrw{"wrr"}
+	mul		$tmp209 $tmp210 $tmp213 	%argrw{"wrr"}
+	return
+# include/node_color.h:22
+# 		return pow((c + 0.055) * (1.0 / 1.055), 2.4);
+	add		$tmp214 $tmp210 $const16 	%line{22} %argrw{"wrr"}
+	div		$tmp215 $const5 $const17 	%argrw{"wrr"}
+	mul		$tmp216 $tmp214 $tmp215 	%argrw{"wrr"}
+	pow		$tmp209 $tmp216 $const18 	%argrw{"wrr"}
+	return
+# include/node_color.h:38
+# 		color_srgb_to_scene_linear(c[2]));
+	color		___646_rgb $tmp193 $tmp201 $tmp209 	%line{38} %argrw{"wrrr"}
+# include/node_image_texture.osl:36
+# }
+	assign		$tmp182 ___646_rgb 	%filename{"include/node_image_texture.osl"} %line{36} %argrw{"wr"}
+# include/node_image_texture.osl:124
+# 			Alpha += weight[0] * tmp_alpha;
+	mul		$tmp217 $tmp181 $tmp182 	%line{124} %argrw{"wrr"}
+	add		Color Color $tmp217 	%argrw{"wrr"}
+# include/node_image_texture.osl:125
+# 		}
+	compref		$tmp218 ___650_weight $const2 	%line{125} %argrw{"wrr"}
+	mul		$tmp219 $tmp218 ___650_tmp_alpha 	%argrw{"wrr"}
+	add		Alpha Alpha $tmp219 	%argrw{"wrr"}
+# include/node_image_texture.osl:127
+# 			Color += weight[1] * image_texture_lookup(filename, color_space, p[0], p[2], tmp_alpha, use_alpha, is_float, interpolation);
+	compref		$tmp220 ___650_weight $const3 	%line{127} %argrw{"wrr"}
+	gt		$tmp221 $tmp220 $const11 	%argrw{"wrr"}
+	if		$tmp221 420 420 	%argrw{"r"}
+# include/node_image_texture.osl:128
+# 			Alpha += weight[1] * tmp_alpha;
+	compref		$tmp222 ___650_weight $const3 	%line{128} %argrw{"wrr"}
+	compref		$tmp224 p $const2 	%argrw{"wrr"}
+	compref		$tmp225 p $const19 	%argrw{"wrr"}
+	functioncall	$const4 415 	%argrw{"r"}
+# include/node_image_texture.osl:23
+# 
+	sub		$tmp226 $const5 $tmp225 	%line{23} %argrw{"wrr"}
+	texture		___646_rgb filename $tmp224 $tmp226 $const6 $const7 $const8 interpolation $const9 ___650_tmp_alpha 	%argrw{"wrrrrrrrrw"} %argderivs{2,3}
+# include/node_image_texture.osl:25
+# 		rgb = color_unpremultiply(rgb, Alpha);
+	if		use_alpha 365 365 	%line{25} %argrw{"r"}
+# include/node_image_texture.osl:26
+# 	
+	functioncall	$const10 361 	%line{26} %argrw{"r"}
+# include/node_color.h:51
+# 	if (alpha != 1.0 && alpha != 0.0)
+	neq		$tmp227 ___650_tmp_alpha $const5 	%filename{"include/node_color.h"} %line{51} %argrw{"wrr"}
+	neq		$tmp228 $tmp227 $const2 	%argrw{"wrr"}
+	if		$tmp228 357 357 	%argrw{"r"}
+	neq		$tmp229 ___650_tmp_alpha $const11 	%argrw{"wrr"}
+	neq		$tmp230 $tmp229 $const2 	%argrw{"wrr"}
+	assign		$tmp228 $tmp230 	%argrw{"wr"}
+	if		$tmp228 360 360 	%argrw{"r"}
+# include/node_color.h:52
+# 		return c / alpha;
+	div		___646_rgb ___646_rgb ___650_tmp_alpha 	%line{52} %argrw{"wrr"}
+	return
+# include/node_color.h:54
+# 	return c;
+	assign		___646_rgb ___646_rgb 	%line{54} %argrw{"wr"}
+# include/node_image_texture.osl:28
+# 			rgb = min(rgb, 1.0);
+	eq		$tmp231 is_float $const2 	%filename{"include/node_image_texture.osl"} %line{28} %argrw{"wrr"}
+	if		$tmp231 365 365 	%argrw{"r"}
+# include/node_image_texture.osl:29
+# 	}
+	assign		$tmp232 $const5 	%line{29} %argrw{"wr"}
+	min		___646_rgb ___646_rgb $tmp232 	%argrw{"wrr"}
+# include/node_image_texture.osl:32
+# 		rgb = color_srgb_to_scene_linear(rgb);
+	eq		$tmp233 color_space $const12 	%line{32} %argrw{"wrr"}
+	if		$tmp233 414 414 	%argrw{"r"}
+# include/node_image_texture.osl:33
+# 	}
+	functioncall	$const13 414 	%line{33} %argrw{"r"}
+# include/node_color.h:36
+# 		color_srgb_to_scene_linear(c[0]),
+	compref		$tmp235 ___646_rgb $const2 	%filename{"include/node_color.h"} %line{36} %argrw{"wrr"}
+	functioncall	$const13 383 	%argrw{"r"}
+# include/node_color.h:19
+# 	if (c < 0.04045)
+	lt		$tmp236 $tmp235 $const14 	%line{19} %argrw{"wrr"}
+	if		$tmp236 378 383 	%argrw{"r"}
+# include/node_color.h:20
+# 		return (c < 0.0) ? 0.0 : c * (1.0 / 12.92);
+	lt		$tmp237 $tmp235 $const11 	%line{20} %argrw{"wrr"}
+	if		$tmp237 375 377 	%argrw{"r"}
+	assign		$tmp234 $const11 	%argrw{"wr"}
+	div		$tmp238 $const5 $const15 	%argrw{"wrr"}
+	mul		$tmp234 $tmp235 $tmp238 	%argrw{"wrr"}
+	return
+# include/node_color.h:22
+# 		return pow((c + 0.055) * (1.0 / 1.055), 2.4);
+	add		$tmp239 $tmp235 $const16 	%line{22} %argrw{"wrr"}
+	div		$tmp240 $const5 $const17 	%argrw{"wrr"}
+	mul		$tmp241 $tmp239 $tmp240 	%argrw{"wrr"}
+	pow		$tmp234 $tmp241 $const18 	%argrw{"wrr"}
+	return
+# include/node_color.h:37
+# 		color_srgb_to_scene_linear(c[1]),
+	compref		$tmp243 ___646_rgb $const3 	%line{37} %argrw{"wrr"}
+	functioncall	$const13 398 	%argrw{"r"}
+# include/node_color.h:19
+# 	if (c < 0.04045)
+	lt		$tmp244 $tmp243 $const14 	%line{19} %argrw{"wrr"}
+	if		$tmp244 393 398 	%argrw{"r"}
+# include/node_color.h:20
+# 		return (c < 0.0) ? 0.0 : c * (1.0 / 12.92);
+	lt		$tmp245 $tmp243 $const11 	%line{20} %argrw{"wrr"}
+	if		$tmp245 390 392 	%argrw{"r"}
+	assign		$tmp242 $const11 	%argrw{"wr"}
+	div		$tmp246 $const5 $const15 	%argrw{"wrr"}
+	mul		$tmp242 $tmp243 $tmp246 	%argrw{"wrr"}
+	return
+# include/node_color.h:22
+# 		return pow((c + 0.055) * (1.0 / 1.055), 2.4);
+	add		$tmp247 $tmp243 $const16 	%line{22} %argrw{"wrr"}
+	div		$tmp248 $const5 $const17 	%argrw{"wrr"}
+	mul		$tmp249 $tmp247 $tmp248 	%argrw{"wrr"}
+	pow		$tmp242 $tmp249 $const18 	%argrw{"wrr"}
+	return
+# include/node_color.h:38
+# 		color_srgb_to_scene_linear(c[2]));
+	compref		$tmp251 ___646_rgb $const19 	%line{38} %argrw{"wrr"}
+	functioncall	$const13 413 	%argrw{"r"}
+# include/node_color.h:19
+# 	if (c < 0.04045)
+	lt		$tmp252 $tmp251 $const14 	%line{19} %argrw{"wrr"}
+	if		$tmp252 408 413 	%argrw{"r"}
+# include/node_color.h:20
+# 		return (c < 0.0) ? 0.0 : c * (1.0 / 12.92);
+	lt		$tmp253 $tmp251 $const11 	%line{20} %argrw{"wrr"}
+	if		$tmp253 405 407 	%argrw{"r"}
+	assign		$tmp250 $const11 	%argrw{"wr"}
+	div		$tmp254 $const5 $const15 	%argrw{"wrr"}
+	mul		$tmp250 $tmp251 $tmp254 	%argrw{"wrr"}
+	return
+# include/node_color.h:22
+# 		return pow((c + 0.055) * (1.0 / 1.055), 2.4);
+	add		$tmp255 $tmp251 $const16 	%line{22} %argrw{"wrr"}
+	div		$tmp256 $const5 $const17 	%argrw{"wrr"}
+	mul		$tmp257 $tmp255 $tmp256 	%argrw{"wrr"}
+	pow		$tmp250 $tmp257 $const18 	%argrw{"wrr"}
+	return
+# include/node_color.h:38
+# 		color_srgb_to_scene_linear(c[2]));
+	color		___646_rgb $tmp234 $tmp242 $tmp250 	%line{38} %argrw{"wrrr"}
+# include/node_image_texture.osl:36
+# }
+	assign		$tmp223 ___646_rgb 	%filename{"include/node_image_texture.osl"} %line{36} %argrw{"wr"}
+# include/node_image_texture.osl:128
+# 			Alpha += weight[1] * tmp_alpha;
+	mul		$tmp258 $tmp222 $tmp223 	%line{128} %argrw{"wrr"}
+	add		Color Color $tmp258 	%argrw{"wrr"}
+# include/node_image_texture.osl:129
+# 		}
+	compref		$tmp259 ___650_weight $const3 	%line{129} %argrw{"wrr"}
+	mul		$tmp260 $tmp259 ___650_tmp_alpha 	%argrw{"wrr"}
+	add		Alpha Alpha $tmp260 	%argrw{"wrr"}
+# include/node_image_texture.osl:131
+# 			Color += weight[2] * image_texture_lookup(filename, color_space, p[1], p[0], tmp_alpha, use_alpha, is_float, interpolation);
+	compref		$tmp261 ___650_weight $const19 	%line{131} %argrw{"wrr"}
+	gt		$tmp262 $tmp261 $const11 	%argrw{"wrr"}
+	if		$tmp262 500 500 	%argrw{"r"}
+# include/node_image_texture.osl:132
+# 			Alpha += weight[2] * tmp_alpha;
+	compref		$tmp263 ___650_weight $const19 	%line{132} %argrw{"wrr"}
+	compref		$tmp265 p $const3 	%argrw{"wrr"}
+	compref		$tmp266 p $const2 	%argrw{"wrr"}
+	functioncall	$const4 495 	%argrw{"r"}
+# include/node_image_texture.osl:23
+# 
+	sub		$tmp267 $const5 $tmp266 	%line{23} %argrw{"wrr"}
+	texture		___646_rgb filename $tmp265 $tmp267 $const6 $const7 $const8 interpolation $const9 ___650_tmp_alpha 	%argrw{"wrrrrrrrrw"} %argderivs{2,3}
+# include/node_image_texture.osl:25
+# 		rgb = color_unpremultiply(rgb, Alpha);
+	if		use_alpha 445 445 	%line{25} %argrw{"r"}
+# include/node_image_texture.osl:26
+# 	
+	functioncall	$const10 441 	%line{26} %argrw{"r"}
+# include/node_color.h:51
+# 	if (alpha != 1.0 && alpha != 0.0)
+	neq		$tmp268 ___650_tmp_alpha $const5 	%filename{"include/node_color.h"} %line{51} %argrw{"wrr"}
+	neq		$tmp269 $tmp268 $const2 	%argrw{"wrr"}
+	if		$tmp269 437 437 	%argrw{"r"}
+	neq		$tmp270 ___650_tmp_alpha $const11 	%argrw{"wrr"}
+	neq		$tmp271 $tmp270 $const2 	%argrw{"wrr"}
+	assign		$tmp269 $tmp271 	%argrw{"wr"}
+	if		$tmp269 440 440 	%argrw{"r"}
+# include/node_color.h:52
+# 		return c / alpha;
+	div		___646_rgb ___646_rgb ___650_tmp_alpha 	%line{52} %argrw{"wrr"}
+	return
+# include/node_color.h:54
+# 	return c;
+	assign		___646_rgb ___646_rgb 	%line{54} %argrw{"wr"}
+# include/node_image_texture.osl:28
+# 			rgb = min(rgb, 1.0);
+	eq		$tmp272 is_float $const2 	%filename{"include/node_image_texture.osl"} %line{28} %argrw{"wrr"}
+	if		$tmp272 445 445 	%argrw{"r"}
+# include/node_image_texture.osl:29
+# 	}
+	assign		$tmp273 $const5 	%line{29} %argrw{"wr"}
+	min		___646_rgb ___646_rgb $tmp273 	%argrw{"wrr"}
+# include/node_image_texture.osl:32
+# 		rgb = color_srgb_to_scene_linear(rgb);
+	eq		$tmp274 color_space $const12 	%line{32} %argrw{"wrr"}
+	if		$tmp274 494 494 	%argrw{"r"}
+# include/node_image_texture.osl:33
+# 	}
+	functioncall	$const13 494 	%line{33} %argrw{"r"}
+# include/node_color.h:36
+# 		color_srgb_to_scene_linear(c[0]),
+	compref		$tmp276 ___646_rgb $const2 	%filename{"include/node_color.h"} %line{36} %argrw{"wrr"}
+	functioncall	$const13 463 	%argrw{"r"}
+# include/node_color.h:19
+# 	if (c < 0.04045)
+	lt		$tmp277 $tmp276 $const14 	%line{19} %argrw{"wrr"}
+	if		$tmp277 458 463 	%argrw{"r"}
+# include/node_color.h:20
+# 		return (c < 0.0) ? 0.0 : c * (1.0 / 12.92);
+	lt		$tmp278 $tmp276 $const11 	%line{20} %argrw{"wrr"}
+	if		$tmp278 455 457 	%argrw{"r"}
+	assign		$tmp275 $const11 	%argrw{"wr"}
+	div		$tmp279 $const5 $const15 	%argrw{"wrr"}
+	mul		$tmp275 $tmp276 $tmp279 	%argrw{"wrr"}
+	return
+# include/node_color.h:22
+# 		return pow((c + 0.055) * (1.0 / 1.055), 2.4);
+	add		$tmp280 $tmp276 $const16 	%line{22} %argrw{"wrr"}
+	div		$tmp281 $const5 $const17 	%argrw{"wrr"}
+	mul		$tmp282 $tmp280 $tmp281 	%argrw{"wrr"}
+	pow		$tmp275 $tmp282 $const18 	%argrw{"wrr"}
+	return
+# include/node_color.h:37
+# 		color_srgb_to_scene_linear(c[1]),
+	compref		$tmp284 ___646_rgb $const3 	%line{37} %argrw{"wrr"}
+	functioncall	$const13 478 	%argrw{"r"}
+# include/node_color.h:19
+# 	if (c < 0.04045)
+	lt		$tmp285 $tmp284 $const14 	%line{19} %argrw{"wrr"}
+	if		$tmp285 473 478 	%argrw{"r"}
+# include/node_color.h:20
+# 		return (c < 0.0) ? 0.0 : c * (1.0 / 12.92);
+	lt		$tmp286 $tmp284 $const11 	%line{20} %argrw{"wrr"}
+	if		$tmp286 470 472 	%argrw{"r"}
+	assign		$tmp283 $const11 	%argrw{"wr"}
+	div		$tmp287 $const5 $const15 	%argrw{"wrr"}
+	mul		$tmp283 $tmp284 $tmp287 	%argrw{"wrr"}
+	return
+# include/node_color.h:22
+# 		return pow((c + 0.055) * (1.0 / 1.055), 2.4);
+	add		$tmp288 $tmp284 $const16 	%line{22} %argrw{"wrr"}
+	div		$tmp289 $const5 $const17 	%argrw{"wrr"}
+	mul		$tmp290 $tmp288 $tmp289 	%argrw{"wrr"}
+	pow		$tmp283 $tmp290 $const18 	%argrw{"wrr"}
+	return
+# include/node_color.h:38
+# 		color_srgb_to_scene_linear(c[2]));
+	compref		$tmp292 ___646_rgb $const19 	%line{38} %argrw{"wrr"}
+	functioncall	$const13 493 	%argrw{"r"}
+# include/node_color.h:19
+# 	if (c < 0.04045)
+	lt		$tmp293 $tmp292 $const14 	%line{19} %argrw{"wrr"}
+	if		$tmp293 488 493 	%argrw{"r"}
+# include/node_color.h:20
+# 		return (c < 0.0) ? 0.0 : c * (1.0 / 12.92);
+	lt		$tmp294 $tmp292 $const11 	%line{20} %argrw{"wrr"}
+	if		$tmp294 485 487 	%argrw{"r"}
+	assign		$tmp291 $const11 	%argrw{"wr"}
+	div		$tmp295 $const5 $const15 	%argrw{"wrr"}
+	mul		$tmp291 $tmp292 $tmp295 	%argrw{"wrr"}
+	return
+# include/node_color.h:22
+# 		return pow((c + 0.055) * (1.0 / 1.055), 2.4);
+	add		$tmp296 $tmp292 $const16 	%line{22} %argrw{"wrr"}
+	div		$tmp297 $const5 $const17 	%argrw{"wrr"}
+	mul		$tmp298 $tmp296 $tmp297 	%argrw{"wrr"}
+	pow		$tmp291 $tmp298 $const18 	%argrw{"wrr"}
+	return
+# include/node_color.h:38
+# 		color_srgb_to_scene_linear(c[2]));
+	color		___646_rgb $tmp275 $tmp283 $tmp291 	%line{38} %argrw{"wrrr"}
+# include/node_image_texture.osl:36
+# }
+	assign		$tmp264 ___646_rgb 	%filename{"include/node_image_texture.osl"} %line{36} %argrw{"wr"}
+# include/node_image_texture.osl:132
+# 			Alpha += weight[2] * tmp_alpha;
+	mul		$tmp299 $tmp263 $tmp264 	%line{132} %argrw{"wrr"}
+	add		Color Color $tmp299 	%argrw{"wrr"}
+# include/node_image_texture.osl:133
+# 		}
+	compref		$tmp300 ___650_weight $const19 	%line{133} %argrw{"wrr"}
+	mul		$tmp301 $tmp300 ___650_tmp_alpha 	%argrw{"wrr"}
+	add		Alpha Alpha $tmp301 	%argrw{"wrr"}
+	end

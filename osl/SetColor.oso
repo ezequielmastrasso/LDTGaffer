@@ -1,0 +1,11 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader SetColor	%meta{string,help,"A Color value passthrough.<br>Can be used to instance one value in many places."} %meta{string,label,"Color Value"} %meta{string,category,"Values"} 
+param	color	In	1 0.5 0.1		%meta{string,label,"Color"}  %read{0,0} %write{2147483647,-1}
+oparam	color	Out	0 0 0		%read{2147483647,-1} %write{0,0}
+code ___main___
+# source/3dsMax-OSL-Shaders/SetColor.osl:17
+# }
+	assign		Out In 	%filename{"source/3dsMax-OSL-Shaders/SetColor.osl"} %line{17} %argrw{"wr"}
+	end

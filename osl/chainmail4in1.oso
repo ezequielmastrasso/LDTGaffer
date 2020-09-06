@@ -1,0 +1,1773 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader chainmail4in1
+param	vector	Vector	0 0 0		%read{1,1} %write{0,0} %initexpr
+param	float	Scale	1		%read{1,1} %write{2147483647,-1}
+param	float	Radius	0.47		%read{14,15} %write{2147483647,-1}
+param	float	Width	0.079999998		%read{14,15} %write{2147483647,-1}
+oparam	float	Fac	0		%read{2147483647,-1} %write{271,814}
+oparam	float	Disp	0		%read{2147483647,-1} %write{279,822}
+global	point	P	%read{0,0} %write{2147483647,-1}
+local	float[3]	___328_x0y0	%read{231,808} %write{100,645}
+local	float[3]	___328_x0y1	%read{193,770} %write{103,648}
+local	float[3]	___328_x1y0	%read{154,731} %write{106,651}
+local	float[3]	___328_x1y1	%read{116,693} %write{109,654}
+local	float	___328_r	%read{268,811} %write{112,810}
+local	point	p	%read{2,58} %write{1,1}
+local	float	x	%read{19,67} %write{7,24}
+local	float	y	%read{19,67} %write{13,28}
+local	float	Rm	%read{118,817} %write{14,14}
+local	float	Rp	%read{121,817} %write{15,15}
+local	float	r	%read{269,816} %write{16,811}
+local	float	r1	%read{101,653} %write{36,36}
+local	float	r2	%read{102,652} %write{43,43}
+local	float	r3	%read{100,654} %write{50,50}
+local	float	cr1	%read{282,472} %write{82,82}
+local	float	cr2	%read{283,471} %write{89,89}
+local	float	cr3	%read{281,473} %write{96,96}
+local	int	fx	%read{113,656} %write{17,25}
+local	int	fy	%read{114,734} %write{18,29}
+local	int	flip	%read{97,97} %write{19,19}
+local	int	flipt	%read{97,97} %write{21,21}
+local	float	xc	%read{68,90} %write{57,70}
+local	float	yc	%read{72,91} %write{64,74}
+local	int	fxc	%read{294,475} %write{65,71}
+local	int	fyc	%read{295,553} %write{66,75}
+local	int	flipc	%read{2147483647,-1} %write{67,67}
+const	int	$const1	0		%read{2,804} %write{2147483647,-1}
+temp	float	$tmp1	%read{4,7} %write{2,2}
+const	int	$const2	1		%read{8,814} %write{2147483647,-1}
+const	float	$const3	1		%read{4,74} %write{2147483647,-1}
+const	string	$const4	"mod"		%read{3,60} %write{2147483647,-1}
+temp	float	$tmp2	%read{6,6} %write{5,5}
+temp	float	$tmp3	%read{5,5} %write{4,4}
+temp	float	$tmp4	%read{7,7} %write{6,6}
+temp	float	$tmp5	%read{10,13} %write{8,8}
+temp	float	$tmp6	%read{12,12} %write{11,11}
+temp	float	$tmp7	%read{11,11} %write{10,10}
+temp	float	$tmp8	%read{13,13} %write{12,12}
+const	int	$const5	-1		%read{16,812} %write{2147483647,-1}
+temp	float	$tmp9	%read{21,21} %write{20,20}
+const	float	$const6	0.5		%read{22,821} %write{2147483647,-1}
+temp	int	$tmp10	%read{23,23} %write{22,22}
+temp	int	$tmp11	%read{27,27} %write{26,26}
+temp	float	$tmp12	%read{33,33} %write{30,30}
+temp	float	$tmp13	%read{34,34} %write{31,31}
+const	string	$const7	"hypot"		%read{32,92} %write{2147483647,-1}
+temp	float	$tmp14	%read{35,35} %write{33,33}
+temp	float	$tmp15	%read{35,35} %write{34,34}
+temp	float	$tmp16	%read{36,36} %write{35,35}
+temp	float	$tmp17	%read{40,40} %write{37,37}
+temp	float	$tmp18	%read{41,41} %write{38,38}
+temp	float	$tmp19	%read{42,42} %write{40,40}
+temp	float	$tmp20	%read{42,42} %write{41,41}
+temp	float	$tmp21	%read{43,43} %write{42,42}
+temp	float	$tmp22	%read{47,47} %write{44,44}
+temp	float	$tmp23	%read{48,48} %write{45,45}
+temp	float	$tmp24	%read{49,49} %write{47,47}
+temp	float	$tmp25	%read{49,49} %write{48,48}
+temp	float	$tmp26	%read{50,50} %write{49,49}
+temp	float	$tmp27	%read{52,52} %write{51,51}
+temp	float	$tmp28	%read{54,57} %write{52,52}
+temp	float	$tmp29	%read{56,56} %write{55,55}
+temp	float	$tmp30	%read{55,55} %write{54,54}
+temp	float	$tmp31	%read{57,57} %write{56,56}
+temp	float	$tmp32	%read{59,59} %write{58,58}
+temp	float	$tmp33	%read{61,64} %write{59,59}
+temp	float	$tmp34	%read{63,63} %write{62,62}
+temp	float	$tmp35	%read{62,62} %write{61,61}
+temp	float	$tmp36	%read{64,64} %write{63,63}
+temp	int	$tmp37	%read{69,69} %write{68,68}
+temp	int	$tmp38	%read{73,73} %write{72,72}
+temp	float	$tmp39	%read{79,79} %write{76,76}
+temp	float	$tmp40	%read{80,80} %write{77,77}
+temp	float	$tmp41	%read{81,81} %write{79,79}
+temp	float	$tmp42	%read{81,81} %write{80,80}
+temp	float	$tmp43	%read{82,82} %write{81,81}
+temp	float	$tmp44	%read{86,86} %write{83,83}
+temp	float	$tmp45	%read{87,87} %write{84,84}
+temp	float	$tmp46	%read{88,88} %write{86,86}
+temp	float	$tmp47	%read{88,88} %write{87,87}
+temp	float	$tmp48	%read{89,89} %write{88,88}
+temp	float	$tmp49	%read{93,93} %write{90,90}
+temp	float	$tmp50	%read{94,94} %write{91,91}
+temp	float	$tmp51	%read{95,95} %write{93,93}
+temp	float	$tmp52	%read{95,95} %write{94,94}
+temp	float	$tmp53	%read{96,96} %write{95,95}
+temp	int	$tmp54	%read{98,98} %write{97,97}
+const	string	$const8	"basepattern"		%read{99,642} %write{2147483647,-1}
+const	int	$const9	2		%read{102,808} %write{2147483647,-1}
+const	string	$const10	"rmap"		%read{115,773} %write{2147483647,-1}
+temp	int	$tmp55	%read{125,125} %write{124,124}
+temp	float	$tmp56	%read{118,121} %write{116,116}
+const	string	$const11	"between"		%read{117,799} %write{2147483647,-1}
+temp	int	$tmp57	%read{119,119} %write{118,118}
+temp	int	$tmp58	%read{120,124} %write{119,123}
+temp	int	$tmp59	%read{122,122} %write{121,121}
+temp	int	$tmp60	%read{123,123} %write{122,122}
+temp	int	$tmp61	%read{137,137} %write{136,136}
+temp	float	$tmp62	%read{130,133} %write{128,128}
+temp	int	$tmp63	%read{131,131} %write{130,130}
+temp	int	$tmp64	%read{132,136} %write{131,135}
+temp	int	$tmp65	%read{134,134} %write{133,133}
+temp	int	$tmp66	%read{135,135} %write{134,134}
+temp	int	$tmp67	%read{149,149} %write{148,148}
+temp	float	$tmp68	%read{142,145} %write{140,140}
+temp	int	$tmp69	%read{143,143} %write{142,142}
+temp	int	$tmp70	%read{144,148} %write{143,147}
+temp	int	$tmp71	%read{146,146} %write{145,145}
+temp	int	$tmp72	%read{147,147} %write{146,146}
+temp	int	$tmp73	%read{163,163} %write{162,162}
+temp	float	$tmp74	%read{156,159} %write{154,154}
+temp	int	$tmp75	%read{157,157} %write{156,156}
+temp	int	$tmp76	%read{158,162} %write{157,161}
+temp	int	$tmp77	%read{160,160} %write{159,159}
+temp	int	$tmp78	%read{161,161} %write{160,160}
+temp	int	$tmp79	%read{175,175} %write{174,174}
+temp	float	$tmp80	%read{168,171} %write{166,166}
+temp	int	$tmp81	%read{169,169} %write{168,168}
+temp	int	$tmp82	%read{170,174} %write{169,173}
+temp	int	$tmp83	%read{172,172} %write{171,171}
+temp	int	$tmp84	%read{173,173} %write{172,172}
+temp	int	$tmp85	%read{187,187} %write{186,186}
+temp	float	$tmp86	%read{180,183} %write{178,178}
+temp	int	$tmp87	%read{181,181} %write{180,180}
+temp	int	$tmp88	%read{182,186} %write{181,185}
+temp	int	$tmp89	%read{184,184} %write{183,183}
+temp	int	$tmp90	%read{185,185} %write{184,184}
+temp	int	$tmp91	%read{202,202} %write{201,201}
+temp	float	$tmp92	%read{195,198} %write{193,193}
+temp	int	$tmp93	%read{196,196} %write{195,195}
+temp	int	$tmp94	%read{197,201} %write{196,200}
+temp	int	$tmp95	%read{199,199} %write{198,198}
+temp	int	$tmp96	%read{200,200} %write{199,199}
+temp	int	$tmp97	%read{214,214} %write{213,213}
+temp	float	$tmp98	%read{207,210} %write{205,205}
+temp	int	$tmp99	%read{208,208} %write{207,207}
+temp	int	$tmp100	%read{209,213} %write{208,212}
+temp	int	$tmp101	%read{211,211} %write{210,210}
+temp	int	$tmp102	%read{212,212} %write{211,211}
+temp	int	$tmp103	%read{226,226} %write{225,225}
+temp	float	$tmp104	%read{219,222} %write{217,217}
+temp	int	$tmp105	%read{220,220} %write{219,219}
+temp	int	$tmp106	%read{221,225} %write{220,224}
+temp	int	$tmp107	%read{223,223} %write{222,222}
+temp	int	$tmp108	%read{224,224} %write{223,223}
+temp	int	$tmp109	%read{240,240} %write{239,239}
+temp	float	$tmp110	%read{233,236} %write{231,231}
+temp	int	$tmp111	%read{234,234} %write{233,233}
+temp	int	$tmp112	%read{235,239} %write{234,238}
+temp	int	$tmp113	%read{237,237} %write{236,236}
+temp	int	$tmp114	%read{238,238} %write{237,237}
+temp	int	$tmp115	%read{252,252} %write{251,251}
+temp	float	$tmp116	%read{245,248} %write{243,243}
+temp	int	$tmp117	%read{246,246} %write{245,245}
+temp	int	$tmp118	%read{247,251} %write{246,250}
+temp	int	$tmp119	%read{249,249} %write{248,248}
+temp	int	$tmp120	%read{250,250} %write{249,249}
+temp	int	$tmp121	%read{264,264} %write{263,263}
+temp	float	$tmp122	%read{257,260} %write{255,255}
+temp	int	$tmp123	%read{258,258} %write{257,257}
+temp	int	$tmp124	%read{259,263} %write{258,262}
+temp	int	$tmp125	%read{261,261} %write{260,260}
+temp	int	$tmp126	%read{262,262} %write{261,261}
+temp	int	$tmp127	%read{270,270} %write{269,269}
+const	string	$const12	"arc"		%read{272,815} %write{2147483647,-1}
+temp	float	$tmp128	%read{278,278} %write{277,277}
+temp	float	$tmp129	%read{275,275} %write{273,273}
+temp	float	$tmp130	%read{275,275} %write{274,274}
+temp	float	$tmp131	%read{276,276} %write{275,275}
+temp	float	$tmp132	%read{277,277} %write{276,276}
+temp	float	$tmp133	%read{279,279} %write{278,278}
+temp	int	$tmp134	%read{306,306} %write{305,305}
+temp	float	$tmp135	%read{299,302} %write{297,297}
+temp	int	$tmp136	%read{300,300} %write{299,299}
+temp	int	$tmp137	%read{301,305} %write{300,304}
+temp	int	$tmp138	%read{303,303} %write{302,302}
+temp	int	$tmp139	%read{304,304} %write{303,303}
+temp	int	$tmp140	%read{318,318} %write{317,317}
+temp	float	$tmp141	%read{311,314} %write{309,309}
+temp	int	$tmp142	%read{312,312} %write{311,311}
+temp	int	$tmp143	%read{313,317} %write{312,316}
+temp	int	$tmp144	%read{315,315} %write{314,314}
+temp	int	$tmp145	%read{316,316} %write{315,315}
+temp	int	$tmp146	%read{330,330} %write{329,329}
+temp	float	$tmp147	%read{323,326} %write{321,321}
+temp	int	$tmp148	%read{324,324} %write{323,323}
+temp	int	$tmp149	%read{325,329} %write{324,328}
+temp	int	$tmp150	%read{327,327} %write{326,326}
+temp	int	$tmp151	%read{328,328} %write{327,327}
+temp	int	$tmp152	%read{344,344} %write{343,343}
+temp	float	$tmp153	%read{337,340} %write{335,335}
+temp	int	$tmp154	%read{338,338} %write{337,337}
+temp	int	$tmp155	%read{339,343} %write{338,342}
+temp	int	$tmp156	%read{341,341} %write{340,340}
+temp	int	$tmp157	%read{342,342} %write{341,341}
+temp	int	$tmp158	%read{356,356} %write{355,355}
+temp	float	$tmp159	%read{349,352} %write{347,347}
+temp	int	$tmp160	%read{350,350} %write{349,349}
+temp	int	$tmp161	%read{351,355} %write{350,354}
+temp	int	$tmp162	%read{353,353} %write{352,352}
+temp	int	$tmp163	%read{354,354} %write{353,353}
+temp	int	$tmp164	%read{368,368} %write{367,367}
+temp	float	$tmp165	%read{361,364} %write{359,359}
+temp	int	$tmp166	%read{362,362} %write{361,361}
+temp	int	$tmp167	%read{363,367} %write{362,366}
+temp	int	$tmp168	%read{365,365} %write{364,364}
+temp	int	$tmp169	%read{366,366} %write{365,365}
+temp	int	$tmp170	%read{383,383} %write{382,382}
+temp	float	$tmp171	%read{376,379} %write{374,374}
+temp	int	$tmp172	%read{377,377} %write{376,376}
+temp	int	$tmp173	%read{378,382} %write{377,381}
+temp	int	$tmp174	%read{380,380} %write{379,379}
+temp	int	$tmp175	%read{381,381} %write{380,380}
+temp	int	$tmp176	%read{395,395} %write{394,394}
+temp	float	$tmp177	%read{388,391} %write{386,386}
+temp	int	$tmp178	%read{389,389} %write{388,388}
+temp	int	$tmp179	%read{390,394} %write{389,393}
+temp	int	$tmp180	%read{392,392} %write{391,391}
+temp	int	$tmp181	%read{393,393} %write{392,392}
+temp	int	$tmp182	%read{407,407} %write{406,406}
+temp	float	$tmp183	%read{400,403} %write{398,398}
+temp	int	$tmp184	%read{401,401} %write{400,400}
+temp	int	$tmp185	%read{402,406} %write{401,405}
+temp	int	$tmp186	%read{404,404} %write{403,403}
+temp	int	$tmp187	%read{405,405} %write{404,404}
+temp	int	$tmp188	%read{421,421} %write{420,420}
+temp	float	$tmp189	%read{414,417} %write{412,412}
+temp	int	$tmp190	%read{415,415} %write{414,414}
+temp	int	$tmp191	%read{416,420} %write{415,419}
+temp	int	$tmp192	%read{418,418} %write{417,417}
+temp	int	$tmp193	%read{419,419} %write{418,418}
+temp	int	$tmp194	%read{433,433} %write{432,432}
+temp	float	$tmp195	%read{426,429} %write{424,424}
+temp	int	$tmp196	%read{427,427} %write{426,426}
+temp	int	$tmp197	%read{428,432} %write{427,431}
+temp	int	$tmp198	%read{430,430} %write{429,429}
+temp	int	$tmp199	%read{431,431} %write{430,430}
+temp	int	$tmp200	%read{445,445} %write{444,444}
+temp	float	$tmp201	%read{438,441} %write{436,436}
+temp	int	$tmp202	%read{439,439} %write{438,438}
+temp	int	$tmp203	%read{440,444} %write{439,443}
+temp	int	$tmp204	%read{442,442} %write{441,441}
+temp	int	$tmp205	%read{443,443} %write{442,442}
+temp	int	$tmp206	%read{451,451} %write{450,450}
+temp	float	$tmp207	%read{459,459} %write{458,458}
+temp	float	$tmp208	%read{456,456} %write{454,454}
+temp	float	$tmp209	%read{456,456} %write{455,455}
+temp	float	$tmp210	%read{457,457} %write{456,456}
+temp	float	$tmp211	%read{458,458} %write{457,457}
+temp	float	$tmp212	%read{460,460} %write{459,459}
+temp	int	$tmp213	%read{487,487} %write{486,486}
+temp	float	$tmp214	%read{480,483} %write{478,478}
+temp	int	$tmp215	%read{481,481} %write{480,480}
+temp	int	$tmp216	%read{482,486} %write{481,485}
+temp	int	$tmp217	%read{484,484} %write{483,483}
+temp	int	$tmp218	%read{485,485} %write{484,484}
+temp	int	$tmp219	%read{499,499} %write{498,498}
+temp	float	$tmp220	%read{492,495} %write{490,490}
+temp	int	$tmp221	%read{493,493} %write{492,492}
+temp	int	$tmp222	%read{494,498} %write{493,497}
+temp	int	$tmp223	%read{496,496} %write{495,495}
+temp	int	$tmp224	%read{497,497} %write{496,496}
+temp	int	$tmp225	%read{511,511} %write{510,510}
+temp	float	$tmp226	%read{504,507} %write{502,502}
+temp	int	$tmp227	%read{505,505} %write{504,504}
+temp	int	$tmp228	%read{506,510} %write{505,509}
+temp	int	$tmp229	%read{508,508} %write{507,507}
+temp	int	$tmp230	%read{509,509} %write{508,508}
+temp	int	$tmp231	%read{525,525} %write{524,524}
+temp	float	$tmp232	%read{518,521} %write{516,516}
+temp	int	$tmp233	%read{519,519} %write{518,518}
+temp	int	$tmp234	%read{520,524} %write{519,523}
+temp	int	$tmp235	%read{522,522} %write{521,521}
+temp	int	$tmp236	%read{523,523} %write{522,522}
+temp	int	$tmp237	%read{537,537} %write{536,536}
+temp	float	$tmp238	%read{530,533} %write{528,528}
+temp	int	$tmp239	%read{531,531} %write{530,530}
+temp	int	$tmp240	%read{532,536} %write{531,535}
+temp	int	$tmp241	%read{534,534} %write{533,533}
+temp	int	$tmp242	%read{535,535} %write{534,534}
+temp	int	$tmp243	%read{549,549} %write{548,548}
+temp	float	$tmp244	%read{542,545} %write{540,540}
+temp	int	$tmp245	%read{543,543} %write{542,542}
+temp	int	$tmp246	%read{544,548} %write{543,547}
+temp	int	$tmp247	%read{546,546} %write{545,545}
+temp	int	$tmp248	%read{547,547} %write{546,546}
+temp	int	$tmp249	%read{564,564} %write{563,563}
+temp	float	$tmp250	%read{557,560} %write{555,555}
+temp	int	$tmp251	%read{558,558} %write{557,557}
+temp	int	$tmp252	%read{559,563} %write{558,562}
+temp	int	$tmp253	%read{561,561} %write{560,560}
+temp	int	$tmp254	%read{562,562} %write{561,561}
+temp	int	$tmp255	%read{576,576} %write{575,575}
+temp	float	$tmp256	%read{569,572} %write{567,567}
+temp	int	$tmp257	%read{570,570} %write{569,569}
+temp	int	$tmp258	%read{571,575} %write{570,574}
+temp	int	$tmp259	%read{573,573} %write{572,572}
+temp	int	$tmp260	%read{574,574} %write{573,573}
+temp	int	$tmp261	%read{588,588} %write{587,587}
+temp	float	$tmp262	%read{581,584} %write{579,579}
+temp	int	$tmp263	%read{582,582} %write{581,581}
+temp	int	$tmp264	%read{583,587} %write{582,586}
+temp	int	$tmp265	%read{585,585} %write{584,584}
+temp	int	$tmp266	%read{586,586} %write{585,585}
+temp	int	$tmp267	%read{602,602} %write{601,601}
+temp	float	$tmp268	%read{595,598} %write{593,593}
+temp	int	$tmp269	%read{596,596} %write{595,595}
+temp	int	$tmp270	%read{597,601} %write{596,600}
+temp	int	$tmp271	%read{599,599} %write{598,598}
+temp	int	$tmp272	%read{600,600} %write{599,599}
+temp	int	$tmp273	%read{614,614} %write{613,613}
+temp	float	$tmp274	%read{607,610} %write{605,605}
+temp	int	$tmp275	%read{608,608} %write{607,607}
+temp	int	$tmp276	%read{609,613} %write{608,612}
+temp	int	$tmp277	%read{611,611} %write{610,610}
+temp	int	$tmp278	%read{612,612} %write{611,611}
+temp	int	$tmp279	%read{626,626} %write{625,625}
+temp	float	$tmp280	%read{619,622} %write{617,617}
+temp	int	$tmp281	%read{620,620} %write{619,619}
+temp	int	$tmp282	%read{621,625} %write{620,624}
+temp	int	$tmp283	%read{623,623} %write{622,622}
+temp	int	$tmp284	%read{624,624} %write{623,623}
+temp	int	$tmp285	%read{632,632} %write{631,631}
+temp	float	$tmp286	%read{640,640} %write{639,639}
+temp	float	$tmp287	%read{637,637} %write{635,635}
+temp	float	$tmp288	%read{637,637} %write{636,636}
+temp	float	$tmp289	%read{638,638} %write{637,637}
+temp	float	$tmp290	%read{639,639} %write{638,638}
+temp	float	$tmp291	%read{641,641} %write{640,640}
+temp	int	$tmp292	%read{668,668} %write{667,667}
+temp	float	$tmp293	%read{661,664} %write{659,659}
+temp	int	$tmp294	%read{662,662} %write{661,661}
+temp	int	$tmp295	%read{663,667} %write{662,666}
+temp	int	$tmp296	%read{665,665} %write{664,664}
+temp	int	$tmp297	%read{666,666} %write{665,665}
+temp	int	$tmp298	%read{680,680} %write{679,679}
+temp	float	$tmp299	%read{673,676} %write{671,671}
+temp	int	$tmp300	%read{674,674} %write{673,673}
+temp	int	$tmp301	%read{675,679} %write{674,678}
+temp	int	$tmp302	%read{677,677} %write{676,676}
+temp	int	$tmp303	%read{678,678} %write{677,677}
+temp	int	$tmp304	%read{692,692} %write{691,691}
+temp	float	$tmp305	%read{685,688} %write{683,683}
+temp	int	$tmp306	%read{686,686} %write{685,685}
+temp	int	$tmp307	%read{687,691} %write{686,690}
+temp	int	$tmp308	%read{689,689} %write{688,688}
+temp	int	$tmp309	%read{690,690} %write{689,689}
+temp	int	$tmp310	%read{706,706} %write{705,705}
+temp	float	$tmp311	%read{699,702} %write{697,697}
+temp	int	$tmp312	%read{700,700} %write{699,699}
+temp	int	$tmp313	%read{701,705} %write{700,704}
+temp	int	$tmp314	%read{703,703} %write{702,702}
+temp	int	$tmp315	%read{704,704} %write{703,703}
+temp	int	$tmp316	%read{718,718} %write{717,717}
+temp	float	$tmp317	%read{711,714} %write{709,709}
+temp	int	$tmp318	%read{712,712} %write{711,711}
+temp	int	$tmp319	%read{713,717} %write{712,716}
+temp	int	$tmp320	%read{715,715} %write{714,714}
+temp	int	$tmp321	%read{716,716} %write{715,715}
+temp	int	$tmp322	%read{730,730} %write{729,729}
+temp	float	$tmp323	%read{723,726} %write{721,721}
+temp	int	$tmp324	%read{724,724} %write{723,723}
+temp	int	$tmp325	%read{725,729} %write{724,728}
+temp	int	$tmp326	%read{727,727} %write{726,726}
+temp	int	$tmp327	%read{728,728} %write{727,727}
+temp	int	$tmp328	%read{745,745} %write{744,744}
+temp	float	$tmp329	%read{738,741} %write{736,736}
+temp	int	$tmp330	%read{739,739} %write{738,738}
+temp	int	$tmp331	%read{740,744} %write{739,743}
+temp	int	$tmp332	%read{742,742} %write{741,741}
+temp	int	$tmp333	%read{743,743} %write{742,742}
+temp	int	$tmp334	%read{757,757} %write{756,756}
+temp	float	$tmp335	%read{750,753} %write{748,748}
+temp	int	$tmp336	%read{751,751} %write{750,750}
+temp	int	$tmp337	%read{752,756} %write{751,755}
+temp	int	$tmp338	%read{754,754} %write{753,753}
+temp	int	$tmp339	%read{755,755} %write{754,754}
+temp	int	$tmp340	%read{769,769} %write{768,768}
+temp	float	$tmp341	%read{762,765} %write{760,760}
+temp	int	$tmp342	%read{763,763} %write{762,762}
+temp	int	$tmp343	%read{764,768} %write{763,767}
+temp	int	$tmp344	%read{766,766} %write{765,765}
+temp	int	$tmp345	%read{767,767} %write{766,766}
+temp	int	$tmp346	%read{783,783} %write{782,782}
+temp	float	$tmp347	%read{776,779} %write{774,774}
+temp	int	$tmp348	%read{777,777} %write{776,776}
+temp	int	$tmp349	%read{778,782} %write{777,781}
+temp	int	$tmp350	%read{780,780} %write{779,779}
+temp	int	$tmp351	%read{781,781} %write{780,780}
+temp	int	$tmp352	%read{795,795} %write{794,794}
+temp	float	$tmp353	%read{788,791} %write{786,786}
+temp	int	$tmp354	%read{789,789} %write{788,788}
+temp	int	$tmp355	%read{790,794} %write{789,793}
+temp	int	$tmp356	%read{792,792} %write{791,791}
+temp	int	$tmp357	%read{793,793} %write{792,792}
+temp	int	$tmp358	%read{807,807} %write{806,806}
+temp	float	$tmp359	%read{800,803} %write{798,798}
+temp	int	$tmp360	%read{801,801} %write{800,800}
+temp	int	$tmp361	%read{802,806} %write{801,805}
+temp	int	$tmp362	%read{804,804} %write{803,803}
+temp	int	$tmp363	%read{805,805} %write{804,804}
+temp	int	$tmp364	%read{813,813} %write{812,812}
+temp	float	$tmp365	%read{821,821} %write{820,820}
+temp	float	$tmp366	%read{818,818} %write{816,816}
+temp	float	$tmp367	%read{818,818} %write{817,817}
+temp	float	$tmp368	%read{819,819} %write{818,818}
+temp	float	$tmp369	%read{820,820} %write{819,819}
+temp	float	$tmp370	%read{822,822} %write{821,821}
+code Vector
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:52
+#         float Scale = 1,
+	assign		Vector P 	%filename{"source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl"} %line{52} %argrw{"wr"}
+code ___main___
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:59
+#     float x = mod(p[0],1);
+	mul		p Vector Scale 	%filename{"source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl"} %line{59} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:60
+#     float y = mod(p[1],1);
+	compref		$tmp1 p $const1 	%line{60} %argrw{"wrr"}
+	functioncall	$const4 8 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:136
+# float  mod (float  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp3 $tmp1 $const3 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{136} %argrw{"wrr"}
+	floor		$tmp2 $tmp3 	%argrw{"wr"}
+	mul		$tmp4 $const3 $tmp2 	%argrw{"wrr"}
+	sub		x $tmp1 $tmp4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:61
+# 
+	compref		$tmp5 p $const2 	%filename{"source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl"} %line{61} %argrw{"wrr"}
+	functioncall	$const4 14 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:136
+# float  mod (float  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp7 $tmp5 $const3 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{136} %argrw{"wrr"}
+	floor		$tmp6 $tmp7 	%argrw{"wr"}
+	mul		$tmp8 $const3 $tmp6 	%argrw{"wrr"}
+	sub		y $tmp5 $tmp8 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:63
+#     float Rp = Radius + Width;
+	sub		Rm Radius Width 	%filename{"source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl"} %line{63} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:64
+# 
+	add		Rp Radius Width 	%line{64} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:66
+# 
+	assign		r $const5 	%line{66} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:68
+#     if ( x > 0.5 ){ x = 1 - x ; fx = 1; }
+	assign		fx $const1 	%line{68} %argrw{"wr"}
+	assign		fy $const1 	%argrw{"wr"}
+	gt		flip y x 	%argrw{"wrr"}
+	sub		$tmp9 $const3 x 	%argrw{"wrr"}
+	gt		flipt y $tmp9 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:69
+#     if ( y > 0.5 ){ y = 1 - y ; fy = 1; }
+	gt		$tmp10 x $const6 	%line{69} %argrw{"wrr"}
+	if		$tmp10 26 26 	%argrw{"r"}
+	sub		x $const3 x 	%argrw{"wrr"}
+	assign		fx $const2 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:70
+# 
+	gt		$tmp11 y $const6 	%line{70} %argrw{"wrr"}
+	if		$tmp11 30 30 	%argrw{"r"}
+	sub		y $const3 y 	%argrw{"wrr"}
+	assign		fy $const2 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:72
+#     r2 = hypot(x-0.5,y+0.5);
+	sub		$tmp12 x $const6 	%line{72} %argrw{"wrr"}
+	sub		$tmp13 y $const6 	%argrw{"wrr"}
+	functioncall	$const7 37 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:114
+# float hypot (float a, float b) { return sqrt (a*a + b*b); }
+	mul		$tmp14 $tmp12 $tmp12 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{114} %argrw{"wrr"}
+	mul		$tmp15 $tmp13 $tmp13 	%argrw{"wrr"}
+	add		$tmp16 $tmp14 $tmp15 	%argrw{"wrr"}
+	sqrt		r1 $tmp16 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:73
+#     r3 = hypot(x+0.5,y-0.5);
+	sub		$tmp17 x $const6 	%filename{"source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl"} %line{73} %argrw{"wrr"}
+	add		$tmp18 y $const6 	%argrw{"wrr"}
+	functioncall	$const7 44 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:114
+# float hypot (float a, float b) { return sqrt (a*a + b*b); }
+	mul		$tmp19 $tmp17 $tmp17 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{114} %argrw{"wrr"}
+	mul		$tmp20 $tmp18 $tmp18 	%argrw{"wrr"}
+	add		$tmp21 $tmp19 $tmp20 	%argrw{"wrr"}
+	sqrt		r2 $tmp21 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:74
+# 
+	add		$tmp22 x $const6 	%filename{"source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl"} %line{74} %argrw{"wrr"}
+	sub		$tmp23 y $const6 	%argrw{"wrr"}
+	functioncall	$const7 51 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:114
+# float hypot (float a, float b) { return sqrt (a*a + b*b); }
+	mul		$tmp24 $tmp22 $tmp22 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{114} %argrw{"wrr"}
+	mul		$tmp25 $tmp23 $tmp23 	%argrw{"wrr"}
+	add		$tmp26 $tmp24 $tmp25 	%argrw{"wrr"}
+	sqrt		r3 $tmp26 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:76
+#     float yc = mod(p[1]+0.5,1);
+	compref		$tmp27 p $const1 	%filename{"source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl"} %line{76} %argrw{"wrr"}
+	add		$tmp28 $tmp27 $const6 	%argrw{"wrr"}
+	functioncall	$const4 58 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:136
+# float  mod (float  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp30 $tmp28 $const3 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{136} %argrw{"wrr"}
+	floor		$tmp29 $tmp30 	%argrw{"wr"}
+	mul		$tmp31 $const3 $tmp29 	%argrw{"wrr"}
+	sub		xc $tmp28 $tmp31 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:77
+# 
+	compref		$tmp32 p $const2 	%filename{"source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl"} %line{77} %argrw{"wrr"}
+	add		$tmp33 $tmp32 $const6 	%argrw{"wrr"}
+	functioncall	$const4 65 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:136
+# float  mod (float  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp35 $tmp33 $const3 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{136} %argrw{"wrr"}
+	floor		$tmp34 $tmp35 	%argrw{"wr"}
+	mul		$tmp36 $const3 $tmp34 	%argrw{"wrr"}
+	sub		yc $tmp33 $tmp36 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:79
+# 
+	assign		fxc $const1 	%filename{"source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl"} %line{79} %argrw{"wr"}
+	assign		fyc $const1 	%argrw{"wr"}
+	gt		flipc y x 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:81
+#     if ( yc > 0.5 ){ yc = 1 - yc ; fyc = 1; }
+	gt		$tmp37 xc $const6 	%line{81} %argrw{"wrr"}
+	if		$tmp37 72 72 	%argrw{"r"}
+	sub		xc $const3 xc 	%argrw{"wrr"}
+	assign		fxc $const2 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:82
+# 
+	gt		$tmp38 yc $const6 	%line{82} %argrw{"wrr"}
+	if		$tmp38 76 76 	%argrw{"r"}
+	sub		yc $const3 yc 	%argrw{"wrr"}
+	assign		fyc $const2 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:84
+#     cr2 = hypot(xc-0.5,yc+0.5);
+	sub		$tmp39 xc $const6 	%line{84} %argrw{"wrr"}
+	sub		$tmp40 yc $const6 	%argrw{"wrr"}
+	functioncall	$const7 83 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:114
+# float hypot (float a, float b) { return sqrt (a*a + b*b); }
+	mul		$tmp41 $tmp39 $tmp39 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{114} %argrw{"wrr"}
+	mul		$tmp42 $tmp40 $tmp40 	%argrw{"wrr"}
+	add		$tmp43 $tmp41 $tmp42 	%argrw{"wrr"}
+	sqrt		cr1 $tmp43 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:85
+#     cr3 = hypot(xc+0.5,yc-0.5);
+	sub		$tmp44 xc $const6 	%filename{"source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl"} %line{85} %argrw{"wrr"}
+	add		$tmp45 yc $const6 	%argrw{"wrr"}
+	functioncall	$const7 90 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:114
+# float hypot (float a, float b) { return sqrt (a*a + b*b); }
+	mul		$tmp46 $tmp44 $tmp44 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{114} %argrw{"wrr"}
+	mul		$tmp47 $tmp45 $tmp45 	%argrw{"wrr"}
+	add		$tmp48 $tmp46 $tmp47 	%argrw{"wrr"}
+	sqrt		cr2 $tmp48 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:86
+# 
+	add		$tmp49 xc $const6 	%filename{"source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl"} %line{86} %argrw{"wrr"}
+	sub		$tmp50 yc $const6 	%argrw{"wrr"}
+	functioncall	$const7 97 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:114
+# float hypot (float a, float b) { return sqrt (a*a + b*b); }
+	mul		$tmp51 $tmp49 $tmp49 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{114} %argrw{"wrr"}
+	mul		$tmp52 $tmp50 $tmp50 	%argrw{"wrr"}
+	add		$tmp53 $tmp51 $tmp52 	%argrw{"wrr"}
+	sqrt		cr3 $tmp53 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:88
+#         // base pattern
+	xor		$tmp54 flip flipt 	%filename{"source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl"} %line{88} %argrw{"wrr"}
+	if		$tmp54 461 823 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:90
+#         if ( r> -1){
+	functioncall	$const8 269 	%line{90} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:28
+#     float x0y1[3] = {r2, r3, r1};
+	aassign		___328_x0y0 $const1 r3 	%line{28} %argrw{"wrr"}
+	aassign		___328_x0y0 $const2 r1 	%argrw{"wrr"}
+	aassign		___328_x0y0 $const9 r2 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:29
+#     float x1y0[3] = {r1, r3, r2};
+	aassign		___328_x0y1 $const1 r2 	%line{29} %argrw{"wrr"}
+	aassign		___328_x0y1 $const2 r3 	%argrw{"wrr"}
+	aassign		___328_x0y1 $const9 r1 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:30
+#     float x1y1[3] = {r2, r1, r3};
+	aassign		___328_x1y0 $const1 r1 	%line{30} %argrw{"wrr"}
+	aassign		___328_x1y0 $const2 r3 	%argrw{"wrr"}
+	aassign		___328_x1y0 $const9 r2 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:31
+# 
+	aassign		___328_x1y1 $const1 r2 	%line{31} %argrw{"wrr"}
+	aassign		___328_x1y1 $const2 r1 	%argrw{"wrr"}
+	aassign		___328_x1y1 $const9 r3 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:33
+#     if ( fx ){
+	assign		___328_r $const5 	%line{33} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:34
+#     if ( fy ) {
+	if		fx 191 268 	%line{34} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:35
+#         r = rmap(Rm, Rp, x1y1);
+	if		fy 153 191 	%line{35} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:36
+#     } else {
+	functioncall	$const10 153 	%line{36} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:20
+#     if ( between(ra[1], a, b) ) { return ra[1]; }
+	aref		$tmp56 ___328_x1y1 $const1 	%line{20} %argrw{"wrr"}
+	functioncall	$const11 125 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp57 $tmp56 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp58 $tmp57 $const1 	%argrw{"wrr"}
+	if		$tmp58 124 124 	%argrw{"r"}
+	le		$tmp59 $tmp56 Rp 	%argrw{"wrr"}
+	neq		$tmp60 $tmp59 $const1 	%argrw{"wrr"}
+	assign		$tmp58 $tmp60 	%argrw{"wr"}
+	assign		$tmp55 $tmp58 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:20
+#     if ( between(ra[1], a, b) ) { return ra[1]; }
+	if		$tmp55 128 128 	%line{20} %argrw{"r"}
+	aref		___328_r ___328_x1y1 $const1 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:21
+#     if ( between(ra[2], a, b) ) { return ra[2]; }
+	aref		$tmp62 ___328_x1y1 $const2 	%line{21} %argrw{"wrr"}
+	functioncall	$const11 137 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp63 $tmp62 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp64 $tmp63 $const1 	%argrw{"wrr"}
+	if		$tmp64 136 136 	%argrw{"r"}
+	le		$tmp65 $tmp62 Rp 	%argrw{"wrr"}
+	neq		$tmp66 $tmp65 $const1 	%argrw{"wrr"}
+	assign		$tmp64 $tmp66 	%argrw{"wr"}
+	assign		$tmp61 $tmp64 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:21
+#     if ( between(ra[2], a, b) ) { return ra[2]; }
+	if		$tmp61 140 140 	%line{21} %argrw{"r"}
+	aref		___328_r ___328_x1y1 $const2 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:22
+#     return -1;
+	aref		$tmp68 ___328_x1y1 $const9 	%line{22} %argrw{"wrr"}
+	functioncall	$const11 149 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp69 $tmp68 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp70 $tmp69 $const1 	%argrw{"wrr"}
+	if		$tmp70 148 148 	%argrw{"r"}
+	le		$tmp71 $tmp68 Rp 	%argrw{"wrr"}
+	neq		$tmp72 $tmp71 $const1 	%argrw{"wrr"}
+	assign		$tmp70 $tmp72 	%argrw{"wr"}
+	assign		$tmp67 $tmp70 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:22
+#     return -1;
+	if		$tmp67 152 152 	%line{22} %argrw{"r"}
+	aref		___328_r ___328_x1y1 $const9 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:23
+# }
+	assign		___328_r $const5 	%line{23} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:38
+#     }
+	functioncall	$const10 191 	%line{38} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:20
+#     if ( between(ra[1], a, b) ) { return ra[1]; }
+	aref		$tmp74 ___328_x1y0 $const1 	%line{20} %argrw{"wrr"}
+	functioncall	$const11 163 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp75 $tmp74 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp76 $tmp75 $const1 	%argrw{"wrr"}
+	if		$tmp76 162 162 	%argrw{"r"}
+	le		$tmp77 $tmp74 Rp 	%argrw{"wrr"}
+	neq		$tmp78 $tmp77 $const1 	%argrw{"wrr"}
+	assign		$tmp76 $tmp78 	%argrw{"wr"}
+	assign		$tmp73 $tmp76 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:20
+#     if ( between(ra[1], a, b) ) { return ra[1]; }
+	if		$tmp73 166 166 	%line{20} %argrw{"r"}
+	aref		___328_r ___328_x1y0 $const1 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:21
+#     if ( between(ra[2], a, b) ) { return ra[2]; }
+	aref		$tmp80 ___328_x1y0 $const2 	%line{21} %argrw{"wrr"}
+	functioncall	$const11 175 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp81 $tmp80 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp82 $tmp81 $const1 	%argrw{"wrr"}
+	if		$tmp82 174 174 	%argrw{"r"}
+	le		$tmp83 $tmp80 Rp 	%argrw{"wrr"}
+	neq		$tmp84 $tmp83 $const1 	%argrw{"wrr"}
+	assign		$tmp82 $tmp84 	%argrw{"wr"}
+	assign		$tmp79 $tmp82 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:21
+#     if ( between(ra[2], a, b) ) { return ra[2]; }
+	if		$tmp79 178 178 	%line{21} %argrw{"r"}
+	aref		___328_r ___328_x1y0 $const2 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:22
+#     return -1;
+	aref		$tmp86 ___328_x1y0 $const9 	%line{22} %argrw{"wrr"}
+	functioncall	$const11 187 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp87 $tmp86 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp88 $tmp87 $const1 	%argrw{"wrr"}
+	if		$tmp88 186 186 	%argrw{"r"}
+	le		$tmp89 $tmp86 Rp 	%argrw{"wrr"}
+	neq		$tmp90 $tmp89 $const1 	%argrw{"wrr"}
+	assign		$tmp88 $tmp90 	%argrw{"wr"}
+	assign		$tmp85 $tmp88 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:22
+#     return -1;
+	if		$tmp85 190 190 	%line{22} %argrw{"r"}
+	aref		___328_r ___328_x1y0 $const9 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:23
+# }
+	assign		___328_r $const5 	%line{23} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:42
+#             r = rmap(Rm, Rp, x0y1);
+	if		fy 230 268 	%line{42} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:43
+#         } else {
+	functioncall	$const10 230 	%line{43} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:20
+#     if ( between(ra[1], a, b) ) { return ra[1]; }
+	aref		$tmp92 ___328_x0y1 $const1 	%line{20} %argrw{"wrr"}
+	functioncall	$const11 202 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp93 $tmp92 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp94 $tmp93 $const1 	%argrw{"wrr"}
+	if		$tmp94 201 201 	%argrw{"r"}
+	le		$tmp95 $tmp92 Rp 	%argrw{"wrr"}
+	neq		$tmp96 $tmp95 $const1 	%argrw{"wrr"}
+	assign		$tmp94 $tmp96 	%argrw{"wr"}
+	assign		$tmp91 $tmp94 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:20
+#     if ( between(ra[1], a, b) ) { return ra[1]; }
+	if		$tmp91 205 205 	%line{20} %argrw{"r"}
+	aref		___328_r ___328_x0y1 $const1 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:21
+#     if ( between(ra[2], a, b) ) { return ra[2]; }
+	aref		$tmp98 ___328_x0y1 $const2 	%line{21} %argrw{"wrr"}
+	functioncall	$const11 214 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp99 $tmp98 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp100 $tmp99 $const1 	%argrw{"wrr"}
+	if		$tmp100 213 213 	%argrw{"r"}
+	le		$tmp101 $tmp98 Rp 	%argrw{"wrr"}
+	neq		$tmp102 $tmp101 $const1 	%argrw{"wrr"}
+	assign		$tmp100 $tmp102 	%argrw{"wr"}
+	assign		$tmp97 $tmp100 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:21
+#     if ( between(ra[2], a, b) ) { return ra[2]; }
+	if		$tmp97 217 217 	%line{21} %argrw{"r"}
+	aref		___328_r ___328_x0y1 $const2 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:22
+#     return -1;
+	aref		$tmp104 ___328_x0y1 $const9 	%line{22} %argrw{"wrr"}
+	functioncall	$const11 226 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp105 $tmp104 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp106 $tmp105 $const1 	%argrw{"wrr"}
+	if		$tmp106 225 225 	%argrw{"r"}
+	le		$tmp107 $tmp104 Rp 	%argrw{"wrr"}
+	neq		$tmp108 $tmp107 $const1 	%argrw{"wrr"}
+	assign		$tmp106 $tmp108 	%argrw{"wr"}
+	assign		$tmp103 $tmp106 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:22
+#     return -1;
+	if		$tmp103 229 229 	%line{22} %argrw{"r"}
+	aref		___328_r ___328_x0y1 $const9 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:23
+# }
+	assign		___328_r $const5 	%line{23} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:45
+#         }
+	functioncall	$const10 268 	%line{45} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:20
+#     if ( between(ra[1], a, b) ) { return ra[1]; }
+	aref		$tmp110 ___328_x0y0 $const1 	%line{20} %argrw{"wrr"}
+	functioncall	$const11 240 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp111 $tmp110 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp112 $tmp111 $const1 	%argrw{"wrr"}
+	if		$tmp112 239 239 	%argrw{"r"}
+	le		$tmp113 $tmp110 Rp 	%argrw{"wrr"}
+	neq		$tmp114 $tmp113 $const1 	%argrw{"wrr"}
+	assign		$tmp112 $tmp114 	%argrw{"wr"}
+	assign		$tmp109 $tmp112 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:20
+#     if ( between(ra[1], a, b) ) { return ra[1]; }
+	if		$tmp109 243 243 	%line{20} %argrw{"r"}
+	aref		___328_r ___328_x0y0 $const1 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:21
+#     if ( between(ra[2], a, b) ) { return ra[2]; }
+	aref		$tmp116 ___328_x0y0 $const2 	%line{21} %argrw{"wrr"}
+	functioncall	$const11 252 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp117 $tmp116 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp118 $tmp117 $const1 	%argrw{"wrr"}
+	if		$tmp118 251 251 	%argrw{"r"}
+	le		$tmp119 $tmp116 Rp 	%argrw{"wrr"}
+	neq		$tmp120 $tmp119 $const1 	%argrw{"wrr"}
+	assign		$tmp118 $tmp120 	%argrw{"wr"}
+	assign		$tmp115 $tmp118 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:21
+#     if ( between(ra[2], a, b) ) { return ra[2]; }
+	if		$tmp115 255 255 	%line{21} %argrw{"r"}
+	aref		___328_r ___328_x0y0 $const2 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:22
+#     return -1;
+	aref		$tmp122 ___328_x0y0 $const9 	%line{22} %argrw{"wrr"}
+	functioncall	$const11 264 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp123 $tmp122 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp124 $tmp123 $const1 	%argrw{"wrr"}
+	if		$tmp124 263 263 	%argrw{"r"}
+	le		$tmp125 $tmp122 Rp 	%argrw{"wrr"}
+	neq		$tmp126 $tmp125 $const1 	%argrw{"wrr"}
+	assign		$tmp124 $tmp126 	%argrw{"wr"}
+	assign		$tmp121 $tmp124 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:22
+#     return -1;
+	if		$tmp121 267 267 	%line{22} %argrw{"r"}
+	aref		___328_r ___328_x0y0 $const9 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:23
+# }
+	assign		___328_r $const5 	%line{23} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:48
+# }
+	assign		r ___328_r 	%line{48} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:91
+#             Fac = 1;
+	gt		$tmp127 r $const5 	%line{91} %argrw{"wrr"}
+	if		$tmp127 280 461 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:92
+#             Disp = arc(r,Rm,Rp);
+	assign		Fac $const2 	%line{92} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:93
+#         } else {
+	functioncall	$const12 280 	%line{93} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:16
+# 
+	sub		$tmp129 r Rm 	%line{16} %argrw{"wrr"}
+	sub		$tmp130 Rp Rm 	%argrw{"wrr"}
+	div		$tmp131 $tmp129 $tmp130 	%argrw{"wrr"}
+	sub		$tmp132 $const6 $tmp131 	%argrw{"wrr"}
+	abs		$tmp128 $tmp132 	%argrw{"wr"}
+	sub		$tmp133 $const6 $tmp128 	%argrw{"wrr"}
+	sqrt		Disp $tmp133 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:96
+#             if ( r> -1){
+	functioncall	$const8 450 	%line{96} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:28
+#     float x0y1[3] = {r2, r3, r1};
+	aassign		___328_x0y0 $const1 cr3 	%line{28} %argrw{"wrr"}
+	aassign		___328_x0y0 $const2 cr1 	%argrw{"wrr"}
+	aassign		___328_x0y0 $const9 cr2 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:29
+#     float x1y0[3] = {r1, r3, r2};
+	aassign		___328_x0y1 $const1 cr2 	%line{29} %argrw{"wrr"}
+	aassign		___328_x0y1 $const2 cr3 	%argrw{"wrr"}
+	aassign		___328_x0y1 $const9 cr1 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:30
+#     float x1y1[3] = {r2, r1, r3};
+	aassign		___328_x1y0 $const1 cr1 	%line{30} %argrw{"wrr"}
+	aassign		___328_x1y0 $const2 cr3 	%argrw{"wrr"}
+	aassign		___328_x1y0 $const9 cr2 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:31
+# 
+	aassign		___328_x1y1 $const1 cr2 	%line{31} %argrw{"wrr"}
+	aassign		___328_x1y1 $const2 cr1 	%argrw{"wrr"}
+	aassign		___328_x1y1 $const9 cr3 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:33
+#     if ( fx ){
+	assign		___328_r $const5 	%line{33} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:34
+#     if ( fy ) {
+	if		fxc 372 449 	%line{34} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:35
+#         r = rmap(Rm, Rp, x1y1);
+	if		fyc 334 372 	%line{35} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:36
+#     } else {
+	functioncall	$const10 334 	%line{36} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:20
+#     if ( between(ra[1], a, b) ) { return ra[1]; }
+	aref		$tmp135 ___328_x1y1 $const1 	%line{20} %argrw{"wrr"}
+	functioncall	$const11 306 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp136 $tmp135 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp137 $tmp136 $const1 	%argrw{"wrr"}
+	if		$tmp137 305 305 	%argrw{"r"}
+	le		$tmp138 $tmp135 Rp 	%argrw{"wrr"}
+	neq		$tmp139 $tmp138 $const1 	%argrw{"wrr"}
+	assign		$tmp137 $tmp139 	%argrw{"wr"}
+	assign		$tmp134 $tmp137 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:20
+#     if ( between(ra[1], a, b) ) { return ra[1]; }
+	if		$tmp134 309 309 	%line{20} %argrw{"r"}
+	aref		___328_r ___328_x1y1 $const1 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:21
+#     if ( between(ra[2], a, b) ) { return ra[2]; }
+	aref		$tmp141 ___328_x1y1 $const2 	%line{21} %argrw{"wrr"}
+	functioncall	$const11 318 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp142 $tmp141 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp143 $tmp142 $const1 	%argrw{"wrr"}
+	if		$tmp143 317 317 	%argrw{"r"}
+	le		$tmp144 $tmp141 Rp 	%argrw{"wrr"}
+	neq		$tmp145 $tmp144 $const1 	%argrw{"wrr"}
+	assign		$tmp143 $tmp145 	%argrw{"wr"}
+	assign		$tmp140 $tmp143 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:21
+#     if ( between(ra[2], a, b) ) { return ra[2]; }
+	if		$tmp140 321 321 	%line{21} %argrw{"r"}
+	aref		___328_r ___328_x1y1 $const2 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:22
+#     return -1;
+	aref		$tmp147 ___328_x1y1 $const9 	%line{22} %argrw{"wrr"}
+	functioncall	$const11 330 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp148 $tmp147 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp149 $tmp148 $const1 	%argrw{"wrr"}
+	if		$tmp149 329 329 	%argrw{"r"}
+	le		$tmp150 $tmp147 Rp 	%argrw{"wrr"}
+	neq		$tmp151 $tmp150 $const1 	%argrw{"wrr"}
+	assign		$tmp149 $tmp151 	%argrw{"wr"}
+	assign		$tmp146 $tmp149 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:22
+#     return -1;
+	if		$tmp146 333 333 	%line{22} %argrw{"r"}
+	aref		___328_r ___328_x1y1 $const9 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:23
+# }
+	assign		___328_r $const5 	%line{23} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:38
+#     }
+	functioncall	$const10 372 	%line{38} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:20
+#     if ( between(ra[1], a, b) ) { return ra[1]; }
+	aref		$tmp153 ___328_x1y0 $const1 	%line{20} %argrw{"wrr"}
+	functioncall	$const11 344 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp154 $tmp153 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp155 $tmp154 $const1 	%argrw{"wrr"}
+	if		$tmp155 343 343 	%argrw{"r"}
+	le		$tmp156 $tmp153 Rp 	%argrw{"wrr"}
+	neq		$tmp157 $tmp156 $const1 	%argrw{"wrr"}
+	assign		$tmp155 $tmp157 	%argrw{"wr"}
+	assign		$tmp152 $tmp155 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:20
+#     if ( between(ra[1], a, b) ) { return ra[1]; }
+	if		$tmp152 347 347 	%line{20} %argrw{"r"}
+	aref		___328_r ___328_x1y0 $const1 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:21
+#     if ( between(ra[2], a, b) ) { return ra[2]; }
+	aref		$tmp159 ___328_x1y0 $const2 	%line{21} %argrw{"wrr"}
+	functioncall	$const11 356 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp160 $tmp159 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp161 $tmp160 $const1 	%argrw{"wrr"}
+	if		$tmp161 355 355 	%argrw{"r"}
+	le		$tmp162 $tmp159 Rp 	%argrw{"wrr"}
+	neq		$tmp163 $tmp162 $const1 	%argrw{"wrr"}
+	assign		$tmp161 $tmp163 	%argrw{"wr"}
+	assign		$tmp158 $tmp161 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:21
+#     if ( between(ra[2], a, b) ) { return ra[2]; }
+	if		$tmp158 359 359 	%line{21} %argrw{"r"}
+	aref		___328_r ___328_x1y0 $const2 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:22
+#     return -1;
+	aref		$tmp165 ___328_x1y0 $const9 	%line{22} %argrw{"wrr"}
+	functioncall	$const11 368 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp166 $tmp165 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp167 $tmp166 $const1 	%argrw{"wrr"}
+	if		$tmp167 367 367 	%argrw{"r"}
+	le		$tmp168 $tmp165 Rp 	%argrw{"wrr"}
+	neq		$tmp169 $tmp168 $const1 	%argrw{"wrr"}
+	assign		$tmp167 $tmp169 	%argrw{"wr"}
+	assign		$tmp164 $tmp167 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:22
+#     return -1;
+	if		$tmp164 371 371 	%line{22} %argrw{"r"}
+	aref		___328_r ___328_x1y0 $const9 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:23
+# }
+	assign		___328_r $const5 	%line{23} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:42
+#             r = rmap(Rm, Rp, x0y1);
+	if		fyc 411 449 	%line{42} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:43
+#         } else {
+	functioncall	$const10 411 	%line{43} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:20
+#     if ( between(ra[1], a, b) ) { return ra[1]; }
+	aref		$tmp171 ___328_x0y1 $const1 	%line{20} %argrw{"wrr"}
+	functioncall	$const11 383 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp172 $tmp171 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp173 $tmp172 $const1 	%argrw{"wrr"}
+	if		$tmp173 382 382 	%argrw{"r"}
+	le		$tmp174 $tmp171 Rp 	%argrw{"wrr"}
+	neq		$tmp175 $tmp174 $const1 	%argrw{"wrr"}
+	assign		$tmp173 $tmp175 	%argrw{"wr"}
+	assign		$tmp170 $tmp173 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:20
+#     if ( between(ra[1], a, b) ) { return ra[1]; }
+	if		$tmp170 386 386 	%line{20} %argrw{"r"}
+	aref		___328_r ___328_x0y1 $const1 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:21
+#     if ( between(ra[2], a, b) ) { return ra[2]; }
+	aref		$tmp177 ___328_x0y1 $const2 	%line{21} %argrw{"wrr"}
+	functioncall	$const11 395 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp178 $tmp177 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp179 $tmp178 $const1 	%argrw{"wrr"}
+	if		$tmp179 394 394 	%argrw{"r"}
+	le		$tmp180 $tmp177 Rp 	%argrw{"wrr"}
+	neq		$tmp181 $tmp180 $const1 	%argrw{"wrr"}
+	assign		$tmp179 $tmp181 	%argrw{"wr"}
+	assign		$tmp176 $tmp179 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:21
+#     if ( between(ra[2], a, b) ) { return ra[2]; }
+	if		$tmp176 398 398 	%line{21} %argrw{"r"}
+	aref		___328_r ___328_x0y1 $const2 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:22
+#     return -1;
+	aref		$tmp183 ___328_x0y1 $const9 	%line{22} %argrw{"wrr"}
+	functioncall	$const11 407 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp184 $tmp183 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp185 $tmp184 $const1 	%argrw{"wrr"}
+	if		$tmp185 406 406 	%argrw{"r"}
+	le		$tmp186 $tmp183 Rp 	%argrw{"wrr"}
+	neq		$tmp187 $tmp186 $const1 	%argrw{"wrr"}
+	assign		$tmp185 $tmp187 	%argrw{"wr"}
+	assign		$tmp182 $tmp185 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:22
+#     return -1;
+	if		$tmp182 410 410 	%line{22} %argrw{"r"}
+	aref		___328_r ___328_x0y1 $const9 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:23
+# }
+	assign		___328_r $const5 	%line{23} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:45
+#         }
+	functioncall	$const10 449 	%line{45} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:20
+#     if ( between(ra[1], a, b) ) { return ra[1]; }
+	aref		$tmp189 ___328_x0y0 $const1 	%line{20} %argrw{"wrr"}
+	functioncall	$const11 421 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp190 $tmp189 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp191 $tmp190 $const1 	%argrw{"wrr"}
+	if		$tmp191 420 420 	%argrw{"r"}
+	le		$tmp192 $tmp189 Rp 	%argrw{"wrr"}
+	neq		$tmp193 $tmp192 $const1 	%argrw{"wrr"}
+	assign		$tmp191 $tmp193 	%argrw{"wr"}
+	assign		$tmp188 $tmp191 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:20
+#     if ( between(ra[1], a, b) ) { return ra[1]; }
+	if		$tmp188 424 424 	%line{20} %argrw{"r"}
+	aref		___328_r ___328_x0y0 $const1 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:21
+#     if ( between(ra[2], a, b) ) { return ra[2]; }
+	aref		$tmp195 ___328_x0y0 $const2 	%line{21} %argrw{"wrr"}
+	functioncall	$const11 433 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp196 $tmp195 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp197 $tmp196 $const1 	%argrw{"wrr"}
+	if		$tmp197 432 432 	%argrw{"r"}
+	le		$tmp198 $tmp195 Rp 	%argrw{"wrr"}
+	neq		$tmp199 $tmp198 $const1 	%argrw{"wrr"}
+	assign		$tmp197 $tmp199 	%argrw{"wr"}
+	assign		$tmp194 $tmp197 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:21
+#     if ( between(ra[2], a, b) ) { return ra[2]; }
+	if		$tmp194 436 436 	%line{21} %argrw{"r"}
+	aref		___328_r ___328_x0y0 $const2 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:22
+#     return -1;
+	aref		$tmp201 ___328_x0y0 $const9 	%line{22} %argrw{"wrr"}
+	functioncall	$const11 445 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp202 $tmp201 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp203 $tmp202 $const1 	%argrw{"wrr"}
+	if		$tmp203 444 444 	%argrw{"r"}
+	le		$tmp204 $tmp201 Rp 	%argrw{"wrr"}
+	neq		$tmp205 $tmp204 $const1 	%argrw{"wrr"}
+	assign		$tmp203 $tmp205 	%argrw{"wr"}
+	assign		$tmp200 $tmp203 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:22
+#     return -1;
+	if		$tmp200 448 448 	%line{22} %argrw{"r"}
+	aref		___328_r ___328_x0y0 $const9 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:23
+# }
+	assign		___328_r $const5 	%line{23} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:48
+# }
+	assign		r ___328_r 	%line{48} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:97
+#                 Fac = 1;
+	gt		$tmp206 r $const5 	%line{97} %argrw{"wrr"}
+	if		$tmp206 461 461 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:98
+#                 Disp = arc(r,Rm,Rp);
+	assign		Fac $const2 	%line{98} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:99
+#             }
+	functioncall	$const12 461 	%line{99} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:16
+# 
+	sub		$tmp208 r Rm 	%line{16} %argrw{"wrr"}
+	sub		$tmp209 Rp Rm 	%argrw{"wrr"}
+	div		$tmp210 $tmp208 $tmp209 	%argrw{"wrr"}
+	sub		$tmp211 $const6 $tmp210 	%argrw{"wrr"}
+	abs		$tmp207 $tmp211 	%argrw{"wr"}
+	sub		$tmp212 $const6 $tmp207 	%argrw{"wrr"}
+	sqrt		Disp $tmp212 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:104
+#         if ( r> -1){
+	functioncall	$const8 631 	%line{104} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:28
+#     float x0y1[3] = {r2, r3, r1};
+	aassign		___328_x0y0 $const1 cr3 	%line{28} %argrw{"wrr"}
+	aassign		___328_x0y0 $const2 cr1 	%argrw{"wrr"}
+	aassign		___328_x0y0 $const9 cr2 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:29
+#     float x1y0[3] = {r1, r3, r2};
+	aassign		___328_x0y1 $const1 cr2 	%line{29} %argrw{"wrr"}
+	aassign		___328_x0y1 $const2 cr3 	%argrw{"wrr"}
+	aassign		___328_x0y1 $const9 cr1 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:30
+#     float x1y1[3] = {r2, r1, r3};
+	aassign		___328_x1y0 $const1 cr1 	%line{30} %argrw{"wrr"}
+	aassign		___328_x1y0 $const2 cr3 	%argrw{"wrr"}
+	aassign		___328_x1y0 $const9 cr2 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:31
+# 
+	aassign		___328_x1y1 $const1 cr2 	%line{31} %argrw{"wrr"}
+	aassign		___328_x1y1 $const2 cr1 	%argrw{"wrr"}
+	aassign		___328_x1y1 $const9 cr3 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:33
+#     if ( fx ){
+	assign		___328_r $const5 	%line{33} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:34
+#     if ( fy ) {
+	if		fxc 553 630 	%line{34} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:35
+#         r = rmap(Rm, Rp, x1y1);
+	if		fyc 515 553 	%line{35} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:36
+#     } else {
+	functioncall	$const10 515 	%line{36} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:20
+#     if ( between(ra[1], a, b) ) { return ra[1]; }
+	aref		$tmp214 ___328_x1y1 $const1 	%line{20} %argrw{"wrr"}
+	functioncall	$const11 487 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp215 $tmp214 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp216 $tmp215 $const1 	%argrw{"wrr"}
+	if		$tmp216 486 486 	%argrw{"r"}
+	le		$tmp217 $tmp214 Rp 	%argrw{"wrr"}
+	neq		$tmp218 $tmp217 $const1 	%argrw{"wrr"}
+	assign		$tmp216 $tmp218 	%argrw{"wr"}
+	assign		$tmp213 $tmp216 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:20
+#     if ( between(ra[1], a, b) ) { return ra[1]; }
+	if		$tmp213 490 490 	%line{20} %argrw{"r"}
+	aref		___328_r ___328_x1y1 $const1 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:21
+#     if ( between(ra[2], a, b) ) { return ra[2]; }
+	aref		$tmp220 ___328_x1y1 $const2 	%line{21} %argrw{"wrr"}
+	functioncall	$const11 499 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp221 $tmp220 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp222 $tmp221 $const1 	%argrw{"wrr"}
+	if		$tmp222 498 498 	%argrw{"r"}
+	le		$tmp223 $tmp220 Rp 	%argrw{"wrr"}
+	neq		$tmp224 $tmp223 $const1 	%argrw{"wrr"}
+	assign		$tmp222 $tmp224 	%argrw{"wr"}
+	assign		$tmp219 $tmp222 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:21
+#     if ( between(ra[2], a, b) ) { return ra[2]; }
+	if		$tmp219 502 502 	%line{21} %argrw{"r"}
+	aref		___328_r ___328_x1y1 $const2 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:22
+#     return -1;
+	aref		$tmp226 ___328_x1y1 $const9 	%line{22} %argrw{"wrr"}
+	functioncall	$const11 511 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp227 $tmp226 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp228 $tmp227 $const1 	%argrw{"wrr"}
+	if		$tmp228 510 510 	%argrw{"r"}
+	le		$tmp229 $tmp226 Rp 	%argrw{"wrr"}
+	neq		$tmp230 $tmp229 $const1 	%argrw{"wrr"}
+	assign		$tmp228 $tmp230 	%argrw{"wr"}
+	assign		$tmp225 $tmp228 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:22
+#     return -1;
+	if		$tmp225 514 514 	%line{22} %argrw{"r"}
+	aref		___328_r ___328_x1y1 $const9 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:23
+# }
+	assign		___328_r $const5 	%line{23} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:38
+#     }
+	functioncall	$const10 553 	%line{38} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:20
+#     if ( between(ra[1], a, b) ) { return ra[1]; }
+	aref		$tmp232 ___328_x1y0 $const1 	%line{20} %argrw{"wrr"}
+	functioncall	$const11 525 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp233 $tmp232 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp234 $tmp233 $const1 	%argrw{"wrr"}
+	if		$tmp234 524 524 	%argrw{"r"}
+	le		$tmp235 $tmp232 Rp 	%argrw{"wrr"}
+	neq		$tmp236 $tmp235 $const1 	%argrw{"wrr"}
+	assign		$tmp234 $tmp236 	%argrw{"wr"}
+	assign		$tmp231 $tmp234 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:20
+#     if ( between(ra[1], a, b) ) { return ra[1]; }
+	if		$tmp231 528 528 	%line{20} %argrw{"r"}
+	aref		___328_r ___328_x1y0 $const1 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:21
+#     if ( between(ra[2], a, b) ) { return ra[2]; }
+	aref		$tmp238 ___328_x1y0 $const2 	%line{21} %argrw{"wrr"}
+	functioncall	$const11 537 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp239 $tmp238 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp240 $tmp239 $const1 	%argrw{"wrr"}
+	if		$tmp240 536 536 	%argrw{"r"}
+	le		$tmp241 $tmp238 Rp 	%argrw{"wrr"}
+	neq		$tmp242 $tmp241 $const1 	%argrw{"wrr"}
+	assign		$tmp240 $tmp242 	%argrw{"wr"}
+	assign		$tmp237 $tmp240 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:21
+#     if ( between(ra[2], a, b) ) { return ra[2]; }
+	if		$tmp237 540 540 	%line{21} %argrw{"r"}
+	aref		___328_r ___328_x1y0 $const2 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:22
+#     return -1;
+	aref		$tmp244 ___328_x1y0 $const9 	%line{22} %argrw{"wrr"}
+	functioncall	$const11 549 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp245 $tmp244 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp246 $tmp245 $const1 	%argrw{"wrr"}
+	if		$tmp246 548 548 	%argrw{"r"}
+	le		$tmp247 $tmp244 Rp 	%argrw{"wrr"}
+	neq		$tmp248 $tmp247 $const1 	%argrw{"wrr"}
+	assign		$tmp246 $tmp248 	%argrw{"wr"}
+	assign		$tmp243 $tmp246 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:22
+#     return -1;
+	if		$tmp243 552 552 	%line{22} %argrw{"r"}
+	aref		___328_r ___328_x1y0 $const9 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:23
+# }
+	assign		___328_r $const5 	%line{23} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:42
+#             r = rmap(Rm, Rp, x0y1);
+	if		fyc 592 630 	%line{42} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:43
+#         } else {
+	functioncall	$const10 592 	%line{43} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:20
+#     if ( between(ra[1], a, b) ) { return ra[1]; }
+	aref		$tmp250 ___328_x0y1 $const1 	%line{20} %argrw{"wrr"}
+	functioncall	$const11 564 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp251 $tmp250 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp252 $tmp251 $const1 	%argrw{"wrr"}
+	if		$tmp252 563 563 	%argrw{"r"}
+	le		$tmp253 $tmp250 Rp 	%argrw{"wrr"}
+	neq		$tmp254 $tmp253 $const1 	%argrw{"wrr"}
+	assign		$tmp252 $tmp254 	%argrw{"wr"}
+	assign		$tmp249 $tmp252 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:20
+#     if ( between(ra[1], a, b) ) { return ra[1]; }
+	if		$tmp249 567 567 	%line{20} %argrw{"r"}
+	aref		___328_r ___328_x0y1 $const1 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:21
+#     if ( between(ra[2], a, b) ) { return ra[2]; }
+	aref		$tmp256 ___328_x0y1 $const2 	%line{21} %argrw{"wrr"}
+	functioncall	$const11 576 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp257 $tmp256 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp258 $tmp257 $const1 	%argrw{"wrr"}
+	if		$tmp258 575 575 	%argrw{"r"}
+	le		$tmp259 $tmp256 Rp 	%argrw{"wrr"}
+	neq		$tmp260 $tmp259 $const1 	%argrw{"wrr"}
+	assign		$tmp258 $tmp260 	%argrw{"wr"}
+	assign		$tmp255 $tmp258 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:21
+#     if ( between(ra[2], a, b) ) { return ra[2]; }
+	if		$tmp255 579 579 	%line{21} %argrw{"r"}
+	aref		___328_r ___328_x0y1 $const2 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:22
+#     return -1;
+	aref		$tmp262 ___328_x0y1 $const9 	%line{22} %argrw{"wrr"}
+	functioncall	$const11 588 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp263 $tmp262 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp264 $tmp263 $const1 	%argrw{"wrr"}
+	if		$tmp264 587 587 	%argrw{"r"}
+	le		$tmp265 $tmp262 Rp 	%argrw{"wrr"}
+	neq		$tmp266 $tmp265 $const1 	%argrw{"wrr"}
+	assign		$tmp264 $tmp266 	%argrw{"wr"}
+	assign		$tmp261 $tmp264 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:22
+#     return -1;
+	if		$tmp261 591 591 	%line{22} %argrw{"r"}
+	aref		___328_r ___328_x0y1 $const9 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:23
+# }
+	assign		___328_r $const5 	%line{23} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:45
+#         }
+	functioncall	$const10 630 	%line{45} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:20
+#     if ( between(ra[1], a, b) ) { return ra[1]; }
+	aref		$tmp268 ___328_x0y0 $const1 	%line{20} %argrw{"wrr"}
+	functioncall	$const11 602 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp269 $tmp268 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp270 $tmp269 $const1 	%argrw{"wrr"}
+	if		$tmp270 601 601 	%argrw{"r"}
+	le		$tmp271 $tmp268 Rp 	%argrw{"wrr"}
+	neq		$tmp272 $tmp271 $const1 	%argrw{"wrr"}
+	assign		$tmp270 $tmp272 	%argrw{"wr"}
+	assign		$tmp267 $tmp270 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:20
+#     if ( between(ra[1], a, b) ) { return ra[1]; }
+	if		$tmp267 605 605 	%line{20} %argrw{"r"}
+	aref		___328_r ___328_x0y0 $const1 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:21
+#     if ( between(ra[2], a, b) ) { return ra[2]; }
+	aref		$tmp274 ___328_x0y0 $const2 	%line{21} %argrw{"wrr"}
+	functioncall	$const11 614 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp275 $tmp274 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp276 $tmp275 $const1 	%argrw{"wrr"}
+	if		$tmp276 613 613 	%argrw{"r"}
+	le		$tmp277 $tmp274 Rp 	%argrw{"wrr"}
+	neq		$tmp278 $tmp277 $const1 	%argrw{"wrr"}
+	assign		$tmp276 $tmp278 	%argrw{"wr"}
+	assign		$tmp273 $tmp276 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:21
+#     if ( between(ra[2], a, b) ) { return ra[2]; }
+	if		$tmp273 617 617 	%line{21} %argrw{"r"}
+	aref		___328_r ___328_x0y0 $const2 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:22
+#     return -1;
+	aref		$tmp280 ___328_x0y0 $const9 	%line{22} %argrw{"wrr"}
+	functioncall	$const11 626 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp281 $tmp280 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp282 $tmp281 $const1 	%argrw{"wrr"}
+	if		$tmp282 625 625 	%argrw{"r"}
+	le		$tmp283 $tmp280 Rp 	%argrw{"wrr"}
+	neq		$tmp284 $tmp283 $const1 	%argrw{"wrr"}
+	assign		$tmp282 $tmp284 	%argrw{"wr"}
+	assign		$tmp279 $tmp282 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:22
+#     return -1;
+	if		$tmp279 629 629 	%line{22} %argrw{"r"}
+	aref		___328_r ___328_x0y0 $const9 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:23
+# }
+	assign		___328_r $const5 	%line{23} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:48
+# }
+	assign		r ___328_r 	%line{48} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:105
+#             Fac = 1;
+	gt		$tmp285 r $const5 	%line{105} %argrw{"wrr"}
+	if		$tmp285 642 823 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:106
+#             Disp = arc(r,Rm,Rp);
+	assign		Fac $const2 	%line{106} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:107
+#         } else {
+	functioncall	$const12 642 	%line{107} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:16
+# 
+	sub		$tmp287 r Rm 	%line{16} %argrw{"wrr"}
+	sub		$tmp288 Rp Rm 	%argrw{"wrr"}
+	div		$tmp289 $tmp287 $tmp288 	%argrw{"wrr"}
+	sub		$tmp290 $const6 $tmp289 	%argrw{"wrr"}
+	abs		$tmp286 $tmp290 	%argrw{"wr"}
+	sub		$tmp291 $const6 $tmp286 	%argrw{"wrr"}
+	sqrt		Disp $tmp291 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:110
+#             if ( r> -1){
+	functioncall	$const8 812 	%line{110} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:28
+#     float x0y1[3] = {r2, r3, r1};
+	aassign		___328_x0y0 $const1 r3 	%line{28} %argrw{"wrr"}
+	aassign		___328_x0y0 $const2 r1 	%argrw{"wrr"}
+	aassign		___328_x0y0 $const9 r2 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:29
+#     float x1y0[3] = {r1, r3, r2};
+	aassign		___328_x0y1 $const1 r2 	%line{29} %argrw{"wrr"}
+	aassign		___328_x0y1 $const2 r3 	%argrw{"wrr"}
+	aassign		___328_x0y1 $const9 r1 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:30
+#     float x1y1[3] = {r2, r1, r3};
+	aassign		___328_x1y0 $const1 r1 	%line{30} %argrw{"wrr"}
+	aassign		___328_x1y0 $const2 r3 	%argrw{"wrr"}
+	aassign		___328_x1y0 $const9 r2 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:31
+# 
+	aassign		___328_x1y1 $const1 r2 	%line{31} %argrw{"wrr"}
+	aassign		___328_x1y1 $const2 r1 	%argrw{"wrr"}
+	aassign		___328_x1y1 $const9 r3 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:33
+#     if ( fx ){
+	assign		___328_r $const5 	%line{33} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:34
+#     if ( fy ) {
+	if		fx 734 811 	%line{34} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:35
+#         r = rmap(Rm, Rp, x1y1);
+	if		fy 696 734 	%line{35} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:36
+#     } else {
+	functioncall	$const10 696 	%line{36} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:20
+#     if ( between(ra[1], a, b) ) { return ra[1]; }
+	aref		$tmp293 ___328_x1y1 $const1 	%line{20} %argrw{"wrr"}
+	functioncall	$const11 668 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp294 $tmp293 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp295 $tmp294 $const1 	%argrw{"wrr"}
+	if		$tmp295 667 667 	%argrw{"r"}
+	le		$tmp296 $tmp293 Rp 	%argrw{"wrr"}
+	neq		$tmp297 $tmp296 $const1 	%argrw{"wrr"}
+	assign		$tmp295 $tmp297 	%argrw{"wr"}
+	assign		$tmp292 $tmp295 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:20
+#     if ( between(ra[1], a, b) ) { return ra[1]; }
+	if		$tmp292 671 671 	%line{20} %argrw{"r"}
+	aref		___328_r ___328_x1y1 $const1 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:21
+#     if ( between(ra[2], a, b) ) { return ra[2]; }
+	aref		$tmp299 ___328_x1y1 $const2 	%line{21} %argrw{"wrr"}
+	functioncall	$const11 680 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp300 $tmp299 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp301 $tmp300 $const1 	%argrw{"wrr"}
+	if		$tmp301 679 679 	%argrw{"r"}
+	le		$tmp302 $tmp299 Rp 	%argrw{"wrr"}
+	neq		$tmp303 $tmp302 $const1 	%argrw{"wrr"}
+	assign		$tmp301 $tmp303 	%argrw{"wr"}
+	assign		$tmp298 $tmp301 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:21
+#     if ( between(ra[2], a, b) ) { return ra[2]; }
+	if		$tmp298 683 683 	%line{21} %argrw{"r"}
+	aref		___328_r ___328_x1y1 $const2 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:22
+#     return -1;
+	aref		$tmp305 ___328_x1y1 $const9 	%line{22} %argrw{"wrr"}
+	functioncall	$const11 692 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp306 $tmp305 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp307 $tmp306 $const1 	%argrw{"wrr"}
+	if		$tmp307 691 691 	%argrw{"r"}
+	le		$tmp308 $tmp305 Rp 	%argrw{"wrr"}
+	neq		$tmp309 $tmp308 $const1 	%argrw{"wrr"}
+	assign		$tmp307 $tmp309 	%argrw{"wr"}
+	assign		$tmp304 $tmp307 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:22
+#     return -1;
+	if		$tmp304 695 695 	%line{22} %argrw{"r"}
+	aref		___328_r ___328_x1y1 $const9 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:23
+# }
+	assign		___328_r $const5 	%line{23} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:38
+#     }
+	functioncall	$const10 734 	%line{38} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:20
+#     if ( between(ra[1], a, b) ) { return ra[1]; }
+	aref		$tmp311 ___328_x1y0 $const1 	%line{20} %argrw{"wrr"}
+	functioncall	$const11 706 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp312 $tmp311 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp313 $tmp312 $const1 	%argrw{"wrr"}
+	if		$tmp313 705 705 	%argrw{"r"}
+	le		$tmp314 $tmp311 Rp 	%argrw{"wrr"}
+	neq		$tmp315 $tmp314 $const1 	%argrw{"wrr"}
+	assign		$tmp313 $tmp315 	%argrw{"wr"}
+	assign		$tmp310 $tmp313 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:20
+#     if ( between(ra[1], a, b) ) { return ra[1]; }
+	if		$tmp310 709 709 	%line{20} %argrw{"r"}
+	aref		___328_r ___328_x1y0 $const1 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:21
+#     if ( between(ra[2], a, b) ) { return ra[2]; }
+	aref		$tmp317 ___328_x1y0 $const2 	%line{21} %argrw{"wrr"}
+	functioncall	$const11 718 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp318 $tmp317 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp319 $tmp318 $const1 	%argrw{"wrr"}
+	if		$tmp319 717 717 	%argrw{"r"}
+	le		$tmp320 $tmp317 Rp 	%argrw{"wrr"}
+	neq		$tmp321 $tmp320 $const1 	%argrw{"wrr"}
+	assign		$tmp319 $tmp321 	%argrw{"wr"}
+	assign		$tmp316 $tmp319 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:21
+#     if ( between(ra[2], a, b) ) { return ra[2]; }
+	if		$tmp316 721 721 	%line{21} %argrw{"r"}
+	aref		___328_r ___328_x1y0 $const2 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:22
+#     return -1;
+	aref		$tmp323 ___328_x1y0 $const9 	%line{22} %argrw{"wrr"}
+	functioncall	$const11 730 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp324 $tmp323 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp325 $tmp324 $const1 	%argrw{"wrr"}
+	if		$tmp325 729 729 	%argrw{"r"}
+	le		$tmp326 $tmp323 Rp 	%argrw{"wrr"}
+	neq		$tmp327 $tmp326 $const1 	%argrw{"wrr"}
+	assign		$tmp325 $tmp327 	%argrw{"wr"}
+	assign		$tmp322 $tmp325 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:22
+#     return -1;
+	if		$tmp322 733 733 	%line{22} %argrw{"r"}
+	aref		___328_r ___328_x1y0 $const9 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:23
+# }
+	assign		___328_r $const5 	%line{23} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:42
+#             r = rmap(Rm, Rp, x0y1);
+	if		fy 773 811 	%line{42} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:43
+#         } else {
+	functioncall	$const10 773 	%line{43} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:20
+#     if ( between(ra[1], a, b) ) { return ra[1]; }
+	aref		$tmp329 ___328_x0y1 $const1 	%line{20} %argrw{"wrr"}
+	functioncall	$const11 745 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp330 $tmp329 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp331 $tmp330 $const1 	%argrw{"wrr"}
+	if		$tmp331 744 744 	%argrw{"r"}
+	le		$tmp332 $tmp329 Rp 	%argrw{"wrr"}
+	neq		$tmp333 $tmp332 $const1 	%argrw{"wrr"}
+	assign		$tmp331 $tmp333 	%argrw{"wr"}
+	assign		$tmp328 $tmp331 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:20
+#     if ( between(ra[1], a, b) ) { return ra[1]; }
+	if		$tmp328 748 748 	%line{20} %argrw{"r"}
+	aref		___328_r ___328_x0y1 $const1 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:21
+#     if ( between(ra[2], a, b) ) { return ra[2]; }
+	aref		$tmp335 ___328_x0y1 $const2 	%line{21} %argrw{"wrr"}
+	functioncall	$const11 757 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp336 $tmp335 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp337 $tmp336 $const1 	%argrw{"wrr"}
+	if		$tmp337 756 756 	%argrw{"r"}
+	le		$tmp338 $tmp335 Rp 	%argrw{"wrr"}
+	neq		$tmp339 $tmp338 $const1 	%argrw{"wrr"}
+	assign		$tmp337 $tmp339 	%argrw{"wr"}
+	assign		$tmp334 $tmp337 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:21
+#     if ( between(ra[2], a, b) ) { return ra[2]; }
+	if		$tmp334 760 760 	%line{21} %argrw{"r"}
+	aref		___328_r ___328_x0y1 $const2 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:22
+#     return -1;
+	aref		$tmp341 ___328_x0y1 $const9 	%line{22} %argrw{"wrr"}
+	functioncall	$const11 769 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp342 $tmp341 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp343 $tmp342 $const1 	%argrw{"wrr"}
+	if		$tmp343 768 768 	%argrw{"r"}
+	le		$tmp344 $tmp341 Rp 	%argrw{"wrr"}
+	neq		$tmp345 $tmp344 $const1 	%argrw{"wrr"}
+	assign		$tmp343 $tmp345 	%argrw{"wr"}
+	assign		$tmp340 $tmp343 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:22
+#     return -1;
+	if		$tmp340 772 772 	%line{22} %argrw{"r"}
+	aref		___328_r ___328_x0y1 $const9 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:23
+# }
+	assign		___328_r $const5 	%line{23} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:45
+#         }
+	functioncall	$const10 811 	%line{45} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:20
+#     if ( between(ra[1], a, b) ) { return ra[1]; }
+	aref		$tmp347 ___328_x0y0 $const1 	%line{20} %argrw{"wrr"}
+	functioncall	$const11 783 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp348 $tmp347 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp349 $tmp348 $const1 	%argrw{"wrr"}
+	if		$tmp349 782 782 	%argrw{"r"}
+	le		$tmp350 $tmp347 Rp 	%argrw{"wrr"}
+	neq		$tmp351 $tmp350 $const1 	%argrw{"wrr"}
+	assign		$tmp349 $tmp351 	%argrw{"wr"}
+	assign		$tmp346 $tmp349 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:20
+#     if ( between(ra[1], a, b) ) { return ra[1]; }
+	if		$tmp346 786 786 	%line{20} %argrw{"r"}
+	aref		___328_r ___328_x0y0 $const1 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:21
+#     if ( between(ra[2], a, b) ) { return ra[2]; }
+	aref		$tmp353 ___328_x0y0 $const2 	%line{21} %argrw{"wrr"}
+	functioncall	$const11 795 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp354 $tmp353 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp355 $tmp354 $const1 	%argrw{"wrr"}
+	if		$tmp355 794 794 	%argrw{"r"}
+	le		$tmp356 $tmp353 Rp 	%argrw{"wrr"}
+	neq		$tmp357 $tmp356 $const1 	%argrw{"wrr"}
+	assign		$tmp355 $tmp357 	%argrw{"wr"}
+	assign		$tmp352 $tmp355 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:21
+#     if ( between(ra[2], a, b) ) { return ra[2]; }
+	if		$tmp352 798 798 	%line{21} %argrw{"r"}
+	aref		___328_r ___328_x0y0 $const2 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:22
+#     return -1;
+	aref		$tmp359 ___328_x0y0 $const9 	%line{22} %argrw{"wrr"}
+	functioncall	$const11 807 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:14
+# 
+	ge		$tmp360 $tmp359 Rm 	%line{14} %argrw{"wrr"}
+	neq		$tmp361 $tmp360 $const1 	%argrw{"wrr"}
+	if		$tmp361 806 806 	%argrw{"r"}
+	le		$tmp362 $tmp359 Rp 	%argrw{"wrr"}
+	neq		$tmp363 $tmp362 $const1 	%argrw{"wrr"}
+	assign		$tmp361 $tmp363 	%argrw{"wr"}
+	assign		$tmp358 $tmp361 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:22
+#     return -1;
+	if		$tmp358 810 810 	%line{22} %argrw{"r"}
+	aref		___328_r ___328_x0y0 $const9 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:23
+# }
+	assign		___328_r $const5 	%line{23} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:48
+# }
+	assign		r ___328_r 	%line{48} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:111
+#                 Fac = 1;
+	gt		$tmp364 r $const5 	%line{111} %argrw{"wrr"}
+	if		$tmp364 823 823 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:112
+#                 Disp = arc(r,Rm,Rp);
+	assign		Fac $const2 	%line{112} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:113
+#             }
+	functioncall	$const12 823 	%line{113} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainmail/MAChainmail.osl:16
+# 
+	sub		$tmp366 r Rm 	%line{16} %argrw{"wrr"}
+	sub		$tmp367 Rp Rm 	%argrw{"wrr"}
+	div		$tmp368 $tmp366 $tmp367 	%argrw{"wrr"}
+	sub		$tmp369 $const6 $tmp368 	%argrw{"wrr"}
+	abs		$tmp365 $tmp369 	%argrw{"wr"}
+	sub		$tmp370 $const6 $tmp365 	%argrw{"wrr"}
+	sqrt		Disp $tmp370 	%argrw{"wr"}
+	end

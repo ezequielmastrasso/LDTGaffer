@@ -1,0 +1,40 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader GreaterThan	%meta{string,help,"Simpler comparision shader that just returns two different colors for value being creater than (or not)"} %meta{string,label,"Greater Than"} %meta{string,category,"Switchers"} 
+param	float	A	0		%meta{string,label,"Input A"}  %read{0,0} %write{2147483647,-1}
+param	float	B	0		%meta{string,label,"Input B"}  %read{0,0} %write{2147483647,-1}
+param	color	Greater	0 1 0		%meta{string,label,"Result if A > B"}  %read{2,2} %write{2147483647,-1}
+param	color	Else	1 0 0		%meta{string,label,"Result if not"}  %read{3,3} %write{2147483647,-1}
+oparam	color	Out	0 0 0		%read{4,7} %write{2,3}
+oparam	float	Float	0		%read{2147483647,-1} %write{9,9}
+temp	int	$tmp1	%read{1,1} %write{0,0}
+const	int	$const1	0		%read{4,4} %write{2147483647,-1}
+temp	float	$tmp2	%read{6,6} %write{4,4}
+const	int	$const2	1		%read{5,5} %write{2147483647,-1}
+temp	float	$tmp3	%read{6,6} %write{5,5}
+temp	float	$tmp4	%read{8,8} %write{6,6}
+const	int	$const3	2		%read{7,7} %write{2147483647,-1}
+temp	float	$tmp5	%read{8,8} %write{7,7}
+temp	float	$tmp6	%read{9,9} %write{8,8}
+const	float	$const4	3		%read{9,9} %write{2147483647,-1}
+code ___main___
+# source/3dsMax-OSL-Shaders/GreaterThan.osl:22
+# 		Out = Greater;
+	gt		$tmp1 A B 	%filename{"source/3dsMax-OSL-Shaders/GreaterThan.osl"} %line{22} %argrw{"wrr"}
+	if		$tmp1 3 4 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/GreaterThan.osl:23
+# 	else 
+	assign		Out Greater 	%line{23} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/GreaterThan.osl:25
+# 		
+	assign		Out Else 	%line{25} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/GreaterThan.osl:28
+# }
+	compref		$tmp2 Out $const1 	%line{28} %argrw{"wrr"}
+	compref		$tmp3 Out $const2 	%argrw{"wrr"}
+	add		$tmp4 $tmp2 $tmp3 	%argrw{"wrr"}
+	compref		$tmp5 Out $const3 	%argrw{"wrr"}
+	add		$tmp6 $tmp4 $tmp5 	%argrw{"wrr"}
+	div		Float $tmp6 $const4 	%argrw{"wrr"}
+	end

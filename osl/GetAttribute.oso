@@ -1,0 +1,55 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader GetAttribute	%meta{string,help,"Get any named attribute, as well a<br/>user defined per-object properties."} %meta{string,label,"Named Attribute"} %meta{string,category,"Scene Attributes"} 
+param	string	Attribute	""		%meta{string,help,"Name of the scene attribute to read. If the attributes come from the 3ds max 'User Defined' object properties, check the 'User Defined Property' checkbox below"}  %read{5,6} %write{2147483647,-1}
+param	int	AddPrefix	1		%meta{string,widget,"checkBox"} %meta{string,label,"User Defined Property"} %meta{string,help,"User Defined Properties come from the 'User Defined' tab in the 3ds Max object properties. Those are shared with OSL as attributes with a 'usr_' prefix. Checking this box automatically adds this prefix."}  %read{4,4} %write{2147483647,-1}
+param	color	ColDef	1 0 0		%meta{string,help,"The color used when the property is missing"} %meta{string,label,"Color Default"}  %read{0,0} %write{2147483647,-1}
+param	float	FltDef	0		%meta{string,help,"The float used when the property is missing"} %meta{string,label,"Float Default"}  %read{1,1} %write{2147483647,-1}
+param	int	IntDef	0		%meta{string,help,"The integer used when the property is missing"} %meta{string,label,"Integer Default"}  %read{2,2} %write{2147483647,-1}
+param	string	StrDef	""		%meta{string,help,"The string used when the property is missing"} %meta{string,label,"String Default"}  %read{3,3} %write{2147483647,-1}
+oparam	color	Col	0 0 0		%read{2147483647,-1} %write{0,7} %initexpr
+oparam	float	Flt	0		%read{2147483647,-1} %write{1,8} %initexpr
+oparam	int	Int	0		%read{2147483647,-1} %write{2,9} %initexpr
+oparam	string	Str	""		%read{2147483647,-1} %write{3,10} %initexpr
+local	string	att	%read{7,10} %write{5,6}
+const	string	$const1	"usr_"		%read{5,5} %write{2147483647,-1}
+temp	int	$tmp1	%read{2147483647,-1} %write{7,7}
+temp	int	$tmp2	%read{2147483647,-1} %write{8,8}
+temp	int	$tmp3	%read{2147483647,-1} %write{9,9}
+temp	int	$tmp4	%read{2147483647,-1} %write{10,10}
+code Col
+# source/3dsMax-OSL-Shaders/GetAttribute.osl:35
+# 	output float  Flt   = FltDef,
+	assign		Col ColDef 	%filename{"source/3dsMax-OSL-Shaders/GetAttribute.osl"} %line{35} %argrw{"wr"}
+code Flt
+# source/3dsMax-OSL-Shaders/GetAttribute.osl:36
+# 	output int    Int   = IntDef,
+	assign		Flt FltDef 	%filename{"source/3dsMax-OSL-Shaders/GetAttribute.osl"} %line{36} %argrw{"wr"}
+code Int
+# source/3dsMax-OSL-Shaders/GetAttribute.osl:37
+# 	output string Str   = StrDef,	
+	assign		Int IntDef 	%filename{"source/3dsMax-OSL-Shaders/GetAttribute.osl"} %line{37} %argrw{"wr"}
+code Str
+# source/3dsMax-OSL-Shaders/GetAttribute.osl:38
+# )
+	assign		Str StrDef 	%filename{"source/3dsMax-OSL-Shaders/GetAttribute.osl"} %line{38} %argrw{"wr"}
+code ___main___
+# source/3dsMax-OSL-Shaders/GetAttribute.osl:43
+# 	// The OSL Optimizer will cause only the 
+	if		AddPrefix 6 7 	%filename{"source/3dsMax-OSL-Shaders/GetAttribute.osl"} %line{43} %argrw{"r"}
+	concat		att $const1 Attribute 	%argrw{"wrr"}
+	assign		att Attribute 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/GetAttribute.osl:47
+# 	getattribute(att, Flt);	
+	getattribute	$tmp1 att Col 	%line{47} %argrw{"wrw"}
+# source/3dsMax-OSL-Shaders/GetAttribute.osl:48
+# 	getattribute(att, Int);	
+	getattribute	$tmp2 att Flt 	%line{48} %argrw{"wrw"}
+# source/3dsMax-OSL-Shaders/GetAttribute.osl:49
+# 	getattribute(att, Str);	
+	getattribute	$tmp3 att Int 	%line{49} %argrw{"wrw"}
+# source/3dsMax-OSL-Shaders/GetAttribute.osl:50
+# }
+	getattribute	$tmp4 att Str 	%line{50} %argrw{"wrw"}
+	end

@@ -1,0 +1,39 @@
+/*
+ * TDSineStripes.osl byThomas Dinges (c)2012
+ * from https://github.com/sambler/osl-shaders
+ *
+ * original script from -
+ * http://www.openshading.com/osl/example-shaders/
+ *
+ */
+
+
+shader TDsine_stripes(
+        vector Vector = P,
+        color StripeColor = color(0.8),
+        float Time = 1.0,
+        float Intensity = 1.0,
+        int Stripes = 10,
+        output float Fac = 1.0,
+        output color Color = color(0.8))
+{
+    point Pos = Vector;
+    Pos[0] -= 0.5;
+    float pattern_col = 0.0;
+    
+    for( float i = 0.0; i < Stripes; ++i )
+    {
+        float t = Time/10.0 * (i);
+        
+        Pos[0] += sin( (Pos[1] + t) * 10.0  ) * 0.1;
+        
+        float f = abs(Intensity / Pos[0] / 1000.0);
+        pattern_col += f;
+    }
+    
+    color C = transformc("hsv", StripeColor);
+    
+    Fac = pattern_col;
+    Color = color("hsv", C[0], C[1], (Fac*C[2]));
+}
+

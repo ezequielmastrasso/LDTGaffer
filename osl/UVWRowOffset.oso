@@ -1,0 +1,59 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader UVWRowOffset	%meta{string,help,"Offsets each row of an UVW coordinate in the U direction. Allows making brick stacks and similar."} %meta{string,label,"UVW Row Offset"} %meta{string,category,"UVW Coordinates"} 
+param	point	Input	0 0 0		%meta{string,label,"Input (UVW)"} %meta{string,help,"Connect your UVW generator here, for example <b>UVW Channel</b> or <b>UVW Object Space</b>.<br/>If not connected, the default UV channel (Map Channel 1) is used"}  %read{1,1} %write{0,0} %initexpr
+param	float	Scale	1		%meta{string,help,"The overall Scale. Larger number = bigger."}  %read{2,2} %write{2147483647,-1}
+param	vector	Tiling	1 1 1		%meta{string,help,"A per-axis dividing scale, to subdivide the values. Larger number = smaller."}  %read{1,1} %write{2147483647,-1}
+param	int	RowCount	2		%read{6,6} %write{2147483647,-1}
+param	float	Offset	0.5		%meta{string,help,"How much to offset each row"}  %read{9,9} %write{2147483647,-1}
+param	float	RandomOffset	0		%meta{string,help,"How much to randomly offset each row"}  %read{13,13} %write{2147483647,-1}
+oparam	point	UVW	0 0 0		%read{3,7} %write{2,15}
+global	float	u	%read{0,0} %write{2147483647,-1}
+global	float	v	%read{0,0} %write{2147483647,-1}
+local	int	row	%read{6,11} %write{5,5}
+local	int	modrow	%read{8,8} %write{6,6}
+const	int	$const1	0		%read{7,15} %write{2147483647,-1}
+const	float	$const2	0		%read{0,0} %write{2147483647,-1}
+temp	point	$tmp1	%read{2,2} %write{1,1}
+temp	float	$tmp2	%read{5,5} %write{4,4}
+const	int	$const3	1		%read{3,3} %write{2147483647,-1}
+temp	float	$tmp3	%read{4,4} %write{3,3}
+temp	float	$tmp4	%read{10,10} %write{7,7}
+temp	float	$tmp5	%read{10,10} %write{9,9}
+temp	float	$tmp6	%read{9,9} %write{8,8}
+temp	float	$tmp7	%read{14,14} %write{10,10}
+temp	float	$tmp8	%read{13,13} %write{12,12}
+const	string	$const4	"cell"		%read{12,12} %write{2147483647,-1}
+temp	float	$tmp9	%read{12,12} %write{11,11}
+temp	float	$tmp10	%read{14,14} %write{13,13}
+temp	float	$tmp11	%read{15,15} %write{14,14}
+code Input
+# source/3dsMax-OSL-Shaders/UVWRowOffset.osl:13
+# 		[[ string label = "Input (UVW)", 
+	point		Input u v $const2 	%filename{"source/3dsMax-OSL-Shaders/UVWRowOffset.osl"} %line{13} %argrw{"wrrr"}
+code ___main___
+# source/3dsMax-OSL-Shaders/UVWRowOffset.osl:30
+# 	int row    = int(floor(UVW[1]));
+	mul		$tmp1 Input Tiling 	%filename{"source/3dsMax-OSL-Shaders/UVWRowOffset.osl"} %line{30} %argrw{"wrr"}
+	div		UVW $tmp1 Scale 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/UVWRowOffset.osl:31
+# 	int modrow = row % RowCount;
+	compref		$tmp3 UVW $const3 	%line{31} %argrw{"wrr"}
+	floor		$tmp2 $tmp3 	%argrw{"wr"}
+	assign		row $tmp2 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/UVWRowOffset.osl:32
+# 	// Now move that U coordinate accorginly
+	mod		modrow row RowCount 	%line{32} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/UVWRowOffset.osl:34
+# }
+	compref		$tmp4 UVW $const1 	%line{34} %argrw{"wrr"}
+	assign		$tmp6 modrow 	%argrw{"wr"}
+	mul		$tmp5 $tmp6 Offset 	%argrw{"wrr"}
+	add		$tmp7 $tmp4 $tmp5 	%argrw{"wrr"}
+	assign		$tmp9 row 	%argrw{"wr"}
+	noise		$tmp8 $const4 $tmp9 	%argrw{"wrr"}
+	mul		$tmp10 $tmp8 RandomOffset 	%argrw{"wrr"}
+	add		$tmp11 $tmp7 $tmp10 	%argrw{"wrr"}
+	compassign	UVW $const1 $tmp11 	%argrw{"wrr"}
+	end

@@ -1,0 +1,753 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader HDRIenv	%meta{string,help,"<h3>HDRI Environment</h3> Environment shader with exposure adjustments,<br> ground projection mode, and separation between<br> <b>Background</b> and <b>Environment</b>"} %meta{string,version,"1.0.0"} %meta{string,category,"Environment"} %meta{string,label,"HDRI Environment"} 
+param	string	HDRI	"HDRI\\palermo_square_2k.hdr"		%meta{string,widget,"filename"} %meta{string,label,"HDRI file name"}  %read{9,249} %write{2147483647,-1}
+param	float	Rotation	0		%meta{float,min,-360} %meta{float,max,360} %meta{int,connectable,0} %meta{float,step,1}  %read{227,227} %write{2147483647,-1} %derivs
+param	int	Flip	0		%meta{string,widget,"checkBox"} %meta{int,connectable,0}  %read{245,245} %write{2147483647,-1}
+param	float	TiltX	0		%meta{float,min,-360} %meta{float,max,360} %meta{int,connectable,0} %meta{float,step,0.1}  %read{115,119} %write{2147483647,-1} %derivs
+param	float	TiltY	0		%meta{float,min,-360} %meta{float,max,360} %meta{int,connectable,0} %meta{float,step,0.1}  %read{171,175} %write{2147483647,-1} %derivs
+param	float	Height	0		%meta{float,min,-1} %meta{float,max,1} %meta{int,connectable,0} %meta{float,step,0.001}  %read{243,243} %write{2147483647,-1} %derivs
+param	float	Exposure	0		%meta{float,min,-100} %meta{float,max,100} %meta{string,packName,"Exposure/Contrast"} %meta{int,connectable,0}  %read{276,276} %write{2147483647,-1}
+param	color	Tint	1 1 1		%meta{string,packName,"Exposure/Contrast"} %meta{int,connectable,0}  %read{250,250} %write{2147483647,-1}
+param	float	Contrast	1		%meta{float,min,0.0099999998} %meta{float,max,100} %meta{string,packName,"Exposure/Contrast"} %meta{int,connectable,0}  %read{8,8} %write{2147483647,-1}
+param	float	Viewport	1		%meta{float,min,0} %meta{float,max,100} %meta{string,label,"Viewport Multiplier"} %meta{int,connectable,0}  %read{281,281} %write{2147483647,-1}
+param	int	GroundProjection	0		%meta{string,widget,"checkBox"} %meta{int,connectable,0}  %read{81,81} %write{2147483647,-1}
+param	point	GroundCenter	0 0 0		%meta{int,connectable,0}  %read{89,104} %write{2147483647,-1} %derivs
+param	float	GroundRadius	1.5		%meta{int,connectable,0} %meta{int,worldunits,1}  %read{103,103} %write{2147483647,-1} %derivs
+param	int	UseBackground	0		%meta{string,widget,"checkBox"} %meta{string,label,"Use Background"} %meta{int,connectable,0}  %read{0,0} %write{2147483647,-1}
+param	color	Background	0 0 0		%read{6,6} %write{2147483647,-1}
+param	float	BackgroundMultiplier	1		%meta{string,label,"Background Multiplier"} %meta{int,connectable,0}  %read{6,6} %write{2147483647,-1}
+param	color	AdditionalLight	0 0 0		%meta{string,label,"Additional Light"}  %read{278,278} %write{2147483647,-1}
+param	float	AdditionalLightMul	1		%meta{string,label,"Additional Light Multiplier"} %meta{int,connectable,0}  %read{278,278} %write{2147483647,-1}
+param	int	Blur	0		%meta{string,widget,"checkBox"} %meta{int,connectable,0}  %read{60,60} %write{2147483647,-1}
+param	float	BlurAmount	1		%meta{float,min,0} %meta{float,max,25} %meta{int,connectable,0}  %read{62,78} %write{2147483647,-1} %derivs
+param	int	BlurSamples	16		%meta{int,min,1} %meta{int,max,256} %meta{int,connectable,0}  %read{69,69} %write{2147483647,-1}
+param	int	Clamp	1		%meta{string,widget,"checkBox"} %meta{int,connectable,0}  %read{256,256} %write{2147483647,-1}
+param	float	ClampStops	10		%meta{float,min,-10} %meta{float,max,30} %meta{float,step,0.1} %meta{int,connectable,0}  %read{258,258} %write{2147483647,-1}
+oparam	color	Out	0 0 0		%read{73,281} %write{6,281}
+global	point	P	%read{51,51} %write{2147483647,-1} %derivs
+global	vector	I	%read{46,76} %write{2147483647,-1} %derivs
+local	vector	___254_axis	%read{73,253} %write{73,253} %derivs
+local	float	___254_cosang	%read{73,253} %write{73,253} %derivs
+local	float	___254_sinang	%read{73,253} %write{73,253} %derivs
+local	float	___254_cosang1	%read{73,253} %write{73,253} %derivs
+local	float	___254_x	%read{73,253} %write{73,253} %derivs
+local	float	___254_y	%read{73,253} %write{73,253} %derivs
+local	float	___254_z	%read{73,253} %write{73,253} %derivs
+local	matrix	___254_M	%read{73,253} %write{73,253} %derivs
+local	float	power	%read{42,275} %write{8,42}
+local	float	U	%read{73,253} %write{43,253} %derivs
+local	float	V	%read{73,253} %write{44,253} %derivs
+local	vector	Direction	%read{47,253} %write{46,253} %derivs
+local	vector	OrgDir	%read{73,253} %write{47,47} %derivs
+local	point	CP	%read{73,253} %write{49,49}
+local	point	Position	%read{57,253} %write{51,59} %derivs
+local	int	HLSLBackend	%read{73,280} %write{52,56}
+local	string	renderer	%read{54,54} %write{53,53}
+local	int	doBlur	%read{68,253} %write{66,67}
+local	int	samples	%read{73,254} %write{69,70}
+local	int	___324_i	%read{73,253} %write{72,253} %derivs
+local	float	___326_t	%read{73,253} %write{73,253} %derivs
+local	point	___326_GP	%read{73,253} %write{73,253} %derivs
+local	int	___326_doGround	%read{73,253} %write{73,253}
+local	point	___328_TP	%read{73,253} %write{73,253} %derivs
+local	float	___329_fac	%read{73,253} %write{73,253} %derivs
+temp	int	$tmp1	%read{1,5} %write{0,4}
+const	int	$const1	0		%read{0,266} %write{2147483647,-1}
+temp	int	$tmp2	%read{3,3} %write{2,2}
+const	string	$const2	"camera"		%read{2,66} %write{2147483647,-1}
+temp	int	$tmp3	%read{4,4} %write{3,3}
+temp	int	$tmp4	%read{10,10} %write{9,9}
+const	string	$const3	".exr"		%read{9,9} %write{2147483647,-1}
+temp	int	$tmp5	%read{11,11} %write{10,10}
+temp	int	$tmp6	%read{12,17} %write{11,16}
+temp	int	$tmp7	%read{14,14} %write{13,13}
+const	string	$const4	".EXR"		%read{13,13} %write{2147483647,-1}
+temp	int	$tmp8	%read{15,15} %write{14,14}
+temp	int	$tmp9	%read{16,16} %write{15,15}
+temp	int	$tmp10	%read{18,23} %write{17,22}
+temp	int	$tmp11	%read{20,20} %write{19,19}
+const	string	$const5	".hdr"		%read{19,19} %write{2147483647,-1}
+temp	int	$tmp12	%read{21,21} %write{20,20}
+temp	int	$tmp13	%read{22,22} %write{21,21}
+temp	int	$tmp14	%read{24,29} %write{23,28}
+temp	int	$tmp15	%read{26,26} %write{25,25}
+const	string	$const6	".HDR"		%read{25,25} %write{2147483647,-1}
+temp	int	$tmp16	%read{27,27} %write{26,26}
+temp	int	$tmp17	%read{28,28} %write{27,27}
+temp	int	$tmp18	%read{30,35} %write{29,34}
+temp	int	$tmp19	%read{32,32} %write{31,31}
+const	string	$const7	".tx"		%read{31,31} %write{2147483647,-1}
+temp	int	$tmp20	%read{33,33} %write{32,32}
+temp	int	$tmp21	%read{34,34} %write{33,33}
+temp	int	$tmp22	%read{36,41} %write{35,40}
+temp	int	$tmp23	%read{38,38} %write{37,37}
+const	string	$const8	".TX"		%read{37,37} %write{2147483647,-1}
+temp	int	$tmp24	%read{39,39} %write{38,38}
+temp	int	$tmp25	%read{40,40} %write{39,39}
+const	float	$const9	2.2		%read{42,42} %write{2147483647,-1}
+const	float	$const10	0		%read{43,274} %write{2147483647,-1}
+const	string	$const11	"world"		%read{46,59} %write{2147483647,-1}
+const	string	$const12	"transform"		%read{45,50} %write{2147483647,-1}
+const	string	$const13	"common"		%read{46,51} %write{2147483647,-1}
+const	point	$const14	0 0 0		%read{49,59} %write{2147483647,-1}
+temp	int	$tmp27	%read{2147483647,-1} %write{53,53}
+const	string	$const15	"renderer:name"		%read{53,53} %write{2147483647,-1}
+const	string	$const16	"3dsmax:hlsl"		%read{54,54} %write{2147483647,-1}
+temp	int	$tmp28	%read{55,55} %write{54,54}
+const	int	$const17	1		%read{56,270} %write{2147483647,-1}
+temp	int	$tmp29	%read{58,58} %write{57,57}
+temp	int	$tmp31	%read{61,65} %write{60,64}
+temp	int	$tmp32	%read{63,63} %write{62,62}
+temp	int	$tmp33	%read{64,64} %write{63,63}
+temp	int	$tmp34	%read{71,253} %write{72,253}
+temp	vector	$tmp35	%read{73,253} %write{73,253} %derivs
+const	string	$const18	"hash"		%read{76,76} %write{2147483647,-1}
+temp	float	$tmp36	%read{73,253} %write{73,253} %derivs
+const	float	$const19	0.5		%read{77,237} %write{2147483647,-1}
+temp	vector	$tmp37	%read{73,253} %write{73,253} %derivs
+temp	vector	$tmp38	%read{73,253} %write{73,253} %derivs
+const	float	$const20	100		%read{79,79} %write{2147483647,-1}
+temp	vector	$tmp39	%read{73,253} %write{73,253} %derivs
+temp	int	$tmp40	%read{73,253} %write{73,253}
+temp	int	$tmp41	%read{73,253} %write{73,253}
+const	int	$const21	2		%read{84,274} %write{2147483647,-1}
+temp	float	$tmp42	%read{73,253} %write{73,253}
+temp	int	$tmp43	%read{73,253} %write{73,253}
+temp	int	$tmp44	%read{73,253} %write{73,253}
+temp	float	$tmp45	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp46	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp47	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp48	%read{73,253} %write{73,253} %derivs
+temp	vector	$tmp49	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp50	%read{73,253} %write{73,253}
+const	float	$const22	9.9999997e-05		%read{99,99} %write{2147483647,-1}
+temp	int	$tmp51	%read{73,253} %write{73,253}
+temp	vector	$tmp52	%read{73,253} %write{73,253} %derivs
+temp	vector	$tmp53	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp54	%read{73,253} %write{73,253}
+const	float	$const23	-0.1		%read{108,108} %write{2147483647,-1}
+temp	int	$tmp55	%read{73,253} %write{73,253}
+const	float	$const24	1		%read{112,248} %write{2147483647,-1}
+temp	float	$tmp56	%read{73,253} %write{73,253} %derivs
+const	float	$const25	-10		%read{111,111} %write{2147483647,-1}
+temp	float	$tmp57	%read{73,253} %write{73,253} %derivs
+temp	int	$tmp58	%read{73,253} %write{73,253}
+temp	float	$tmp59	%read{73,253} %write{73,253} %derivs
+const	string	$const26	"radians"		%read{117,173} %write{2147483647,-1}
+const	float	$const27	3.1415927		%read{118,236} %write{2147483647,-1}
+const	float	$const28	180		%read{118,174} %write{2147483647,-1}
+temp	float	$tmp60	%read{73,253} %write{73,253} %derivs
+const	vector	$const29	0 0 0		%read{121,226} %write{2147483647,-1}
+const	vector	$const30	1 0 0		%read{121,121} %write{2147483647,-1}
+const	string	$const31	"rotate"		%read{120,176} %write{2147483647,-1}
+temp	vector	$tmp63	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp64	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp65	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp66	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp67	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp68	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp69	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp70	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp71	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp72	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp73	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp74	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp75	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp76	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp77	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp78	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp79	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp80	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp81	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp82	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp83	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp84	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp85	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp86	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp87	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp88	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp89	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp90	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp91	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp92	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp93	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp94	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp95	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp96	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp97	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp98	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp99	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp100	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp101	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp102	%read{73,253} %write{73,253} %derivs
+temp	vector	$tmp103	%read{73,253} %write{73,253} %derivs
+temp	vector	$tmp104	%read{73,253} %write{73,253} %derivs
+temp	int	$tmp105	%read{73,253} %write{73,253}
+temp	float	$tmp106	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp107	%read{73,253} %write{73,253} %derivs
+const	vector	$const32	0 1 0		%read{177,177} %write{2147483647,-1}
+temp	vector	$tmp110	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp111	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp112	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp113	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp114	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp115	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp116	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp117	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp118	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp119	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp120	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp121	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp122	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp123	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp124	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp125	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp126	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp127	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp128	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp129	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp130	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp131	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp132	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp133	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp134	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp135	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp136	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp137	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp138	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp139	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp140	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp141	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp142	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp143	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp144	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp145	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp146	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp147	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp148	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp149	%read{73,253} %write{73,253} %derivs
+temp	vector	$tmp150	%read{73,253} %write{73,253} %derivs
+temp	vector	$tmp151	%read{73,253} %write{73,253} %derivs
+const	float	$const33	360		%read{227,227} %write{2147483647,-1}
+temp	float	$tmp152	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp153	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp154	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp155	%read{73,253} %write{73,253} %derivs
+const	float	$const34	2		%read{231,276} %write{2147483647,-1}
+temp	float	$tmp156	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp157	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp158	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp159	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp160	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp161	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp162	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp163	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp164	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp165	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp166	%read{73,253} %write{73,253} %derivs
+temp	color	$tmp167	%read{73,253} %write{73,253}
+temp	float	$tmp168	%read{73,253} %write{73,253} %derivs
+temp	float	$tmp169	%read{73,253} %write{73,253} %derivs
+const	string	$const35	"wrap"		%read{249,249} %write{2147483647,-1}
+const	string	$const36	"periodic"		%read{249,249} %write{2147483647,-1}
+temp	color	$tmp170	%read{73,253} %write{73,253}
+temp	int	$tmp171	%read{2147483647,-1} %write{73,253}
+temp	color	$tmp172	%read{255,255} %write{254,254}
+temp	color	$tmp173	%read{262,262} %write{257,257}
+temp	float	$tmp174	%read{259,259} %write{258,258}
+temp	color	$tmp175	%read{261,261} %write{259,259}
+const	string	$const37	"clamp"		%read{260,260} %write{2147483647,-1}
+temp	color	$tmp176	%read{262,262} %write{261,261}
+temp	float	$tmp177	%read{264,264} %write{263,263}
+temp	int	$tmp178	%read{265,265} %write{264,264}
+temp	float	$tmp179	%read{268,268} %write{267,267}
+temp	int	$tmp180	%read{269,269} %write{268,268}
+temp	float	$tmp181	%read{272,272} %write{271,271}
+temp	int	$tmp182	%read{273,273} %write{272,272}
+temp	color	$tmp183	%read{277,277} %write{275,275}
+temp	float	$tmp184	%read{277,277} %write{276,276}
+temp	color	$tmp185	%read{279,279} %write{278,278}
+code ___main___
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:97
+# 	{
+	neq		$tmp1 UseBackground $const1 	%filename{"source/3dsMax-OSL-Shaders/HDRIEnviron.osl"} %line{97} %argrw{"wrr"}
+	if		$tmp1 5 5 	%argrw{"r"}
+	raytype		$tmp2 $const2 	%argrw{"wr"}
+	neq		$tmp3 $tmp2 $const1 	%argrw{"wrr"}
+	assign		$tmp1 $tmp3 	%argrw{"wr"}
+	if		$tmp1 8 8 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:99
+# 		return;
+	mul		Out Background BackgroundMultiplier 	%line{99} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:100
+# 	}
+	exit	%line{100}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:103
+# 	
+	assign		power Contrast 	%line{103} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:105
+# 		!endswith(HDRI, ".EXR") &&
+	endswith	$tmp4 HDRI $const3 	%line{105} %argrw{"wrr"}
+	eq		$tmp5 $tmp4 $const1 	%argrw{"wrr"}
+	neq		$tmp6 $tmp5 $const1 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:106
+# 		!endswith(HDRI, ".hdr") &&
+	if		$tmp6 17 17 	%line{106} %argrw{"r"}
+	endswith	$tmp7 HDRI $const4 	%argrw{"wrr"}
+	eq		$tmp8 $tmp7 $const1 	%argrw{"wrr"}
+	neq		$tmp9 $tmp8 $const1 	%argrw{"wrr"}
+	assign		$tmp6 $tmp9 	%argrw{"wr"}
+	neq		$tmp10 $tmp6 $const1 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:107
+# 		!endswith(HDRI, ".HDR") &&
+	if		$tmp10 23 23 	%line{107} %argrw{"r"}
+	endswith	$tmp11 HDRI $const5 	%argrw{"wrr"}
+	eq		$tmp12 $tmp11 $const1 	%argrw{"wrr"}
+	neq		$tmp13 $tmp12 $const1 	%argrw{"wrr"}
+	assign		$tmp10 $tmp13 	%argrw{"wr"}
+	neq		$tmp14 $tmp10 $const1 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:108
+# 		!endswith(HDRI, ".tx")  &&
+	if		$tmp14 29 29 	%line{108} %argrw{"r"}
+	endswith	$tmp15 HDRI $const6 	%argrw{"wrr"}
+	eq		$tmp16 $tmp15 $const1 	%argrw{"wrr"}
+	neq		$tmp17 $tmp16 $const1 	%argrw{"wrr"}
+	assign		$tmp14 $tmp17 	%argrw{"wr"}
+	neq		$tmp18 $tmp14 $const1 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:109
+# 		!endswith(HDRI, ".TX"))
+	if		$tmp18 35 35 	%line{109} %argrw{"r"}
+	endswith	$tmp19 HDRI $const7 	%argrw{"wrr"}
+	eq		$tmp20 $tmp19 $const1 	%argrw{"wrr"}
+	neq		$tmp21 $tmp20 $const1 	%argrw{"wrr"}
+	assign		$tmp18 $tmp21 	%argrw{"wr"}
+	neq		$tmp22 $tmp18 $const1 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:110
+# 	{
+	if		$tmp22 41 41 	%line{110} %argrw{"r"}
+	endswith	$tmp23 HDRI $const8 	%argrw{"wrr"}
+	eq		$tmp24 $tmp23 $const1 	%argrw{"wrr"}
+	neq		$tmp25 $tmp24 $const1 	%argrw{"wrr"}
+	assign		$tmp22 $tmp25 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:105
+# 		!endswith(HDRI, ".EXR") &&
+	if		$tmp22 43 43 	%line{105} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:113
+# 	}	
+	mul		power power $const9 	%line{113} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:116
+# 	vector Direction  = transform("world", I);
+	assign		U $const10 	%line{116} %argrw{"wr"}
+	assign		V $const10 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:117
+# 	vector OrgDir     = Direction;
+	functioncall	$const12 47 	%line{117} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:266
+# vector transform (string to, vector p) { return transform("common",to,p); }
+	transformv	Direction $const13 $const11 I 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{266} %argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:118
+# 	point  CP         = transform("camera", point(0,0,0));
+	assign		OrgDir Direction 	%filename{"source/3dsMax-OSL-Shaders/HDRIEnviron.osl"} %line{118} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:119
+# 
+	functioncall	$const12 50 	%line{119} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:267
+# point  transform (string to, point p)  { return transform("common",to,p); }
+	transform	CP $const13 $const2 $const14 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{267} %argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:121
+# 	
+	functioncall	$const12 52 	%filename{"source/3dsMax-OSL-Shaders/HDRIEnviron.osl"} %line{121} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:267
+# point  transform (string to, point p)  { return transform("common",to,p); }
+	transform	Position $const13 $const11 P 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{267} %argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:123
+# 	string renderer; 
+	assign		HLSLBackend $const1 	%filename{"source/3dsMax-OSL-Shaders/HDRIEnviron.osl"} %line{123} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:125
+# 	if (renderer == "3dsmax:hlsl")
+	getattribute	$tmp27 $const15 renderer 	%line{125} %argrw{"wrw"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:126
+# 		HLSLBackend = 1;
+	eq		$tmp28 renderer $const16 	%line{126} %argrw{"wrr"}
+	if		$tmp28 57 57 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:127
+# 
+	assign		HLSLBackend $const17 	%line{127} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:130
+# 		Position = transform("camera", "world", point(0));
+	eq		$tmp29 Position $const10 	%line{130} %argrw{"wrr"}
+	if		$tmp29 60 60 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:131
+# 
+	transform	Position $const2 $const11 $const14 	%line{131} %argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:133
+# 				
+	neq		$tmp31 Blur $const1 	%line{133} %argrw{"wrr"}
+	if		$tmp31 65 65 	%argrw{"r"}
+	gt		$tmp32 BlurAmount $const10 	%argrw{"wrr"}
+	neq		$tmp33 $tmp32 $const1 	%argrw{"wrr"}
+	assign		$tmp31 $tmp33 	%argrw{"wr"}
+	if		$tmp31 67 68 	%argrw{"r"}
+	raytype		doBlur $const2 	%argrw{"wr"}
+	assign		doBlur $const1 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:135
+# 	
+	if		doBlur 70 71 	%line{135} %argrw{"r"}
+	assign		samples BlurSamples 	%argrw{"wr"}
+	assign		samples $const17 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:137
+# 	{
+	for		$tmp34 73 74 252 254 	%line{137} %argrw{"r"}
+	assign		___324_i $const1 	%argrw{"wr"}
+	lt		$tmp34 ___324_i samples 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:139
+# 			Direction = OrgDir + (noise("hash", I, i) - 0.5) * BlurAmount / 100.0;
+	if		doBlur 81 81 	%line{139} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:140
+# 	
+	assign		$tmp36 ___324_i 	%line{140} %argrw{"wr"}
+	noise		$tmp35 $const18 I $tmp36 	%argrw{"wrrr"}
+	sub		$tmp37 $tmp35 $const19 	%argrw{"wrr"}
+	mul		$tmp38 $tmp37 BlurAmount 	%argrw{"wrr"}
+	div		$tmp39 $tmp38 $const20 	%argrw{"wrr"}
+	add		Direction OrgDir $tmp39 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:143
+# 		{
+	eq		$tmp40 GroundProjection $const17 	%line{143} %argrw{"wrr"}
+	neq		$tmp41 $tmp40 $const1 	%argrw{"wrr"}
+	if		$tmp41 88 88 	%argrw{"r"}
+	compref		$tmp42 Direction $const21 	%argrw{"wrr"}
+	lt		$tmp43 $tmp42 $const10 	%argrw{"wrr"}
+	neq		$tmp44 $tmp43 $const1 	%argrw{"wrr"}
+	assign		$tmp41 $tmp44 	%argrw{"wr"}
+	if		$tmp41 115 115 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:146
+# 			point GP = Position + Direction * t;
+	compref		$tmp45 GroundCenter $const21 	%line{146} %argrw{"wrr"}
+	compref		$tmp46 Position $const21 	%argrw{"wrr"}
+	sub		$tmp47 $tmp45 $tmp46 	%argrw{"wrr"}
+	compref		$tmp48 Direction $const21 	%argrw{"wrr"}
+	div		___326_t $tmp47 $tmp48 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:147
+# 			
+	mul		$tmp49 Direction ___326_t 	%line{147} %argrw{"wrr"}
+	add		___326_GP Position $tmp49 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:150
+# 		
+	assign		___326_doGround $const17 	%line{150} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:153
+# 			{
+	if		HLSLBackend 102 102 	%line{153} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:159
+# 					doGround = 0;
+	distance	$tmp50 ___326_GP CP 	%line{159} %argrw{"wrr"}
+	lt		$tmp51 $tmp50 $const22 	%argrw{"wrr"}
+	if		$tmp51 102 102 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:160
+# 			}
+	assign		___326_doGround $const1 	%line{160} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:163
+# 			{
+	if		___326_doGround 115 115 	%line{163} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:166
+# 				// Use direction from that point to the groundplane as the
+	vector		$tmp52 $const10 $const10 GroundRadius 	%line{166} %argrw{"wrrr"}
+	add		___328_TP GroundCenter $tmp52 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:169
+# 				
+	sub		$tmp53 ___326_GP ___328_TP 	%line{169} %argrw{"wrr"}
+	normalize	Direction $tmp53 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:173
+# 				{
+	compref		$tmp54 Direction $const21 	%line{173} %argrw{"wrr"}
+	gt		$tmp55 $tmp54 $const23 	%argrw{"wrr"}
+	if		$tmp55 115 115 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:175
+# 					fac *= fac;
+	compref		$tmp56 Direction $const21 	%line{175} %argrw{"wrr"}
+	mul		$tmp57 $tmp56 $const25 	%argrw{"wrr"}
+	sub		___329_fac $const24 $tmp57 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:176
+# 					
+	mul		___329_fac ___329_fac ___329_fac 	%line{176} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:178
+# 				}
+	mix		Direction Direction OrgDir ___329_fac 	%line{178} %argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:183
+# 			Direction = rotate(Direction, radians(TiltX), vector(0.0), vector(1,0,0));
+	neq		$tmp58 TiltX $const10 	%line{183} %argrw{"wrr"}
+	if		$tmp58 171 171 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:184
+# 		if (TiltY != 0.0)
+	functioncall	$const26 120 	%line{184} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:88
+# float  radians (float x)  { return x*(M_PI/180.0); }
+	div		$tmp60 $const27 $const28 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{88} %argrw{"wrr"}
+	mul		$tmp59 TiltX $tmp60 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:184
+# 		if (TiltY != 0.0)
+	functioncall	$const31 171 	%filename{"source/3dsMax-OSL-Shaders/HDRIEnviron.osl"} %line{184} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:274
+#     vector axis = normalize (b - a);
+	sub		$tmp63 $const30 $const29 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{274} %argrw{"wrr"}
+	normalize	___254_axis $tmp63 	%argrw{"wr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:276
+#     sincos (angle, sinang, cosang);
+	sincos		$tmp59 ___254_sinang ___254_cosang 	%line{276} %argrw{"rww"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:277
+#     float cosang1 = 1.0 - cosang;
+	sub		___254_cosang1 $const24 ___254_cosang 	%line{277} %argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:278
+#     float x = axis[0], y = axis[1], z = axis[2];
+	compref		___254_x ___254_axis $const1 	%line{278} %argrw{"wrr"}
+	compref		___254_y ___254_axis $const17 	%argrw{"wrr"}
+	compref		___254_z ___254_axis $const21 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:279
+#     matrix M = matrix (x * x + (1.0 - x * x) * cosang,
+	mul		$tmp64 ___254_x ___254_x 	%line{279} %argrw{"wrr"}
+	mul		$tmp65 ___254_x ___254_x 	%argrw{"wrr"}
+	sub		$tmp66 $const24 $tmp65 	%argrw{"wrr"}
+	mul		$tmp67 $tmp66 ___254_cosang 	%argrw{"wrr"}
+	add		$tmp68 $tmp64 $tmp67 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:280
+#                        x * y * cosang1 + z * sinang,
+	mul		$tmp69 ___254_x ___254_y 	%line{280} %argrw{"wrr"}
+	mul		$tmp70 $tmp69 ___254_cosang1 	%argrw{"wrr"}
+	mul		$tmp71 ___254_z ___254_sinang 	%argrw{"wrr"}
+	add		$tmp72 $tmp70 $tmp71 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:281
+#                        x * z * cosang1 - y * sinang,
+	mul		$tmp73 ___254_x ___254_z 	%line{281} %argrw{"wrr"}
+	mul		$tmp74 $tmp73 ___254_cosang1 	%argrw{"wrr"}
+	mul		$tmp75 ___254_y ___254_sinang 	%argrw{"wrr"}
+	sub		$tmp76 $tmp74 $tmp75 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:283
+#                        x * y * cosang1 - z * sinang,
+	mul		$tmp77 ___254_x ___254_y 	%line{283} %argrw{"wrr"}
+	mul		$tmp78 $tmp77 ___254_cosang1 	%argrw{"wrr"}
+	mul		$tmp79 ___254_z ___254_sinang 	%argrw{"wrr"}
+	sub		$tmp80 $tmp78 $tmp79 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:284
+#                        y * y + (1.0 - y * y) * cosang,
+	mul		$tmp81 ___254_y ___254_y 	%line{284} %argrw{"wrr"}
+	mul		$tmp82 ___254_y ___254_y 	%argrw{"wrr"}
+	sub		$tmp83 $const24 $tmp82 	%argrw{"wrr"}
+	mul		$tmp84 $tmp83 ___254_cosang 	%argrw{"wrr"}
+	add		$tmp85 $tmp81 $tmp84 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:285
+#                        y * z * cosang1 + x * sinang,
+	mul		$tmp86 ___254_y ___254_z 	%line{285} %argrw{"wrr"}
+	mul		$tmp87 $tmp86 ___254_cosang1 	%argrw{"wrr"}
+	mul		$tmp88 ___254_x ___254_sinang 	%argrw{"wrr"}
+	add		$tmp89 $tmp87 $tmp88 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:287
+#                        x * z * cosang1 + y * sinang,
+	mul		$tmp90 ___254_x ___254_z 	%line{287} %argrw{"wrr"}
+	mul		$tmp91 $tmp90 ___254_cosang1 	%argrw{"wrr"}
+	mul		$tmp92 ___254_y ___254_sinang 	%argrw{"wrr"}
+	add		$tmp93 $tmp91 $tmp92 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:288
+#                        y * z * cosang1 - x * sinang,
+	mul		$tmp94 ___254_y ___254_z 	%line{288} %argrw{"wrr"}
+	mul		$tmp95 $tmp94 ___254_cosang1 	%argrw{"wrr"}
+	mul		$tmp96 ___254_x ___254_sinang 	%argrw{"wrr"}
+	sub		$tmp97 $tmp95 $tmp96 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:289
+#                        z * z + (1.0 - z * z) * cosang,
+	mul		$tmp98 ___254_z ___254_z 	%line{289} %argrw{"wrr"}
+	mul		$tmp99 ___254_z ___254_z 	%argrw{"wrr"}
+	sub		$tmp100 $const24 $tmp99 	%argrw{"wrr"}
+	mul		$tmp101 $tmp100 ___254_cosang 	%argrw{"wrr"}
+	add		$tmp102 $tmp98 $tmp101 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:291
+#                        0.0, 0.0, 0.0, 1.0);
+	matrix		___254_M $tmp68 $tmp72 $tmp76 $const10 $tmp80 $tmp85 $tmp89 $const10 $tmp93 $tmp97 $tmp102 $const10 $const10 $const10 $const10 $const24 	%line{291} %argrw{"wrrrrrrrrrrrrrrrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:292
+#     return transform (M, p-a) + a;
+	sub		$tmp104 Direction $const29 	%line{292} %argrw{"wrr"}
+	transformv	$tmp103 ___254_M $tmp104 	%argrw{"wrr"}
+	add		Direction $tmp103 $const29 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:185
+# 			Direction = rotate(Direction, radians(TiltY), vector(0.0), vector(0,1,0));	
+	neq		$tmp105 TiltY $const10 	%filename{"source/3dsMax-OSL-Shaders/HDRIEnviron.osl"} %line{185} %argrw{"wrr"}
+	if		$tmp105 227 227 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:186
+# 	
+	functioncall	$const26 176 	%line{186} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:88
+# float  radians (float x)  { return x*(M_PI/180.0); }
+	div		$tmp107 $const27 $const28 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{88} %argrw{"wrr"}
+	mul		$tmp106 TiltY $tmp107 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:186
+# 	
+	functioncall	$const31 227 	%filename{"source/3dsMax-OSL-Shaders/HDRIEnviron.osl"} %line{186} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:274
+#     vector axis = normalize (b - a);
+	sub		$tmp110 $const32 $const29 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{274} %argrw{"wrr"}
+	normalize	___254_axis $tmp110 	%argrw{"wr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:276
+#     sincos (angle, sinang, cosang);
+	sincos		$tmp106 ___254_sinang ___254_cosang 	%line{276} %argrw{"rww"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:277
+#     float cosang1 = 1.0 - cosang;
+	sub		___254_cosang1 $const24 ___254_cosang 	%line{277} %argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:278
+#     float x = axis[0], y = axis[1], z = axis[2];
+	compref		___254_x ___254_axis $const1 	%line{278} %argrw{"wrr"}
+	compref		___254_y ___254_axis $const17 	%argrw{"wrr"}
+	compref		___254_z ___254_axis $const21 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:279
+#     matrix M = matrix (x * x + (1.0 - x * x) * cosang,
+	mul		$tmp111 ___254_x ___254_x 	%line{279} %argrw{"wrr"}
+	mul		$tmp112 ___254_x ___254_x 	%argrw{"wrr"}
+	sub		$tmp113 $const24 $tmp112 	%argrw{"wrr"}
+	mul		$tmp114 $tmp113 ___254_cosang 	%argrw{"wrr"}
+	add		$tmp115 $tmp111 $tmp114 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:280
+#                        x * y * cosang1 + z * sinang,
+	mul		$tmp116 ___254_x ___254_y 	%line{280} %argrw{"wrr"}
+	mul		$tmp117 $tmp116 ___254_cosang1 	%argrw{"wrr"}
+	mul		$tmp118 ___254_z ___254_sinang 	%argrw{"wrr"}
+	add		$tmp119 $tmp117 $tmp118 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:281
+#                        x * z * cosang1 - y * sinang,
+	mul		$tmp120 ___254_x ___254_z 	%line{281} %argrw{"wrr"}
+	mul		$tmp121 $tmp120 ___254_cosang1 	%argrw{"wrr"}
+	mul		$tmp122 ___254_y ___254_sinang 	%argrw{"wrr"}
+	sub		$tmp123 $tmp121 $tmp122 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:283
+#                        x * y * cosang1 - z * sinang,
+	mul		$tmp124 ___254_x ___254_y 	%line{283} %argrw{"wrr"}
+	mul		$tmp125 $tmp124 ___254_cosang1 	%argrw{"wrr"}
+	mul		$tmp126 ___254_z ___254_sinang 	%argrw{"wrr"}
+	sub		$tmp127 $tmp125 $tmp126 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:284
+#                        y * y + (1.0 - y * y) * cosang,
+	mul		$tmp128 ___254_y ___254_y 	%line{284} %argrw{"wrr"}
+	mul		$tmp129 ___254_y ___254_y 	%argrw{"wrr"}
+	sub		$tmp130 $const24 $tmp129 	%argrw{"wrr"}
+	mul		$tmp131 $tmp130 ___254_cosang 	%argrw{"wrr"}
+	add		$tmp132 $tmp128 $tmp131 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:285
+#                        y * z * cosang1 + x * sinang,
+	mul		$tmp133 ___254_y ___254_z 	%line{285} %argrw{"wrr"}
+	mul		$tmp134 $tmp133 ___254_cosang1 	%argrw{"wrr"}
+	mul		$tmp135 ___254_x ___254_sinang 	%argrw{"wrr"}
+	add		$tmp136 $tmp134 $tmp135 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:287
+#                        x * z * cosang1 + y * sinang,
+	mul		$tmp137 ___254_x ___254_z 	%line{287} %argrw{"wrr"}
+	mul		$tmp138 $tmp137 ___254_cosang1 	%argrw{"wrr"}
+	mul		$tmp139 ___254_y ___254_sinang 	%argrw{"wrr"}
+	add		$tmp140 $tmp138 $tmp139 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:288
+#                        y * z * cosang1 - x * sinang,
+	mul		$tmp141 ___254_y ___254_z 	%line{288} %argrw{"wrr"}
+	mul		$tmp142 $tmp141 ___254_cosang1 	%argrw{"wrr"}
+	mul		$tmp143 ___254_x ___254_sinang 	%argrw{"wrr"}
+	sub		$tmp144 $tmp142 $tmp143 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:289
+#                        z * z + (1.0 - z * z) * cosang,
+	mul		$tmp145 ___254_z ___254_z 	%line{289} %argrw{"wrr"}
+	mul		$tmp146 ___254_z ___254_z 	%argrw{"wrr"}
+	sub		$tmp147 $const24 $tmp146 	%argrw{"wrr"}
+	mul		$tmp148 $tmp147 ___254_cosang 	%argrw{"wrr"}
+	add		$tmp149 $tmp145 $tmp148 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:291
+#                        0.0, 0.0, 0.0, 1.0);
+	matrix		___254_M $tmp115 $tmp119 $tmp123 $const10 $tmp127 $tmp132 $tmp136 $const10 $tmp140 $tmp144 $tmp149 $const10 $const10 $const10 $const10 $const24 	%line{291} %argrw{"wrrrrrrrrrrrrrrrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:292
+#     return transform (M, p-a) + a;
+	sub		$tmp151 Direction $const29 	%line{292} %argrw{"wrr"}
+	transformv	$tmp150 ___254_M $tmp151 	%argrw{"wrr"}
+	add		Direction $tmp150 $const29 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:189
+# 		V = 0.5 + (asin(Direction[2]) / M_PI);
+	div		$tmp152 Rotation $const33 	%filename{"source/3dsMax-OSL-Shaders/HDRIEnviron.osl"} %line{189} %argrw{"wrr"}
+	compref		$tmp154 Direction $const1 	%argrw{"wrr"}
+	compref		$tmp155 Direction $const17 	%argrw{"wrr"}
+	atan2		$tmp153 $tmp154 $tmp155 	%argrw{"wrr"}
+	mul		$tmp156 $const27 $const34 	%argrw{"wrr"}
+	div		$tmp157 $tmp153 $tmp156 	%argrw{"wrr"}
+	add		U $tmp152 $tmp157 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:190
+# 	
+	compref		$tmp159 Direction $const21 	%line{190} %argrw{"wrr"}
+	asin		$tmp158 $tmp159 	%argrw{"wr"}
+	div		$tmp160 $tmp158 $const27 	%argrw{"wrr"}
+	add		V $const19 $tmp160 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:193
+# 	
+	compref		$tmp162 Direction $const21 	%line{193} %argrw{"wrr"}
+	compref		$tmp163 Direction $const21 	%argrw{"wrr"}
+	mul		$tmp164 $tmp162 $tmp163 	%argrw{"wrr"}
+	sub		$tmp165 $const24 $tmp164 	%argrw{"wrr"}
+	sqrt		$tmp161 $tmp165 	%argrw{"wr"}
+	mul		$tmp166 Height $tmp161 	%argrw{"wrr"}
+	sub		V V $tmp166 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:196
+# 	}
+	if		Flip 247 248 	%line{196} %argrw{"r"}
+	neg		$tmp168 U 	%argrw{"wr"}
+	assign		$tmp168 U 	%argrw{"wr"}
+	sub		$tmp169 $const24 V 	%argrw{"wrr"}
+	texture		$tmp167 HDRI $tmp168 $tmp169 $const35 $const36 	%argrw{"wrrrrr"} %argderivs{2,3}
+	mul		$tmp170 $tmp167 Tint 	%argrw{"wrr"}
+	add		Out Out $tmp170 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:137
+# 	{
+	assign		$tmp171 ___324_i 	%line{137} %argrw{"wr"}
+	add		___324_i ___324_i $const17 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:199
+# 	
+	assign		$tmp172 samples 	%line{199} %argrw{"wr"}
+	div		Out Out $tmp172 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:201
+# 		Out = clamp(Out, 0.0, pow(2.0, ClampStops));
+	if		Clamp 263 275 	%line{201} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:202
+# 	else
+	assign		$tmp173 $const10 	%line{202} %argrw{"wr"}
+	pow		$tmp174 $const34 ClampStops 	%argrw{"wrr"}
+	assign		$tmp175 $tmp174 	%argrw{"wr"}
+	functioncall	$const37 263 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:144
+# color  clamp (color x, color minval, color maxval) { return max(min(x,maxval),minval); }
+	min		$tmp176 Out $tmp175 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{144} %argrw{"wrr"}
+	max		Out $tmp176 $tmp173 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:206
+# 		if (Out[1] < 0.0) Out[1] = 0.0;
+	compref		$tmp177 Out $const1 	%filename{"source/3dsMax-OSL-Shaders/HDRIEnviron.osl"} %line{206} %argrw{"wrr"}
+	lt		$tmp178 $tmp177 $const10 	%argrw{"wrr"}
+	if		$tmp178 267 267 	%argrw{"r"}
+	compassign	Out $const1 $const10 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:207
+# 		if (Out[2] < 0.0) Out[2] = 0.0;
+	compref		$tmp179 Out $const17 	%line{207} %argrw{"wrr"}
+	lt		$tmp180 $tmp179 $const10 	%argrw{"wrr"}
+	if		$tmp180 271 271 	%argrw{"r"}
+	compassign	Out $const17 $const10 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:208
+# 	}
+	compref		$tmp181 Out $const21 	%line{208} %argrw{"wrr"}
+	lt		$tmp182 $tmp181 $const10 	%argrw{"wrr"}
+	if		$tmp182 275 275 	%argrw{"r"}
+	compassign	Out $const21 $const10 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:212
+# 	
+	pow		$tmp183 Out power 	%line{212} %argrw{"wrr"}
+	pow		$tmp184 $const34 Exposure 	%argrw{"wrr"}
+	mul		Out $tmp183 $tmp184 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:215
+# 
+	mul		$tmp185 AdditionalLight AdditionalLightMul 	%line{215} %argrw{"wrr"}
+	add		Out Out $tmp185 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:218
+# 		Out *= Viewport;
+	if		HLSLBackend 282 282 	%line{218} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/HDRIEnviron.osl:219
+# }
+	mul		Out Out Viewport 	%line{219} %argrw{"wrr"}
+	end

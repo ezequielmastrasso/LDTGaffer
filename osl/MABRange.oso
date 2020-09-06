@@ -1,0 +1,28 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader MABRange
+param	float	Value	0		%read{0,3} %write{2147483647,-1}
+param	float	Low	0		%read{0,0} %write{2147483647,-1}
+param	float	High	0		%read{3,3} %write{2147483647,-1}
+oparam	float	Fac	0		%read{2147483647,-1} %write{7,7}
+temp	int	$tmp1	%read{1,1} %write{0,0}
+temp	int	$tmp2	%read{2,6} %write{1,5}
+const	int	$const1	0		%read{1,4} %write{2147483647,-1}
+temp	int	$tmp3	%read{4,4} %write{3,3}
+temp	int	$tmp4	%read{5,5} %write{4,4}
+const	int	$const2	1		%read{7,7} %write{2147483647,-1}
+code ___main___
+# source/sambler-osl-shaders/MJABook/00MABRange/MABRange.osl:21
+#         Fac = 1;
+	ge		$tmp1 Value Low 	%filename{"source/sambler-osl-shaders/MJABook/00MABRange/MABRange.osl"} %line{21} %argrw{"wrr"}
+	neq		$tmp2 $tmp1 $const1 	%argrw{"wrr"}
+	if		$tmp2 6 6 	%argrw{"r"}
+	le		$tmp3 Value High 	%argrw{"wrr"}
+	neq		$tmp4 $tmp3 $const1 	%argrw{"wrr"}
+	assign		$tmp2 $tmp4 	%argrw{"wr"}
+	if		$tmp2 8 8 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/00MABRange/MABRange.osl:22
+#     }
+	assign		Fac $const2 	%line{22} %argrw{"wr"}
+	end

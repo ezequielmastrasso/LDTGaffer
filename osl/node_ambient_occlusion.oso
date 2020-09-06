@@ -1,0 +1,20 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader node_ambient_occlusion
+param	normal	NormalIn	0 0 0		%read{2147483647,-1} %write{0,0} %initexpr
+param	color	Color	0.80000001 0.80000001 0.80000001		%read{2,2} %write{2147483647,-1}
+oparam	closure color	AO			%read{2147483647,-1} %write{2,2}
+global	normal	N	%read{0,0} %write{2147483647,-1}
+temp	closure color	$tmp1	%read{2,2} %write{1,1}
+const	string	$const1	"ambient_occlusion"		%read{1,1} %write{2147483647,-1}
+code NormalIn
+# include/node_ambient_occlusion.osl:21
+# 	color Color = 0.8,
+	assign		NormalIn N 	%filename{"include/node_ambient_occlusion.osl"} %line{21} %argrw{"wr"}
+code ___main___
+# include/node_ambient_occlusion.osl:25
+# }
+	closure		$tmp1 $const1 	%filename{"include/node_ambient_occlusion.osl"} %line{25} %argrw{"wr"}
+	mul		AO $tmp1 Color 	%argrw{"wrr"}
+	end

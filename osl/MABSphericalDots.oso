@@ -1,0 +1,191 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader MABSphericalDots
+param	int	Number	1000		%read{6,6} %write{2147483647,-1}
+param	float	Radius	1		%read{3,3} %write{2147483647,-1}
+oparam	float	Fac	0		%read{2147483647,-1} %write{6,57}
+global	point	P	%read{1,1} %write{2147483647,-1}
+local	float	___322_result	%read{6,57} %write{6,57}
+local	float	___322_f	%read{6,57} %write{6,57}
+local	int	___322_ri	%read{6,57} %write{6,57}
+local	float	___325_z	%read{6,57} %write{6,57}
+local	float	___325_t	%read{6,57} %write{6,57}
+local	float	___325_r	%read{6,57} %write{6,57}
+local	float	___325_s	%read{6,57} %write{6,57}
+local	float	___325_c	%read{6,57} %write{6,57}
+local	point	p	%read{2,57} %write{1,1}
+local	float	r	%read{6,57} %write{2,2}
+local	float	sRad	%read{6,57} %write{3,3}
+local	int	___326_n	%read{6,57} %write{5,57}
+local	vector	___327_v	%read{6,57} %write{6,57}
+local	float	___327_d	%read{6,57} %write{6,57}
+const	string	$const1	"object"		%read{1,1} %write{2147483647,-1}
+const	string	$const2	"transform"		%read{0,0} %write{2147483647,-1}
+const	string	$const3	"common"		%read{1,1} %write{2147483647,-1}
+const	float	$const5	10		%read{3,3} %write{2147483647,-1}
+const	int	$const6	1		%read{5,57} %write{2147483647,-1}
+temp	int	$tmp1	%read{4,57} %write{5,57}
+temp	vector	$tmp2	%read{6,57} %write{6,57}
+const	string	$const7	"pointonsphere"		%read{7,7} %write{2147483647,-1}
+temp	float	$tmp3	%read{6,57} %write{6,57}
+const	int	$const8	2		%read{10,21} %write{2147483647,-1}
+const	string	$const9	"haltonsequence"		%read{8,26} %write{2147483647,-1}
+const	float	$const10	0		%read{9,27} %write{2147483647,-1}
+const	float	$const11	1		%read{11,44} %write{2147483647,-1}
+temp	float	$tmp4	%read{6,57} %write{6,57}
+const	int	$const12	0		%read{14,32} %write{2147483647,-1}
+temp	int	$tmp5	%read{6,57} %write{6,57}
+temp	int	$tmp6	%read{6,57} %write{6,57}
+temp	float	$tmp7	%read{6,57} %write{6,57}
+temp	float	$tmp8	%read{6,57} %write{6,57}
+temp	int	$tmp9	%read{6,57} %write{6,57}
+temp	float	$tmp10	%read{6,57} %write{6,57}
+temp	float	$tmp11	%read{6,57} %write{6,57}
+const	float	$const13	2		%read{24,24} %write{2147483647,-1}
+temp	float	$tmp12	%read{6,57} %write{6,57}
+const	int	$const14	3		%read{28,39} %write{2147483647,-1}
+temp	float	$tmp13	%read{6,57} %write{6,57}
+temp	int	$tmp14	%read{6,57} %write{6,57}
+temp	int	$tmp15	%read{6,57} %write{6,57}
+temp	float	$tmp16	%read{6,57} %write{6,57}
+temp	float	$tmp17	%read{6,57} %write{6,57}
+temp	int	$tmp18	%read{6,57} %write{6,57}
+temp	float	$tmp19	%read{6,57} %write{6,57}
+const	float	$const15	6.2831855		%read{42,42} %write{2147483647,-1}
+temp	float	$tmp20	%read{6,57} %write{6,57}
+temp	float	$tmp21	%read{6,57} %write{6,57}
+temp	float	$tmp22	%read{6,57} %write{6,57}
+temp	float	$tmp23	%read{6,57} %write{6,57}
+temp	int	$tmp24	%read{6,57} %write{6,57}
+temp	int	$tmp25	%read{2147483647,-1} %write{6,57}
+code ___main___
+# source/sambler-osl-shaders/MJABook/17MABSphericalDots/MABSphericalDots.osl:54
+#     float r = length(p);
+	functioncall	$const2 2 	%filename{"source/sambler-osl-shaders/MJABook/17MABSphericalDots/MABSphericalDots.osl"} %line{54} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:267
+# point  transform (string to, point p)  { return transform("common",to,p); }
+	transform	p $const3 $const1 P 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{267} %argrw{"wrrr"}
+# source/sambler-osl-shaders/MJABook/17MABSphericalDots/MABSphericalDots.osl:55
+#     float sRad = Radius/10;
+	length		r p 	%filename{"source/sambler-osl-shaders/MJABook/17MABSphericalDots/MABSphericalDots.osl"} %line{55} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/17MABSphericalDots/MABSphericalDots.osl:56
+# 
+	div		sRad Radius $const5 	%line{56} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/17MABSphericalDots/MABSphericalDots.osl:58
+#         vector v = r * pointonsphere(n);
+	for		$tmp1 6 7 56 58 	%line{58} %argrw{"r"}
+	assign		___326_n $const6 	%argrw{"wr"}
+	le		$tmp1 ___326_n Number 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/17MABSphericalDots/MABSphericalDots.osl:59
+#         float d = distance(v,p);
+	functioncall	$const7 50 	%line{59} %argrw{"r"}
+# source/sambler-osl-shaders/MJABook/17MABSphericalDots/MABSphericalDots.osl:40
+#     float t = haltonsequence(index,3)*M_2PI;
+	functioncall	$const9 24 	%line{40} %argrw{"r"}
+# source/sambler-osl-shaders/MJABook/17MABSphericalDots/MABSphericalDots.osl:22
+#     float f = 1.0/base;
+	assign		___322_result $const10 	%line{22} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/17MABSphericalDots/MABSphericalDots.osl:23
+#     int ri = index;
+	assign		$tmp4 $const8 	%line{23} %argrw{"wr"}
+	div		___322_f $const11 $tmp4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/17MABSphericalDots/MABSphericalDots.osl:24
+#     while(ri > 0){
+	assign		___322_ri ___326_n 	%line{24} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/17MABSphericalDots/MABSphericalDots.osl:25
+#         result += f*(ri%base);
+	while		$tmp5 14 15 23 23 	%line{25} %argrw{"r"}
+	gt		$tmp5 ___322_ri $const12 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/17MABSphericalDots/MABSphericalDots.osl:26
+#         ri = int(ri/base);
+	mod		$tmp6 ___322_ri $const8 	%line{26} %argrw{"wrr"}
+	assign		$tmp8 $tmp6 	%argrw{"wr"}
+	mul		$tmp7 ___322_f $tmp8 	%argrw{"wrr"}
+	add		___322_result ___322_result $tmp7 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/17MABSphericalDots/MABSphericalDots.osl:27
+#         f /= base;
+	div		$tmp9 ___322_ri $const8 	%line{27} %argrw{"wrr"}
+	assign		___322_ri $tmp9 	%argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/17MABSphericalDots/MABSphericalDots.osl:28
+#     }
+	assign		$tmp10 $const8 	%line{28} %argrw{"wr"}
+	div		___322_f ___322_f $tmp10 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/17MABSphericalDots/MABSphericalDots.osl:30
+# }
+	assign		$tmp3 ___322_result 	%line{30} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/17MABSphericalDots/MABSphericalDots.osl:40
+#     float t = haltonsequence(index,3)*M_2PI;
+	mul		$tmp11 $tmp3 $const13 	%line{40} %argrw{"wrr"}
+	sub		___325_z $tmp11 $const11 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/17MABSphericalDots/MABSphericalDots.osl:41
+#     float r = sqrt(1-z*z);
+	functioncall	$const9 42 	%line{41} %argrw{"r"}
+# source/sambler-osl-shaders/MJABook/17MABSphericalDots/MABSphericalDots.osl:22
+#     float f = 1.0/base;
+	assign		___322_result $const10 	%line{22} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/17MABSphericalDots/MABSphericalDots.osl:23
+#     int ri = index;
+	assign		$tmp13 $const14 	%line{23} %argrw{"wr"}
+	div		___322_f $const11 $tmp13 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/17MABSphericalDots/MABSphericalDots.osl:24
+#     while(ri > 0){
+	assign		___322_ri ___326_n 	%line{24} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/17MABSphericalDots/MABSphericalDots.osl:25
+#         result += f*(ri%base);
+	while		$tmp14 32 33 41 41 	%line{25} %argrw{"r"}
+	gt		$tmp14 ___322_ri $const12 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/17MABSphericalDots/MABSphericalDots.osl:26
+#         ri = int(ri/base);
+	mod		$tmp15 ___322_ri $const14 	%line{26} %argrw{"wrr"}
+	assign		$tmp17 $tmp15 	%argrw{"wr"}
+	mul		$tmp16 ___322_f $tmp17 	%argrw{"wrr"}
+	add		___322_result ___322_result $tmp16 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/17MABSphericalDots/MABSphericalDots.osl:27
+#         f /= base;
+	div		$tmp18 ___322_ri $const14 	%line{27} %argrw{"wrr"}
+	assign		___322_ri $tmp18 	%argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/17MABSphericalDots/MABSphericalDots.osl:28
+#     }
+	assign		$tmp19 $const14 	%line{28} %argrw{"wr"}
+	div		___322_f ___322_f $tmp19 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/17MABSphericalDots/MABSphericalDots.osl:30
+# }
+	assign		$tmp12 ___322_result 	%line{30} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/17MABSphericalDots/MABSphericalDots.osl:41
+#     float r = sqrt(1-z*z);
+	mul		___325_t $tmp12 $const15 	%line{41} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/17MABSphericalDots/MABSphericalDots.osl:42
+#     float s,c;
+	mul		$tmp20 ___325_z ___325_z 	%line{42} %argrw{"wrr"}
+	sub		$tmp21 $const11 $tmp20 	%argrw{"wrr"}
+	sqrt		___325_r $tmp21 	%argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/17MABSphericalDots/MABSphericalDots.osl:44
+#     return vector(s*r,c*r,z);
+	sincos		___325_t ___325_s ___325_c 	%line{44} %argrw{"rww"}
+# source/sambler-osl-shaders/MJABook/17MABSphericalDots/MABSphericalDots.osl:45
+# }
+	mul		$tmp22 ___325_s ___325_r 	%line{45} %argrw{"wrr"}
+	mul		$tmp23 ___325_c ___325_r 	%argrw{"wrr"}
+	vector		$tmp2 $tmp22 $tmp23 ___325_z 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/MJABook/17MABSphericalDots/MABSphericalDots.osl:59
+#         float d = distance(v,p);
+	mul		___327_v r $tmp2 	%line{59} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/17MABSphericalDots/MABSphericalDots.osl:60
+#         if( d < sRad ){
+	distance	___327_d ___327_v p 	%line{60} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/17MABSphericalDots/MABSphericalDots.osl:61
+#             Fac = sRad - d;
+	lt		$tmp24 ___327_d sRad 	%line{61} %argrw{"wrr"}
+	if		$tmp24 56 56 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/17MABSphericalDots/MABSphericalDots.osl:62
+#             break;
+	sub		Fac sRad ___327_d 	%line{62} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/17MABSphericalDots/MABSphericalDots.osl:63
+#         }
+	break	%line{63}
+# source/sambler-osl-shaders/MJABook/17MABSphericalDots/MABSphericalDots.osl:58
+#         vector v = r * pointonsphere(n);
+	assign		$tmp25 ___326_n 	%line{58} %argrw{"wr"}
+	add		___326_n ___326_n $const6 	%argrw{"wrr"}
+	end

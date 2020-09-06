@@ -1,0 +1,319 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+surface oak
+param	point	Vector	0 0 0		%read{2,53} %write{0,0} %initexpr
+param	color	LightWood	0.5 0.2 0.067000002		%read{89,89} %write{2147483647,-1}
+param	color	DarkWood	0.15000001 0.077 0.028000001		%read{89,89} %write{2147483647,-1}
+param	float	Sharpness	0.0099999998		%read{55,55} %write{2147483647,-1}
+param	float	Ringy	1		%read{87,87} %write{2147483647,-1}
+param	float	RingFreq	8		%read{32,32} %write{2147483647,-1}
+param	float	RingUnevenness	0.5		%read{41,41} %write{2147483647,-1}
+param	float	RingNoise	0.02		%read{17,17} %write{2147483647,-1}
+param	float	RingNoiseFreq	1		%read{2,2} %write{2147483647,-1}
+param	float	Grainy	1		%read{76,76} %write{2147483647,-1}
+param	float	GrainFreq	25		%read{53,53} %write{2147483647,-1}
+param	float	TrunkWobble	0.15000001		%read{22,22} %write{2147483647,-1}
+param	float	TrunkWobbleFreq	0.025		%read{20,20} %write{2147483647,-1}
+param	float	AngularWobble	1		%read{34,34} %write{2147483647,-1}
+param	float	AngularWobbleFreq	1.5		%read{35,35} %write{2147483647,-1}
+oparam	color	Color	0 0 0		%read{2147483647,-1} %write{89,89}
+oparam	float	Specular	0.1		%read{2147483647,-1} %write{93,93}
+oparam	float	Roughness	0.1		%read{2147483647,-1} %write{95,95}
+oparam	float	Displacement	0		%read{2147483647,-1} %write{90,90}
+global	point	P	%read{0,0} %write{2147483647,-1}
+local	float	___324_amp	%read{9,15} %write{4,15}
+local	point	___324_pp	%read{9,15} %write{5,15}
+local	vector	___324_sum	%read{9,16} %write{6,15}
+local	float	___324_i	%read{9,15} %write{8,15}
+local	vector	___326_d	%read{9,15} %write{9,15}
+local	vector	___327_offset	%read{17,17} %write{16,16}
+local	point	___327_Pring	%read{24,35} %write{18,24}
+local	vector	___327_d	%read{22,22} %write{21,21}
+local	float	___327_r	%read{33,48} %write{32,42}
+local	float	___327_inring	%read{60,87} %write{52,86}
+local	point	___327_Pgrain	%read{60,86} %write{54,86}
+local	float	___327_dPgrain	%read{60,86} %write{55,86}
+local	float	___327_grain	%read{60,88} %write{56,86}
+local	float	___327_i	%read{60,86} %write{59,86}
+local	float	___327_amp	%read{60,86} %write{57,86}
+local	float	___329_grain1valid	%read{60,86} %write{60,86}
+local	float	___330_g	%read{60,86} %write{60,86}
+local	float	wood	%read{89,94} %write{88,88}
+const	string	$const1	"oaktexture"		%read{1,1} %write{2147483647,-1}
+temp	point	$tmp1	%read{5,5} %write{2,2}
+const	int	$const2	2		%read{19,60} %write{2147483647,-1}
+const	float	$const3	2		%read{9,84} %write{2147483647,-1}
+const	float	$const5	4		%read{14,14} %write{2147483647,-1}
+const	float	$const6	0.5		%read{13,91} %write{2147483647,-1}
+const	string	$const7	"vfBm"		%read{3,3} %write{2147483647,-1}
+const	int	$const8	1		%read{4,57} %write{2147483647,-1}
+const	int	$const9	0		%read{6,77} %write{2147483647,-1}
+temp	int	$tmp2	%read{7,15} %write{8,15}
+temp	vector	$tmp3	%read{9,15} %write{9,15}
+const	float	$const10	1		%read{15,92} %write{2147483647,-1}
+temp	vector	$tmp4	%read{18,18} %write{17,17}
+temp	float	$tmp5	%read{20,20} %write{19,19}
+temp	float	$tmp6	%read{21,21} %write{20,20}
+temp	vector	$tmp7	%read{23,23} %write{22,22}
+const	vector	$const11	1 1 0		%read{23,23} %write{2147483647,-1}
+temp	vector	$tmp9	%read{24,24} %write{23,23}
+temp	float	$tmp10	%read{32,32} %write{31,31}
+temp	float	$tmp11	%read{28,28} %write{25,25}
+temp	float	$tmp12	%read{29,29} %write{26,26}
+const	string	$const12	"hypot"		%read{27,27} %write{2147483647,-1}
+temp	float	$tmp13	%read{30,30} %write{28,28}
+temp	float	$tmp14	%read{30,30} %write{29,29}
+temp	float	$tmp15	%read{31,31} %write{30,30}
+temp	float	$tmp16	%read{34,34} %write{33,33}
+const	float	$const13	0		%read{33,73} %write{2147483647,-1}
+const	float	$const15	5		%read{33,33} %write{2147483647,-1}
+temp	float	$tmp17	%read{38,38} %write{34,34}
+temp	float	$tmp18	%read{38,38} %write{37,37}
+temp	point	$tmp19	%read{36,36} %write{35,35}
+const	vector	$const16	1 1 0.1		%read{36,36} %write{2147483647,-1}
+temp	point	$tmp21	%read{37,37} %write{36,36}
+temp	float	$tmp22	%read{39,39} %write{38,38}
+temp	float	$tmp23	%read{41,41} %write{40,40}
+temp	float	$tmp24	%read{42,42} %write{41,41}
+const	float	$const17	0.1		%read{50,95} %write{2147483647,-1}
+const	float	$const18	0.55000001		%read{50,50} %write{2147483647,-1}
+const	float	$const19	0.69999999		%read{51,67} %write{2147483647,-1}
+const	float	$const20	0.94999999		%read{51,51} %write{2147483647,-1}
+const	string	$const21	"smoothpulsetrain"		%read{43,43} %write{2147483647,-1}
+temp	float	$tmp25	%read{50,51} %write{48,48}
+const	string	$const22	"mod"		%read{44,44} %write{2147483647,-1}
+temp	float	$tmp26	%read{47,47} %write{46,46}
+temp	float	$tmp27	%read{46,46} %write{45,45}
+temp	float	$tmp28	%read{48,48} %write{47,47}
+const	string	$const23	"smoothpulse"		%read{49,49} %write{2147483647,-1}
+temp	float	$tmp29	%read{52,52} %write{50,50}
+temp	float	$tmp30	%read{52,52} %write{51,51}
+temp	point	$tmp31	%read{54,54} %write{53,53}
+const	vector	$const24	1 1 0.050000001		%read{54,54} %write{2147483647,-1}
+temp	int	$tmp33	%read{58,86} %write{59,86}
+temp	float	$tmp34	%read{60,86} %write{60,86}
+const	float	$const25	0.2		%read{61,61} %write{2147483647,-1}
+const	float	$const26	0.60000002		%read{61,61} %write{2147483647,-1}
+temp	int	$tmp35	%read{60,86} %write{60,86}
+temp	float	$tmp36	%read{60,86} %write{60,86}
+const	float	$const27	0.30000001		%read{68,68} %write{2147483647,-1}
+temp	float	$tmp37	%read{60,86} %write{60,86}
+temp	float	$tmp38	%read{60,86} %write{60,86}
+temp	float	$tmp39	%read{60,86} %write{60,86}
+const	float	$const28	0.80000001		%read{70,70} %write{2147483647,-1}
+temp	float	$tmp40	%read{60,86} %write{60,86}
+const	string	$const29	"clamp"		%read{71,71} %write{2147483647,-1}
+temp	float	$tmp41	%read{60,86} %write{60,86}
+temp	float	$tmp42	%read{60,86} %write{60,86}
+temp	int	$tmp43	%read{60,86} %write{60,86}
+const	float	$const30	0.40000001		%read{79,79} %write{2147483647,-1}
+temp	float	$tmp44	%read{60,86} %write{60,86}
+temp	float	$tmp45	%read{60,86} %write{60,86}
+temp	float	$tmp46	%read{88,88} %write{87,87}
+temp	float	$tmp47	%read{92,92} %write{91,91}
+temp	float	$tmp48	%read{93,93} %write{92,92}
+temp	float	$tmp49	%read{95,95} %write{94,94}
+code Vector
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:125
+#         color LightWood = color(0.5, 0.2, 0.067),
+	assign		Vector P 	%filename{"source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl"} %line{125} %argrw{"wr"}
+code ___main___
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:147
+# 
+	functioncall	$const1 89 	%filename{"source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl"} %line{147} %argrw{"r"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:80
+# 
+	mul		$tmp1 Vector RingNoiseFreq 	%line{80} %argrw{"wrr"}
+	functioncall	$const7 17 	%argrw{"r"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:43
+#     point pp = p;
+	assign		___324_amp $const8 	%line{43} %argrw{"wr"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:44
+#     vector sum = 0;
+	assign		___324_pp $tmp1 	%line{44} %argrw{"wr"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:45
+#     float i;
+	assign		___324_sum $const9 	%line{45} %argrw{"wr"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:48
+#         vector d = snoise(pp);
+	for		$tmp2 9 10 15 16 	%line{48} %argrw{"r"}
+	assign		___324_i $const9 	%argrw{"wr"}
+	lt		$tmp2 ___324_i $const3 	%argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:49
+#         sum += amp * d;
+	snoise		___326_d ___324_pp 	%line{49} %argrw{"wr"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:50
+#         amp *= gain;
+	mul		$tmp3 ___324_amp ___326_d 	%line{50} %argrw{"wrr"}
+	add		___324_sum ___324_sum $tmp3 	%argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:51
+#         pp *= lacunarity;
+	mul		___324_amp ___324_amp $const6 	%line{51} %argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:52
+#     }
+	mul		___324_pp ___324_pp $const5 	%line{52} %argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:48
+#         vector d = snoise(pp);
+	add		___324_i ___324_i $const10 	%line{48} %argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:54
+# }
+	assign		___327_offset ___324_sum 	%line{54} %argrw{"wr"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:82
+#     /* The trunk isn't totally steady xy as you go up in z */
+	mul		$tmp4 RingNoise ___327_offset 	%line{82} %argrw{"wrr"}
+	add		___327_Pring Vector $tmp4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:84
+#     Pring += trunkwobble * d * vector(1,1,0);
+	compref		$tmp5 Vector $const2 	%line{84} %argrw{"wrr"}
+	mul		$tmp6 $tmp5 TrunkWobbleFreq 	%argrw{"wrr"}
+	snoise		___327_d $tmp6 	%argrw{"wr"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:85
+# 
+	mul		$tmp7 TrunkWobble ___327_d 	%line{85} %argrw{"wrr"}
+	mul		$tmp9 $tmp7 $const11 	%argrw{"wrr"}
+	add		___327_Pring ___327_Pring $tmp9 	%argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:88
+#     /* Add some noise around the trunk */
+	compref		$tmp11 ___327_Pring $const9 	%line{88} %argrw{"wrr"}
+	compref		$tmp12 ___327_Pring $const8 	%argrw{"wrr"}
+	functioncall	$const12 32 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:114
+# float hypot (float a, float b) { return sqrt (a*a + b*b); }
+	mul		$tmp13 $tmp11 $tmp11 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{114} %argrw{"wrr"}
+	mul		$tmp14 $tmp12 $tmp12 	%argrw{"wrr"}
+	add		$tmp15 $tmp13 $tmp14 	%argrw{"wrr"}
+	sqrt		$tmp10 $tmp15 	%argrw{"wr"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:88
+#     /* Add some noise around the trunk */
+	mul		___327_r $tmp10 RingFreq 	%filename{"source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl"} %line{88} %argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:90
+#     * snoise (angularwobblefreq*(Pring)*vector(1,1,0.1));
+	smoothstep	$tmp16 $const13 $const15 ___327_r 	%line{90} %argrw{"wrrr"}
+	mul		$tmp17 AngularWobble $tmp16 	%argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:91
+# 
+	mul		$tmp19 AngularWobbleFreq ___327_Pring 	%line{91} %argrw{"wrr"}
+	mul		$tmp21 $tmp19 $const16 	%argrw{"wrr"}
+	snoise		$tmp18 $tmp21 	%argrw{"wr"}
+	mul		$tmp22 $tmp17 $tmp18 	%argrw{"wrr"}
+	add		___327_r ___327_r $tmp22 	%argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:94
+# 
+	snoise		$tmp23 ___327_r 	%line{94} %argrw{"wr"}
+	mul		$tmp24 RingUnevenness $tmp23 	%argrw{"wrr"}
+	add		___327_r ___327_r $tmp24 	%argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:96
+# 
+	functioncall	$const21 53 	%line{96} %argrw{"r"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:28
+# }
+	functioncall	$const22 49 	%line{28} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:136
+# float  mod (float  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp27 ___327_r $const10 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{136} %argrw{"wrr"}
+	floor		$tmp26 $tmp27 	%argrw{"wr"}
+	mul		$tmp28 $const10 $tmp26 	%argrw{"wrr"}
+	sub		$tmp25 ___327_r $tmp28 	%argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:28
+# }
+	functioncall	$const23 53 	%filename{"source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl"} %line{28} %argrw{"r"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:19
+# }
+	smoothstep	$tmp29 $const17 $const18 $tmp25 	%line{19} %argrw{"wrrr"}
+	smoothstep	$tmp30 $const19 $const20 $tmp25 	%argrw{"wrrr"}
+	sub		___327_inring $tmp29 $tmp30 	%argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:98
+#     float dPgrain = dPshad; //dropped filterwidthp(Pgrain);
+	mul		$tmp31 Vector GrainFreq 	%line{98} %argrw{"wrr"}
+	mul		___327_Pgrain $tmp31 $const24 	%argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:99
+#     float grain = 0;
+	assign		___327_dPgrain Sharpness 	%line{99} %argrw{"wr"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:100
+#     float i, amp=1;
+	assign		___327_grain $const9 	%line{100} %argrw{"wr"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:101
+#     for (i = 0;  i < 2;  i += 1) {
+	assign		___327_amp $const8 	%line{101} %argrw{"wr"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:102
+#     float grain1valid = 1-smoothstep(0.2,0.6,dPgrain);
+	for		$tmp33 60 61 86 87 	%line{102} %argrw{"r"}
+	assign		___327_i $const9 	%argrw{"wr"}
+	lt		$tmp33 ___327_i $const2 	%argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:103
+#         if (grain1valid > 0) {
+	smoothstep	$tmp34 $const25 $const26 ___327_dPgrain 	%line{103} %argrw{"wrrr"}
+	sub		___329_grain1valid $const10 $tmp34 	%argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:104
+#             float g = grain1valid * snoise (Pgrain);
+	gt		$tmp35 ___329_grain1valid $const9 	%line{104} %argrw{"wrr"}
+	if		$tmp35 83 83 	%argrw{"r"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:105
+#             g *= (0.3 + 0.7*inring);
+	snoise		$tmp36 ___327_Pgrain 	%line{105} %argrw{"wr"}
+	mul		___330_g ___329_grain1valid $tmp36 	%argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:106
+#             g = pow(clamp(0.8 - (g),0,1),2);
+	mul		$tmp37 $const19 ___327_inring 	%line{106} %argrw{"wrr"}
+	add		$tmp38 $const27 $tmp37 	%argrw{"wrr"}
+	mul		___330_g ___330_g $tmp38 	%argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:107
+#             g = grainy * smoothstep (0.5, 1, g);
+	sub		$tmp40 $const28 ___330_g 	%line{107} %argrw{"wrr"}
+	functioncall	$const29 74 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:145
+# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
+	min		$tmp41 $tmp40 $const10 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{145} %argrw{"wrr"}
+	max		$tmp39 $tmp41 $const13 	%argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:107
+#             g = grainy * smoothstep (0.5, 1, g);
+	pow		___330_g $tmp39 $const3 	%filename{"source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl"} %line{107} %argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:108
+#             if (i == 0)
+	smoothstep	$tmp42 $const6 $const10 ___330_g 	%line{108} %argrw{"wrrr"}
+	mul		___330_g Grainy $tmp42 	%argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:109
+#                 inring *= (1-0.4*grain1valid);
+	eq		$tmp43 ___327_i $const9 	%line{109} %argrw{"wrr"}
+	if		$tmp43 82 82 	%argrw{"r"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:110
+#             grain = max (grain, g);
+	mul		$tmp44 $const30 ___329_grain1valid 	%line{110} %argrw{"wrr"}
+	sub		$tmp45 $const10 $tmp44 	%argrw{"wrr"}
+	mul		___327_inring ___327_inring $tmp45 	%argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:111
+#         }
+	max		___327_grain ___327_grain ___330_g 	%line{111} %argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:113
+#         dPgrain *= 2;
+	mul		___327_Pgrain ___327_Pgrain $const3 	%line{113} %argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:114
+#         amp *= 0.5;
+	mul		___327_dPgrain ___327_dPgrain $const3 	%line{114} %argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:115
+#     }
+	mul		___327_amp ___327_amp $const6 	%line{115} %argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:102
+#     float grain1valid = 1-smoothstep(0.2,0.6,dPgrain);
+	add		___327_i ___327_i $const10 	%line{102} %argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:118
+# }
+	mul		$tmp46 ___327_inring Ringy 	%line{118} %argrw{"wrr"}
+	mix		wood $tmp46 $const10 ___327_grain 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:149
+#     Displacement = -wood;  // lightwood = 0, darkwood is deeper/lower = -1
+	mix		Color LightWood DarkWood wood 	%line{149} %argrw{"wrrr"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:150
+#     Specular = 0.1*(1.0-0.5*wood); // darkwood is less specular
+	neg		Displacement wood 	%line{150} %argrw{"wr"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:151
+#     Roughness = 0.1+0.1*wood; // and rougher
+	mul		$tmp47 $const6 wood 	%line{151} %argrw{"wrr"}
+	sub		$tmp48 $const10 $tmp47 	%argrw{"wrr"}
+	mul		Specular $const17 $tmp48 	%argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodGrain/MAWoodGrain.osl:152
+# }
+	mul		$tmp49 $const17 wood 	%line{152} %argrw{"wrr"}
+	add		Roughness $const17 $tmp49 	%argrw{"wrr"}
+	end

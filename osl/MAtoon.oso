@@ -1,0 +1,39 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader MAtoon
+param	color	Shading	1 1 1		%read{9,9} %write{2147483647,-1}
+param	float	Angle	50		%read{2,2} %write{2147483647,-1}
+oparam	color	Color	0 0 0		%read{2147483647,-1} %write{9,9}
+global	vector	I	%read{4,4} %write{2147483647,-1}
+global	normal	N	%read{5,5} %write{2147483647,-1}
+local	float	angle	%read{7,7} %write{3,3}
+temp	float	$tmp1	%read{3,3} %write{2,2}
+const	string	$const1	"radians"		%read{0,0} %write{2147483647,-1}
+const	float	$const2	3.1415927		%read{1,1} %write{2147483647,-1}
+const	float	$const3	180		%read{1,1} %write{2147483647,-1}
+temp	float	$tmp2	%read{2,2} %write{1,1}
+temp	float	$tmp3	%read{7,7} %write{6,6}
+temp	float	$tmp4	%read{6,6} %write{5,5}
+temp	vector	$tmp5	%read{5,5} %write{4,4}
+temp	int	$tmp6	%read{8,8} %write{7,7}
+code ___main___
+# source/sambler-osl-shaders/ramps/MAtoon/MAtoon.osl:19
+#     if(abs(dot(-I,N)) > angle) Color = Shading;
+	functioncall	$const1 3 	%filename{"source/sambler-osl-shaders/ramps/MAtoon/MAtoon.osl"} %line{19} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:88
+# float  radians (float x)  { return x*(M_PI/180.0); }
+	div		$tmp2 $const2 $const3 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{88} %argrw{"wrr"}
+	mul		$tmp1 Angle $tmp2 	%argrw{"wrr"}
+# source/sambler-osl-shaders/ramps/MAtoon/MAtoon.osl:19
+#     if(abs(dot(-I,N)) > angle) Color = Shading;
+	cos		angle $tmp1 	%filename{"source/sambler-osl-shaders/ramps/MAtoon/MAtoon.osl"} %line{19} %argrw{"wr"}
+# source/sambler-osl-shaders/ramps/MAtoon/MAtoon.osl:20
+# }
+	neg		$tmp5 I 	%line{20} %argrw{"wr"}
+	dot		$tmp4 $tmp5 N 	%argrw{"wrr"}
+	abs		$tmp3 $tmp4 	%argrw{"wr"}
+	gt		$tmp6 $tmp3 angle 	%argrw{"wrr"}
+	if		$tmp6 10 10 	%argrw{"r"}
+	assign		Color Shading 	%argrw{"wr"}
+	end

@@ -1,0 +1,55 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader Falloff	%meta{string,help,"Falloff map, OSL version"} %meta{string,category,"Utility"} %meta{string,label,"Falloff"} 
+param	color	Face	0 0 0		%read{12,12} %write{2147483647,-1}
+param	color	Away	1 1 1		%read{12,12} %write{2147483647,-1}
+param	string	Coordspace	"camera"		%meta{string,widget,"popup"} %meta{string,help,"world, object, cmera, shader, screen, NDC, raster, or an explicitly named coordinate system"} %meta{string,options,"world|object|camera|shader|screen|NDC|raster"} %meta{int,editable,1}  %read{1,1} %write{2147483647,-1}
+param	vector	FalloffDirection	0 0 1		%meta{string,label,"Falloff Direction"} %meta{string,help,"Chooses the direction of falloff. Z-axis(0, 0, 1) is viewing direction for camera."}  %read{2,2} %write{2147483647,-1}
+param	int	Type	0		%meta{string,widget,"mapper"} %meta{string,help,"Perpendicular/Parallel : Sets the angular falloff ranges between face normals that are perpendicular to the falloff direction and normals that are parallel to the falloff direction. The falloff range is based on a 90-degree change in normal direction. (Default.)     Towards/Away : Sets the angular falloff ranges between face normals that face toward (parallel to) the falloff direction and normals that face away from the falloff direction. The falloff range is based on a 180-degree change in normal direction."} %meta{string,options,"Perpendicular/Parallel:0|Towards/Away:1"}  %read{8,8} %write{2147483647,-1}
+param	float	Power	1		%meta{string,help,"Adjusts the curve of how the falloff is applied. Higher gives thinner edges"} %meta{float,min,0.0099999998} %meta{float,max,100}  %read{3,6} %write{2147483647,-1}
+oparam	color	Out	0 0 0		%read{2147483647,-1} %write{12,12}
+oparam	float	MixAmount	0		%read{5,12} %write{2,11}
+global	normal	N	%read{1,1} %write{2147483647,-1}
+local	vector	normalDir	%read{2,2} %write{1,1}
+const	string	$const1	"transform"		%read{0,0} %write{2147483647,-1}
+const	string	$const2	"common"		%read{1,1} %write{2147483647,-1}
+const	float	$const3	1		%read{3,10} %write{2147483647,-1}
+temp	int	$tmp1	%read{4,4} %write{3,3}
+temp	float	$tmp2	%read{7,7} %write{6,6}
+temp	float	$tmp3	%read{6,6} %write{5,5}
+const	int	$const4	1		%read{8,8} %write{2147483647,-1}
+temp	int	$tmp4	%read{9,9} %write{8,8}
+temp	float	$tmp5	%read{11,11} %write{10,10}
+const	float	$const5	2		%read{11,11} %write{2147483647,-1}
+code ___main___
+# source/3dsMax-OSL-Shaders/Falloff.osl:35
+# 	MixAmount = dot (normalDir, FalloffDirection);
+	functioncall	$const1 2 	%filename{"source/3dsMax-OSL-Shaders/Falloff.osl"} %line{35} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:265
+# normal transform (string to, normal p) { return transform("common",to,p); }
+	transformn	normalDir $const2 Coordspace N 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{265} %argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/Falloff.osl:36
+# 	if (Power != 1.0)
+	dot		MixAmount normalDir FalloffDirection 	%filename{"source/3dsMax-OSL-Shaders/Falloff.osl"} %line{36} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Falloff.osl:37
+# 		MixAmount = 1.0 - pow(1.0 - MixAmount, Power);
+	neq		$tmp1 Power $const3 	%line{37} %argrw{"wrr"}
+	if		$tmp1 8 8 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Falloff.osl:38
+# 	if (Type == 1)  
+	sub		$tmp3 $const3 MixAmount 	%line{38} %argrw{"wrr"}
+	pow		$tmp2 $tmp3 Power 	%argrw{"wrr"}
+	sub		MixAmount $const3 $tmp2 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Falloff.osl:39
+# 			MixAmount = (MixAmount + 1.0)/2.0;
+	eq		$tmp4 Type $const4 	%line{39} %argrw{"wrr"}
+	if		$tmp4 12 12 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Falloff.osl:40
+# 	Out = mix(Away, Face, MixAmount);
+	add		$tmp5 MixAmount $const3 	%line{40} %argrw{"wrr"}
+	div		MixAmount $tmp5 $const5 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Falloff.osl:41
+# }
+	mix		Out Away Face MixAmount 	%line{41} %argrw{"wrrr"}
+	end

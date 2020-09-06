@@ -1,0 +1,12 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader FloatSub	%meta{string,help,"Subtracts two float numbers"} %meta{string,label,"Subtract"} %meta{string,category,"Math Float"} 
+param	float	A	0		%meta{string,label,"A (minuend)"}  %read{0,0} %write{2147483647,-1}
+param	float	B	0		%meta{string,label,"B (subtrahend)"}  %read{0,0} %write{2147483647,-1}
+oparam	float	Out	0		%read{2147483647,-1} %write{0,0}
+code ___main___
+# source/3dsMax-OSL-Shaders/FloatSub.osl:18
+# }
+	sub		Out A B 	%filename{"source/3dsMax-OSL-Shaders/FloatSub.osl"} %line{18} %argrw{"wrr"}
+	end

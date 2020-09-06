@@ -1,0 +1,22 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader GetObjSpace	%meta{string,help,"Get an Object Space Coordinate"} %meta{string,label,"UVW Object Space"} %meta{string,category,"UVW Coordinates"} 
+param	point	Input	0 0 0		%read{2,2} %write{0,0} %initexpr
+oparam	point	UVW	0 0 0		%read{2147483647,-1} %write{2,2}
+global	point	P	%read{0,0} %write{2147483647,-1}
+const	string	$const1	"object"		%read{2,2} %write{2147483647,-1}
+const	string	$const2	"transform"		%read{1,1} %write{2147483647,-1}
+const	string	$const3	"common"		%read{2,2} %write{2147483647,-1}
+code Input
+# source/3dsMax-OSL-Shaders/GetObjSpace.osl:13
+# 	output point UVW = 0.0
+	assign		Input P 	%filename{"source/3dsMax-OSL-Shaders/GetObjSpace.osl"} %line{13} %argrw{"wr"}
+code ___main___
+# source/3dsMax-OSL-Shaders/GetObjSpace.osl:17
+# }
+	functioncall	$const2 3 	%filename{"source/3dsMax-OSL-Shaders/GetObjSpace.osl"} %line{17} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:267
+# point  transform (string to, point p)  { return transform("common",to,p); }
+	transform	UVW $const3 $const1 Input 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{267} %argrw{"wrrr"}
+	end

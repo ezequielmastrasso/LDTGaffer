@@ -1,0 +1,280 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader node_hsv
+param	float	Hue	0.5		%read{47,47} %write{2147483647,-1}
+param	float	Saturation	1		%read{54,54} %write{2147483647,-1}
+param	float	Value	1		%read{57,57} %write{2147483647,-1}
+param	float	Fac	0.5		%read{99,99} %write{2147483647,-1}
+param	color	ColorIn	0 0 0		%read{1,99} %write{2147483647,-1}
+oparam	color	ColorOut	0 0 0		%read{2147483647,-1} %write{99,99}
+local	float	___638_cmax	%read{11,31} %write{5,5}
+local	float	___638_cmin	%read{11,11} %write{10,10}
+local	float	___638_h	%read{41,45} %write{17,44}
+local	float	___638_s	%read{18,45} %write{15,16}
+local	float	___638_v	%read{45,45} %write{12,12}
+local	float	___638_cdelta	%read{15,23} %write{11,11}
+local	color	___638_c	%read{27,39} %write{23,23}
+local	float	___643_i	%read{71,94} %write{70,70}
+local	float	___643_f	%read{72,78} %write{71,71}
+local	float	___643_p	%read{84,97} %write{74,74}
+local	float	___643_q	%read{87,97} %write{77,77}
+local	float	___643_t	%read{84,96} %write{81,81}
+local	float	___643_h	%read{66,71} %write{60,69}
+local	float	___643_s	%read{63,79} %write{61,61}
+local	float	___643_v	%read{65,97} %write{62,62}
+local	color	___643_rgb	%read{98,98} %write{65,97}
+local	color	Color	%read{46,99} %write{45,98}
+const	string	$const1	"rgb_to_hsv"		%read{0,0} %write{2147483647,-1}
+const	int	$const2	0		%read{1,60} %write{2147483647,-1}
+temp	float	$tmp1	%read{5,5} %write{1,1}
+temp	float	$tmp2	%read{5,5} %write{4,4}
+const	int	$const3	1		%read{2,61} %write{2147483647,-1}
+temp	float	$tmp3	%read{4,4} %write{2,2}
+const	int	$const4	2		%read{3,62} %write{2147483647,-1}
+temp	float	$tmp4	%read{4,4} %write{3,3}
+temp	float	$tmp5	%read{10,10} %write{6,6}
+temp	float	$tmp6	%read{10,10} %write{9,9}
+temp	float	$tmp7	%read{9,9} %write{7,7}
+temp	float	$tmp8	%read{9,9} %write{8,8}
+const	float	$const5	0		%read{13,82} %write{2147483647,-1}
+temp	int	$tmp9	%read{14,14} %write{13,13}
+temp	int	$tmp10	%read{19,19} %write{18,18}
+temp	color	$tmp11	%read{22,22} %write{21,21}
+temp	color	$tmp12	%read{23,23} %write{22,22}
+temp	float	$tmp13	%read{25,25} %write{24,24}
+temp	int	$tmp14	%read{26,26} %write{25,25}
+temp	float	$tmp15	%read{29,29} %write{27,27}
+temp	float	$tmp16	%read{29,29} %write{28,28}
+temp	float	$tmp17	%read{31,31} %write{30,30}
+temp	int	$tmp18	%read{32,32} %write{31,31}
+const	float	$const6	2		%read{34,88} %write{2147483647,-1}
+temp	float	$tmp19	%read{34,34} %write{33,33}
+temp	float	$tmp20	%read{36,36} %write{34,34}
+temp	float	$tmp21	%read{36,36} %write{35,35}
+const	float	$const7	4		%read{38,94} %write{2147483647,-1}
+temp	float	$tmp22	%read{38,38} %write{37,37}
+temp	float	$tmp23	%read{40,40} %write{38,38}
+temp	float	$tmp24	%read{40,40} %write{39,39}
+const	float	$const8	6		%read{41,69} %write{2147483647,-1}
+temp	int	$tmp25	%read{43,43} %write{42,42}
+const	float	$const9	1		%read{44,85} %write{2147483647,-1}
+temp	float	$tmp26	%read{48,48} %write{46,46}
+const	float	$const10	0.5		%read{47,47} %write{2147483647,-1}
+temp	float	$tmp27	%read{48,48} %write{47,47}
+temp	float	$tmp28	%read{49,49} %write{48,48}
+temp	float	$tmp29	%read{52,52} %write{51,51}
+temp	float	$tmp30	%read{51,51} %write{50,50}
+temp	float	$tmp31	%read{54,54} %write{53,53}
+temp	float	$tmp32	%read{55,55} %write{54,54}
+temp	float	$tmp33	%read{57,57} %write{56,56}
+temp	float	$tmp34	%read{58,58} %write{57,57}
+const	string	$const11	"hsv_to_rgb"		%read{59,59} %write{2147483647,-1}
+temp	int	$tmp35	%read{64,64} %write{63,63}
+temp	int	$tmp36	%read{67,67} %write{66,66}
+temp	float	$tmp37	%read{74,74} %write{73,73}
+temp	float	$tmp38	%read{76,76} %write{75,75}
+temp	float	$tmp39	%read{77,77} %write{76,76}
+temp	float	$tmp40	%read{79,79} %write{78,78}
+temp	float	$tmp41	%read{80,80} %write{79,79}
+temp	float	$tmp42	%read{81,81} %write{80,80}
+temp	int	$tmp43	%read{83,83} %write{82,82}
+temp	int	$tmp44	%read{86,86} %write{85,85}
+temp	int	$tmp45	%read{89,89} %write{88,88}
+const	float	$const12	3		%read{91,91} %write{2147483647,-1}
+temp	int	$tmp46	%read{92,92} %write{91,91}
+temp	int	$tmp47	%read{95,95} %write{94,94}
+code ___main___
+# include/node_hsv.osl:29
+# 
+	functioncall	$const1 46 	%filename{"include/node_hsv.osl"} %line{29} %argrw{"r"}
+# include/node_color.h:84
+# 	cmax = max(rgb[0], max(rgb[1], rgb[2]));
+	compref		$tmp1 ColorIn $const2 	%filename{"include/node_color.h"} %line{84} %argrw{"wrr"}
+	compref		$tmp3 ColorIn $const3 	%argrw{"wrr"}
+	compref		$tmp4 ColorIn $const4 	%argrw{"wrr"}
+	max		$tmp2 $tmp3 $tmp4 	%argrw{"wrr"}
+	max		___638_cmax $tmp1 $tmp2 	%argrw{"wrr"}
+# include/node_color.h:85
+# 	cmin = min(rgb[0], min(rgb[1], rgb[2]));
+	compref		$tmp5 ColorIn $const2 	%line{85} %argrw{"wrr"}
+	compref		$tmp7 ColorIn $const3 	%argrw{"wrr"}
+	compref		$tmp8 ColorIn $const4 	%argrw{"wrr"}
+	min		$tmp6 $tmp7 $tmp8 	%argrw{"wrr"}
+	min		___638_cmin $tmp5 $tmp6 	%argrw{"wrr"}
+# include/node_color.h:86
+# 	cdelta = cmax - cmin;
+	sub		___638_cdelta ___638_cmax ___638_cmin 	%line{86} %argrw{"wrr"}
+# include/node_color.h:88
+# 	v = cmax;
+	assign		___638_v ___638_cmax 	%line{88} %argrw{"wr"}
+# include/node_color.h:90
+# 	if (cmax != 0.0) {
+	neq		$tmp9 ___638_cmax $const5 	%line{90} %argrw{"wrr"}
+	if		$tmp9 16 18 	%argrw{"r"}
+# include/node_color.h:91
+# 		s = cdelta / cmax;
+	div		___638_s ___638_cdelta ___638_cmax 	%line{91} %argrw{"wrr"}
+# include/node_color.h:94
+# 		s = 0.0;
+	assign		___638_s $const5 	%line{94} %argrw{"wr"}
+# include/node_color.h:95
+# 		h = 0.0;
+	assign		___638_h $const5 	%line{95} %argrw{"wr"}
+# include/node_color.h:98
+# 	if (s == 0.0) {
+	eq		$tmp10 ___638_s $const5 	%line{98} %argrw{"wrr"}
+	if		$tmp10 21 45 	%argrw{"r"}
+# include/node_color.h:99
+# 		h = 0.0;
+	assign		___638_h $const5 	%line{99} %argrw{"wr"}
+# include/node_color.h:102
+# 		c = (color(cmax, cmax, cmax) - rgb) / cdelta;
+	color		$tmp11 ___638_cmax ___638_cmax ___638_cmax 	%line{102} %argrw{"wrrr"}
+	sub		$tmp12 $tmp11 ColorIn 	%argrw{"wrr"}
+	div		___638_c $tmp12 ___638_cdelta 	%argrw{"wrr"}
+# include/node_color.h:104
+# 		if (rgb[0] == cmax) h = c[2] - c[1];
+	compref		$tmp13 ColorIn $const2 	%line{104} %argrw{"wrr"}
+	eq		$tmp14 $tmp13 ___638_cmax 	%argrw{"wrr"}
+	if		$tmp14 30 41 	%argrw{"r"}
+	compref		$tmp15 ___638_c $const4 	%argrw{"wrr"}
+	compref		$tmp16 ___638_c $const3 	%argrw{"wrr"}
+	sub		___638_h $tmp15 $tmp16 	%argrw{"wrr"}
+# include/node_color.h:105
+# 		else if (rgb[1] == cmax) h = 2.0 + c[0] -  c[2];
+	compref		$tmp17 ColorIn $const3 	%line{105} %argrw{"wrr"}
+	eq		$tmp18 $tmp17 ___638_cmax 	%argrw{"wrr"}
+	if		$tmp18 37 41 	%argrw{"r"}
+	compref		$tmp19 ___638_c $const2 	%argrw{"wrr"}
+	add		$tmp20 $const6 $tmp19 	%argrw{"wrr"}
+	compref		$tmp21 ___638_c $const4 	%argrw{"wrr"}
+	sub		___638_h $tmp20 $tmp21 	%argrw{"wrr"}
+# include/node_color.h:106
+# 		else h = 4.0 + c[1] - c[0];
+	compref		$tmp22 ___638_c $const3 	%line{106} %argrw{"wrr"}
+	add		$tmp23 $const7 $tmp22 	%argrw{"wrr"}
+	compref		$tmp24 ___638_c $const2 	%argrw{"wrr"}
+	sub		___638_h $tmp23 $tmp24 	%argrw{"wrr"}
+# include/node_color.h:108
+# 		h /= 6.0;
+	div		___638_h ___638_h $const8 	%line{108} %argrw{"wrr"}
+# include/node_color.h:110
+# 		if (h < 0.0)
+	lt		$tmp25 ___638_h $const5 	%line{110} %argrw{"wrr"}
+	if		$tmp25 45 45 	%argrw{"r"}
+# include/node_color.h:111
+# 			h += 1.0;
+	add		___638_h ___638_h $const9 	%line{111} %argrw{"wrr"}
+# include/node_color.h:114
+# 	return color(h, s, v);
+	color		Color ___638_h ___638_s ___638_v 	%line{114} %argrw{"wrrr"}
+# include/node_hsv.osl:32
+# 	Color[0] = fmod(Color[0], 1.0);
+	compref		$tmp26 Color $const2 	%filename{"include/node_hsv.osl"} %line{32} %argrw{"wrr"}
+	add		$tmp27 Hue $const10 	%argrw{"wrr"}
+	add		$tmp28 $tmp26 $tmp27 	%argrw{"wrr"}
+	compassign	Color $const2 $tmp28 	%argrw{"wrr"}
+# include/node_hsv.osl:33
+# 	Color[1] *= Saturation;
+	compref		$tmp30 Color $const2 	%line{33} %argrw{"wrr"}
+	fmod		$tmp29 $tmp30 $const9 	%argrw{"wrr"}
+	compassign	Color $const2 $tmp29 	%argrw{"wrr"}
+# include/node_hsv.osl:34
+# 	Color[2] *= Value;
+	compref		$tmp31 Color $const3 	%line{34} %argrw{"wrr"}
+	mul		$tmp32 $tmp31 Saturation 	%argrw{"wrr"}
+	compassign	Color $const3 $tmp32 	%argrw{"wrr"}
+# include/node_hsv.osl:35
+# 
+	compref		$tmp33 Color $const4 	%line{35} %argrw{"wrr"}
+	mul		$tmp34 $tmp33 Value 	%argrw{"wrr"}
+	compassign	Color $const4 $tmp34 	%argrw{"wrr"}
+# include/node_hsv.osl:37
+# 
+	functioncall	$const11 99 	%line{37} %argrw{"r"}
+# include/node_color.h:122
+# 	h = hsv[0];
+	compref		___643_h Color $const2 	%filename{"include/node_color.h"} %line{122} %argrw{"wrr"}
+# include/node_color.h:123
+# 	s = hsv[1];
+	compref		___643_s Color $const3 	%line{123} %argrw{"wrr"}
+# include/node_color.h:124
+# 	v = hsv[2];
+	compref		___643_v Color $const4 	%line{124} %argrw{"wrr"}
+# include/node_color.h:126
+# 	if (s == 0.0) {
+	eq		$tmp35 ___643_s $const5 	%line{126} %argrw{"wrr"}
+	if		$tmp35 66 98 	%argrw{"r"}
+# include/node_color.h:127
+# 		rgb = color(v, v, v);
+	color		___643_rgb ___643_v ___643_v ___643_v 	%line{127} %argrw{"wrrr"}
+# include/node_color.h:130
+# 		if (h == 1.0)
+	eq		$tmp36 ___643_h $const9 	%line{130} %argrw{"wrr"}
+	if		$tmp36 69 69 	%argrw{"r"}
+# include/node_color.h:131
+# 			h = 0.0;
+	assign		___643_h $const5 	%line{131} %argrw{"wr"}
+# include/node_color.h:133
+# 		h *= 6.0;
+	mul		___643_h ___643_h $const8 	%line{133} %argrw{"wrr"}
+# include/node_color.h:134
+# 		i = floor(h);
+	floor		___643_i ___643_h 	%line{134} %argrw{"wr"}
+# include/node_color.h:135
+# 		f = h - i;
+	sub		___643_f ___643_h ___643_i 	%line{135} %argrw{"wrr"}
+# include/node_color.h:136
+# 		rgb = color(f, f, f);
+	color		___643_rgb ___643_f ___643_f ___643_f 	%line{136} %argrw{"wrrr"}
+# include/node_color.h:137
+# 		p = v * (1.0 - s);
+	sub		$tmp37 $const9 ___643_s 	%line{137} %argrw{"wrr"}
+	mul		___643_p ___643_v $tmp37 	%argrw{"wrr"}
+# include/node_color.h:138
+# 		q = v * (1.0 - (s * f));
+	mul		$tmp38 ___643_s ___643_f 	%line{138} %argrw{"wrr"}
+	sub		$tmp39 $const9 $tmp38 	%argrw{"wrr"}
+	mul		___643_q ___643_v $tmp39 	%argrw{"wrr"}
+# include/node_color.h:139
+# 		t = v * (1.0 - (s * (1.0 - f)));
+	sub		$tmp40 $const9 ___643_f 	%line{139} %argrw{"wrr"}
+	mul		$tmp41 ___643_s $tmp40 	%argrw{"wrr"}
+	sub		$tmp42 $const9 $tmp41 	%argrw{"wrr"}
+	mul		___643_t ___643_v $tmp42 	%argrw{"wrr"}
+# include/node_color.h:141
+# 		if (i == 0.0) rgb = color(v, t, p);
+	eq		$tmp43 ___643_i $const5 	%line{141} %argrw{"wrr"}
+	if		$tmp43 85 98 	%argrw{"r"}
+	color		___643_rgb ___643_v ___643_t ___643_p 	%argrw{"wrrr"}
+# include/node_color.h:142
+# 		else if (i == 1.0) rgb = color(q, v, p);
+	eq		$tmp44 ___643_i $const9 	%line{142} %argrw{"wrr"}
+	if		$tmp44 88 98 	%argrw{"r"}
+	color		___643_rgb ___643_q ___643_v ___643_p 	%argrw{"wrrr"}
+# include/node_color.h:143
+# 		else if (i == 2.0) rgb = color(p, v, t);
+	eq		$tmp45 ___643_i $const6 	%line{143} %argrw{"wrr"}
+	if		$tmp45 91 98 	%argrw{"r"}
+	color		___643_rgb ___643_p ___643_v ___643_t 	%argrw{"wrrr"}
+# include/node_color.h:144
+# 		else if (i == 3.0) rgb = color(p, q, v);
+	eq		$tmp46 ___643_i $const12 	%line{144} %argrw{"wrr"}
+	if		$tmp46 94 98 	%argrw{"r"}
+	color		___643_rgb ___643_p ___643_q ___643_v 	%argrw{"wrrr"}
+# include/node_color.h:145
+# 		else if (i == 4.0) rgb = color(t, p, v);
+	eq		$tmp47 ___643_i $const7 	%line{145} %argrw{"wrr"}
+	if		$tmp47 97 98 	%argrw{"r"}
+	color		___643_rgb ___643_t ___643_p ___643_v 	%argrw{"wrrr"}
+# include/node_color.h:146
+# 		else rgb = color(v, p, q);
+	color		___643_rgb ___643_v ___643_p ___643_q 	%line{146} %argrw{"wrrr"}
+# include/node_color.h:149
+# 	return rgb;
+	assign		Color ___643_rgb 	%line{149} %argrw{"wr"}
+# include/node_hsv.osl:39
+# }
+	mix		ColorOut ColorIn Color Fac 	%filename{"include/node_hsv.osl"} %line{39} %argrw{"wrrr"}
+	end

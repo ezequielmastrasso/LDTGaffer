@@ -1,0 +1,299 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader HalftoneDots	%meta{string,help,"Halftone Dots (by default i screen space)<br>Works well together with toon shaders."} %meta{string,category,"Textures"} %meta{string,label,"Halftone Dots"} 
+param	vector	UVW	0 0 0		%meta{string,help,"The input coordinate. If not connected, uses screen pixel space"}  %read{54,54} %write{1,1} %initexpr
+param	vector	Scale	8 8 8		%meta{string,help,"This size of the dots. In the default screen space mapping, this is in pixels."}  %read{58,68} %write{2147483647,-1}
+param	float	Angle	45		%meta{string,help,"Angle of the Halftoning"}  %read{4,4} %write{2147483647,-1}
+param	color	InputValue	0.25 0.25 0.25		%meta{string,help,"The input value defining the size of the dots to yield the right halftone density. "}  %read{72,72} %write{2147483647,-1}
+param	int	U_Input	0		%meta{string,help,"If checked, adds the U coordinate as the input value. This works well when connected in a 'base_tonemap' input of an Arnold Toon shader."} %meta{string,widget,"checkBox"}  %read{73,73} %write{2147483647,-1}
+param	float	Fuzz	0.1		%meta{float,min,0} %meta{float,max,2}  %read{82,82} %write{2147483647,-1}
+param	color	BlackDots	0 0 0		%meta{string,help,"The color of the dots"}  %read{102,102} %write{2147483647,-1}
+param	color	WhiteDots	1 1 1		%meta{string,help,"The color of the space between the dots"}  %read{102,102} %write{2147483647,-1}
+oparam	color	Out	0 0 0		%read{2147483647,-1} %write{102,102}
+global	point	P	%read{1,1} %write{2147483647,-1}
+global	float	u	%read{74,74} %write{2147483647,-1}
+local	vector	___254_axis	%read{11,13} %write{8,8}
+local	float	___254_cosang	%read{10,51} %write{9,9}
+local	float	___254_sinang	%read{21,46} %write{9,9}
+local	float	___254_cosang1	%read{20,45} %write{10,10}
+local	float	___254_x	%read{14,46} %write{11,11}
+local	float	___254_y	%read{19,44} %write{12,12}
+local	float	___254_z	%read{21,49} %write{13,13}
+local	matrix	___254_M	%read{55,55} %write{53,53}
+local	vector	pos	%read{57,77} %write{56,76}
+local	color	inputV	%read{74,87} %write{72,74}
+local	float	dist	%read{85,85} %write{81,81}
+local	color	factor	%read{102,102} %write{101,101}
+const	string	$const1	"raster"		%read{1,1} %write{2147483647,-1}
+const	string	$const2	"transform"		%read{0,0} %write{2147483647,-1}
+const	string	$const3	"common"		%read{1,1} %write{2147483647,-1}
+temp	float	$tmp1	%read{9,9} %write{4,4}
+const	string	$const4	"radians"		%read{2,2} %write{2147483647,-1}
+const	float	$const5	3.1415927		%read{3,3} %write{2147483647,-1}
+const	float	$const6	180		%read{3,3} %write{2147483647,-1}
+temp	float	$tmp2	%read{4,4} %write{3,3}
+const	float	$const7	0		%read{5,85} %write{2147483647,-1}
+temp	point	$tmp3	%read{7,56} %write{5,5}
+const	vector	$const8	0 0 1		%read{7,7} %write{2147483647,-1}
+const	string	$const9	"rotate"		%read{6,6} %write{2147483647,-1}
+temp	vector	$tmp5	%read{8,8} %write{7,7}
+const	float	$const10	1		%read{10,81} %write{2147483647,-1}
+const	int	$const11	0		%read{11,91} %write{2147483647,-1}
+const	int	$const12	1		%read{12,95} %write{2147483647,-1}
+const	int	$const13	2		%read{13,99} %write{2147483647,-1}
+temp	float	$tmp6	%read{18,18} %write{14,14}
+temp	float	$tmp7	%read{16,16} %write{15,15}
+temp	float	$tmp8	%read{17,17} %write{16,16}
+temp	float	$tmp9	%read{18,18} %write{17,17}
+temp	float	$tmp10	%read{53,53} %write{18,18}
+temp	float	$tmp11	%read{20,20} %write{19,19}
+temp	float	$tmp12	%read{22,22} %write{20,20}
+temp	float	$tmp13	%read{22,22} %write{21,21}
+temp	float	$tmp14	%read{53,53} %write{22,22}
+temp	float	$tmp15	%read{24,24} %write{23,23}
+temp	float	$tmp16	%read{26,26} %write{24,24}
+temp	float	$tmp17	%read{26,26} %write{25,25}
+temp	float	$tmp18	%read{53,53} %write{26,26}
+temp	float	$tmp19	%read{28,28} %write{27,27}
+temp	float	$tmp20	%read{30,30} %write{28,28}
+temp	float	$tmp21	%read{30,30} %write{29,29}
+temp	float	$tmp22	%read{53,53} %write{30,30}
+temp	float	$tmp23	%read{35,35} %write{31,31}
+temp	float	$tmp24	%read{33,33} %write{32,32}
+temp	float	$tmp25	%read{34,34} %write{33,33}
+temp	float	$tmp26	%read{35,35} %write{34,34}
+temp	float	$tmp27	%read{53,53} %write{35,35}
+temp	float	$tmp28	%read{37,37} %write{36,36}
+temp	float	$tmp29	%read{39,39} %write{37,37}
+temp	float	$tmp30	%read{39,39} %write{38,38}
+temp	float	$tmp31	%read{53,53} %write{39,39}
+temp	float	$tmp32	%read{41,41} %write{40,40}
+temp	float	$tmp33	%read{43,43} %write{41,41}
+temp	float	$tmp34	%read{43,43} %write{42,42}
+temp	float	$tmp35	%read{53,53} %write{43,43}
+temp	float	$tmp36	%read{45,45} %write{44,44}
+temp	float	$tmp37	%read{47,47} %write{45,45}
+temp	float	$tmp38	%read{47,47} %write{46,46}
+temp	float	$tmp39	%read{53,53} %write{47,47}
+temp	float	$tmp40	%read{52,52} %write{48,48}
+temp	float	$tmp41	%read{50,50} %write{49,49}
+temp	float	$tmp42	%read{51,51} %write{50,50}
+temp	float	$tmp43	%read{52,52} %write{51,51}
+temp	float	$tmp44	%read{53,53} %write{52,52}
+temp	vector	$tmp45	%read{56,56} %write{55,55}
+temp	vector	$tmp46	%read{55,55} %write{54,54}
+temp	float	$tmp47	%read{59,59} %write{57,57}
+temp	float	$tmp48	%read{59,59} %write{58,58}
+temp	float	$tmp49	%read{63,63} %write{59,59}
+temp	float	$tmp50	%read{62,62} %write{60,60}
+temp	float	$tmp51	%read{62,62} %write{61,61}
+temp	float	$tmp52	%read{63,63} %write{62,62}
+temp	float	$tmp53	%read{65,65} %write{64,64}
+temp	int	$tmp54	%read{66,66} %write{65,65}
+const	float	$const14	0.5		%read{67,71} %write{2147483647,-1}
+temp	float	$tmp55	%read{69,69} %write{68,68}
+temp	int	$tmp56	%read{70,70} %write{69,69}
+temp	vector	$tmp57	%read{76,76} %write{75,75}
+temp	float	$tmp58	%read{80,80} %write{77,77}
+const	vector	$const15	0.5 0.5 0		%read{77,77} %write{2147483647,-1}
+temp	float	$tmp60	%read{79,79} %write{78,78}
+const	float	$const16	2		%read{78,78} %write{2147483647,-1}
+const	float	$const17	2.5		%read{79,79} %write{2147483647,-1}
+temp	float	$tmp61	%read{80,80} %write{79,79}
+temp	float	$tmp62	%read{81,81} %write{80,80}
+temp	float	$tmp63	%read{83,83} %write{82,82}
+temp	color	$tmp64	%read{89,97} %write{83,83}
+temp	color	$tmp65	%read{90,98} %write{84,84}
+temp	float	$tmp66	%read{87,87} %write{86,86}
+temp	float	$tmp67	%read{86,86} %write{85,85}
+temp	color	$tmp68	%read{91,99} %write{87,87}
+const	string	$const18	"smoothstep"		%read{88,88} %write{2147483647,-1}
+temp	float	$tmp69	%read{101,101} %write{92,92}
+temp	float	$tmp70	%read{92,92} %write{89,89}
+temp	float	$tmp71	%read{92,92} %write{90,90}
+temp	float	$tmp72	%read{92,92} %write{91,91}
+temp	float	$tmp73	%read{101,101} %write{96,96}
+temp	float	$tmp74	%read{96,96} %write{93,93}
+temp	float	$tmp75	%read{96,96} %write{94,94}
+temp	float	$tmp76	%read{96,96} %write{95,95}
+temp	float	$tmp77	%read{101,101} %write{100,100}
+temp	float	$tmp78	%read{100,100} %write{97,97}
+temp	float	$tmp79	%read{100,100} %write{98,98}
+temp	float	$tmp80	%read{100,100} %write{99,99}
+code UVW
+# source/3dsMax-OSL-Shaders/Halftone.osl:15
+# 		[[ string help = "The input coordinate. If not connected, uses screen pixel space" ]],
+	functioncall	$const2 2 	%filename{"source/3dsMax-OSL-Shaders/Halftone.osl"} %line{15} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:267
+# point  transform (string to, point p)  { return transform("common",to,p); }
+	transform	UVW $const3 $const1 P 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{267} %argrw{"wrrr"}
+code ___main___
+# source/3dsMax-OSL-Shaders/Halftone.osl:36
+# 	pos = vector(pos[0] / Scale[0], pos[1] / Scale[1], 0.0);
+	functioncall	$const4 5 	%filename{"source/3dsMax-OSL-Shaders/Halftone.osl"} %line{36} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:88
+# float  radians (float x)  { return x*(M_PI/180.0); }
+	div		$tmp2 $const5 $const6 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{88} %argrw{"wrr"}
+	mul		$tmp1 Angle $tmp2 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Halftone.osl:36
+# 	pos = vector(pos[0] / Scale[0], pos[1] / Scale[1], 0.0);
+	assign		$tmp3 $const7 	%filename{"source/3dsMax-OSL-Shaders/Halftone.osl"} %line{36} %argrw{"wr"}
+	functioncall	$const9 57 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:274
+#     vector axis = normalize (b - a);
+	sub		$tmp5 $const8 $tmp3 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{274} %argrw{"wrr"}
+	normalize	___254_axis $tmp5 	%argrw{"wr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:276
+#     sincos (angle, sinang, cosang);
+	sincos		$tmp1 ___254_sinang ___254_cosang 	%line{276} %argrw{"rww"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:277
+#     float cosang1 = 1.0 - cosang;
+	sub		___254_cosang1 $const10 ___254_cosang 	%line{277} %argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:278
+#     float x = axis[0], y = axis[1], z = axis[2];
+	compref		___254_x ___254_axis $const11 	%line{278} %argrw{"wrr"}
+	compref		___254_y ___254_axis $const12 	%argrw{"wrr"}
+	compref		___254_z ___254_axis $const13 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:279
+#     matrix M = matrix (x * x + (1.0 - x * x) * cosang,
+	mul		$tmp6 ___254_x ___254_x 	%line{279} %argrw{"wrr"}
+	mul		$tmp7 ___254_x ___254_x 	%argrw{"wrr"}
+	sub		$tmp8 $const10 $tmp7 	%argrw{"wrr"}
+	mul		$tmp9 $tmp8 ___254_cosang 	%argrw{"wrr"}
+	add		$tmp10 $tmp6 $tmp9 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:280
+#                        x * y * cosang1 + z * sinang,
+	mul		$tmp11 ___254_x ___254_y 	%line{280} %argrw{"wrr"}
+	mul		$tmp12 $tmp11 ___254_cosang1 	%argrw{"wrr"}
+	mul		$tmp13 ___254_z ___254_sinang 	%argrw{"wrr"}
+	add		$tmp14 $tmp12 $tmp13 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:281
+#                        x * z * cosang1 - y * sinang,
+	mul		$tmp15 ___254_x ___254_z 	%line{281} %argrw{"wrr"}
+	mul		$tmp16 $tmp15 ___254_cosang1 	%argrw{"wrr"}
+	mul		$tmp17 ___254_y ___254_sinang 	%argrw{"wrr"}
+	sub		$tmp18 $tmp16 $tmp17 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:283
+#                        x * y * cosang1 - z * sinang,
+	mul		$tmp19 ___254_x ___254_y 	%line{283} %argrw{"wrr"}
+	mul		$tmp20 $tmp19 ___254_cosang1 	%argrw{"wrr"}
+	mul		$tmp21 ___254_z ___254_sinang 	%argrw{"wrr"}
+	sub		$tmp22 $tmp20 $tmp21 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:284
+#                        y * y + (1.0 - y * y) * cosang,
+	mul		$tmp23 ___254_y ___254_y 	%line{284} %argrw{"wrr"}
+	mul		$tmp24 ___254_y ___254_y 	%argrw{"wrr"}
+	sub		$tmp25 $const10 $tmp24 	%argrw{"wrr"}
+	mul		$tmp26 $tmp25 ___254_cosang 	%argrw{"wrr"}
+	add		$tmp27 $tmp23 $tmp26 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:285
+#                        y * z * cosang1 + x * sinang,
+	mul		$tmp28 ___254_y ___254_z 	%line{285} %argrw{"wrr"}
+	mul		$tmp29 $tmp28 ___254_cosang1 	%argrw{"wrr"}
+	mul		$tmp30 ___254_x ___254_sinang 	%argrw{"wrr"}
+	add		$tmp31 $tmp29 $tmp30 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:287
+#                        x * z * cosang1 + y * sinang,
+	mul		$tmp32 ___254_x ___254_z 	%line{287} %argrw{"wrr"}
+	mul		$tmp33 $tmp32 ___254_cosang1 	%argrw{"wrr"}
+	mul		$tmp34 ___254_y ___254_sinang 	%argrw{"wrr"}
+	add		$tmp35 $tmp33 $tmp34 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:288
+#                        y * z * cosang1 - x * sinang,
+	mul		$tmp36 ___254_y ___254_z 	%line{288} %argrw{"wrr"}
+	mul		$tmp37 $tmp36 ___254_cosang1 	%argrw{"wrr"}
+	mul		$tmp38 ___254_x ___254_sinang 	%argrw{"wrr"}
+	sub		$tmp39 $tmp37 $tmp38 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:289
+#                        z * z + (1.0 - z * z) * cosang,
+	mul		$tmp40 ___254_z ___254_z 	%line{289} %argrw{"wrr"}
+	mul		$tmp41 ___254_z ___254_z 	%argrw{"wrr"}
+	sub		$tmp42 $const10 $tmp41 	%argrw{"wrr"}
+	mul		$tmp43 $tmp42 ___254_cosang 	%argrw{"wrr"}
+	add		$tmp44 $tmp40 $tmp43 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:291
+#                        0.0, 0.0, 0.0, 1.0);
+	matrix		___254_M $tmp10 $tmp14 $tmp18 $const7 $tmp22 $tmp27 $tmp31 $const7 $tmp35 $tmp39 $tmp44 $const7 $const7 $const7 $const7 $const10 	%line{291} %argrw{"wrrrrrrrrrrrrrrrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:292
+#     return transform (M, p-a) + a;
+	sub		$tmp46 UVW $tmp3 	%line{292} %argrw{"wrr"}
+	transformv	$tmp45 ___254_M $tmp46 	%argrw{"wrr"}
+	add		pos $tmp45 $tmp3 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Halftone.osl:37
+# 	if (Scale[0] == 0.0)
+	compref		$tmp47 pos $const11 	%filename{"source/3dsMax-OSL-Shaders/Halftone.osl"} %line{37} %argrw{"wrr"}
+	compref		$tmp48 Scale $const11 	%argrw{"wrr"}
+	div		$tmp49 $tmp47 $tmp48 	%argrw{"wrr"}
+	compref		$tmp50 pos $const12 	%argrw{"wrr"}
+	compref		$tmp51 Scale $const12 	%argrw{"wrr"}
+	div		$tmp52 $tmp50 $tmp51 	%argrw{"wrr"}
+	vector		pos $tmp49 $tmp52 $const7 	%argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/Halftone.osl:38
+# 		pos[0] = 0.5;
+	compref		$tmp53 Scale $const11 	%line{38} %argrw{"wrr"}
+	eq		$tmp54 $tmp53 $const7 	%argrw{"wrr"}
+	if		$tmp54 68 68 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Halftone.osl:39
+# 	if (Scale[1] == 0.0)
+	compassign	pos $const11 $const14 	%line{39} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Halftone.osl:40
+# 		pos[1] = 0.5;
+	compref		$tmp55 Scale $const12 	%line{40} %argrw{"wrr"}
+	eq		$tmp56 $tmp55 $const7 	%argrw{"wrr"}
+	if		$tmp56 72 72 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Halftone.osl:41
+# 
+	compassign	pos $const12 $const14 	%line{41} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Halftone.osl:43
+# 	
+	assign		inputV InputValue 	%line{43} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Halftone.osl:45
+# 		inputV += u;	
+	if		U_Input 75 75 	%line{45} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/Halftone.osl:46
+# 				
+	add		inputV inputV u 	%line{46} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Halftone.osl:48
+# 	
+	floor		$tmp57 pos 	%line{48} %argrw{"wr"}
+	sub		pos pos $tmp57 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Halftone.osl:50
+# 	color factor = smoothstep(-Fuzz, 0.0, inputV - sqrt(max(0,dist)));
+	distance	$tmp58 $const15 pos 	%line{50} %argrw{"wrr"}
+	sqrt		$tmp60 $const16 	%argrw{"wr"}
+	div		$tmp61 $tmp60 $const17 	%argrw{"wrr"}
+	div		$tmp62 $tmp58 $tmp61 	%argrw{"wrr"}
+	sub		dist $const10 $tmp62 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Halftone.osl:51
+# 		
+	neg		$tmp63 Fuzz 	%line{51} %argrw{"wr"}
+	assign		$tmp64 $tmp63 	%argrw{"wr"}
+	assign		$tmp65 $const7 	%argrw{"wr"}
+	max		$tmp67 $const7 dist 	%argrw{"wrr"}
+	sqrt		$tmp66 $tmp67 	%argrw{"wr"}
+	sub		$tmp68 inputV $tmp66 	%argrw{"wrr"}
+	functioncall	$const18 102 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:325
+#     return color (smoothstep(edge0[0], edge1[0], in[0]),
+	compref		$tmp70 $tmp64 $const11 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{325} %argrw{"wrr"}
+	compref		$tmp71 $tmp65 $const11 	%argrw{"wrr"}
+	compref		$tmp72 $tmp68 $const11 	%argrw{"wrr"}
+	smoothstep	$tmp69 $tmp70 $tmp71 $tmp72 	%argrw{"wrrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:326
+#                   smoothstep(edge0[1], edge1[1], in[1]),
+	compref		$tmp74 $tmp64 $const12 	%line{326} %argrw{"wrr"}
+	compref		$tmp75 $tmp65 $const12 	%argrw{"wrr"}
+	compref		$tmp76 $tmp68 $const12 	%argrw{"wrr"}
+	smoothstep	$tmp73 $tmp74 $tmp75 $tmp76 	%argrw{"wrrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:327
+#                   smoothstep(edge0[2], edge1[2], in[2]));
+	compref		$tmp78 $tmp64 $const13 	%line{327} %argrw{"wrr"}
+	compref		$tmp79 $tmp65 $const13 	%argrw{"wrr"}
+	compref		$tmp80 $tmp68 $const13 	%argrw{"wrr"}
+	smoothstep	$tmp77 $tmp78 $tmp79 $tmp80 	%argrw{"wrrr"}
+	color		factor $tmp69 $tmp73 $tmp77 	%argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/Halftone.osl:53
+# }
+	mix		Out BlackDots WhiteDots factor 	%filename{"source/3dsMax-OSL-Shaders/Halftone.osl"} %line{53} %argrw{"wrrr"}
+	end

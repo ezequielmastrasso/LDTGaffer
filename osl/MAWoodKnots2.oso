@@ -1,0 +1,437 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader MAWoodKnots2
+param	vector	Pos	0 0 0		%read{2,2} %write{0,0} %initexpr
+param	float	Scale	1.5		%read{2,2} %write{2147483647,-1}
+param	float	Density	2.9000001		%read{4,123} %write{2147483647,-1}
+param	float	Falloff	2		%read{60,125} %write{2147483647,-1}
+param	float	Knots	0.1		%read{19,85} %write{2147483647,-1}
+param	float	KnotSize	1		%read{61,126} %write{2147483647,-1}
+param	float	Distortion	1		%read{42,107} %write{2147483647,-1}
+oparam	vector	Vec	0 0 0		%read{2147483647,-1} %write{1,152} %initexpr
+oparam	float	Fac	0		%read{7,149} %write{7,148}
+global	point	P	%read{0,1} %write{2147483647,-1}
+local	float	___322_t	%read{7,148} %write{7,148}
+local	float	___322_u	%read{7,148} %write{7,148}
+local	float	___322_s	%read{7,148} %write{7,148}
+local	float	___322_c	%read{7,148} %write{7,148}
+local	float	___322_a	%read{7,148} %write{7,148}
+local	float	___322_x	%read{7,148} %write{7,148}
+local	float	___322_y	%read{7,148} %write{7,148}
+local	float	___322_z	%read{7,148} %write{7,148}
+local	vector	___323_pk	%read{7,148} %write{7,148}
+local	vector	___323_t	%read{7,148} %write{7,148}
+local	vector	___323_D	%read{7,148} %write{7,148}
+local	float	___323_L	%read{7,148} %write{7,148}
+local	float	___324_c	%read{7,148} %write{7,148}
+local	float	___324_d	%read{7,148} %write{7,148}
+local	vector	p	%read{7,151} %write{2,2}
+local	vector	sdp	%read{7,152} %write{3,148}
+local	float	TR	%read{6,148} %write{4,4}
+local	float	___327_dx	%read{7,148} %write{6,148}
+local	float	___329_dy	%read{7,148} %write{7,148}
+local	float	___331_dz	%read{7,148} %write{7,148}
+local	vector	___332_ip	%read{7,148} %write{7,148}
+local	int	___333_ik	%read{7,148} %write{7,148}
+local	vector	___334_k	%read{7,148} %write{7,148}
+local	vector	___334_kv	%read{7,148} %write{7,148}
+local	vector	___334_dp	%read{7,148} %write{7,148}
+local	int	___334_ret	%read{7,148} %write{7,148}
+local	vector	___336_k	%read{7,148} %write{7,148}
+local	vector	___336_kv	%read{7,148} %write{7,148}
+local	vector	___336_dp	%read{7,148} %write{7,148}
+local	int	___336_ret	%read{7,148} %write{7,148}
+const	int	$const1	0		%read{3,137} %write{2147483647,-1}
+temp	int	$tmp1	%read{5,148} %write{6,148}
+temp	int	$tmp2	%read{7,148} %write{7,148}
+temp	int	$tmp3	%read{7,148} %write{7,148}
+temp	vector	$tmp4	%read{7,148} %write{7,148}
+temp	vector	$tmp5	%read{7,148} %write{7,148}
+temp	int	$tmp6	%read{7,148} %write{7,148}
+temp	int	$tmp7	%read{7,148} %write{7,148}
+const	string	$const2	"cell"		%read{22,98} %write{2147483647,-1}
+temp	float	$tmp8	%read{7,148} %write{7,148}
+const	int	$const3	1000		%read{23,23} %write{2147483647,-1}
+temp	int	$tmp9	%read{7,148} %write{7,148}
+const	string	$const4	"random_sphere"		%read{24,89} %write{2147483647,-1}
+const	float	$const5	6.2831855		%read{29,94} %write{2147483647,-1}
+temp	float	$tmp10	%read{7,148} %write{7,148}
+const	int	$const6	2		%read{25,139} %write{2147483647,-1}
+temp	int	$tmp11	%read{7,148} %write{7,148}
+temp	int	$tmp12	%read{7,148} %write{7,148}
+temp	float	$tmp13	%read{7,148} %write{7,148}
+temp	float	$tmp14	%read{7,148} %write{7,148}
+temp	int	$tmp15	%read{7,148} %write{7,148}
+const	int	$const7	1		%read{31,149} %write{2147483647,-1}
+temp	int	$tmp16	%read{7,148} %write{7,148}
+temp	float	$tmp17	%read{7,148} %write{7,148}
+temp	float	$tmp18	%read{7,148} %write{7,148}
+const	float	$const8	2		%read{34,99} %write{2147483647,-1}
+const	float	$const9	1		%read{35,148} %write{2147483647,-1}
+temp	float	$tmp19	%read{7,148} %write{7,148}
+temp	float	$tmp20	%read{7,148} %write{7,148}
+temp	vector	$tmp21	%read{7,148} %write{7,148}
+const	string	$const10	"bend"		%read{46,111} %write{2147483647,-1}
+temp	float	$tmp22	%read{7,148} %write{7,148}
+temp	float	$tmp23	%read{7,148} %write{7,148}
+temp	float	$tmp24	%read{7,148} %write{7,148}
+temp	vector	$tmp25	%read{7,148} %write{7,148}
+temp	vector	$tmp26	%read{7,148} %write{7,148}
+temp	int	$tmp27	%read{7,148} %write{7,148}
+temp	float	$tmp28	%read{7,148} %write{7,148}
+temp	float	$tmp29	%read{7,148} %write{7,148}
+temp	int	$tmp30	%read{7,148} %write{7,148}
+temp	vector	$tmp31	%read{7,148} %write{7,148}
+temp	int	$tmp32	%read{7,148} %write{7,148}
+temp	int	$tmp33	%read{7,148} %write{7,148}
+temp	float	$tmp34	%read{7,148} %write{7,148}
+temp	int	$tmp35	%read{2147483647,-1} %write{7,148}
+temp	float	$tmp36	%read{7,148} %write{7,148}
+const	float	$const12	-1		%read{80,80} %write{2147483647,-1}
+temp	float	$tmp37	%read{7,148} %write{7,148}
+const	string	$const13	"mod"		%read{81,81} %write{2147483647,-1}
+temp	float	$tmp38	%read{7,148} %write{7,148}
+temp	float	$tmp39	%read{7,148} %write{7,148}
+temp	float	$tmp40	%read{7,148} %write{7,148}
+temp	int	$tmp41	%read{7,148} %write{7,148}
+const	float	$const15	-2		%read{88,88} %write{2147483647,-1}
+const	int	$const16	998		%read{90,95} %write{2147483647,-1}
+temp	float	$tmp42	%read{7,148} %write{7,148}
+temp	int	$tmp43	%read{7,148} %write{7,148}
+temp	int	$tmp44	%read{7,148} %write{7,148}
+temp	float	$tmp45	%read{7,148} %write{7,148}
+temp	float	$tmp46	%read{7,148} %write{7,148}
+temp	int	$tmp47	%read{7,148} %write{7,148}
+temp	int	$tmp48	%read{7,148} %write{7,148}
+temp	float	$tmp49	%read{7,148} %write{7,148}
+temp	float	$tmp50	%read{7,148} %write{7,148}
+temp	float	$tmp51	%read{7,148} %write{7,148}
+temp	float	$tmp52	%read{7,148} %write{7,148}
+temp	vector	$tmp53	%read{7,148} %write{7,148}
+temp	float	$tmp54	%read{7,148} %write{7,148}
+temp	float	$tmp55	%read{7,148} %write{7,148}
+temp	float	$tmp56	%read{7,148} %write{7,148}
+temp	vector	$tmp57	%read{7,148} %write{7,148}
+temp	vector	$tmp58	%read{7,148} %write{7,148}
+temp	int	$tmp59	%read{7,148} %write{7,148}
+temp	float	$tmp60	%read{7,148} %write{7,148}
+temp	float	$tmp61	%read{7,148} %write{7,148}
+temp	int	$tmp62	%read{7,148} %write{7,148}
+temp	vector	$tmp63	%read{7,148} %write{7,148}
+temp	int	$tmp64	%read{7,148} %write{7,148}
+temp	int	$tmp65	%read{7,148} %write{7,148}
+temp	float	$tmp66	%read{7,148} %write{7,148}
+temp	float	$tmp67	%read{2147483647,-1} %write{7,148}
+temp	float	$tmp68	%read{2147483647,-1} %write{7,148}
+temp	float	$tmp69	%read{2147483647,-1} %write{7,148}
+temp	int	$tmp70	%read{150,150} %write{149,149}
+code Pos
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:46
+#   float Scale = 1.5,
+	assign		Pos P 	%filename{"source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl"} %line{46} %argrw{"wr"}
+code Vec
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:55
+#   output float Fac = 0 )
+	assign		Vec P 	%filename{"source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl"} %line{55} %argrw{"wr"}
+code ___main___
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:58
+#     vector sdp = 0;
+	mul		p Scale Pos 	%filename{"source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl"} %line{58} %argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:59
+# 
+	assign		sdp $const1 	%line{59} %argrw{"wr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:61
+#     for(float dx=-TR; dx <= TR; dx++){
+	ceil		TR Density 	%line{61} %argrw{"wr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:62
+#         for(float dy=-TR; dy <= TR; dy++){
+	for		$tmp1 7 8 147 149 	%line{62} %argrw{"r"}
+	neg		___327_dx TR 	%argrw{"wr"}
+	le		$tmp1 ___327_dx TR 	%argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:63
+#             for(float dz=-TR; dz <= TR; dz++){
+	for		$tmp2 10 11 145 147 	%line{63} %argrw{"r"}
+	neg		___329_dy TR 	%argrw{"wr"}
+	le		$tmp2 ___329_dy TR 	%argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:64
+#                 vector ip = floor(p)+vector(dx,dy,dz);
+	for		$tmp3 13 14 143 145 	%line{64} %argrw{"r"}
+	neg		___331_dz TR 	%argrw{"wr"}
+	le		$tmp3 ___331_dz TR 	%argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:65
+#                 for(int ik=0; ik < (int)Knots; ik++){
+	floor		$tmp4 p 	%line{65} %argrw{"wr"}
+	vector		$tmp5 ___327_dx ___329_dy ___331_dz 	%argrw{"wrrr"}
+	add		___332_ip $tmp4 $tmp5 	%argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:66
+#                     vector k = noise("cell",ip,ik);
+	for		$tmp7 19 21 78 80 	%line{66} %argrw{"r"}
+	assign		___333_ik $const1 	%argrw{"wr"}
+	assign		$tmp6 Knots 	%argrw{"wr"}
+	lt		$tmp7 ___333_ik $tmp6 	%argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:67
+#                     vector kv= random_sphere(ip,ik+1000,Distortion);
+	assign		$tmp8 ___333_ik 	%line{67} %argrw{"wr"}
+	noise		___334_k $const2 ___332_ip $tmp8 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:68
+#                     vector dp= 0;
+	add		$tmp9 ___333_ik $const3 	%line{68} %argrw{"wrr"}
+	functioncall	$const4 44 	%argrw{"r"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:15
+#     float u = 2*noise("cell",p,n*2+1)-1;
+	mul		$tmp11 $tmp9 $const6 	%line{15} %argrw{"wrr"}
+	add		$tmp12 $tmp11 $const1 	%argrw{"wrr"}
+	assign		$tmp13 $tmp12 	%argrw{"wr"}
+	noise		$tmp10 $const2 ___332_ip $tmp13 	%argrw{"wrrr"}
+	mul		___322_t $const5 $tmp10 	%argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:16
+#     float s,c,a;
+	mul		$tmp15 $tmp9 $const6 	%line{16} %argrw{"wrr"}
+	add		$tmp16 $tmp15 $const7 	%argrw{"wrr"}
+	assign		$tmp17 $tmp16 	%argrw{"wr"}
+	noise		$tmp14 $const2 ___332_ip $tmp17 	%argrw{"wrrr"}
+	mul		$tmp18 $const8 $tmp14 	%argrw{"wrr"}
+	sub		___322_u $tmp18 $const9 	%argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:18
+#     a = sqrt(1-u*u);
+	sincos		___322_t ___322_s ___322_c 	%line{18} %argrw{"rww"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:19
+#     float x = a*c;
+	mul		$tmp19 ___322_u ___322_u 	%line{19} %argrw{"wrr"}
+	sub		$tmp20 $const9 $tmp19 	%argrw{"wrr"}
+	sqrt		___322_a $tmp20 	%argrw{"wr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:20
+#     float y = a*s;
+	mul		___322_x ___322_a ___322_c 	%line{20} %argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:21
+#     float z = u*zdistribution;
+	mul		___322_y ___322_a ___322_s 	%line{21} %argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:22
+#     return vector(x,y,z);
+	mul		___322_z ___322_u Distortion 	%line{22} %argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:23
+# }
+	vector		___334_kv ___322_x ___322_y ___322_z 	%line{23} %argrw{"wrrr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:69
+#                     int ret = bend(p,ip+k,kv,Density,Falloff,KnotSize,dp);
+	assign		___334_dp $const1 	%line{69} %argrw{"wr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:70
+#                     if(ret != 0){
+	add		$tmp21 ___332_ip ___334_k 	%line{70} %argrw{"wrr"}
+	functioncall	$const10 72 	%argrw{"r"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:27
+#     vector t = dot(pk,kv)/dot(kv,kv);
+	sub		___323_pk $tmp21 p 	%line{27} %argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:28
+#     vector D = k + t * kv - p;
+	dot		$tmp22 ___323_pk ___334_kv 	%line{28} %argrw{"wrr"}
+	dot		$tmp23 ___334_kv ___334_kv 	%argrw{"wrr"}
+	div		$tmp24 $tmp22 $tmp23 	%argrw{"wrr"}
+	assign		___323_t $tmp24 	%argrw{"wr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:29
+#     float L = length(D);
+	mul		$tmp25 ___323_t ___334_kv 	%line{29} %argrw{"wrr"}
+	add		$tmp26 $tmp21 $tmp25 	%argrw{"wrr"}
+	sub		___323_D $tmp26 p 	%argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:30
+#     if( L < r ){
+	length		___323_L ___323_D 	%line{30} %argrw{"wr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:31
+#         float c = L/r;
+	lt		$tmp27 ___323_L Density 	%line{31} %argrw{"wrr"}
+	if		$tmp27 71 71 	%argrw{"r"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:32
+#         float d = m * pow( 1 - c , a);
+	div		___324_c ___323_L Density 	%line{32} %argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:33
+#         if( d < L ){
+	sub		$tmp29 $const9 ___324_c 	%line{33} %argrw{"wrr"}
+	pow		$tmp28 $tmp29 Falloff 	%argrw{"wrr"}
+	mul		___324_d KnotSize $tmp28 	%argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:34
+#             B = d * normalize(D);
+	lt		$tmp30 ___324_d ___323_L 	%line{34} %argrw{"wrr"}
+	if		$tmp30 68 71 	%argrw{"r"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:35
+#             return 1;
+	normalize	$tmp31 ___323_D 	%line{35} %argrw{"wr"}
+	mul		___334_dp ___324_d $tmp31 	%argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:36
+#         }else{
+	assign		___334_ret $const7 	%line{36} %argrw{"wr"}
+	return
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:38
+#             return 2;
+	assign		___334_dp ___323_D 	%line{38} %argrw{"wr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:39
+#         }
+	assign		___334_ret $const6 	%line{39} %argrw{"wr"}
+	return
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:42
+# }
+	assign		___334_ret $const1 	%line{42} %argrw{"wr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:71
+#                         Fac=max(Fac,ret==2);
+	neq		$tmp32 ___334_ret $const1 	%line{71} %argrw{"wrr"}
+	if		$tmp32 78 78 	%argrw{"r"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:72
+#                         sdp+=dp;
+	eq		$tmp33 ___334_ret $const6 	%line{72} %argrw{"wrr"}
+	assign		$tmp34 $tmp33 	%argrw{"wr"}
+	max		Fac Fac $tmp34 	%argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:73
+#                     }
+	add		sdp sdp ___334_dp 	%line{73} %argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:66
+#                     vector k = noise("cell",ip,ik);
+	assign		$tmp35 ___333_ik 	%line{66} %argrw{"wr"}
+	add		___333_ik ___333_ik $const7 	%argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:76
+#                     vector k = noise("cell",ip,-2);
+	noise		$tmp36 $const2 ___332_ip $const12 	%line{76} %argrw{"wrrr"}
+	functioncall	$const13 86 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:136
+# float  mod (float  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp39 Knots $const9 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{136} %argrw{"wrr"}
+	floor		$tmp38 $tmp39 	%argrw{"wr"}
+	mul		$tmp40 $const9 $tmp38 	%argrw{"wrr"}
+	sub		$tmp37 Knots $tmp40 	%argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:76
+#                     vector k = noise("cell",ip,-2);
+	lt		$tmp41 $tmp36 $tmp37 	%filename{"source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl"} %line{76} %argrw{"wrr"}
+	if		$tmp41 143 143 	%argrw{"r"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:77
+#                     vector kv= random_sphere(ip,998,Distortion);
+	noise		___336_k $const2 ___332_ip $const15 	%line{77} %argrw{"wrrr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:78
+#                     vector dp= 0;
+	functioncall	$const4 109 	%line{78} %argrw{"r"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:15
+#     float u = 2*noise("cell",p,n*2+1)-1;
+	mul		$tmp43 $const16 $const6 	%line{15} %argrw{"wrr"}
+	add		$tmp44 $tmp43 $const1 	%argrw{"wrr"}
+	assign		$tmp45 $tmp44 	%argrw{"wr"}
+	noise		$tmp42 $const2 ___332_ip $tmp45 	%argrw{"wrrr"}
+	mul		___322_t $const5 $tmp42 	%argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:16
+#     float s,c,a;
+	mul		$tmp47 $const16 $const6 	%line{16} %argrw{"wrr"}
+	add		$tmp48 $tmp47 $const7 	%argrw{"wrr"}
+	assign		$tmp49 $tmp48 	%argrw{"wr"}
+	noise		$tmp46 $const2 ___332_ip $tmp49 	%argrw{"wrrr"}
+	mul		$tmp50 $const8 $tmp46 	%argrw{"wrr"}
+	sub		___322_u $tmp50 $const9 	%argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:18
+#     a = sqrt(1-u*u);
+	sincos		___322_t ___322_s ___322_c 	%line{18} %argrw{"rww"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:19
+#     float x = a*c;
+	mul		$tmp51 ___322_u ___322_u 	%line{19} %argrw{"wrr"}
+	sub		$tmp52 $const9 $tmp51 	%argrw{"wrr"}
+	sqrt		___322_a $tmp52 	%argrw{"wr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:20
+#     float y = a*s;
+	mul		___322_x ___322_a ___322_c 	%line{20} %argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:21
+#     float z = u*zdistribution;
+	mul		___322_y ___322_a ___322_s 	%line{21} %argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:22
+#     return vector(x,y,z);
+	mul		___322_z ___322_u Distortion 	%line{22} %argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:23
+# }
+	vector		___336_kv ___322_x ___322_y ___322_z 	%line{23} %argrw{"wrrr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:79
+#                     int ret = bend(p,ip+k,kv,Density,Falloff,KnotSize,dp);
+	assign		___336_dp $const1 	%line{79} %argrw{"wr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:80
+#                     if(ret != 0){
+	add		$tmp53 ___332_ip ___336_k 	%line{80} %argrw{"wrr"}
+	functioncall	$const10 137 	%argrw{"r"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:27
+#     vector t = dot(pk,kv)/dot(kv,kv);
+	sub		___323_pk $tmp53 p 	%line{27} %argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:28
+#     vector D = k + t * kv - p;
+	dot		$tmp54 ___323_pk ___336_kv 	%line{28} %argrw{"wrr"}
+	dot		$tmp55 ___336_kv ___336_kv 	%argrw{"wrr"}
+	div		$tmp56 $tmp54 $tmp55 	%argrw{"wrr"}
+	assign		___323_t $tmp56 	%argrw{"wr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:29
+#     float L = length(D);
+	mul		$tmp57 ___323_t ___336_kv 	%line{29} %argrw{"wrr"}
+	add		$tmp58 $tmp53 $tmp57 	%argrw{"wrr"}
+	sub		___323_D $tmp58 p 	%argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:30
+#     if( L < r ){
+	length		___323_L ___323_D 	%line{30} %argrw{"wr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:31
+#         float c = L/r;
+	lt		$tmp59 ___323_L Density 	%line{31} %argrw{"wrr"}
+	if		$tmp59 136 136 	%argrw{"r"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:32
+#         float d = m * pow( 1 - c , a);
+	div		___324_c ___323_L Density 	%line{32} %argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:33
+#         if( d < L ){
+	sub		$tmp61 $const9 ___324_c 	%line{33} %argrw{"wrr"}
+	pow		$tmp60 $tmp61 Falloff 	%argrw{"wrr"}
+	mul		___324_d KnotSize $tmp60 	%argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:34
+#             B = d * normalize(D);
+	lt		$tmp62 ___324_d ___323_L 	%line{34} %argrw{"wrr"}
+	if		$tmp62 133 136 	%argrw{"r"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:35
+#             return 1;
+	normalize	$tmp63 ___323_D 	%line{35} %argrw{"wr"}
+	mul		___336_dp ___324_d $tmp63 	%argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:36
+#         }else{
+	assign		___336_ret $const7 	%line{36} %argrw{"wr"}
+	return
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:38
+#             return 2;
+	assign		___336_dp ___323_D 	%line{38} %argrw{"wr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:39
+#         }
+	assign		___336_ret $const6 	%line{39} %argrw{"wr"}
+	return
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:42
+# }
+	assign		___336_ret $const1 	%line{42} %argrw{"wr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:81
+#                         Fac=max(Fac,ret==2);
+	neq		$tmp64 ___336_ret $const1 	%line{81} %argrw{"wrr"}
+	if		$tmp64 143 143 	%argrw{"r"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:82
+#                         sdp+=dp;
+	eq		$tmp65 ___336_ret $const6 	%line{82} %argrw{"wrr"}
+	assign		$tmp66 $tmp65 	%argrw{"wr"}
+	max		Fac Fac $tmp66 	%argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:83
+#                     }
+	add		sdp sdp ___336_dp 	%line{83} %argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:64
+#                 vector ip = floor(p)+vector(dx,dy,dz);
+	assign		$tmp67 ___331_dz 	%line{64} %argrw{"wr"}
+	add		___331_dz ___331_dz $const9 	%argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:63
+#             for(float dz=-TR; dz <= TR; dz++){
+	assign		$tmp68 ___329_dy 	%line{63} %argrw{"wr"}
+	add		___329_dy ___329_dy $const9 	%argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:62
+#         for(float dy=-TR; dy <= TR; dy++){
+	assign		$tmp69 ___327_dx 	%line{62} %argrw{"wr"}
+	add		___327_dx ___327_dx $const9 	%argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:89
+#         Vec = p + sdp;
+	lt		$tmp70 Fac $const7 	%line{89} %argrw{"wrr"}
+	if		$tmp70 152 153 	%argrw{"r"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:90
+#     }else{
+	add		Vec p sdp 	%line{90} %argrw{"wrr"}
+# source/sambler-osl-shaders/wood/MAWoodKnot/MAWoodKnots2.osl:92
+#     }
+	assign		Vec sdp 	%line{92} %argrw{"wr"}
+	end

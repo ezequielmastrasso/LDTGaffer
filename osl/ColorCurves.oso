@@ -1,0 +1,1490 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader ColorCurves	%meta{string,label,"Curves (color)"} %meta{string,help,"<h3>Curves</h3> Transform an input using a arbitrary curves.<br> Can be used for gradients or as a color correction tool.<br>Each color channel is mapped individually by the curve."} %meta{string,version,"1.0"} 
+param	int[]	interpolation	2 2 2		%meta{string,widget,"max:ramp0"} %meta{string,interpolation,"interpolation"} %meta{string,position,"position"} %meta{string,values,"colors"} %meta{int,connectable,0}  %read{41,453} %write{2147483647,-1}
+param	color[]	colors	0 1 0 0.30000001 0.2 1 1 0 0		%meta{string,widget,"null"} %meta{int,connectable,0}  %read{8,614} %write{2147483647,-1}
+param	float[]	position	0 0.5 1		%meta{string,widget,"null"} %meta{int,connectable,0}  %read{3,532} %write{2147483647,-1}
+param	color	Input	0 0 0		%read{1,413} %write{0,0} %initexpr
+oparam	color	Out	0 0 0		%read{2147483647,-1} %write{205,617}
+oparam	float	R	0		%read{2147483647,-1} %write{206,206}
+oparam	float	G	0		%read{2147483647,-1} %write{412,412}
+oparam	float	B	0		%read{2147483647,-1} %write{618,618}
+global	float	u	%read{0,0} %write{2147483647,-1}
+local	int	___322_l	%read{4,416} %write{3,415}
+local	int	___322_last	%read{13,570} %write{4,416}
+local	int	___322_i	%read{13,448} %write{12,438}
+local	int	___322_i0	%read{76,536} %write{33,445}
+local	int	___322_i1	%read{39,612} %write{34,446}
+local	int	___322_i2	%read{38,614} %write{35,447}
+local	int	___322_i3	%read{82,546} %write{37,449}
+local	float	___322_delta	%read{42,466} %write{40,452}
+local	int	___322_interp	%read{45,521} %write{41,453}
+local	float	___322_along	%read{61,616} %write{54,466}
+local	float	___325_M12	%read{84,496} %write{65,477}
+local	float	___325_M21	%read{85,497} %write{66,478}
+local	float	___325_M23	%read{86,498} %write{67,479}
+local	float	___325_M31	%read{88,500} %write{68,480}
+local	float	___325_M32	%read{89,501} %write{69,481}
+local	float	___325_M33	%read{91,503} %write{70,482}
+local	float	___325_M34	%read{93,505} %write{71,483}
+local	float	___325_M41	%read{95,507} %write{72,484}
+local	float	___325_M42	%read{96,508} %write{73,485}
+local	float	___325_M43	%read{98,510} %write{74,486}
+local	float	___325_M44	%read{100,512} %write{75,487}
+local	float	___325_v0	%read{85,507} %write{77,489}
+local	float	___325_v1	%read{84,508} %write{79,491}
+local	float	___325_v2	%read{86,510} %write{81,493}
+local	float	___325_v3	%read{93,512} %write{83,495}
+local	float	___325_c1	%read{107,519} %write{84,496}
+local	float	___325_c2	%read{105,517} %write{87,499}
+local	float	___325_c3	%read{103,515} %write{94,506}
+local	float	___325_c4	%read{102,514} %write{101,513}
+local	float	___326_i1_tangent	%read{179,605} %write{111,569}
+local	float	___326_i2_tangent	%read{181,595} %write{112,587}
+local	float	___326_i0_interval	%read{127,565} %write{115,527}
+local	float	___326_i1_interval	%read{133,600} %write{118,530}
+local	float	___326_i2_interval	%read{139,584} %write{121,533}
+local	float	___326_i0_delta	%read{143,564} %write{127,539}
+local	float	___326_i1_delta	%read{143,589} %write{133,545}
+local	float	___326_i2_delta	%read{161,585} %write{139,551}
+local	float	___326_invint	%read{182,599} %write{176,588}
+local	float	___326_si	%read{178,596} %write{177,589}
+local	float	___326_ci	%read{195,607} %write{182,594}
+local	float	___326_di	%read{197,609} %write{187,599}
+local	float	___326_t	%read{189,605} %write{188,600}
+local	float	___326_t2	%read{190,607} %write{189,601}
+local	float	___326_t3	%read{197,609} %write{190,602}
+temp	float	$tmp1	%read{205,206} %write{9,204}
+const	int	$const1	0		%read{1,575} %write{2147483647,-1}
+temp	float	$tmp2	%read{6,53} %write{1,1}
+const	string	$const2	"interpolate"		%read{2,414} %write{2147483647,-1}
+const	int	$const3	1		%read{4,467} %write{2147483647,-1}
+temp	float	$tmp3	%read{6,6} %write{5,5}
+temp	int	$tmp4	%read{7,7} %write{6,6}
+temp	color	$tmp5	%read{9,9} %write{8,8}
+temp	int	$tmp6	%read{11,26} %write{12,26}
+temp	float	$tmp7	%read{13,26} %write{13,26}
+temp	int	$tmp8	%read{13,26} %write{13,26}
+temp	int	$tmp9	%read{13,26} %write{13,26}
+temp	int	$tmp10	%read{13,26} %write{13,26}
+temp	float	$tmp11	%read{13,26} %write{13,26}
+temp	int	$tmp12	%read{13,26} %write{13,26}
+temp	int	$tmp13	%read{13,26} %write{13,26}
+temp	int	$tmp14	%read{2147483647,-1} %write{13,26}
+temp	int	$tmp15	%read{28,28} %write{27,27}
+temp	color	$tmp16	%read{30,30} %write{29,29}
+temp	int	$tmp17	%read{33,33} %write{32,32}
+const	int	$const4	2		%read{36,617} %write{2147483647,-1}
+temp	int	$tmp18	%read{37,37} %write{36,36}
+temp	float	$tmp19	%read{40,40} %write{38,38}
+temp	float	$tmp20	%read{40,40} %write{39,39}
+const	float	$const5	0		%read{42,574} %write{2147483647,-1}
+temp	int	$tmp21	%read{43,43} %write{42,42}
+temp	int	$tmp22	%read{44,48} %write{43,47}
+temp	int	$tmp23	%read{46,46} %write{45,45}
+temp	int	$tmp24	%read{47,47} %write{46,46}
+temp	color	$tmp25	%read{50,50} %write{49,49}
+temp	float	$tmp26	%read{53,53} %write{52,52}
+temp	float	$tmp27	%read{54,54} %write{53,53}
+temp	int	$tmp28	%read{56,56} %write{55,55}
+temp	float	$tmp29	%read{61,61} %write{58,58}
+temp	color	$tmp30	%read{58,58} %write{57,57}
+temp	float	$tmp31	%read{61,61} %write{60,60}
+temp	color	$tmp32	%read{60,60} %write{59,59}
+temp	int	$tmp33	%read{64,64} %write{63,63}
+const	float	$const6	1		%read{65,588} %write{2147483647,-1}
+const	float	$const7	-0.5		%read{66,484} %write{2147483647,-1}
+const	float	$const8	0.5		%read{67,487} %write{2147483647,-1}
+const	float	$const9	-2.5		%read{69,481} %write{2147483647,-1}
+const	float	$const10	2		%read{70,596} %write{2147483647,-1}
+const	float	$const11	1.5		%read{73,485} %write{2147483647,-1}
+const	float	$const12	-1.5		%read{74,486} %write{2147483647,-1}
+temp	color	$tmp34	%read{77,77} %write{76,76}
+temp	color	$tmp35	%read{79,79} %write{78,78}
+temp	color	$tmp36	%read{81,81} %write{80,80}
+temp	color	$tmp37	%read{83,83} %write{82,82}
+temp	float	$tmp38	%read{87,87} %write{85,85}
+temp	float	$tmp39	%read{87,87} %write{86,86}
+temp	float	$tmp40	%read{90,90} %write{88,88}
+temp	float	$tmp41	%read{90,90} %write{89,89}
+temp	float	$tmp42	%read{92,92} %write{90,90}
+temp	float	$tmp43	%read{92,92} %write{91,91}
+temp	float	$tmp44	%read{94,94} %write{92,92}
+temp	float	$tmp45	%read{94,94} %write{93,93}
+temp	float	$tmp46	%read{97,97} %write{95,95}
+temp	float	$tmp47	%read{97,97} %write{96,96}
+temp	float	$tmp48	%read{99,99} %write{97,97}
+temp	float	$tmp49	%read{99,99} %write{98,98}
+temp	float	$tmp50	%read{101,101} %write{99,99}
+temp	float	$tmp51	%read{101,101} %write{100,100}
+temp	float	$tmp52	%read{103,103} %write{102,102}
+temp	float	$tmp53	%read{104,104} %write{103,103}
+temp	float	$tmp54	%read{105,105} %write{104,104}
+temp	float	$tmp55	%read{106,106} %write{105,105}
+temp	float	$tmp56	%read{107,107} %write{106,106}
+const	int	$const13	3		%read{109,521} %write{2147483647,-1}
+temp	int	$tmp57	%read{110,110} %write{109,109}
+temp	float	$tmp58	%read{115,115} %write{113,113}
+temp	float	$tmp59	%read{115,115} %write{114,114}
+temp	float	$tmp60	%read{118,118} %write{116,116}
+temp	float	$tmp61	%read{118,118} %write{117,117}
+temp	float	$tmp62	%read{121,121} %write{119,119}
+temp	float	$tmp63	%read{121,121} %write{120,120}
+temp	float	$tmp64	%read{126,126} %write{123,123}
+temp	color	$tmp65	%read{123,123} %write{122,122}
+temp	float	$tmp66	%read{126,126} %write{125,125}
+temp	color	$tmp67	%read{125,125} %write{124,124}
+temp	float	$tmp68	%read{127,127} %write{126,126}
+temp	float	$tmp69	%read{132,132} %write{129,129}
+temp	color	$tmp70	%read{129,129} %write{128,128}
+temp	float	$tmp71	%read{132,132} %write{131,131}
+temp	color	$tmp72	%read{131,131} %write{130,130}
+temp	float	$tmp73	%read{133,133} %write{132,132}
+temp	float	$tmp74	%read{138,138} %write{135,135}
+temp	color	$tmp75	%read{135,135} %write{134,134}
+temp	float	$tmp76	%read{138,138} %write{137,137}
+temp	color	$tmp77	%read{137,137} %write{136,136}
+temp	float	$tmp78	%read{139,139} %write{138,138}
+temp	int	$tmp79	%read{141,141} %write{140,140}
+temp	int	$tmp80	%read{142,147} %write{141,146}
+temp	float	$tmp81	%read{144,144} %write{143,143}
+temp	int	$tmp82	%read{145,145} %write{144,144}
+temp	int	$tmp83	%read{146,146} %write{145,145}
+const	float	$const14	3		%read{149,590} %write{2147483647,-1}
+temp	float	$tmp84	%read{149,149} %write{148,148}
+temp	float	$tmp85	%read{157,157} %write{149,149}
+temp	float	$tmp86	%read{151,151} %write{150,150}
+temp	float	$tmp87	%read{152,152} %write{151,151}
+temp	float	$tmp88	%read{156,156} %write{152,152}
+temp	float	$tmp89	%read{154,154} %write{153,153}
+temp	float	$tmp90	%read{155,155} %write{154,154}
+temp	float	$tmp91	%read{156,156} %write{155,155}
+temp	float	$tmp92	%read{157,157} %write{156,156}
+temp	int	$tmp93	%read{159,159} %write{158,158}
+temp	int	$tmp94	%read{160,165} %write{159,164}
+temp	float	$tmp95	%read{162,162} %write{161,161}
+temp	int	$tmp96	%read{163,163} %write{162,162}
+temp	int	$tmp97	%read{164,164} %write{163,163}
+temp	float	$tmp98	%read{167,167} %write{166,166}
+temp	float	$tmp99	%read{175,175} %write{167,167}
+temp	float	$tmp100	%read{169,169} %write{168,168}
+temp	float	$tmp101	%read{170,170} %write{169,169}
+temp	float	$tmp102	%read{174,174} %write{170,170}
+temp	float	$tmp103	%read{172,172} %write{171,171}
+temp	float	$tmp104	%read{173,173} %write{172,172}
+temp	float	$tmp105	%read{174,174} %write{173,173}
+temp	float	$tmp106	%read{175,175} %write{174,174}
+temp	float	$tmp107	%read{180,180} %write{178,178}
+temp	float	$tmp108	%read{180,180} %write{179,179}
+temp	float	$tmp109	%read{181,181} %write{180,180}
+temp	float	$tmp110	%read{182,182} %write{181,181}
+temp	float	$tmp111	%read{185,185} %write{183,183}
+temp	float	$tmp112	%read{185,185} %write{184,184}
+temp	float	$tmp113	%read{186,186} %write{185,185}
+temp	float	$tmp114	%read{187,187} %write{186,186}
+temp	float	$tmp115	%read{194,194} %write{192,192}
+temp	color	$tmp116	%read{192,192} %write{191,191}
+temp	float	$tmp117	%read{194,194} %write{193,193}
+temp	float	$tmp118	%read{196,196} %write{194,194}
+temp	float	$tmp119	%read{196,196} %write{195,195}
+temp	float	$tmp120	%read{198,198} %write{196,196}
+temp	float	$tmp121	%read{198,198} %write{197,197}
+temp	float	$tmp122	%read{204,204} %write{201,201}
+temp	color	$tmp123	%read{201,201} %write{200,200}
+temp	float	$tmp124	%read{204,204} %write{203,203}
+temp	color	$tmp125	%read{203,203} %write{202,202}
+temp	float	$tmp126	%read{411,412} %write{215,410}
+temp	float	$tmp127	%read{212,259} %write{207,207}
+temp	float	$tmp128	%read{212,212} %write{211,211}
+temp	int	$tmp129	%read{213,213} %write{212,212}
+temp	color	$tmp130	%read{215,215} %write{214,214}
+temp	int	$tmp131	%read{217,232} %write{218,232}
+temp	float	$tmp132	%read{219,232} %write{219,232}
+temp	int	$tmp133	%read{219,232} %write{219,232}
+temp	int	$tmp134	%read{219,232} %write{219,232}
+temp	int	$tmp135	%read{219,232} %write{219,232}
+temp	float	$tmp136	%read{219,232} %write{219,232}
+temp	int	$tmp137	%read{219,232} %write{219,232}
+temp	int	$tmp138	%read{219,232} %write{219,232}
+temp	int	$tmp139	%read{2147483647,-1} %write{219,232}
+temp	int	$tmp140	%read{234,234} %write{233,233}
+temp	color	$tmp141	%read{236,236} %write{235,235}
+temp	int	$tmp142	%read{239,239} %write{238,238}
+temp	int	$tmp143	%read{243,243} %write{242,242}
+temp	float	$tmp144	%read{246,246} %write{244,244}
+temp	float	$tmp145	%read{246,246} %write{245,245}
+temp	int	$tmp146	%read{249,249} %write{248,248}
+temp	int	$tmp147	%read{250,254} %write{249,253}
+temp	int	$tmp148	%read{252,252} %write{251,251}
+temp	int	$tmp149	%read{253,253} %write{252,252}
+temp	color	$tmp150	%read{256,256} %write{255,255}
+temp	float	$tmp151	%read{259,259} %write{258,258}
+temp	float	$tmp152	%read{260,260} %write{259,259}
+temp	int	$tmp153	%read{262,262} %write{261,261}
+temp	float	$tmp154	%read{267,267} %write{264,264}
+temp	color	$tmp155	%read{264,264} %write{263,263}
+temp	float	$tmp156	%read{267,267} %write{266,266}
+temp	color	$tmp157	%read{266,266} %write{265,265}
+temp	int	$tmp158	%read{270,270} %write{269,269}
+temp	color	$tmp159	%read{283,283} %write{282,282}
+temp	color	$tmp160	%read{285,285} %write{284,284}
+temp	color	$tmp161	%read{287,287} %write{286,286}
+temp	color	$tmp162	%read{289,289} %write{288,288}
+temp	float	$tmp163	%read{293,293} %write{291,291}
+temp	float	$tmp164	%read{293,293} %write{292,292}
+temp	float	$tmp165	%read{296,296} %write{294,294}
+temp	float	$tmp166	%read{296,296} %write{295,295}
+temp	float	$tmp167	%read{298,298} %write{296,296}
+temp	float	$tmp168	%read{298,298} %write{297,297}
+temp	float	$tmp169	%read{300,300} %write{298,298}
+temp	float	$tmp170	%read{300,300} %write{299,299}
+temp	float	$tmp171	%read{303,303} %write{301,301}
+temp	float	$tmp172	%read{303,303} %write{302,302}
+temp	float	$tmp173	%read{305,305} %write{303,303}
+temp	float	$tmp174	%read{305,305} %write{304,304}
+temp	float	$tmp175	%read{307,307} %write{305,305}
+temp	float	$tmp176	%read{307,307} %write{306,306}
+temp	float	$tmp177	%read{309,309} %write{308,308}
+temp	float	$tmp178	%read{310,310} %write{309,309}
+temp	float	$tmp179	%read{311,311} %write{310,310}
+temp	float	$tmp180	%read{312,312} %write{311,311}
+temp	float	$tmp181	%read{313,313} %write{312,312}
+temp	int	$tmp182	%read{316,316} %write{315,315}
+temp	float	$tmp183	%read{321,321} %write{319,319}
+temp	float	$tmp184	%read{321,321} %write{320,320}
+temp	float	$tmp185	%read{324,324} %write{322,322}
+temp	float	$tmp186	%read{324,324} %write{323,323}
+temp	float	$tmp187	%read{327,327} %write{325,325}
+temp	float	$tmp188	%read{327,327} %write{326,326}
+temp	float	$tmp189	%read{332,332} %write{329,329}
+temp	color	$tmp190	%read{329,329} %write{328,328}
+temp	float	$tmp191	%read{332,332} %write{331,331}
+temp	color	$tmp192	%read{331,331} %write{330,330}
+temp	float	$tmp193	%read{333,333} %write{332,332}
+temp	float	$tmp194	%read{338,338} %write{335,335}
+temp	color	$tmp195	%read{335,335} %write{334,334}
+temp	float	$tmp196	%read{338,338} %write{337,337}
+temp	color	$tmp197	%read{337,337} %write{336,336}
+temp	float	$tmp198	%read{339,339} %write{338,338}
+temp	float	$tmp199	%read{344,344} %write{341,341}
+temp	color	$tmp200	%read{341,341} %write{340,340}
+temp	float	$tmp201	%read{344,344} %write{343,343}
+temp	color	$tmp202	%read{343,343} %write{342,342}
+temp	float	$tmp203	%read{345,345} %write{344,344}
+temp	int	$tmp204	%read{347,347} %write{346,346}
+temp	int	$tmp205	%read{348,353} %write{347,352}
+temp	float	$tmp206	%read{350,350} %write{349,349}
+temp	int	$tmp207	%read{351,351} %write{350,350}
+temp	int	$tmp208	%read{352,352} %write{351,351}
+temp	float	$tmp209	%read{355,355} %write{354,354}
+temp	float	$tmp210	%read{363,363} %write{355,355}
+temp	float	$tmp211	%read{357,357} %write{356,356}
+temp	float	$tmp212	%read{358,358} %write{357,357}
+temp	float	$tmp213	%read{362,362} %write{358,358}
+temp	float	$tmp214	%read{360,360} %write{359,359}
+temp	float	$tmp215	%read{361,361} %write{360,360}
+temp	float	$tmp216	%read{362,362} %write{361,361}
+temp	float	$tmp217	%read{363,363} %write{362,362}
+temp	int	$tmp218	%read{365,365} %write{364,364}
+temp	int	$tmp219	%read{366,371} %write{365,370}
+temp	float	$tmp220	%read{368,368} %write{367,367}
+temp	int	$tmp221	%read{369,369} %write{368,368}
+temp	int	$tmp222	%read{370,370} %write{369,369}
+temp	float	$tmp223	%read{373,373} %write{372,372}
+temp	float	$tmp224	%read{381,381} %write{373,373}
+temp	float	$tmp225	%read{375,375} %write{374,374}
+temp	float	$tmp226	%read{376,376} %write{375,375}
+temp	float	$tmp227	%read{380,380} %write{376,376}
+temp	float	$tmp228	%read{378,378} %write{377,377}
+temp	float	$tmp229	%read{379,379} %write{378,378}
+temp	float	$tmp230	%read{380,380} %write{379,379}
+temp	float	$tmp231	%read{381,381} %write{380,380}
+temp	float	$tmp232	%read{386,386} %write{384,384}
+temp	float	$tmp233	%read{386,386} %write{385,385}
+temp	float	$tmp234	%read{387,387} %write{386,386}
+temp	float	$tmp235	%read{388,388} %write{387,387}
+temp	float	$tmp236	%read{391,391} %write{389,389}
+temp	float	$tmp237	%read{391,391} %write{390,390}
+temp	float	$tmp238	%read{392,392} %write{391,391}
+temp	float	$tmp239	%read{393,393} %write{392,392}
+temp	float	$tmp240	%read{400,400} %write{398,398}
+temp	color	$tmp241	%read{398,398} %write{397,397}
+temp	float	$tmp242	%read{400,400} %write{399,399}
+temp	float	$tmp243	%read{402,402} %write{400,400}
+temp	float	$tmp244	%read{402,402} %write{401,401}
+temp	float	$tmp245	%read{404,404} %write{402,402}
+temp	float	$tmp246	%read{404,404} %write{403,403}
+temp	float	$tmp247	%read{410,410} %write{407,407}
+temp	color	$tmp248	%read{407,407} %write{406,406}
+temp	float	$tmp249	%read{410,410} %write{409,409}
+temp	color	$tmp250	%read{409,409} %write{408,408}
+temp	float	$tmp251	%read{617,618} %write{421,616}
+temp	float	$tmp252	%read{418,465} %write{413,413}
+temp	float	$tmp253	%read{418,418} %write{417,417}
+temp	int	$tmp254	%read{419,419} %write{418,418}
+temp	color	$tmp255	%read{421,421} %write{420,420}
+temp	int	$tmp256	%read{423,438} %write{424,438}
+temp	float	$tmp257	%read{425,438} %write{425,438}
+temp	int	$tmp258	%read{425,438} %write{425,438}
+temp	int	$tmp259	%read{425,438} %write{425,438}
+temp	int	$tmp260	%read{425,438} %write{425,438}
+temp	float	$tmp261	%read{425,438} %write{425,438}
+temp	int	$tmp262	%read{425,438} %write{425,438}
+temp	int	$tmp263	%read{425,438} %write{425,438}
+temp	int	$tmp264	%read{2147483647,-1} %write{425,438}
+temp	int	$tmp265	%read{440,440} %write{439,439}
+temp	color	$tmp266	%read{442,442} %write{441,441}
+temp	int	$tmp267	%read{445,445} %write{444,444}
+temp	int	$tmp268	%read{449,449} %write{448,448}
+temp	float	$tmp269	%read{452,452} %write{450,450}
+temp	float	$tmp270	%read{452,452} %write{451,451}
+temp	int	$tmp271	%read{455,455} %write{454,454}
+temp	int	$tmp272	%read{456,460} %write{455,459}
+temp	int	$tmp273	%read{458,458} %write{457,457}
+temp	int	$tmp274	%read{459,459} %write{458,458}
+temp	color	$tmp275	%read{462,462} %write{461,461}
+temp	float	$tmp276	%read{465,465} %write{464,464}
+temp	float	$tmp277	%read{466,466} %write{465,465}
+temp	int	$tmp278	%read{468,468} %write{467,467}
+temp	float	$tmp279	%read{473,473} %write{470,470}
+temp	color	$tmp280	%read{470,470} %write{469,469}
+temp	float	$tmp281	%read{473,473} %write{472,472}
+temp	color	$tmp282	%read{472,472} %write{471,471}
+temp	int	$tmp283	%read{476,476} %write{475,475}
+temp	color	$tmp284	%read{489,489} %write{488,488}
+temp	color	$tmp285	%read{491,491} %write{490,490}
+temp	color	$tmp286	%read{493,493} %write{492,492}
+temp	color	$tmp287	%read{495,495} %write{494,494}
+temp	float	$tmp288	%read{499,499} %write{497,497}
+temp	float	$tmp289	%read{499,499} %write{498,498}
+temp	float	$tmp290	%read{502,502} %write{500,500}
+temp	float	$tmp291	%read{502,502} %write{501,501}
+temp	float	$tmp292	%read{504,504} %write{502,502}
+temp	float	$tmp293	%read{504,504} %write{503,503}
+temp	float	$tmp294	%read{506,506} %write{504,504}
+temp	float	$tmp295	%read{506,506} %write{505,505}
+temp	float	$tmp296	%read{509,509} %write{507,507}
+temp	float	$tmp297	%read{509,509} %write{508,508}
+temp	float	$tmp298	%read{511,511} %write{509,509}
+temp	float	$tmp299	%read{511,511} %write{510,510}
+temp	float	$tmp300	%read{513,513} %write{511,511}
+temp	float	$tmp301	%read{513,513} %write{512,512}
+temp	float	$tmp302	%read{515,515} %write{514,514}
+temp	float	$tmp303	%read{516,516} %write{515,515}
+temp	float	$tmp304	%read{517,517} %write{516,516}
+temp	float	$tmp305	%read{518,518} %write{517,517}
+temp	float	$tmp306	%read{519,519} %write{518,518}
+temp	int	$tmp307	%read{522,522} %write{521,521}
+temp	float	$tmp308	%read{527,527} %write{525,525}
+temp	float	$tmp309	%read{527,527} %write{526,526}
+temp	float	$tmp310	%read{530,530} %write{528,528}
+temp	float	$tmp311	%read{530,530} %write{529,529}
+temp	float	$tmp312	%read{533,533} %write{531,531}
+temp	float	$tmp313	%read{533,533} %write{532,532}
+temp	float	$tmp314	%read{538,538} %write{535,535}
+temp	color	$tmp315	%read{535,535} %write{534,534}
+temp	float	$tmp316	%read{538,538} %write{537,537}
+temp	color	$tmp317	%read{537,537} %write{536,536}
+temp	float	$tmp318	%read{539,539} %write{538,538}
+temp	float	$tmp319	%read{544,544} %write{541,541}
+temp	color	$tmp320	%read{541,541} %write{540,540}
+temp	float	$tmp321	%read{544,544} %write{543,543}
+temp	color	$tmp322	%read{543,543} %write{542,542}
+temp	float	$tmp323	%read{545,545} %write{544,544}
+temp	float	$tmp324	%read{550,550} %write{547,547}
+temp	color	$tmp325	%read{547,547} %write{546,546}
+temp	float	$tmp326	%read{550,550} %write{549,549}
+temp	color	$tmp327	%read{549,549} %write{548,548}
+temp	float	$tmp328	%read{551,551} %write{550,550}
+temp	int	$tmp329	%read{553,553} %write{552,552}
+temp	int	$tmp330	%read{554,559} %write{553,558}
+temp	float	$tmp331	%read{556,556} %write{555,555}
+temp	int	$tmp332	%read{557,557} %write{556,556}
+temp	int	$tmp333	%read{558,558} %write{557,557}
+temp	float	$tmp334	%read{561,561} %write{560,560}
+temp	float	$tmp335	%read{569,569} %write{561,561}
+temp	float	$tmp336	%read{563,563} %write{562,562}
+temp	float	$tmp337	%read{564,564} %write{563,563}
+temp	float	$tmp338	%read{568,568} %write{564,564}
+temp	float	$tmp339	%read{566,566} %write{565,565}
+temp	float	$tmp340	%read{567,567} %write{566,566}
+temp	float	$tmp341	%read{568,568} %write{567,567}
+temp	float	$tmp342	%read{569,569} %write{568,568}
+temp	int	$tmp343	%read{571,571} %write{570,570}
+temp	int	$tmp344	%read{572,577} %write{571,576}
+temp	float	$tmp345	%read{574,574} %write{573,573}
+temp	int	$tmp346	%read{575,575} %write{574,574}
+temp	int	$tmp347	%read{576,576} %write{575,575}
+temp	float	$tmp348	%read{579,579} %write{578,578}
+temp	float	$tmp349	%read{587,587} %write{579,579}
+temp	float	$tmp350	%read{581,581} %write{580,580}
+temp	float	$tmp351	%read{582,582} %write{581,581}
+temp	float	$tmp352	%read{586,586} %write{582,582}
+temp	float	$tmp353	%read{584,584} %write{583,583}
+temp	float	$tmp354	%read{585,585} %write{584,584}
+temp	float	$tmp355	%read{586,586} %write{585,585}
+temp	float	$tmp356	%read{587,587} %write{586,586}
+temp	float	$tmp357	%read{592,592} %write{590,590}
+temp	float	$tmp358	%read{592,592} %write{591,591}
+temp	float	$tmp359	%read{593,593} %write{592,592}
+temp	float	$tmp360	%read{594,594} %write{593,593}
+temp	float	$tmp361	%read{597,597} %write{595,595}
+temp	float	$tmp362	%read{597,597} %write{596,596}
+temp	float	$tmp363	%read{598,598} %write{597,597}
+temp	float	$tmp364	%read{599,599} %write{598,598}
+temp	float	$tmp365	%read{606,606} %write{604,604}
+temp	color	$tmp366	%read{604,604} %write{603,603}
+temp	float	$tmp367	%read{606,606} %write{605,605}
+temp	float	$tmp368	%read{608,608} %write{606,606}
+temp	float	$tmp369	%read{608,608} %write{607,607}
+temp	float	$tmp370	%read{610,610} %write{608,608}
+temp	float	$tmp371	%read{610,610} %write{609,609}
+temp	float	$tmp372	%read{616,616} %write{613,613}
+temp	color	$tmp373	%read{613,613} %write{612,612}
+temp	float	$tmp374	%read{616,616} %write{615,615}
+temp	color	$tmp375	%read{615,615} %write{614,614}
+code Input
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:150
+# 	 
+	assign		Input u 	%filename{"source/3dsMax-OSL-Shaders/ColorCurves.osl"} %line{150} %argrw{"wr"}
+code ___main___
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:159
+# 	G = Out[1] = interpolate(Input[1], position, colors, interpolation, 1);
+	compref		$tmp2 Input $const1 	%filename{"source/3dsMax-OSL-Shaders/ColorCurves.osl"} %line{159} %argrw{"wrr"}
+	functioncall	$const2 205 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:10
+# 	int last = l-1;
+	arraylength	___322_l position 	%line{10} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:11
+# 
+	sub		___322_last ___322_l $const3 	%line{11} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:14
+# 		return values[0][c];
+	aref		$tmp3 position $const1 	%line{14} %argrw{"wrr"}
+	lt		$tmp4 $tmp2 $tmp3 	%argrw{"wrr"}
+	if		$tmp4 11 11 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:15
+# 
+	aref		$tmp5 colors $const1 	%line{15} %argrw{"wrr"}
+	compref		$tmp1 $tmp5 $const1 	%argrw{"wrr"}
+	return
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:19
+# 	{
+	for		$tmp6 13 14 25 27 	%line{19} %argrw{"r"}
+	assign		___322_i $const1 	%argrw{"wr"}
+	lt		$tmp6 ___322_i ___322_last 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:21
+# 			break;
+	aref		$tmp7 position ___322_i 	%line{21} %argrw{"wrr"}
+	ge		$tmp8 $tmp2 $tmp7 	%argrw{"wrr"}
+	neq		$tmp9 $tmp8 $const1 	%argrw{"wrr"}
+	if		$tmp9 23 23 	%argrw{"r"}
+	add		$tmp10 ___322_i $const3 	%argrw{"wrr"}
+	aref		$tmp11 position $tmp10 	%argrw{"wrr"}
+	lt		$tmp12 $tmp2 $tmp11 	%argrw{"wrr"}
+	neq		$tmp13 $tmp12 $const1 	%argrw{"wrr"}
+	assign		$tmp9 $tmp13 	%argrw{"wr"}
+	if		$tmp9 25 25 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:22
+# 	}
+	break	%line{22}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:19
+# 	{
+	assign		$tmp14 ___322_i 	%line{19} %argrw{"wr"}
+	add		___322_i ___322_i $const3 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:26
+# 		return values[last][c];
+	ge		$tmp15 ___322_i ___322_last 	%line{26} %argrw{"wrr"}
+	if		$tmp15 32 32 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:27
+# 		
+	aref		$tmp16 colors ___322_last 	%line{27} %argrw{"wrr"}
+	compref		$tmp1 $tmp16 $const1 	%argrw{"wrr"}
+	return
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:29
+# 	int i1 = i;
+	sub		$tmp17 ___322_i $const3 	%line{29} %argrw{"wrr"}
+	max		___322_i0 $const1 $tmp17 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:30
+# 	int i2 = i+1;
+	assign		___322_i1 ___322_i 	%line{30} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:31
+# 	int i3 = min(last, i+2);
+	add		___322_i2 ___322_i $const3 	%line{31} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:32
+# 	
+	add		$tmp18 ___322_i $const4 	%line{32} %argrw{"wrr"}
+	min		___322_i3 ___322_last $tmp18 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:34
+# 
+	aref		$tmp19 position ___322_i2 	%line{34} %argrw{"wrr"}
+	aref		$tmp20 position ___322_i1 	%argrw{"wrr"}
+	sub		___322_delta $tmp19 $tmp20 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:37
+# 
+	aref		___322_interp interpolation ___322_i1 	%line{37} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:40
+# 		return values[i1][c];
+	le		$tmp21 ___322_delta $const5 	%line{40} %argrw{"wrr"}
+	neq		$tmp22 $tmp21 $const1 	%argrw{"wrr"}
+	if		$tmp22 45 48 	%argrw{"r"}
+	eq		$tmp23 ___322_interp $const1 	%argrw{"wrr"}
+	neq		$tmp24 $tmp23 $const1 	%argrw{"wrr"}
+	assign		$tmp22 $tmp24 	%argrw{"wr"}
+	if		$tmp22 52 52 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:41
+# 
+	aref		$tmp25 colors ___322_i1 	%line{41} %argrw{"wrr"}
+	compref		$tmp1 $tmp25 $const1 	%argrw{"wrr"}
+	return
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:44
+# 
+	aref		$tmp26 position ___322_i1 	%line{44} %argrw{"wrr"}
+	sub		$tmp27 $tmp2 $tmp26 	%argrw{"wrr"}
+	div		___322_along $tmp27 ___322_delta 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:47
+# 		return mix(values[i1][c], values[i2][c], along);	
+	eq		$tmp28 ___322_interp $const3 	%line{47} %argrw{"wrr"}
+	if		$tmp28 63 63 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:48
+# 		
+	aref		$tmp30 colors ___322_i1 	%line{48} %argrw{"wrr"}
+	compref		$tmp29 $tmp30 $const1 	%argrw{"wrr"}
+	aref		$tmp32 colors ___322_i2 	%argrw{"wrr"}
+	compref		$tmp31 $tmp32 $const1 	%argrw{"wrr"}
+	mix		$tmp1 $tmp29 $tmp31 ___322_along 	%argrw{"wrrr"}
+	return
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:51
+# 	{
+	eq		$tmp33 ___322_interp $const4 	%line{51} %argrw{"wrr"}
+	if		$tmp33 109 109 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:60
+# 		float M21 = -0.5;
+	assign		___325_M12 $const6 	%line{60} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:61
+# 		float M23 =  0.5;
+	assign		___325_M21 $const7 	%line{61} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:62
+# 		float M31 =  1.0;
+	assign		___325_M23 $const8 	%line{62} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:63
+# 		float M32 = -2.5;
+	assign		___325_M31 $const6 	%line{63} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:64
+# 		float M33 =  2.0;
+	assign		___325_M32 $const9 	%line{64} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:65
+# 		float M34 = -0.5;
+	assign		___325_M33 $const10 	%line{65} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:66
+# 		float M41 = -0.5;
+	assign		___325_M34 $const7 	%line{66} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:67
+# 		float M42 =  1.5;
+	assign		___325_M41 $const7 	%line{67} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:68
+# 		float M43 = -1.5;
+	assign		___325_M42 $const11 	%line{68} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:69
+# 		float M44 =  0.5;
+	assign		___325_M43 $const12 	%line{69} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:70
+# 
+	assign		___325_M44 $const8 	%line{70} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:72
+# 		float v1 = values[i1][c];
+	aref		$tmp34 colors ___322_i0 	%line{72} %argrw{"wrr"}
+	compref		___325_v0 $tmp34 $const1 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:73
+# 		float v2 = values[i2][c];
+	aref		$tmp35 colors ___322_i1 	%line{73} %argrw{"wrr"}
+	compref		___325_v1 $tmp35 $const1 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:74
+# 		float v3 = values[i3][c];
+	aref		$tmp36 colors ___322_i2 	%line{74} %argrw{"wrr"}
+	compref		___325_v2 $tmp36 $const1 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:75
+# 
+	aref		$tmp37 colors ___322_i3 	%line{75} %argrw{"wrr"}
+	compref		___325_v3 $tmp37 $const1 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:77
+# 		float c2 = M21 * v0 + M23 * v2;
+	mul		___325_c1 ___325_M12 ___325_v1 	%line{77} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:78
+# 		float c3 = M31 * v0 + M32 * v1 + M33 * v2 + M34 * v3;
+	mul		$tmp38 ___325_M21 ___325_v0 	%line{78} %argrw{"wrr"}
+	mul		$tmp39 ___325_M23 ___325_v2 	%argrw{"wrr"}
+	add		___325_c2 $tmp38 $tmp39 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:79
+# 		float c4 = M41 * v0 + M42 * v1 + M43 * v2 + M44 * v3;
+	mul		$tmp40 ___325_M31 ___325_v0 	%line{79} %argrw{"wrr"}
+	mul		$tmp41 ___325_M32 ___325_v1 	%argrw{"wrr"}
+	add		$tmp42 $tmp40 $tmp41 	%argrw{"wrr"}
+	mul		$tmp43 ___325_M33 ___325_v2 	%argrw{"wrr"}
+	add		$tmp44 $tmp42 $tmp43 	%argrw{"wrr"}
+	mul		$tmp45 ___325_M34 ___325_v3 	%argrw{"wrr"}
+	add		___325_c3 $tmp44 $tmp45 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:80
+# 
+	mul		$tmp46 ___325_M41 ___325_v0 	%line{80} %argrw{"wrr"}
+	mul		$tmp47 ___325_M42 ___325_v1 	%argrw{"wrr"}
+	add		$tmp48 $tmp46 $tmp47 	%argrw{"wrr"}
+	mul		$tmp49 ___325_M43 ___325_v2 	%argrw{"wrr"}
+	add		$tmp50 $tmp48 $tmp49 	%argrw{"wrr"}
+	mul		$tmp51 ___325_M44 ___325_v3 	%argrw{"wrr"}
+	add		___325_c4 $tmp50 $tmp51 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:82
+# 	}
+	mul		$tmp52 ___325_c4 ___322_along 	%line{82} %argrw{"wrr"}
+	add		$tmp53 $tmp52 ___325_c3 	%argrw{"wrr"}
+	mul		$tmp54 $tmp53 ___322_along 	%argrw{"wrr"}
+	add		$tmp55 $tmp54 ___325_c2 	%argrw{"wrr"}
+	mul		$tmp56 $tmp55 ___322_along 	%argrw{"wrr"}
+	add		$tmp1 $tmp56 ___325_c1 	%argrw{"wrr"}
+	return
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:84
+# 	{
+	eq		$tmp57 ___322_interp $const13 	%line{84} %argrw{"wrr"}
+	if		$tmp57 200 200 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:86
+# 		float i2_tangent = 0;
+	assign		___326_i1_tangent $const1 	%line{86} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:87
+# 
+	assign		___326_i2_tangent $const1 	%line{87} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:89
+# 		float i1_interval = position[i2] - position[i1];
+	aref		$tmp58 position ___322_i1 	%line{89} %argrw{"wrr"}
+	aref		$tmp59 position ___322_i0 	%argrw{"wrr"}
+	sub		___326_i0_interval $tmp58 $tmp59 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:90
+# 		float i2_interval = position[i3] - position[i2];
+	aref		$tmp60 position ___322_i2 	%line{90} %argrw{"wrr"}
+	aref		$tmp61 position ___322_i1 	%argrw{"wrr"}
+	sub		___326_i1_interval $tmp60 $tmp61 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:91
+# 
+	aref		$tmp62 position ___322_i3 	%line{91} %argrw{"wrr"}
+	aref		$tmp63 position ___322_i2 	%argrw{"wrr"}
+	sub		___326_i2_interval $tmp62 $tmp63 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:93
+# 		float i1_delta = (values[i2][c] - values[i1][c]) / i1_interval;		
+	aref		$tmp65 colors ___322_i1 	%line{93} %argrw{"wrr"}
+	compref		$tmp64 $tmp65 $const1 	%argrw{"wrr"}
+	aref		$tmp67 colors ___322_i0 	%argrw{"wrr"}
+	compref		$tmp66 $tmp67 $const1 	%argrw{"wrr"}
+	sub		$tmp68 $tmp64 $tmp66 	%argrw{"wrr"}
+	div		___326_i0_delta $tmp68 ___326_i0_interval 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:94
+# 		float i2_delta = (values[i3][c] - values[i2][c]) / i2_interval;		
+	aref		$tmp70 colors ___322_i2 	%line{94} %argrw{"wrr"}
+	compref		$tmp69 $tmp70 $const1 	%argrw{"wrr"}
+	aref		$tmp72 colors ___322_i1 	%argrw{"wrr"}
+	compref		$tmp71 $tmp72 $const1 	%argrw{"wrr"}
+	sub		$tmp73 $tmp69 $tmp71 	%argrw{"wrr"}
+	div		___326_i1_delta $tmp73 ___326_i1_interval 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:95
+# 		
+	aref		$tmp75 colors ___322_i3 	%line{95} %argrw{"wrr"}
+	compref		$tmp74 $tmp75 $const1 	%argrw{"wrr"}
+	aref		$tmp77 colors ___322_i2 	%argrw{"wrr"}
+	compref		$tmp76 $tmp77 $const1 	%argrw{"wrr"}
+	sub		$tmp78 $tmp74 $tmp76 	%argrw{"wrr"}
+	div		___326_i2_delta $tmp78 ___326_i2_interval 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:98
+# 			i1_tangent = 3.0 * (i0_interval + i1_interval)
+	gt		$tmp79 ___322_i1 $const1 	%line{98} %argrw{"wrr"}
+	neq		$tmp80 $tmp79 $const1 	%argrw{"wrr"}
+	if		$tmp80 147 147 	%argrw{"r"}
+	mul		$tmp81 ___326_i1_delta ___326_i0_delta 	%argrw{"wrr"}
+	ge		$tmp82 $tmp81 $const5 	%argrw{"wrr"}
+	neq		$tmp83 $tmp82 $const1 	%argrw{"wrr"}
+	assign		$tmp80 $tmp83 	%argrw{"wr"}
+	if		$tmp80 158 158 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:99
+# 						/ ((2.0 * i1_interval + i0_interval) / i0_delta
+	add		$tmp84 ___326_i0_interval ___326_i1_interval 	%line{99} %argrw{"wrr"}
+	mul		$tmp85 $const14 $tmp84 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:100
+# 						+ (i1_interval + 2.0  * i0_interval) / i1_delta);
+	mul		$tmp86 $const10 ___326_i1_interval 	%line{100} %argrw{"wrr"}
+	add		$tmp87 $tmp86 ___326_i0_interval 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:101
+# 		}
+	div		$tmp88 $tmp87 ___326_i0_delta 	%line{101} %argrw{"wrr"}
+	mul		$tmp89 $const10 ___326_i0_interval 	%argrw{"wrr"}
+	add		$tmp90 ___326_i1_interval $tmp89 	%argrw{"wrr"}
+	div		$tmp91 $tmp90 ___326_i1_delta 	%argrw{"wrr"}
+	add		$tmp92 $tmp88 $tmp91 	%argrw{"wrr"}
+	div		___326_i1_tangent $tmp85 $tmp92 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:104
+# 						i2_tangent = 3.0 * (i1_interval + i2_interval)
+	lt		$tmp93 ___322_i2 ___322_last 	%line{104} %argrw{"wrr"}
+	neq		$tmp94 $tmp93 $const1 	%argrw{"wrr"}
+	if		$tmp94 165 165 	%argrw{"r"}
+	mul		$tmp95 ___326_i2_delta ___326_i1_delta 	%argrw{"wrr"}
+	ge		$tmp96 $tmp95 $const5 	%argrw{"wrr"}
+	neq		$tmp97 $tmp96 $const1 	%argrw{"wrr"}
+	assign		$tmp94 $tmp97 	%argrw{"wr"}
+	if		$tmp94 176 176 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:105
+# 						/ ((2.0 * i2_interval + i1_interval) / i1_delta
+	add		$tmp98 ___326_i1_interval ___326_i2_interval 	%line{105} %argrw{"wrr"}
+	mul		$tmp99 $const14 $tmp98 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:106
+# 						+ (i2_interval + 2.0 * i1_interval) / i2_delta);
+	mul		$tmp100 $const10 ___326_i2_interval 	%line{106} %argrw{"wrr"}
+	add		$tmp101 $tmp100 ___326_i1_interval 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:107
+# 		}
+	div		$tmp102 $tmp101 ___326_i1_delta 	%line{107} %argrw{"wrr"}
+	mul		$tmp103 $const10 ___326_i1_interval 	%argrw{"wrr"}
+	add		$tmp104 ___326_i2_interval $tmp103 	%argrw{"wrr"}
+	div		$tmp105 $tmp104 ___326_i2_delta 	%argrw{"wrr"}
+	add		$tmp106 $tmp102 $tmp105 	%argrw{"wrr"}
+	div		___326_i2_tangent $tmp99 $tmp106 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:110
+# 		float si = i1_delta;
+	div		___326_invint $const6 ___326_i1_interval 	%line{110} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:111
+# 		float ci = (3.0 * si - 2.0 * i1_tangent - i2_tangent) * invint;
+	assign		___326_si ___326_i1_delta 	%line{111} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:112
+# 		float di = (i1_tangent + i2_tangent - 2.0 * si) * invint * invint;
+	mul		$tmp107 $const14 ___326_si 	%line{112} %argrw{"wrr"}
+	mul		$tmp108 $const10 ___326_i1_tangent 	%argrw{"wrr"}
+	sub		$tmp109 $tmp107 $tmp108 	%argrw{"wrr"}
+	sub		$tmp110 $tmp109 ___326_i2_tangent 	%argrw{"wrr"}
+	mul		___326_ci $tmp110 ___326_invint 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:113
+# 
+	add		$tmp111 ___326_i1_tangent ___326_i2_tangent 	%line{113} %argrw{"wrr"}
+	mul		$tmp112 $const10 ___326_si 	%argrw{"wrr"}
+	sub		$tmp113 $tmp111 $tmp112 	%argrw{"wrr"}
+	mul		$tmp114 $tmp113 ___326_invint 	%argrw{"wrr"}
+	mul		___326_di $tmp114 ___326_invint 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:115
+# 		float t2 = t * t;
+	mul		___326_t ___322_along ___326_i1_interval 	%line{115} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:116
+# 		float t3 = t * t2;
+	mul		___326_t2 ___326_t ___326_t 	%line{116} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:117
+# 		return values[i1][c] + i1_tangent * t + ci * t2 + di * t3;
+	mul		___326_t3 ___326_t ___326_t2 	%line{117} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:118
+# 	}
+	aref		$tmp116 colors ___322_i1 	%line{118} %argrw{"wrr"}
+	compref		$tmp115 $tmp116 $const1 	%argrw{"wrr"}
+	mul		$tmp117 ___326_i1_tangent ___326_t 	%argrw{"wrr"}
+	add		$tmp118 $tmp115 $tmp117 	%argrw{"wrr"}
+	mul		$tmp119 ___326_ci ___326_t2 	%argrw{"wrr"}
+	add		$tmp120 $tmp118 $tmp119 	%argrw{"wrr"}
+	mul		$tmp121 ___326_di ___326_t3 	%argrw{"wrr"}
+	add		$tmp1 $tmp120 $tmp121 	%argrw{"wrr"}
+	return
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:122
+# }
+	aref		$tmp123 colors ___322_i1 	%line{122} %argrw{"wrr"}
+	compref		$tmp122 $tmp123 $const1 	%argrw{"wrr"}
+	aref		$tmp125 colors ___322_i2 	%argrw{"wrr"}
+	compref		$tmp124 $tmp125 $const1 	%argrw{"wrr"}
+	mix		$tmp1 $tmp122 $tmp124 ___322_along 	%argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:159
+# 	G = Out[1] = interpolate(Input[1], position, colors, interpolation, 1);
+	compassign	Out $const1 $tmp1 	%line{159} %argrw{"wrr"}
+	assign		R $tmp1 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:160
+# 	B = Out[2] = interpolate(Input[2], position, colors, interpolation, 2);		
+	compref		$tmp127 Input $const3 	%line{160} %argrw{"wrr"}
+	functioncall	$const2 411 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:10
+# 	int last = l-1;
+	arraylength	___322_l position 	%line{10} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:11
+# 
+	sub		___322_last ___322_l $const3 	%line{11} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:14
+# 		return values[0][c];
+	aref		$tmp128 position $const1 	%line{14} %argrw{"wrr"}
+	lt		$tmp129 $tmp127 $tmp128 	%argrw{"wrr"}
+	if		$tmp129 217 217 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:15
+# 
+	aref		$tmp130 colors $const1 	%line{15} %argrw{"wrr"}
+	compref		$tmp126 $tmp130 $const3 	%argrw{"wrr"}
+	return
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:19
+# 	{
+	for		$tmp131 219 220 231 233 	%line{19} %argrw{"r"}
+	assign		___322_i $const1 	%argrw{"wr"}
+	lt		$tmp131 ___322_i ___322_last 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:21
+# 			break;
+	aref		$tmp132 position ___322_i 	%line{21} %argrw{"wrr"}
+	ge		$tmp133 $tmp127 $tmp132 	%argrw{"wrr"}
+	neq		$tmp134 $tmp133 $const1 	%argrw{"wrr"}
+	if		$tmp134 229 229 	%argrw{"r"}
+	add		$tmp135 ___322_i $const3 	%argrw{"wrr"}
+	aref		$tmp136 position $tmp135 	%argrw{"wrr"}
+	lt		$tmp137 $tmp127 $tmp136 	%argrw{"wrr"}
+	neq		$tmp138 $tmp137 $const1 	%argrw{"wrr"}
+	assign		$tmp134 $tmp138 	%argrw{"wr"}
+	if		$tmp134 231 231 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:22
+# 	}
+	break	%line{22}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:19
+# 	{
+	assign		$tmp139 ___322_i 	%line{19} %argrw{"wr"}
+	add		___322_i ___322_i $const3 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:26
+# 		return values[last][c];
+	ge		$tmp140 ___322_i ___322_last 	%line{26} %argrw{"wrr"}
+	if		$tmp140 238 238 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:27
+# 		
+	aref		$tmp141 colors ___322_last 	%line{27} %argrw{"wrr"}
+	compref		$tmp126 $tmp141 $const3 	%argrw{"wrr"}
+	return
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:29
+# 	int i1 = i;
+	sub		$tmp142 ___322_i $const3 	%line{29} %argrw{"wrr"}
+	max		___322_i0 $const1 $tmp142 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:30
+# 	int i2 = i+1;
+	assign		___322_i1 ___322_i 	%line{30} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:31
+# 	int i3 = min(last, i+2);
+	add		___322_i2 ___322_i $const3 	%line{31} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:32
+# 	
+	add		$tmp143 ___322_i $const4 	%line{32} %argrw{"wrr"}
+	min		___322_i3 ___322_last $tmp143 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:34
+# 
+	aref		$tmp144 position ___322_i2 	%line{34} %argrw{"wrr"}
+	aref		$tmp145 position ___322_i1 	%argrw{"wrr"}
+	sub		___322_delta $tmp144 $tmp145 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:37
+# 
+	aref		___322_interp interpolation ___322_i1 	%line{37} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:40
+# 		return values[i1][c];
+	le		$tmp146 ___322_delta $const5 	%line{40} %argrw{"wrr"}
+	neq		$tmp147 $tmp146 $const1 	%argrw{"wrr"}
+	if		$tmp147 251 254 	%argrw{"r"}
+	eq		$tmp148 ___322_interp $const1 	%argrw{"wrr"}
+	neq		$tmp149 $tmp148 $const1 	%argrw{"wrr"}
+	assign		$tmp147 $tmp149 	%argrw{"wr"}
+	if		$tmp147 258 258 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:41
+# 
+	aref		$tmp150 colors ___322_i1 	%line{41} %argrw{"wrr"}
+	compref		$tmp126 $tmp150 $const3 	%argrw{"wrr"}
+	return
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:44
+# 
+	aref		$tmp151 position ___322_i1 	%line{44} %argrw{"wrr"}
+	sub		$tmp152 $tmp127 $tmp151 	%argrw{"wrr"}
+	div		___322_along $tmp152 ___322_delta 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:47
+# 		return mix(values[i1][c], values[i2][c], along);	
+	eq		$tmp153 ___322_interp $const3 	%line{47} %argrw{"wrr"}
+	if		$tmp153 269 269 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:48
+# 		
+	aref		$tmp155 colors ___322_i1 	%line{48} %argrw{"wrr"}
+	compref		$tmp154 $tmp155 $const3 	%argrw{"wrr"}
+	aref		$tmp157 colors ___322_i2 	%argrw{"wrr"}
+	compref		$tmp156 $tmp157 $const3 	%argrw{"wrr"}
+	mix		$tmp126 $tmp154 $tmp156 ___322_along 	%argrw{"wrrr"}
+	return
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:51
+# 	{
+	eq		$tmp158 ___322_interp $const4 	%line{51} %argrw{"wrr"}
+	if		$tmp158 315 315 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:60
+# 		float M21 = -0.5;
+	assign		___325_M12 $const6 	%line{60} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:61
+# 		float M23 =  0.5;
+	assign		___325_M21 $const7 	%line{61} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:62
+# 		float M31 =  1.0;
+	assign		___325_M23 $const8 	%line{62} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:63
+# 		float M32 = -2.5;
+	assign		___325_M31 $const6 	%line{63} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:64
+# 		float M33 =  2.0;
+	assign		___325_M32 $const9 	%line{64} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:65
+# 		float M34 = -0.5;
+	assign		___325_M33 $const10 	%line{65} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:66
+# 		float M41 = -0.5;
+	assign		___325_M34 $const7 	%line{66} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:67
+# 		float M42 =  1.5;
+	assign		___325_M41 $const7 	%line{67} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:68
+# 		float M43 = -1.5;
+	assign		___325_M42 $const11 	%line{68} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:69
+# 		float M44 =  0.5;
+	assign		___325_M43 $const12 	%line{69} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:70
+# 
+	assign		___325_M44 $const8 	%line{70} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:72
+# 		float v1 = values[i1][c];
+	aref		$tmp159 colors ___322_i0 	%line{72} %argrw{"wrr"}
+	compref		___325_v0 $tmp159 $const3 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:73
+# 		float v2 = values[i2][c];
+	aref		$tmp160 colors ___322_i1 	%line{73} %argrw{"wrr"}
+	compref		___325_v1 $tmp160 $const3 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:74
+# 		float v3 = values[i3][c];
+	aref		$tmp161 colors ___322_i2 	%line{74} %argrw{"wrr"}
+	compref		___325_v2 $tmp161 $const3 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:75
+# 
+	aref		$tmp162 colors ___322_i3 	%line{75} %argrw{"wrr"}
+	compref		___325_v3 $tmp162 $const3 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:77
+# 		float c2 = M21 * v0 + M23 * v2;
+	mul		___325_c1 ___325_M12 ___325_v1 	%line{77} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:78
+# 		float c3 = M31 * v0 + M32 * v1 + M33 * v2 + M34 * v3;
+	mul		$tmp163 ___325_M21 ___325_v0 	%line{78} %argrw{"wrr"}
+	mul		$tmp164 ___325_M23 ___325_v2 	%argrw{"wrr"}
+	add		___325_c2 $tmp163 $tmp164 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:79
+# 		float c4 = M41 * v0 + M42 * v1 + M43 * v2 + M44 * v3;
+	mul		$tmp165 ___325_M31 ___325_v0 	%line{79} %argrw{"wrr"}
+	mul		$tmp166 ___325_M32 ___325_v1 	%argrw{"wrr"}
+	add		$tmp167 $tmp165 $tmp166 	%argrw{"wrr"}
+	mul		$tmp168 ___325_M33 ___325_v2 	%argrw{"wrr"}
+	add		$tmp169 $tmp167 $tmp168 	%argrw{"wrr"}
+	mul		$tmp170 ___325_M34 ___325_v3 	%argrw{"wrr"}
+	add		___325_c3 $tmp169 $tmp170 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:80
+# 
+	mul		$tmp171 ___325_M41 ___325_v0 	%line{80} %argrw{"wrr"}
+	mul		$tmp172 ___325_M42 ___325_v1 	%argrw{"wrr"}
+	add		$tmp173 $tmp171 $tmp172 	%argrw{"wrr"}
+	mul		$tmp174 ___325_M43 ___325_v2 	%argrw{"wrr"}
+	add		$tmp175 $tmp173 $tmp174 	%argrw{"wrr"}
+	mul		$tmp176 ___325_M44 ___325_v3 	%argrw{"wrr"}
+	add		___325_c4 $tmp175 $tmp176 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:82
+# 	}
+	mul		$tmp177 ___325_c4 ___322_along 	%line{82} %argrw{"wrr"}
+	add		$tmp178 $tmp177 ___325_c3 	%argrw{"wrr"}
+	mul		$tmp179 $tmp178 ___322_along 	%argrw{"wrr"}
+	add		$tmp180 $tmp179 ___325_c2 	%argrw{"wrr"}
+	mul		$tmp181 $tmp180 ___322_along 	%argrw{"wrr"}
+	add		$tmp126 $tmp181 ___325_c1 	%argrw{"wrr"}
+	return
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:84
+# 	{
+	eq		$tmp182 ___322_interp $const13 	%line{84} %argrw{"wrr"}
+	if		$tmp182 406 406 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:86
+# 		float i2_tangent = 0;
+	assign		___326_i1_tangent $const1 	%line{86} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:87
+# 
+	assign		___326_i2_tangent $const1 	%line{87} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:89
+# 		float i1_interval = position[i2] - position[i1];
+	aref		$tmp183 position ___322_i1 	%line{89} %argrw{"wrr"}
+	aref		$tmp184 position ___322_i0 	%argrw{"wrr"}
+	sub		___326_i0_interval $tmp183 $tmp184 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:90
+# 		float i2_interval = position[i3] - position[i2];
+	aref		$tmp185 position ___322_i2 	%line{90} %argrw{"wrr"}
+	aref		$tmp186 position ___322_i1 	%argrw{"wrr"}
+	sub		___326_i1_interval $tmp185 $tmp186 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:91
+# 
+	aref		$tmp187 position ___322_i3 	%line{91} %argrw{"wrr"}
+	aref		$tmp188 position ___322_i2 	%argrw{"wrr"}
+	sub		___326_i2_interval $tmp187 $tmp188 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:93
+# 		float i1_delta = (values[i2][c] - values[i1][c]) / i1_interval;		
+	aref		$tmp190 colors ___322_i1 	%line{93} %argrw{"wrr"}
+	compref		$tmp189 $tmp190 $const3 	%argrw{"wrr"}
+	aref		$tmp192 colors ___322_i0 	%argrw{"wrr"}
+	compref		$tmp191 $tmp192 $const3 	%argrw{"wrr"}
+	sub		$tmp193 $tmp189 $tmp191 	%argrw{"wrr"}
+	div		___326_i0_delta $tmp193 ___326_i0_interval 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:94
+# 		float i2_delta = (values[i3][c] - values[i2][c]) / i2_interval;		
+	aref		$tmp195 colors ___322_i2 	%line{94} %argrw{"wrr"}
+	compref		$tmp194 $tmp195 $const3 	%argrw{"wrr"}
+	aref		$tmp197 colors ___322_i1 	%argrw{"wrr"}
+	compref		$tmp196 $tmp197 $const3 	%argrw{"wrr"}
+	sub		$tmp198 $tmp194 $tmp196 	%argrw{"wrr"}
+	div		___326_i1_delta $tmp198 ___326_i1_interval 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:95
+# 		
+	aref		$tmp200 colors ___322_i3 	%line{95} %argrw{"wrr"}
+	compref		$tmp199 $tmp200 $const3 	%argrw{"wrr"}
+	aref		$tmp202 colors ___322_i2 	%argrw{"wrr"}
+	compref		$tmp201 $tmp202 $const3 	%argrw{"wrr"}
+	sub		$tmp203 $tmp199 $tmp201 	%argrw{"wrr"}
+	div		___326_i2_delta $tmp203 ___326_i2_interval 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:98
+# 			i1_tangent = 3.0 * (i0_interval + i1_interval)
+	gt		$tmp204 ___322_i1 $const1 	%line{98} %argrw{"wrr"}
+	neq		$tmp205 $tmp204 $const1 	%argrw{"wrr"}
+	if		$tmp205 353 353 	%argrw{"r"}
+	mul		$tmp206 ___326_i1_delta ___326_i0_delta 	%argrw{"wrr"}
+	ge		$tmp207 $tmp206 $const5 	%argrw{"wrr"}
+	neq		$tmp208 $tmp207 $const1 	%argrw{"wrr"}
+	assign		$tmp205 $tmp208 	%argrw{"wr"}
+	if		$tmp205 364 364 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:99
+# 						/ ((2.0 * i1_interval + i0_interval) / i0_delta
+	add		$tmp209 ___326_i0_interval ___326_i1_interval 	%line{99} %argrw{"wrr"}
+	mul		$tmp210 $const14 $tmp209 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:100
+# 						+ (i1_interval + 2.0  * i0_interval) / i1_delta);
+	mul		$tmp211 $const10 ___326_i1_interval 	%line{100} %argrw{"wrr"}
+	add		$tmp212 $tmp211 ___326_i0_interval 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:101
+# 		}
+	div		$tmp213 $tmp212 ___326_i0_delta 	%line{101} %argrw{"wrr"}
+	mul		$tmp214 $const10 ___326_i0_interval 	%argrw{"wrr"}
+	add		$tmp215 ___326_i1_interval $tmp214 	%argrw{"wrr"}
+	div		$tmp216 $tmp215 ___326_i1_delta 	%argrw{"wrr"}
+	add		$tmp217 $tmp213 $tmp216 	%argrw{"wrr"}
+	div		___326_i1_tangent $tmp210 $tmp217 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:104
+# 						i2_tangent = 3.0 * (i1_interval + i2_interval)
+	lt		$tmp218 ___322_i2 ___322_last 	%line{104} %argrw{"wrr"}
+	neq		$tmp219 $tmp218 $const1 	%argrw{"wrr"}
+	if		$tmp219 371 371 	%argrw{"r"}
+	mul		$tmp220 ___326_i2_delta ___326_i1_delta 	%argrw{"wrr"}
+	ge		$tmp221 $tmp220 $const5 	%argrw{"wrr"}
+	neq		$tmp222 $tmp221 $const1 	%argrw{"wrr"}
+	assign		$tmp219 $tmp222 	%argrw{"wr"}
+	if		$tmp219 382 382 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:105
+# 						/ ((2.0 * i2_interval + i1_interval) / i1_delta
+	add		$tmp223 ___326_i1_interval ___326_i2_interval 	%line{105} %argrw{"wrr"}
+	mul		$tmp224 $const14 $tmp223 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:106
+# 						+ (i2_interval + 2.0 * i1_interval) / i2_delta);
+	mul		$tmp225 $const10 ___326_i2_interval 	%line{106} %argrw{"wrr"}
+	add		$tmp226 $tmp225 ___326_i1_interval 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:107
+# 		}
+	div		$tmp227 $tmp226 ___326_i1_delta 	%line{107} %argrw{"wrr"}
+	mul		$tmp228 $const10 ___326_i1_interval 	%argrw{"wrr"}
+	add		$tmp229 ___326_i2_interval $tmp228 	%argrw{"wrr"}
+	div		$tmp230 $tmp229 ___326_i2_delta 	%argrw{"wrr"}
+	add		$tmp231 $tmp227 $tmp230 	%argrw{"wrr"}
+	div		___326_i2_tangent $tmp224 $tmp231 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:110
+# 		float si = i1_delta;
+	div		___326_invint $const6 ___326_i1_interval 	%line{110} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:111
+# 		float ci = (3.0 * si - 2.0 * i1_tangent - i2_tangent) * invint;
+	assign		___326_si ___326_i1_delta 	%line{111} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:112
+# 		float di = (i1_tangent + i2_tangent - 2.0 * si) * invint * invint;
+	mul		$tmp232 $const14 ___326_si 	%line{112} %argrw{"wrr"}
+	mul		$tmp233 $const10 ___326_i1_tangent 	%argrw{"wrr"}
+	sub		$tmp234 $tmp232 $tmp233 	%argrw{"wrr"}
+	sub		$tmp235 $tmp234 ___326_i2_tangent 	%argrw{"wrr"}
+	mul		___326_ci $tmp235 ___326_invint 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:113
+# 
+	add		$tmp236 ___326_i1_tangent ___326_i2_tangent 	%line{113} %argrw{"wrr"}
+	mul		$tmp237 $const10 ___326_si 	%argrw{"wrr"}
+	sub		$tmp238 $tmp236 $tmp237 	%argrw{"wrr"}
+	mul		$tmp239 $tmp238 ___326_invint 	%argrw{"wrr"}
+	mul		___326_di $tmp239 ___326_invint 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:115
+# 		float t2 = t * t;
+	mul		___326_t ___322_along ___326_i1_interval 	%line{115} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:116
+# 		float t3 = t * t2;
+	mul		___326_t2 ___326_t ___326_t 	%line{116} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:117
+# 		return values[i1][c] + i1_tangent * t + ci * t2 + di * t3;
+	mul		___326_t3 ___326_t ___326_t2 	%line{117} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:118
+# 	}
+	aref		$tmp241 colors ___322_i1 	%line{118} %argrw{"wrr"}
+	compref		$tmp240 $tmp241 $const3 	%argrw{"wrr"}
+	mul		$tmp242 ___326_i1_tangent ___326_t 	%argrw{"wrr"}
+	add		$tmp243 $tmp240 $tmp242 	%argrw{"wrr"}
+	mul		$tmp244 ___326_ci ___326_t2 	%argrw{"wrr"}
+	add		$tmp245 $tmp243 $tmp244 	%argrw{"wrr"}
+	mul		$tmp246 ___326_di ___326_t3 	%argrw{"wrr"}
+	add		$tmp126 $tmp245 $tmp246 	%argrw{"wrr"}
+	return
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:122
+# }
+	aref		$tmp248 colors ___322_i1 	%line{122} %argrw{"wrr"}
+	compref		$tmp247 $tmp248 $const3 	%argrw{"wrr"}
+	aref		$tmp250 colors ___322_i2 	%argrw{"wrr"}
+	compref		$tmp249 $tmp250 $const3 	%argrw{"wrr"}
+	mix		$tmp126 $tmp247 $tmp249 ___322_along 	%argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:160
+# 	B = Out[2] = interpolate(Input[2], position, colors, interpolation, 2);		
+	compassign	Out $const3 $tmp126 	%line{160} %argrw{"wrr"}
+	assign		G $tmp126 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:161
+# } 
+	compref		$tmp252 Input $const4 	%line{161} %argrw{"wrr"}
+	functioncall	$const2 617 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:10
+# 	int last = l-1;
+	arraylength	___322_l position 	%line{10} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:11
+# 
+	sub		___322_last ___322_l $const3 	%line{11} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:14
+# 		return values[0][c];
+	aref		$tmp253 position $const1 	%line{14} %argrw{"wrr"}
+	lt		$tmp254 $tmp252 $tmp253 	%argrw{"wrr"}
+	if		$tmp254 423 423 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:15
+# 
+	aref		$tmp255 colors $const1 	%line{15} %argrw{"wrr"}
+	compref		$tmp251 $tmp255 $const4 	%argrw{"wrr"}
+	return
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:19
+# 	{
+	for		$tmp256 425 426 437 439 	%line{19} %argrw{"r"}
+	assign		___322_i $const1 	%argrw{"wr"}
+	lt		$tmp256 ___322_i ___322_last 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:21
+# 			break;
+	aref		$tmp257 position ___322_i 	%line{21} %argrw{"wrr"}
+	ge		$tmp258 $tmp252 $tmp257 	%argrw{"wrr"}
+	neq		$tmp259 $tmp258 $const1 	%argrw{"wrr"}
+	if		$tmp259 435 435 	%argrw{"r"}
+	add		$tmp260 ___322_i $const3 	%argrw{"wrr"}
+	aref		$tmp261 position $tmp260 	%argrw{"wrr"}
+	lt		$tmp262 $tmp252 $tmp261 	%argrw{"wrr"}
+	neq		$tmp263 $tmp262 $const1 	%argrw{"wrr"}
+	assign		$tmp259 $tmp263 	%argrw{"wr"}
+	if		$tmp259 437 437 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:22
+# 	}
+	break	%line{22}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:19
+# 	{
+	assign		$tmp264 ___322_i 	%line{19} %argrw{"wr"}
+	add		___322_i ___322_i $const3 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:26
+# 		return values[last][c];
+	ge		$tmp265 ___322_i ___322_last 	%line{26} %argrw{"wrr"}
+	if		$tmp265 444 444 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:27
+# 		
+	aref		$tmp266 colors ___322_last 	%line{27} %argrw{"wrr"}
+	compref		$tmp251 $tmp266 $const4 	%argrw{"wrr"}
+	return
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:29
+# 	int i1 = i;
+	sub		$tmp267 ___322_i $const3 	%line{29} %argrw{"wrr"}
+	max		___322_i0 $const1 $tmp267 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:30
+# 	int i2 = i+1;
+	assign		___322_i1 ___322_i 	%line{30} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:31
+# 	int i3 = min(last, i+2);
+	add		___322_i2 ___322_i $const3 	%line{31} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:32
+# 	
+	add		$tmp268 ___322_i $const4 	%line{32} %argrw{"wrr"}
+	min		___322_i3 ___322_last $tmp268 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:34
+# 
+	aref		$tmp269 position ___322_i2 	%line{34} %argrw{"wrr"}
+	aref		$tmp270 position ___322_i1 	%argrw{"wrr"}
+	sub		___322_delta $tmp269 $tmp270 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:37
+# 
+	aref		___322_interp interpolation ___322_i1 	%line{37} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:40
+# 		return values[i1][c];
+	le		$tmp271 ___322_delta $const5 	%line{40} %argrw{"wrr"}
+	neq		$tmp272 $tmp271 $const1 	%argrw{"wrr"}
+	if		$tmp272 457 460 	%argrw{"r"}
+	eq		$tmp273 ___322_interp $const1 	%argrw{"wrr"}
+	neq		$tmp274 $tmp273 $const1 	%argrw{"wrr"}
+	assign		$tmp272 $tmp274 	%argrw{"wr"}
+	if		$tmp272 464 464 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:41
+# 
+	aref		$tmp275 colors ___322_i1 	%line{41} %argrw{"wrr"}
+	compref		$tmp251 $tmp275 $const4 	%argrw{"wrr"}
+	return
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:44
+# 
+	aref		$tmp276 position ___322_i1 	%line{44} %argrw{"wrr"}
+	sub		$tmp277 $tmp252 $tmp276 	%argrw{"wrr"}
+	div		___322_along $tmp277 ___322_delta 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:47
+# 		return mix(values[i1][c], values[i2][c], along);	
+	eq		$tmp278 ___322_interp $const3 	%line{47} %argrw{"wrr"}
+	if		$tmp278 475 475 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:48
+# 		
+	aref		$tmp280 colors ___322_i1 	%line{48} %argrw{"wrr"}
+	compref		$tmp279 $tmp280 $const4 	%argrw{"wrr"}
+	aref		$tmp282 colors ___322_i2 	%argrw{"wrr"}
+	compref		$tmp281 $tmp282 $const4 	%argrw{"wrr"}
+	mix		$tmp251 $tmp279 $tmp281 ___322_along 	%argrw{"wrrr"}
+	return
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:51
+# 	{
+	eq		$tmp283 ___322_interp $const4 	%line{51} %argrw{"wrr"}
+	if		$tmp283 521 521 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:60
+# 		float M21 = -0.5;
+	assign		___325_M12 $const6 	%line{60} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:61
+# 		float M23 =  0.5;
+	assign		___325_M21 $const7 	%line{61} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:62
+# 		float M31 =  1.0;
+	assign		___325_M23 $const8 	%line{62} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:63
+# 		float M32 = -2.5;
+	assign		___325_M31 $const6 	%line{63} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:64
+# 		float M33 =  2.0;
+	assign		___325_M32 $const9 	%line{64} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:65
+# 		float M34 = -0.5;
+	assign		___325_M33 $const10 	%line{65} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:66
+# 		float M41 = -0.5;
+	assign		___325_M34 $const7 	%line{66} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:67
+# 		float M42 =  1.5;
+	assign		___325_M41 $const7 	%line{67} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:68
+# 		float M43 = -1.5;
+	assign		___325_M42 $const11 	%line{68} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:69
+# 		float M44 =  0.5;
+	assign		___325_M43 $const12 	%line{69} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:70
+# 
+	assign		___325_M44 $const8 	%line{70} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:72
+# 		float v1 = values[i1][c];
+	aref		$tmp284 colors ___322_i0 	%line{72} %argrw{"wrr"}
+	compref		___325_v0 $tmp284 $const4 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:73
+# 		float v2 = values[i2][c];
+	aref		$tmp285 colors ___322_i1 	%line{73} %argrw{"wrr"}
+	compref		___325_v1 $tmp285 $const4 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:74
+# 		float v3 = values[i3][c];
+	aref		$tmp286 colors ___322_i2 	%line{74} %argrw{"wrr"}
+	compref		___325_v2 $tmp286 $const4 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:75
+# 
+	aref		$tmp287 colors ___322_i3 	%line{75} %argrw{"wrr"}
+	compref		___325_v3 $tmp287 $const4 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:77
+# 		float c2 = M21 * v0 + M23 * v2;
+	mul		___325_c1 ___325_M12 ___325_v1 	%line{77} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:78
+# 		float c3 = M31 * v0 + M32 * v1 + M33 * v2 + M34 * v3;
+	mul		$tmp288 ___325_M21 ___325_v0 	%line{78} %argrw{"wrr"}
+	mul		$tmp289 ___325_M23 ___325_v2 	%argrw{"wrr"}
+	add		___325_c2 $tmp288 $tmp289 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:79
+# 		float c4 = M41 * v0 + M42 * v1 + M43 * v2 + M44 * v3;
+	mul		$tmp290 ___325_M31 ___325_v0 	%line{79} %argrw{"wrr"}
+	mul		$tmp291 ___325_M32 ___325_v1 	%argrw{"wrr"}
+	add		$tmp292 $tmp290 $tmp291 	%argrw{"wrr"}
+	mul		$tmp293 ___325_M33 ___325_v2 	%argrw{"wrr"}
+	add		$tmp294 $tmp292 $tmp293 	%argrw{"wrr"}
+	mul		$tmp295 ___325_M34 ___325_v3 	%argrw{"wrr"}
+	add		___325_c3 $tmp294 $tmp295 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:80
+# 
+	mul		$tmp296 ___325_M41 ___325_v0 	%line{80} %argrw{"wrr"}
+	mul		$tmp297 ___325_M42 ___325_v1 	%argrw{"wrr"}
+	add		$tmp298 $tmp296 $tmp297 	%argrw{"wrr"}
+	mul		$tmp299 ___325_M43 ___325_v2 	%argrw{"wrr"}
+	add		$tmp300 $tmp298 $tmp299 	%argrw{"wrr"}
+	mul		$tmp301 ___325_M44 ___325_v3 	%argrw{"wrr"}
+	add		___325_c4 $tmp300 $tmp301 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:82
+# 	}
+	mul		$tmp302 ___325_c4 ___322_along 	%line{82} %argrw{"wrr"}
+	add		$tmp303 $tmp302 ___325_c3 	%argrw{"wrr"}
+	mul		$tmp304 $tmp303 ___322_along 	%argrw{"wrr"}
+	add		$tmp305 $tmp304 ___325_c2 	%argrw{"wrr"}
+	mul		$tmp306 $tmp305 ___322_along 	%argrw{"wrr"}
+	add		$tmp251 $tmp306 ___325_c1 	%argrw{"wrr"}
+	return
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:84
+# 	{
+	eq		$tmp307 ___322_interp $const13 	%line{84} %argrw{"wrr"}
+	if		$tmp307 612 612 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:86
+# 		float i2_tangent = 0;
+	assign		___326_i1_tangent $const1 	%line{86} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:87
+# 
+	assign		___326_i2_tangent $const1 	%line{87} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:89
+# 		float i1_interval = position[i2] - position[i1];
+	aref		$tmp308 position ___322_i1 	%line{89} %argrw{"wrr"}
+	aref		$tmp309 position ___322_i0 	%argrw{"wrr"}
+	sub		___326_i0_interval $tmp308 $tmp309 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:90
+# 		float i2_interval = position[i3] - position[i2];
+	aref		$tmp310 position ___322_i2 	%line{90} %argrw{"wrr"}
+	aref		$tmp311 position ___322_i1 	%argrw{"wrr"}
+	sub		___326_i1_interval $tmp310 $tmp311 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:91
+# 
+	aref		$tmp312 position ___322_i3 	%line{91} %argrw{"wrr"}
+	aref		$tmp313 position ___322_i2 	%argrw{"wrr"}
+	sub		___326_i2_interval $tmp312 $tmp313 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:93
+# 		float i1_delta = (values[i2][c] - values[i1][c]) / i1_interval;		
+	aref		$tmp315 colors ___322_i1 	%line{93} %argrw{"wrr"}
+	compref		$tmp314 $tmp315 $const4 	%argrw{"wrr"}
+	aref		$tmp317 colors ___322_i0 	%argrw{"wrr"}
+	compref		$tmp316 $tmp317 $const4 	%argrw{"wrr"}
+	sub		$tmp318 $tmp314 $tmp316 	%argrw{"wrr"}
+	div		___326_i0_delta $tmp318 ___326_i0_interval 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:94
+# 		float i2_delta = (values[i3][c] - values[i2][c]) / i2_interval;		
+	aref		$tmp320 colors ___322_i2 	%line{94} %argrw{"wrr"}
+	compref		$tmp319 $tmp320 $const4 	%argrw{"wrr"}
+	aref		$tmp322 colors ___322_i1 	%argrw{"wrr"}
+	compref		$tmp321 $tmp322 $const4 	%argrw{"wrr"}
+	sub		$tmp323 $tmp319 $tmp321 	%argrw{"wrr"}
+	div		___326_i1_delta $tmp323 ___326_i1_interval 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:95
+# 		
+	aref		$tmp325 colors ___322_i3 	%line{95} %argrw{"wrr"}
+	compref		$tmp324 $tmp325 $const4 	%argrw{"wrr"}
+	aref		$tmp327 colors ___322_i2 	%argrw{"wrr"}
+	compref		$tmp326 $tmp327 $const4 	%argrw{"wrr"}
+	sub		$tmp328 $tmp324 $tmp326 	%argrw{"wrr"}
+	div		___326_i2_delta $tmp328 ___326_i2_interval 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:98
+# 			i1_tangent = 3.0 * (i0_interval + i1_interval)
+	gt		$tmp329 ___322_i1 $const1 	%line{98} %argrw{"wrr"}
+	neq		$tmp330 $tmp329 $const1 	%argrw{"wrr"}
+	if		$tmp330 559 559 	%argrw{"r"}
+	mul		$tmp331 ___326_i1_delta ___326_i0_delta 	%argrw{"wrr"}
+	ge		$tmp332 $tmp331 $const5 	%argrw{"wrr"}
+	neq		$tmp333 $tmp332 $const1 	%argrw{"wrr"}
+	assign		$tmp330 $tmp333 	%argrw{"wr"}
+	if		$tmp330 570 570 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:99
+# 						/ ((2.0 * i1_interval + i0_interval) / i0_delta
+	add		$tmp334 ___326_i0_interval ___326_i1_interval 	%line{99} %argrw{"wrr"}
+	mul		$tmp335 $const14 $tmp334 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:100
+# 						+ (i1_interval + 2.0  * i0_interval) / i1_delta);
+	mul		$tmp336 $const10 ___326_i1_interval 	%line{100} %argrw{"wrr"}
+	add		$tmp337 $tmp336 ___326_i0_interval 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:101
+# 		}
+	div		$tmp338 $tmp337 ___326_i0_delta 	%line{101} %argrw{"wrr"}
+	mul		$tmp339 $const10 ___326_i0_interval 	%argrw{"wrr"}
+	add		$tmp340 ___326_i1_interval $tmp339 	%argrw{"wrr"}
+	div		$tmp341 $tmp340 ___326_i1_delta 	%argrw{"wrr"}
+	add		$tmp342 $tmp338 $tmp341 	%argrw{"wrr"}
+	div		___326_i1_tangent $tmp335 $tmp342 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:104
+# 						i2_tangent = 3.0 * (i1_interval + i2_interval)
+	lt		$tmp343 ___322_i2 ___322_last 	%line{104} %argrw{"wrr"}
+	neq		$tmp344 $tmp343 $const1 	%argrw{"wrr"}
+	if		$tmp344 577 577 	%argrw{"r"}
+	mul		$tmp345 ___326_i2_delta ___326_i1_delta 	%argrw{"wrr"}
+	ge		$tmp346 $tmp345 $const5 	%argrw{"wrr"}
+	neq		$tmp347 $tmp346 $const1 	%argrw{"wrr"}
+	assign		$tmp344 $tmp347 	%argrw{"wr"}
+	if		$tmp344 588 588 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:105
+# 						/ ((2.0 * i2_interval + i1_interval) / i1_delta
+	add		$tmp348 ___326_i1_interval ___326_i2_interval 	%line{105} %argrw{"wrr"}
+	mul		$tmp349 $const14 $tmp348 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:106
+# 						+ (i2_interval + 2.0 * i1_interval) / i2_delta);
+	mul		$tmp350 $const10 ___326_i2_interval 	%line{106} %argrw{"wrr"}
+	add		$tmp351 $tmp350 ___326_i1_interval 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:107
+# 		}
+	div		$tmp352 $tmp351 ___326_i1_delta 	%line{107} %argrw{"wrr"}
+	mul		$tmp353 $const10 ___326_i1_interval 	%argrw{"wrr"}
+	add		$tmp354 ___326_i2_interval $tmp353 	%argrw{"wrr"}
+	div		$tmp355 $tmp354 ___326_i2_delta 	%argrw{"wrr"}
+	add		$tmp356 $tmp352 $tmp355 	%argrw{"wrr"}
+	div		___326_i2_tangent $tmp349 $tmp356 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:110
+# 		float si = i1_delta;
+	div		___326_invint $const6 ___326_i1_interval 	%line{110} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:111
+# 		float ci = (3.0 * si - 2.0 * i1_tangent - i2_tangent) * invint;
+	assign		___326_si ___326_i1_delta 	%line{111} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:112
+# 		float di = (i1_tangent + i2_tangent - 2.0 * si) * invint * invint;
+	mul		$tmp357 $const14 ___326_si 	%line{112} %argrw{"wrr"}
+	mul		$tmp358 $const10 ___326_i1_tangent 	%argrw{"wrr"}
+	sub		$tmp359 $tmp357 $tmp358 	%argrw{"wrr"}
+	sub		$tmp360 $tmp359 ___326_i2_tangent 	%argrw{"wrr"}
+	mul		___326_ci $tmp360 ___326_invint 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:113
+# 
+	add		$tmp361 ___326_i1_tangent ___326_i2_tangent 	%line{113} %argrw{"wrr"}
+	mul		$tmp362 $const10 ___326_si 	%argrw{"wrr"}
+	sub		$tmp363 $tmp361 $tmp362 	%argrw{"wrr"}
+	mul		$tmp364 $tmp363 ___326_invint 	%argrw{"wrr"}
+	mul		___326_di $tmp364 ___326_invint 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:115
+# 		float t2 = t * t;
+	mul		___326_t ___322_along ___326_i1_interval 	%line{115} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:116
+# 		float t3 = t * t2;
+	mul		___326_t2 ___326_t ___326_t 	%line{116} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:117
+# 		return values[i1][c] + i1_tangent * t + ci * t2 + di * t3;
+	mul		___326_t3 ___326_t ___326_t2 	%line{117} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:118
+# 	}
+	aref		$tmp366 colors ___322_i1 	%line{118} %argrw{"wrr"}
+	compref		$tmp365 $tmp366 $const4 	%argrw{"wrr"}
+	mul		$tmp367 ___326_i1_tangent ___326_t 	%argrw{"wrr"}
+	add		$tmp368 $tmp365 $tmp367 	%argrw{"wrr"}
+	mul		$tmp369 ___326_ci ___326_t2 	%argrw{"wrr"}
+	add		$tmp370 $tmp368 $tmp369 	%argrw{"wrr"}
+	mul		$tmp371 ___326_di ___326_t3 	%argrw{"wrr"}
+	add		$tmp251 $tmp370 $tmp371 	%argrw{"wrr"}
+	return
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:122
+# }
+	aref		$tmp373 colors ___322_i1 	%line{122} %argrw{"wrr"}
+	compref		$tmp372 $tmp373 $const4 	%argrw{"wrr"}
+	aref		$tmp375 colors ___322_i2 	%argrw{"wrr"}
+	compref		$tmp374 $tmp375 $const4 	%argrw{"wrr"}
+	mix		$tmp251 $tmp372 $tmp374 ___322_along 	%argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/ColorCurves.osl:161
+# } 
+	compassign	Out $const4 $tmp251 	%line{161} %argrw{"wrr"}
+	assign		B $tmp251 	%argrw{"wr"}
+	end

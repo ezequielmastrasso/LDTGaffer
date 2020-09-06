@@ -1,0 +1,38 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader MABRotate180
+param	point	VectorIn	0 0 0		%read{3,7} %write{0,0} %initexpr
+oparam	point	VectorOut	0 0 0		%read{2147483647,-1} %write{1,8} %initexpr
+global	point	P	%read{0,1} %write{2147483647,-1}
+const	string	$const1	"rotate_180"		%read{2,2} %write{2147483647,-1}
+const	int	$const2	1		%read{5,5} %write{2147483647,-1}
+const	int	$const3	0		%read{3,3} %write{2147483647,-1}
+temp	float	$tmp1	%read{4,4} %write{3,3}
+temp	float	$tmp2	%read{8,8} %write{4,4}
+const	float	$const4	1		%read{4,6} %write{2147483647,-1}
+temp	float	$tmp3	%read{6,6} %write{5,5}
+temp	float	$tmp4	%read{8,8} %write{6,6}
+const	int	$const5	2		%read{7,7} %write{2147483647,-1}
+temp	float	$tmp5	%read{8,8} %write{7,7}
+code VectorIn
+# source/sambler-osl-shaders/MJABook/12MABSymmetry/MABRotate180.osl:19
+# 
+	assign		VectorIn P 	%filename{"source/sambler-osl-shaders/MJABook/12MABSymmetry/MABRotate180.osl"} %line{19} %argrw{"wr"}
+code VectorOut
+# source/sambler-osl-shaders/MJABook/12MABSymmetry/MABRotate180.osl:21
+# {
+	assign		VectorOut P 	%filename{"source/sambler-osl-shaders/MJABook/12MABSymmetry/MABRotate180.osl"} %line{21} %argrw{"wr"}
+code ___main___
+# source/sambler-osl-shaders/MJABook/12MABSymmetry/MABRotate180.osl:23
+# }
+	functioncall	$const1 9 	%filename{"source/sambler-osl-shaders/MJABook/12MABSymmetry/MABRotate180.osl"} %line{23} %argrw{"r"}
+# source/sambler-osl-shaders/MJABook/12MABSymmetry/MABRotate180.osl:15
+# }
+	compref		$tmp1 VectorIn $const3 	%line{15} %argrw{"wrr"}
+	sub		$tmp2 $const4 $tmp1 	%argrw{"wrr"}
+	compref		$tmp3 VectorIn $const2 	%argrw{"wrr"}
+	sub		$tmp4 $const4 $tmp3 	%argrw{"wrr"}
+	compref		$tmp5 VectorIn $const5 	%argrw{"wrr"}
+	point		VectorOut $tmp2 $tmp4 $tmp5 	%argrw{"wrrr"}
+	end

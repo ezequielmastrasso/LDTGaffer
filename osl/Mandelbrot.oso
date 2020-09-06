@@ -1,0 +1,120 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader Mandelbrot	%meta{string,help,"A four dimensional mandelbrot/julia set generator"} %meta{string,category,"Textures"} 
+param	vector	UVW	0 0 0		%meta{string,help,"The coordinate to look up. Defaults to the standard UV channel"}  %read{1,1} %write{0,0} %initexpr
+param	vector	Center	0 0 0		%read{3,3} %write{2147483647,-1}
+param	float	Scale	0.34999999		%read{2,8} %write{2147483647,-1}
+param	float	ZImaginary	0		%read{8,8} %write{2147483647,-1}
+param	int	Iterations	100		%read{12,28} %write{2147483647,-1}
+param	float	ColorScale	1		%read{27,27} %write{2147483647,-1}
+param	float	ColorPower	1		%read{30,30} %write{2147483647,-1}
+oparam	color	Col	0 0 0		%read{2147483647,-1} %write{33,33}
+oparam	float	Fac	0		%read{30,30} %write{29,29}
+global	float	u	%read{0,0} %write{2147483647,-1}
+global	float	v	%read{0,0} %write{2147483647,-1}
+local	vector	pnt	%read{5,7} %write{4,4}
+local	float	cR	%read{12,25} %write{5,5}
+local	float	cI	%read{12,25} %write{6,6}
+local	float	zR	%read{12,25} %write{7,25}
+local	float	zI	%read{12,25} %write{8,25}
+local	int	num	%read{12,26} %write{9,25}
+local	float	___323_zR2	%read{12,25} %write{12,25}
+local	float	___323_zI2	%read{12,25} %write{12,25}
+const	int	$const1	0		%read{5,11} %write{2147483647,-1}
+const	float	$const2	0		%read{0,0} %write{2147483647,-1}
+const	point	$const3	0.5 0.5 0		%read{1,1} %write{2147483647,-1}
+temp	point	$tmp2	%read{2,2} %write{1,1}
+temp	point	$tmp3	%read{4,4} %write{2,2}
+const	point	$const4	0 0.66000003 0		%read{3,3} %write{2147483647,-1}
+temp	point	$tmp5	%read{4,4} %write{3,3}
+const	int	$const5	1		%read{6,25} %write{2147483647,-1}
+const	int	$const6	2		%read{7,7} %write{2147483647,-1}
+temp	int	$tmp6	%read{10,25} %write{11,25}
+temp	float	$tmp7	%read{12,25} %write{12,25}
+const	float	$const7	4		%read{16,16} %write{2147483647,-1}
+temp	int	$tmp8	%read{12,25} %write{12,25}
+temp	float	$tmp9	%read{12,25} %write{12,25}
+const	float	$const8	2		%read{19,19} %write{2147483647,-1}
+temp	float	$tmp10	%read{12,25} %write{12,25}
+temp	float	$tmp11	%read{12,25} %write{12,25}
+temp	int	$tmp12	%read{2147483647,-1} %write{12,25}
+temp	float	$tmp13	%read{29,29} %write{27,27}
+temp	float	$tmp14	%read{27,27} %write{26,26}
+temp	float	$tmp15	%read{29,29} %write{28,28}
+temp	float	$tmp16	%read{31,31} %write{30,30}
+temp	float	$tmp17	%read{32,32} %write{31,31}
+const	float	$const11	2000		%read{31,31} %write{2147483647,-1}
+temp	float	$tmp18	%read{33,33} %write{32,32}
+const	float	$const12	420		%read{32,32} %write{2147483647,-1}
+code UVW
+# source/3dsMax-OSL-Shaders/Mandelbrot.osl:14
+#     	[[ string help = "The coordinate to look up. Defaults to the standard UV channel" ]],
+	vector		UVW u v $const2 	%filename{"source/3dsMax-OSL-Shaders/Mandelbrot.osl"} %line{14} %argrw{"wrrr"}
+code ___main___
+# source/3dsMax-OSL-Shaders/Mandelbrot.osl:27
+# 	
+	sub		$tmp2 UVW $const3 	%filename{"source/3dsMax-OSL-Shaders/Mandelbrot.osl"} %line{27} %argrw{"wrr"}
+	div		$tmp3 $tmp2 Scale 	%argrw{"wrr"}
+	add		$tmp5 Center $const4 	%argrw{"wrr"}
+	sub		pnt $tmp3 $tmp5 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Mandelbrot.osl:29
+#     float cI = pnt[1];
+	compref		cR pnt $const1 	%line{29} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Mandelbrot.osl:30
+#     
+	compref		cI pnt $const5 	%line{30} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Mandelbrot.osl:32
+#     float zI = ZImaginary / Scale;
+	compref		zR pnt $const6 	%line{32} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Mandelbrot.osl:33
+#         
+	div		zI ZImaginary Scale 	%line{33} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Mandelbrot.osl:35
+#         
+	assign		num $const1 	%line{35} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Mandelbrot.osl:37
+#     {
+	for		$tmp6 12 13 24 26 	%line{37} %argrw{"r"}
+	assign		num $const1 	%argrw{"wr"}
+	lt		$tmp6 num Iterations 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Mandelbrot.osl:39
+#     	float zI2 = zI * zI;    // Imag. squared
+	mul		___323_zR2 zR zR 	%line{39} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Mandelbrot.osl:40
+#     	
+	mul		___323_zI2 zI zI 	%line{40} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Mandelbrot.osl:42
+#     		break; // Escapes to infinity
+	add		$tmp7 ___323_zR2 ___323_zI2 	%line{42} %argrw{"wrr"}
+	gt		$tmp8 $tmp7 $const7 	%argrw{"wrr"}
+	if		$tmp8 19 19 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Mandelbrot.osl:43
+# 	    	
+	break	%line{43}
+# source/3dsMax-OSL-Shaders/Mandelbrot.osl:45
+#         zR =    zR2 - zI2 + cI;
+	mul		$tmp9 $const8 zR 	%line{45} %argrw{"wrr"}
+	mul		$tmp10 $tmp9 zI 	%argrw{"wrr"}
+	add		zI $tmp10 cR 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Mandelbrot.osl:46
+#     }
+	sub		$tmp11 ___323_zR2 ___323_zI2 	%line{46} %argrw{"wrr"}
+	add		zR $tmp11 cI 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Mandelbrot.osl:37
+#     {
+	assign		$tmp12 num 	%line{37} %argrw{"wr"}
+	add		num num $const5 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Mandelbrot.osl:49
+#     Col = wavelength_color(420 + pow(Fac, ColorPower) * 2000);
+	assign		$tmp14 num 	%line{49} %argrw{"wr"}
+	mul		$tmp13 $tmp14 ColorScale 	%argrw{"wrr"}
+	assign		$tmp15 Iterations 	%argrw{"wr"}
+	div		Fac $tmp13 $tmp15 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Mandelbrot.osl:50
+# }
+	pow		$tmp16 Fac ColorPower 	%line{50} %argrw{"wrr"}
+	mul		$tmp17 $tmp16 $const11 	%argrw{"wrr"}
+	add		$tmp18 $const12 $tmp17 	%argrw{"wrr"}
+	wavelength_color	Col $tmp18 	%argrw{"wr"}
+	end

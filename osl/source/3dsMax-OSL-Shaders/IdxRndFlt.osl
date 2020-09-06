@@ -1,0 +1,22 @@
+// Index based Randomizer
+// IdxRndFlt.osl, by Zap Andersson
+// Modified: 2019-11-26
+// Copyright 2019 Autodesk Inc, All rights reserved. This file is licensed under Apache 2.0 license
+//    https://github.com/ADN-DevTech/3dsMax-OSL-Shaders/blob/master/LICENSE.txt
+
+shader IdxRndFlt 
+[[ string help  = "Return a randomized float based on an input integer index",
+   string category = "Math Float",
+   string label = "Random by Index" ]]
+(
+	int   Idx   = 0,
+	int   Seed  = 1,
+	float Min   = 0.0,
+	float Max   = 1.0,
+	output float Out = 0.0
+)
+{
+	// abs() to deal w. the versioning issue w. negative cellnoise values
+	float ratio = noise("cell", vector(abs(Idx), abs(Seed), 11)); 
+	Out = mix(Min, Max, ratio);
+}

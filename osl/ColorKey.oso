@@ -1,0 +1,98 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader ColorKey	%meta{string,label,"Color Key"} %meta{string,category,"Compositing"} %meta{string,help,"<font size=+1><b>Color Key</b></font><br>A simple color key shader for rough green/bluescreen<br>keying. Can do simple edge cutoffs in UV space<br>and apply a garbage mask if needed."} 
+param	color	Input	0 0 0		%meta{string,label,"Input Image"} %meta{string,help,"Connect the input image you want to key here."}  %read{3,31} %write{2147483647,-1}
+param	color	KeyColor	0 1 0		%meta{string,label,"Key Color"} %meta{string,help,"The color to key. Ideally, pick it from the image to be keyed, in the middle of the color range to be keyed."}  %read{4,4} %write{2147483647,-1}
+param	color	Mask	0 0 0		%meta{string,label,"Mask"} %meta{string,help,"Connect any garbage mask here."}  %read{28,28} %write{1,1} %initexpr
+param	color	Fill	0 0 0		%meta{string,label,"Fill Color"} %meta{string,help,"The color to fill out the keyed out area with."}  %read{31,31} %write{2147483647,-1}
+param	float	Low	0.5		%meta{string,label,"Low Cutoff"} %meta{string,help,"The low cutoff of the color difference."}  %read{27,27} %write{2147483647,-1}
+param	float	High	0.69999999		%meta{string,label,"High Cutoff"} %meta{string,help,"The high cutoff of the color difference."}  %read{27,27} %write{2147483647,-1}
+param	float	Gamma	1		%meta{string,label,"Computation Gamma"} %meta{string,help,"Tweaks the color range midtones before computing the difference. Trying different values here and adjusting the High/Low cutoff can yeild a better result. "}  %read{3,4} %write{2147483647,-1}
+param	point	UVW	0 0 0		%meta{string,label,"UV Input"} %meta{string,help,"UV Input (defaults to map channel 1)"}  %read{6,22} %write{2,2} %initexpr
+param	float	LowU	0		%meta{string,label,"U Cutoff"} %meta{string,help,"Low edge of simple 2d cutoff in U direction"}  %read{7,7} %write{2147483647,-1}
+param	float	HighU	1		%meta{string,label,"U Cutoff"} %meta{string,help,"High edge of simple 2d cutoff in U direction"}  %read{11,11} %write{2147483647,-1}
+param	float	LowV	0		%meta{string,label,"V Cutoff"} %meta{string,help,"Low edge of simple 2d cutoff in V direction"}  %read{17,17} %write{2147483647,-1}
+param	float	HighV	1		%meta{string,label,"V Cutoff"} %meta{string,help,"High edge of simple 2d cutoff in U direction"}  %read{23,23} %write{2147483647,-1}
+oparam	color	Col	0 0 0		%read{2147483647,-1} %write{30,31}
+oparam	float	Key	0		%read{30,31} %write{29,29}
+global	float	u	%read{2,2} %write{2147483647,-1}
+global	float	v	%read{2,2} %write{2147483647,-1}
+local	float	x	%read{27,27} %write{5,5}
+const	float	$const1	1		%read{0,0} %write{2147483647,-1}
+temp	float	$tmp1	%read{1,1} %write{0,0}
+const	int	$const2	0		%read{6,24} %write{2147483647,-1}
+const	float	$const3	0		%read{2,2} %write{2147483647,-1}
+temp	color	$tmp2	%read{5,5} %write{3,3}
+temp	color	$tmp3	%read{5,5} %write{4,4}
+temp	float	$tmp4	%read{7,7} %write{6,6}
+temp	int	$tmp5	%read{8,8} %write{7,7}
+temp	int	$tmp6	%read{9,14} %write{8,13}
+temp	float	$tmp7	%read{11,11} %write{10,10}
+temp	int	$tmp8	%read{12,12} %write{11,11}
+temp	int	$tmp9	%read{13,13} %write{12,12}
+temp	int	$tmp10	%read{15,20} %write{14,19}
+const	int	$const4	1		%read{16,22} %write{2147483647,-1}
+temp	float	$tmp11	%read{17,17} %write{16,16}
+temp	int	$tmp12	%read{18,18} %write{17,17}
+temp	int	$tmp13	%read{19,19} %write{18,18}
+temp	int	$tmp14	%read{21,26} %write{20,25}
+temp	float	$tmp15	%read{23,23} %write{22,22}
+temp	int	$tmp16	%read{24,24} %write{23,23}
+temp	int	$tmp17	%read{25,25} %write{24,24}
+temp	float	$tmp18	%read{29,29} %write{27,27}
+temp	float	$tmp19	%read{29,29} %write{28,28}
+code Mask
+# source/3dsMax-OSL-Shaders/ColorKey.osl:20
+# 		[[ string label = "Mask",
+	mul		$tmp1 $const1 $const1 	%filename{"source/3dsMax-OSL-Shaders/ColorKey.osl"} %line{20} %argrw{"wrr"}
+	assign		Mask $tmp1 	%argrw{"wr"}
+code UVW
+# source/3dsMax-OSL-Shaders/ColorKey.osl:36
+# 		[[ string label = "UV Input",
+	point		UVW u v $const3 	%filename{"source/3dsMax-OSL-Shaders/ColorKey.osl"} %line{36} %argrw{"wrrr"}
+code ___main___
+# source/3dsMax-OSL-Shaders/ColorKey.osl:56
+# 	
+	pow		$tmp2 Input Gamma 	%filename{"source/3dsMax-OSL-Shaders/ColorKey.osl"} %line{56} %argrw{"wrr"}
+	pow		$tmp3 KeyColor Gamma 	%argrw{"wrr"}
+	distance	x $tmp2 $tmp3 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorKey.osl:58
+#   	    UVW[1] > LowV && UVW[1] < HighV)
+	compref		$tmp4 UVW $const2 	%line{58} %argrw{"wrr"}
+	gt		$tmp5 $tmp4 LowU 	%argrw{"wrr"}
+	neq		$tmp6 $tmp5 $const2 	%argrw{"wrr"}
+	if		$tmp6 14 14 	%argrw{"r"}
+	compref		$tmp7 UVW $const2 	%argrw{"wrr"}
+	lt		$tmp8 $tmp7 HighU 	%argrw{"wrr"}
+	neq		$tmp9 $tmp8 $const2 	%argrw{"wrr"}
+	assign		$tmp6 $tmp9 	%argrw{"wr"}
+	neq		$tmp10 $tmp6 $const2 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorKey.osl:59
+# 	{	
+	if		$tmp10 20 20 	%line{59} %argrw{"r"}
+	compref		$tmp11 UVW $const4 	%argrw{"wrr"}
+	gt		$tmp12 $tmp11 LowV 	%argrw{"wrr"}
+	neq		$tmp13 $tmp12 $const2 	%argrw{"wrr"}
+	assign		$tmp10 $tmp13 	%argrw{"wr"}
+	neq		$tmp14 $tmp10 $const2 	%argrw{"wrr"}
+	if		$tmp14 26 26 	%argrw{"r"}
+	compref		$tmp15 UVW $const4 	%argrw{"wrr"}
+	lt		$tmp16 $tmp15 HighV 	%argrw{"wrr"}
+	neq		$tmp17 $tmp16 $const2 	%argrw{"wrr"}
+	assign		$tmp14 $tmp17 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ColorKey.osl:58
+#   	    UVW[1] > LowV && UVW[1] < HighV)
+	if		$tmp14 31 31 	%line{58} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorKey.osl:61
+# 		Col = Input * Key;
+	smoothstep	$tmp18 Low High x 	%line{61} %argrw{"wrrr"}
+	luminance	$tmp19 Mask 	%argrw{"wr"}
+	mul		Key $tmp18 $tmp19 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorKey.osl:62
+# 	}
+	mul		Col Input Key 	%line{62} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorKey.osl:65
+# }
+	mix		Col Fill Input Key 	%line{65} %argrw{"wrrr"}
+	end

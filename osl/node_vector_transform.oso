@@ -1,0 +1,51 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader node_vector_transform
+param	string	type	"Vector"		%read{0,11} %write{2147483647,-1}
+param	string	convert_from	"world"		%read{7,14} %write{2147483647,-1}
+param	string	convert_to	"object"		%read{7,14} %write{2147483647,-1}
+param	vector	VectorIn	0 0 0		%read{7,13} %write{2147483647,-1}
+oparam	vector	VectorOut	0 0 0		%read{10,10} %write{7,14}
+local	point	___632_Point	%read{14,14} %write{13,13}
+const	string	$const1	"Vector"		%read{0,0} %write{2147483647,-1}
+temp	int	$tmp1	%read{1,1} %write{0,0}
+temp	int	$tmp2	%read{2,6} %write{1,5}
+const	int	$const2	0		%read{1,4} %write{2147483647,-1}
+const	string	$const3	"Normal"		%read{3,8} %write{2147483647,-1}
+temp	int	$tmp3	%read{4,4} %write{3,3}
+temp	int	$tmp4	%read{5,5} %write{4,4}
+temp	int	$tmp5	%read{9,9} %write{8,8}
+const	string	$const4	"Point"		%read{11,11} %write{2147483647,-1}
+temp	int	$tmp6	%read{12,12} %write{11,11}
+code ___main___
+# include/node_vector_transform.osl:27
+# 		VectorOut = transform(convert_from, convert_to, VectorIn);
+	eq		$tmp1 type $const1 	%filename{"include/node_vector_transform.osl"} %line{27} %argrw{"wrr"}
+	neq		$tmp2 $tmp1 $const2 	%argrw{"wrr"}
+	if		$tmp2 3 6 	%argrw{"r"}
+	eq		$tmp3 type $const3 	%argrw{"wrr"}
+	neq		$tmp4 $tmp3 $const2 	%argrw{"wrr"}
+	assign		$tmp2 $tmp4 	%argrw{"wr"}
+	if		$tmp2 11 15 	%argrw{"r"}
+# include/node_vector_transform.osl:28
+# 		if (type == "Normal")
+	transformv	VectorOut convert_from convert_to VectorIn 	%line{28} %argrw{"wrrr"}
+# include/node_vector_transform.osl:29
+# 			VectorOut = normalize(VectorOut);
+	eq		$tmp5 type $const3 	%line{29} %argrw{"wrr"}
+	if		$tmp5 11 11 	%argrw{"r"}
+# include/node_vector_transform.osl:30
+# 	}
+	normalize	VectorOut VectorOut 	%line{30} %argrw{"wr"}
+# include/node_vector_transform.osl:32
+# 		point Point = (point)VectorIn;
+	eq		$tmp6 type $const4 	%line{32} %argrw{"wrr"}
+	if		$tmp6 15 15 	%argrw{"r"}
+# include/node_vector_transform.osl:33
+# 		VectorOut = transform(convert_from, convert_to, Point);
+	assign		___632_Point VectorIn 	%line{33} %argrw{"wr"}
+# include/node_vector_transform.osl:34
+# 	}
+	transform	VectorOut convert_from convert_to ___632_Point 	%line{34} %argrw{"wrrr"}
+	end

@@ -1,0 +1,80 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader MABTriangles
+param	point	Vector	0 0 0		%read{1,1} %write{0,0} %initexpr
+param	float	Scale	1		%read{1,1} %write{2147483647,-1}
+param	color	Color1	1 0 0		%read{22,22} %write{2147483647,-1}
+param	color	Color2	0 1 0		%read{23,23} %write{2147483647,-1}
+oparam	color	Color	0 0 0		%read{2147483647,-1} %write{22,23}
+global	point	P	%read{0,0} %write{2147483647,-1}
+local	point	p	%read{2,6} %write{1,1}
+local	float	y	%read{7,20} %write{5,18}
+local	float	x	%read{19,19} %write{13,13}
+const	int	$const1	1		%read{2,2} %write{2147483647,-1}
+temp	float	$tmp1	%read{5,5} %write{2,2}
+temp	float	$tmp2	%read{4,4} %write{3,3}
+const	float	$const3	3		%read{3,3} %write{2147483647,-1}
+temp	float	$tmp3	%read{5,5} %write{4,4}
+const	float	$const5	2		%read{4,7} %write{2147483647,-1}
+const	int	$const6	0		%read{6,6} %write{2147483647,-1}
+temp	float	$tmp4	%read{8,8} %write{6,6}
+temp	float	$tmp5	%read{8,8} %write{7,7}
+temp	float	$tmp6	%read{10,13} %write{8,8}
+const	float	$const7	1		%read{10,19} %write{2147483647,-1}
+const	string	$const8	"mod"		%read{9,14} %write{2147483647,-1}
+temp	float	$tmp7	%read{12,12} %write{11,11}
+temp	float	$tmp8	%read{11,11} %write{10,10}
+temp	float	$tmp9	%read{13,13} %write{12,12}
+temp	float	$tmp10	%read{17,17} %write{16,16}
+temp	float	$tmp11	%read{16,16} %write{15,15}
+temp	float	$tmp12	%read{18,18} %write{17,17}
+temp	float	$tmp13	%read{20,20} %write{19,19}
+temp	int	$tmp14	%read{21,21} %write{20,20}
+code Vector
+# source/sambler-osl-shaders/MJABook/07MABTriangles/MABTriangles.osl:15
+#     float Scale = 1,
+	assign		Vector P 	%filename{"source/sambler-osl-shaders/MJABook/07MABTriangles/MABTriangles.osl"} %line{15} %argrw{"wr"}
+code ___main___
+# source/sambler-osl-shaders/MJABook/07MABTriangles/MABTriangles.osl:22
+# 
+	mul		p Vector Scale 	%filename{"source/sambler-osl-shaders/MJABook/07MABTriangles/MABTriangles.osl"} %line{22} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/07MABTriangles/MABTriangles.osl:25
+#     float x = mod(p[0] - y/2, 1.0);
+	compref		$tmp1 p $const1 	%line{25} %argrw{"wrr"}
+	sqrt		$tmp2 $const3 	%argrw{"wr"}
+	div		$tmp3 $tmp2 $const5 	%argrw{"wrr"}
+	div		y $tmp1 $tmp3 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/07MABTriangles/MABTriangles.osl:26
+#     y = mod(y,1.0);
+	compref		$tmp4 p $const6 	%line{26} %argrw{"wrr"}
+	div		$tmp5 y $const5 	%argrw{"wrr"}
+	sub		$tmp6 $tmp4 $tmp5 	%argrw{"wrr"}
+	functioncall	$const8 14 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:136
+# float  mod (float  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp8 $tmp6 $const7 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{136} %argrw{"wrr"}
+	floor		$tmp7 $tmp8 	%argrw{"wr"}
+	mul		$tmp9 $const7 $tmp7 	%argrw{"wrr"}
+	sub		x $tmp6 $tmp9 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/07MABTriangles/MABTriangles.osl:27
+#     if( y > 1 - x ){
+	functioncall	$const8 19 	%filename{"source/sambler-osl-shaders/MJABook/07MABTriangles/MABTriangles.osl"} %line{27} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:136
+# float  mod (float  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp11 y $const7 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{136} %argrw{"wrr"}
+	floor		$tmp10 $tmp11 	%argrw{"wr"}
+	mul		$tmp12 $const7 $tmp10 	%argrw{"wrr"}
+	sub		y y $tmp12 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/07MABTriangles/MABTriangles.osl:28
+#         Color = Color1;
+	sub		$tmp13 $const7 x 	%filename{"source/sambler-osl-shaders/MJABook/07MABTriangles/MABTriangles.osl"} %line{28} %argrw{"wrr"}
+	gt		$tmp14 y $tmp13 	%argrw{"wrr"}
+	if		$tmp14 23 24 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/07MABTriangles/MABTriangles.osl:29
+#     } else {
+	assign		Color Color1 	%line{29} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/07MABTriangles/MABTriangles.osl:31
+#     }
+	assign		Color Color2 	%line{31} %argrw{"wr"}
+	end

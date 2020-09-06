@@ -1,0 +1,51 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader RandomIndex	%meta{string,help,"Return a random index based on an input number or color"} %meta{string,category,"Switchers"} %meta{string,label,"Random Index by Number/Color"} 
+param	float	InputNumber	1		%meta{string,label,"Input Number"} %meta{string,help,"number used to initialize a pseudorandom number generator."}  %read{1,1} %write{2147483647,-1}
+param	color	InputColor	1 1 1		%meta{string,label,"Input Color"} %meta{string,help,"color used to initialize a pseudorandom number generator."}  %read{0,5} %write{2147483647,-1}
+param	int	Seed	1		%read{3,3} %write{2147483647,-1}
+param	int	Min	0		%read{9,9} %write{2147483647,-1}
+param	int	Max	4		%read{10,10} %write{2147483647,-1}
+oparam	int	Out	0		%read{2147483647,-1} %write{14,14}
+local	float	ratio	%read{12,12} %write{8,8}
+const	string	$const1	"cell"		%read{8,8} %write{2147483647,-1}
+temp	vector	$tmp1	%read{8,8} %write{7,7}
+const	int	$const2	0		%read{0,0} %write{2147483647,-1}
+temp	float	$tmp2	%read{1,1} %write{0,0}
+temp	float	$tmp3	%read{7,7} %write{1,1}
+const	int	$const3	1		%read{2,2} %write{2147483647,-1}
+temp	float	$tmp4	%read{4,4} %write{2,2}
+temp	float	$tmp5	%read{7,7} %write{4,4}
+temp	float	$tmp6	%read{4,4} %write{3,3}
+const	int	$const5	2		%read{5,5} %write{2147483647,-1}
+temp	float	$tmp7	%read{6,6} %write{5,5}
+temp	float	$tmp8	%read{7,7} %write{6,6}
+const	float	$const6	11		%read{6,6} %write{2147483647,-1}
+temp	float	$tmp9	%read{14,14} %write{13,13}
+temp	float	$tmp10	%read{13,13} %write{12,12}
+temp	float	$tmp11	%read{12,12} %write{9,9}
+const	float	$const7	0.99000001		%read{11,11} %write{2147483647,-1}
+temp	float	$tmp12	%read{12,12} %write{11,11}
+temp	float	$tmp13	%read{11,11} %write{10,10}
+code ___main___
+# source/3dsMax-OSL-Shaders/RandomIndex.osl:25
+# 	Out = int(floor(mix(Min, (Max + 0.99), ratio)));
+	compref		$tmp2 InputColor $const2 	%filename{"source/3dsMax-OSL-Shaders/RandomIndex.osl"} %line{25} %argrw{"wrr"}
+	mul		$tmp3 InputNumber $tmp2 	%argrw{"wrr"}
+	compref		$tmp4 InputColor $const3 	%argrw{"wrr"}
+	assign		$tmp6 Seed 	%argrw{"wr"}
+	mul		$tmp5 $tmp6 $tmp4 	%argrw{"wrr"}
+	compref		$tmp7 InputColor $const5 	%argrw{"wrr"}
+	mul		$tmp8 $const6 $tmp7 	%argrw{"wrr"}
+	vector		$tmp1 $tmp3 $tmp5 $tmp8 	%argrw{"wrrr"}
+	noise		ratio $const1 $tmp1 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/RandomIndex.osl:26
+# }
+	assign		$tmp11 Min 	%line{26} %argrw{"wr"}
+	assign		$tmp13 Max 	%argrw{"wr"}
+	add		$tmp12 $tmp13 $const7 	%argrw{"wrr"}
+	mix		$tmp10 $tmp11 $tmp12 ratio 	%argrw{"wrrr"}
+	floor		$tmp9 $tmp10 	%argrw{"wr"}
+	assign		Out $tmp9 	%argrw{"wr"}
+	end

@@ -1,0 +1,20 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader WaveLength	%meta{string,help,"Modulates a color between two wavelengths of light"} %meta{string,category,"Utility"} 
+param	float	Input	0		%read{1,1} %write{0,0} %initexpr
+param	float	Min	400		%read{1,1} %write{2147483647,-1}
+param	float	Max	700		%read{1,1} %write{2147483647,-1}
+oparam	color	Col	0 0 0		%read{2147483647,-1} %write{2,2}
+global	float	u	%read{0,0} %write{2147483647,-1}
+temp	float	$tmp1	%read{2,2} %write{1,1}
+code Input
+# source/3dsMax-OSL-Shaders/Wavelength.osl:13
+# 	float Min   = 400.0,
+	assign		Input u 	%filename{"source/3dsMax-OSL-Shaders/Wavelength.osl"} %line{13} %argrw{"wr"}
+code ___main___
+# source/3dsMax-OSL-Shaders/Wavelength.osl:19
+# }
+	mix		$tmp1 Min Max Input 	%filename{"source/3dsMax-OSL-Shaders/Wavelength.osl"} %line{19} %argrw{"wrrr"}
+	wavelength_color	Col $tmp1 	%argrw{"wr"}
+	end

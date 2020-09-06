@@ -1,0 +1,48 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader SmoothStepC	%meta{string,help,"A Smooth step-function between two bounds"} %meta{string,label,"SmoothStep (color)"} %meta{string,category,"Math Color"} 
+param	color	Input	0.5 0.5 0.5		%meta{string,help,"The Input value"}  %read{3,11} %write{2147483647,-1}
+param	color	Low	0.40000001 0.40000001 0.40000001		%meta{string,help,"The lower bound of the step function"}  %read{1,9} %write{2147483647,-1}
+param	color	High	0.60000002 0.60000002 0.60000002		%meta{string,help,"The higher bound of the step function"}  %read{2,10} %write{2147483647,-1}
+oparam	color	Out	0 0 0		%meta{string,help,"The result. Zero if below lower bound, one if above high bound, and a smooth step funciton in between."}  %read{2147483647,-1} %write{13,13}
+const	string	$const1	"smoothstep"		%read{0,0} %write{2147483647,-1}
+temp	float	$tmp1	%read{13,13} %write{4,4}
+const	int	$const2	0		%read{1,3} %write{2147483647,-1}
+temp	float	$tmp2	%read{4,4} %write{1,1}
+temp	float	$tmp3	%read{4,4} %write{2,2}
+temp	float	$tmp4	%read{4,4} %write{3,3}
+temp	float	$tmp5	%read{13,13} %write{8,8}
+const	int	$const3	1		%read{5,7} %write{2147483647,-1}
+temp	float	$tmp6	%read{8,8} %write{5,5}
+temp	float	$tmp7	%read{8,8} %write{6,6}
+temp	float	$tmp8	%read{8,8} %write{7,7}
+temp	float	$tmp9	%read{13,13} %write{12,12}
+const	int	$const4	2		%read{9,11} %write{2147483647,-1}
+temp	float	$tmp10	%read{12,12} %write{9,9}
+temp	float	$tmp11	%read{12,12} %write{10,10}
+temp	float	$tmp12	%read{12,12} %write{11,11}
+code ___main___
+# source/3dsMax-OSL-Shaders/SmoothStepC.osl:23
+# }
+	functioncall	$const1 14 	%filename{"source/3dsMax-OSL-Shaders/SmoothStepC.osl"} %line{23} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:325
+#     return color (smoothstep(edge0[0], edge1[0], in[0]),
+	compref		$tmp2 Low $const2 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{325} %argrw{"wrr"}
+	compref		$tmp3 High $const2 	%argrw{"wrr"}
+	compref		$tmp4 Input $const2 	%argrw{"wrr"}
+	smoothstep	$tmp1 $tmp2 $tmp3 $tmp4 	%argrw{"wrrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:326
+#                   smoothstep(edge0[1], edge1[1], in[1]),
+	compref		$tmp6 Low $const3 	%line{326} %argrw{"wrr"}
+	compref		$tmp7 High $const3 	%argrw{"wrr"}
+	compref		$tmp8 Input $const3 	%argrw{"wrr"}
+	smoothstep	$tmp5 $tmp6 $tmp7 $tmp8 	%argrw{"wrrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:327
+#                   smoothstep(edge0[2], edge1[2], in[2]));
+	compref		$tmp10 Low $const4 	%line{327} %argrw{"wrr"}
+	compref		$tmp11 High $const4 	%argrw{"wrr"}
+	compref		$tmp12 Input $const4 	%argrw{"wrr"}
+	smoothstep	$tmp9 $tmp10 $tmp11 $tmp12 	%argrw{"wrrr"}
+	color		Out $tmp1 $tmp5 $tmp9 	%argrw{"wrrr"}
+	end

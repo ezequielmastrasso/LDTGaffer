@@ -1,0 +1,21 @@
+/*
+ * MAToon.osl by Michel J. Anders (c)2012
+ * from https://github.com/sambler/osl-shaders
+ *
+ * license: cc-by-sa
+ *
+ * original script from -
+ * http://blenderthings.blogspot.co.uk/2012/11/a-toon-osl-shader-for-blender.html
+ *
+ */
+
+
+shader MAtoon(
+    color Shading = 1,
+    float Angle = 50,
+    output color Color = 0)
+{
+    float angle = cos(radians(Angle));
+    if(abs(dot(-I,N)) > angle) Color = Shading;
+}
+

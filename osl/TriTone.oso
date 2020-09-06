@@ -1,0 +1,59 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader TriTone	%meta{string,help,"Color corrects an Input color using<br>Highlights/Midtones/Shadows"} %meta{string,label,"Tri-tone"} 
+param	color	Input	0 0 0		%meta{string,label,"Input Color"}  %read{1,7} %write{0,0} %initexpr
+param	color	Highlights	1 1 1		%read{15,15} %write{2147483647,-1}
+param	color	Midtones	0.30000001 0.12 0.059999999		%read{15,15} %write{2147483647,-1}
+param	color	Shadows	0 0 0		%read{16,16} %write{2147483647,-1}
+param	float	MidtoneLum	0.2		%meta{string,label,"Midtone Luminance"}  %read{1,8} %write{2147483647,-1}
+oparam	color	Out	0 0 0		%read{2147483647,-1} %write{16,16}
+global	float	u	%read{0,0} %write{2147483647,-1}
+local	color	below	%read{16,16} %write{6,6}
+local	color	above	%read{15,15} %write{14,14}
+temp	color	$tmp1	%read{5,5} %write{1,1}
+const	float	$const1	0		%read{2,10} %write{2147483647,-1}
+temp	color	$tmp2	%read{6,6} %write{2,2}
+const	float	$const2	1		%read{3,11} %write{2147483647,-1}
+temp	color	$tmp3	%read{5,5} %write{3,3}
+const	string	$const3	"clamp"		%read{4,12} %write{2147483647,-1}
+temp	color	$tmp4	%read{6,6} %write{5,5}
+temp	color	$tmp5	%read{9,9} %write{7,7}
+temp	float	$tmp6	%read{9,9} %write{8,8}
+temp	color	$tmp7	%read{13,13} %write{9,9}
+temp	color	$tmp8	%read{14,14} %write{10,10}
+temp	color	$tmp9	%read{13,13} %write{11,11}
+temp	color	$tmp10	%read{14,14} %write{13,13}
+temp	color	$tmp11	%read{16,16} %write{15,15}
+code Input
+# source/3dsMax-OSL-Shaders/TriTone.osl:15
+# 	
+	assign		Input u 	%filename{"source/3dsMax-OSL-Shaders/TriTone.osl"} %line{15} %argrw{"wr"}
+code ___main___
+# source/3dsMax-OSL-Shaders/TriTone.osl:27
+# 	color above = clamp((Input - MidtoneLum) / (1.0 - MidtoneLum), 0.0, 1.0);
+	div		$tmp1 Input MidtoneLum 	%filename{"source/3dsMax-OSL-Shaders/TriTone.osl"} %line{27} %argrw{"wrr"}
+	assign		$tmp2 $const1 	%argrw{"wr"}
+	assign		$tmp3 $const2 	%argrw{"wr"}
+	functioncall	$const3 7 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:144
+# color  clamp (color x, color minval, color maxval) { return max(min(x,maxval),minval); }
+	min		$tmp4 $tmp1 $tmp3 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{144} %argrw{"wrr"}
+	max		below $tmp4 $tmp2 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/TriTone.osl:28
+# 	Out = mix(Shadows, mix(Midtones, Highlights, above), below);
+	sub		$tmp5 Input MidtoneLum 	%filename{"source/3dsMax-OSL-Shaders/TriTone.osl"} %line{28} %argrw{"wrr"}
+	sub		$tmp6 $const2 MidtoneLum 	%argrw{"wrr"}
+	div		$tmp7 $tmp5 $tmp6 	%argrw{"wrr"}
+	assign		$tmp8 $const1 	%argrw{"wr"}
+	assign		$tmp9 $const2 	%argrw{"wr"}
+	functioncall	$const3 15 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:144
+# color  clamp (color x, color minval, color maxval) { return max(min(x,maxval),minval); }
+	min		$tmp10 $tmp7 $tmp9 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{144} %argrw{"wrr"}
+	max		above $tmp10 $tmp8 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/TriTone.osl:29
+# }
+	mix		$tmp11 Midtones Highlights above 	%filename{"source/3dsMax-OSL-Shaders/TriTone.osl"} %line{29} %argrw{"wrrr"}
+	mix		Out Shadows $tmp11 below 	%argrw{"wrrr"}
+	end

@@ -1,0 +1,90 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader UVWEnviron	%meta{string,help,"Environment mapping"} %meta{string,label,"UVW Environment"} %meta{string,category,"UVW Coordinates"} 
+param	vector	Direction	0 0 0		%read{5,16} %write{0,0} %initexpr
+param	string	Mode	"spherical"		%meta{string,widget,"popup"} %meta{string,options,"spherical|mirrorball"} %meta{string,label,"Environment Mode"} %meta{string,help,"Type of Environment mapping. Valid values: 'spherical' and 'mirrorball'"}  %read{3,14} %write{2147483647,-1}
+oparam	vector	UVW	0 0 0		%read{2147483647,-1} %write{25,25}
+global	vector	I	%read{0,0} %write{2147483647,-1}
+local	float	U	%read{25,25} %write{1,21}
+local	float	V	%read{25,25} %write{2,24}
+local	vector	___323_camSpaceDir	%read{17,17} %write{16,16}
+local	vector	___323_halfwayDir	%read{19,22} %write{18,18}
+const	float	$const1	0		%read{1,25} %write{2147483647,-1}
+const	string	$const2	"spherical"		%read{3,3} %write{2147483647,-1}
+temp	int	$tmp1	%read{4,4} %write{3,3}
+temp	float	$tmp2	%read{9,9} %write{7,7}
+const	int	$const3	0		%read{5,19} %write{2147483647,-1}
+temp	float	$tmp3	%read{7,7} %write{5,5}
+const	int	$const4	1		%read{6,22} %write{2147483647,-1}
+temp	float	$tmp4	%read{7,7} %write{6,6}
+const	float	$const5	3.1415927		%read{8,12} %write{2147483647,-1}
+const	float	$const6	2		%read{8,24} %write{2147483647,-1}
+temp	float	$tmp5	%read{9,9} %write{8,8}
+const	float	$const7	0.5		%read{13,13} %write{2147483647,-1}
+temp	float	$tmp6	%read{12,12} %write{11,11}
+const	int	$const8	2		%read{10,10} %write{2147483647,-1}
+temp	float	$tmp7	%read{11,11} %write{10,10}
+temp	float	$tmp8	%read{13,13} %write{12,12}
+const	string	$const9	"mirrorball"		%read{14,14} %write{2147483647,-1}
+temp	int	$tmp9	%read{15,15} %write{14,14}
+const	string	$const10	"common"		%read{16,16} %write{2147483647,-1}
+const	string	$const11	"camera"		%read{16,16} %write{2147483647,-1}
+const	vector	$const12	0 0 1		%read{17,17} %write{2147483647,-1}
+temp	vector	$tmp11	%read{18,18} %write{17,17}
+temp	float	$tmp12	%read{20,20} %write{19,19}
+const	float	$const13	1		%read{20,23} %write{2147483647,-1}
+temp	float	$tmp13	%read{21,21} %write{20,20}
+temp	float	$tmp14	%read{23,23} %write{22,22}
+temp	float	$tmp15	%read{24,24} %write{23,23}
+code Direction
+# source/3dsMax-OSL-Shaders/UVWEnviron.osl:13
+# 	string Mode       = "spherical"
+	assign		Direction I 	%filename{"source/3dsMax-OSL-Shaders/UVWEnviron.osl"} %line{13} %argrw{"wr"}
+code ___main___
+# source/3dsMax-OSL-Shaders/UVWEnviron.osl:21
+# 	
+	assign		U $const1 	%filename{"source/3dsMax-OSL-Shaders/UVWEnviron.osl"} %line{21} %argrw{"wr"}
+	assign		V $const1 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/UVWEnviron.osl:23
+# 	{
+	eq		$tmp1 Mode $const2 	%line{23} %argrw{"wrr"}
+	if		$tmp1 14 14 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/UVWEnviron.osl:25
+# 		V = 0.5 + (asin(Direction[2]) / M_PI);
+	compref		$tmp3 Direction $const3 	%line{25} %argrw{"wrr"}
+	compref		$tmp4 Direction $const4 	%argrw{"wrr"}
+	atan2		$tmp2 $tmp3 $tmp4 	%argrw{"wrr"}
+	mul		$tmp5 $const5 $const6 	%argrw{"wrr"}
+	div		U $tmp2 $tmp5 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/UVWEnviron.osl:26
+# 	}
+	compref		$tmp7 Direction $const8 	%line{26} %argrw{"wrr"}
+	asin		$tmp6 $tmp7 	%argrw{"wr"}
+	div		$tmp8 $tmp6 $const5 	%argrw{"wrr"}
+	add		V $const7 $tmp8 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/UVWEnviron.osl:29
+# 	{
+	eq		$tmp9 Mode $const9 	%line{29} %argrw{"wrr"}
+	if		$tmp9 25 25 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/UVWEnviron.osl:31
+# 		
+	transformv	___323_camSpaceDir $const10 $const11 Direction 	%line{31} %argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/UVWEnviron.osl:33
+# 		
+	add		$tmp11 $const12 ___323_camSpaceDir 	%line{33} %argrw{"wrr"}
+	normalize	___323_halfwayDir $tmp11 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/UVWEnviron.osl:35
+# 		V = (halfwayDir[1] + 1.0) / 2.0;				
+	compref		$tmp12 ___323_halfwayDir $const3 	%line{35} %argrw{"wrr"}
+	add		$tmp13 $tmp12 $const13 	%argrw{"wrr"}
+	div		U $tmp13 $const6 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/UVWEnviron.osl:36
+# 	}
+	compref		$tmp14 ___323_halfwayDir $const4 	%line{36} %argrw{"wrr"}
+	add		$tmp15 $tmp14 $const13 	%argrw{"wrr"}
+	div		V $tmp15 $const6 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/UVWEnviron.osl:39
+# }
+	vector		UVW U V $const1 	%line{39} %argrw{"wrrr"}
+	end

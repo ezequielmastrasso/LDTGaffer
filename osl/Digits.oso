@@ -1,0 +1,1342 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader Digits	%meta{string,help,"A shader that emulates a 7-Segment display of numbers.<br/>Useful for debugging and showing numbers in SME"} %meta{string,category,"Textures"} 
+param	vector	UVW	0 0 0		%read{4,4} %write{0,0} %initexpr
+param	float	Number	42		%read{2,15} %write{2147483647,-1}
+param	int	Digits	2		%meta{int,min,2} %meta{int,max,8}  %read{14,14} %write{2147483647,-1}
+param	int	Decimals	0		%meta{int,min,0} %meta{int,max,6}  %read{5,61} %write{2147483647,-1}
+param	float	Scale	1		%read{4,4} %write{2147483647,-1}
+param	color	BGColor	0 0 0		%read{1,1} %write{2147483647,-1}
+param	color	OnColor	1 0 0		%read{641,641} %write{2147483647,-1}
+param	color	OffColor	0.1 0 0		%read{637,637} %write{2147483647,-1}
+param	int	UseOffColor	1		%meta{string,widget,"checkBox"} %meta{string,label,"Use OffColor"}  %read{634,634} %write{2147483647,-1}
+oparam	color	Out	0 0 0		%read{2147483647,-1} %write{1,646} %initexpr
+oparam	float	Fac	0		%read{2147483647,-1} %write{58,646}
+oparam	float	NumberOut	0		%meta{string,label,"Number"}  %read{2147483647,-1} %write{2,2} %initexpr
+global	float	u	%read{0,0} %write{2147483647,-1}
+global	float	v	%read{0,0} %write{2147483647,-1}
+local	vector	___323_pt	%read{58,646} %write{58,646}
+local	int[9]	mult	%read{5,5} %write{3,3}
+local	point	px	%read{30,646} %write{4,646}
+local	int	number	%read{10,646} %write{8,646}
+local	int	minus	%read{58,646} %write{9,13}
+local	int	digits	%read{27,646} %write{14,29}
+local	int	leftOfDecimalPoint	%read{23,26} %write{22,25}
+local	int	maxdigi	%read{27,29} %write{26,26}
+local	int	___334_i	%read{58,646} %write{57,646}
+local	int	___335_x	%read{58,646} %write{58,646}
+const	int	$const1	0		%read{9,634} %write{2147483647,-1}
+const	float	$const2	0		%read{0,0} %write{2147483647,-1}
+const	int[9]	$const3	1 10 100 1000 10000 100000 1000000 10000000 100000000 		%read{3,3} %write{2147483647,-1}
+temp	int	$tmp1	%read{6,6} %write{5,5}
+temp	float	$tmp2	%read{8,8} %write{7,7}
+temp	float	$tmp3	%read{7,7} %write{6,6}
+temp	int	$tmp4	%read{11,11} %write{10,10}
+const	int	$const4	1		%read{13,646} %write{2147483647,-1}
+temp	int	$tmp5	%read{22,22} %write{21,21}
+temp	float	$tmp6	%read{21,21} %write{20,20}
+temp	float	$tmp7	%read{20,20} %write{19,19}
+temp	float	$tmp8	%read{17,17} %write{15,15}
+const	float	$const5	10		%read{18,18} %write{2147483647,-1}
+const	string	$const6	"log"		%read{16,16} %write{2147483647,-1}
+temp	float	$tmp9	%read{19,19} %write{17,17}
+temp	float	$tmp10	%read{19,19} %write{18,18}
+temp	int	$tmp11	%read{24,24} %write{23,23}
+temp	int	$tmp12	%read{28,28} %write{27,27}
+temp	float	$tmp13	%read{31,31} %write{30,30}
+temp	int	$tmp14	%read{32,32} %write{31,31}
+temp	int	$tmp15	%read{33,38} %write{32,37}
+temp	float	$tmp16	%read{35,35} %write{34,34}
+temp	int	$tmp17	%read{36,36} %write{35,35}
+temp	int	$tmp18	%read{37,37} %write{36,36}
+temp	int	$tmp19	%read{39,44} %write{38,43}
+temp	float	$tmp20	%read{41,41} %write{40,40}
+temp	int	$tmp21	%read{42,42} %write{41,41}
+temp	int	$tmp22	%read{43,43} %write{42,42}
+temp	int	$tmp23	%read{45,50} %write{44,49}
+temp	float	$tmp24	%read{47,47} %write{46,46}
+temp	int	$tmp25	%read{48,48} %write{47,47}
+temp	int	$tmp26	%read{49,49} %write{48,48}
+const	point	$const7	0.89999998 0.5 0		%read{51,55} %write{2147483647,-1}
+const	float	$const8	0.80000001		%read{53,53} %write{2147483647,-1}
+temp	float	$tmp28	%read{54,54} %write{53,53}
+temp	float	$tmp29	%read{53,53} %write{52,52}
+temp	int	$tmp31	%read{56,646} %write{57,646}
+temp	int	$tmp32	%read{58,646} %write{58,646}
+const	int	$const9	10		%read{60,643} %write{2147483647,-1}
+temp	int	$tmp33	%read{58,646} %write{58,646}
+temp	int	$tmp34	%read{58,646} %write{58,646}
+temp	int	$tmp35	%read{58,646} %write{58,646}
+temp	int	$tmp36	%read{58,646} %write{58,646}
+temp	int	$tmp37	%read{58,646} %write{58,646}
+temp	int	$tmp38	%read{58,646} %write{58,646}
+const	string	$const10	"inDigit"		%read{68,68} %write{2147483647,-1}
+const	point	$const11	0.5 0.2 0		%read{70,72} %write{2147483647,-1}
+const	float	$const12	2.5		%read{71,71} %write{2147483647,-1}
+temp	int	$tmp41	%read{58,646} %write{58,646}
+temp	int	$tmp42	%read{58,646} %write{58,646}
+const	point	$const13	-0.89999998 0.89999998 0		%read{77,89} %write{2147483647,-1}
+const	point	$const14	-0.2 1.1 0		%read{82,96} %write{2147483647,-1}
+const	string	$const15	"inBit"		%read{75,559} %write{2147483647,-1}
+temp	float	$tmp45	%read{58,646} %write{58,646}
+temp	float	$tmp46	%read{58,646} %write{58,646}
+temp	int	$tmp47	%read{58,646} %write{58,646}
+temp	int	$tmp48	%read{58,646} %write{58,646}
+temp	float	$tmp49	%read{58,646} %write{58,646}
+temp	float	$tmp50	%read{58,646} %write{58,646}
+temp	int	$tmp51	%read{58,646} %write{58,646}
+temp	int	$tmp52	%read{58,646} %write{58,646}
+temp	int	$tmp53	%read{58,646} %write{58,646}
+temp	float	$tmp54	%read{58,646} %write{58,646}
+temp	float	$tmp55	%read{58,646} %write{58,646}
+temp	int	$tmp56	%read{58,646} %write{58,646}
+temp	int	$tmp57	%read{58,646} %write{58,646}
+temp	int	$tmp58	%read{58,646} %write{58,646}
+temp	float	$tmp59	%read{58,646} %write{58,646}
+temp	float	$tmp60	%read{58,646} %write{58,646}
+temp	int	$tmp61	%read{58,646} %write{58,646}
+temp	int	$tmp62	%read{58,646} %write{58,646}
+temp	int	$tmp63	%read{58,646} %write{58,646}
+temp	float	$tmp64	%read{58,646} %write{58,646}
+const	float	$const16	-0.1		%read{110,114} %write{2147483647,-1}
+temp	int	$tmp65	%read{58,646} %write{58,646}
+temp	int	$tmp66	%read{58,646} %write{58,646}
+temp	float	$tmp67	%read{58,646} %write{58,646}
+temp	int	$tmp68	%read{58,646} %write{58,646}
+temp	int	$tmp69	%read{58,646} %write{58,646}
+temp	int	$tmp70	%read{58,646} %write{58,646}
+temp	float	$tmp71	%read{58,646} %write{58,646}
+const	float	$const17	1.3		%read{120,120} %write{2147483647,-1}
+temp	int	$tmp72	%read{58,646} %write{58,646}
+temp	int	$tmp73	%read{58,646} %write{58,646}
+temp	int	$tmp74	%read{58,646} %write{58,646}
+temp	float	$tmp75	%read{58,646} %write{58,646}
+const	float	$const18	2.0999999		%read{126,126} %write{2147483647,-1}
+temp	int	$tmp76	%read{58,646} %write{58,646}
+temp	int	$tmp77	%read{58,646} %write{58,646}
+const	int	$const19	-1		%read{130,630} %write{2147483647,-1}
+temp	int	$tmp78	%read{58,646} %write{58,646}
+temp	int	$tmp79	%read{58,646} %write{58,646}
+const	point	$const20	1.15 -0.1 0		%read{136,148} %write{2147483647,-1}
+const	point	$const21	1.3 0.1 0		%read{141,155} %write{2147483647,-1}
+temp	float	$tmp82	%read{58,646} %write{58,646}
+temp	float	$tmp83	%read{58,646} %write{58,646}
+temp	int	$tmp84	%read{58,646} %write{58,646}
+temp	int	$tmp85	%read{58,646} %write{58,646}
+temp	float	$tmp86	%read{58,646} %write{58,646}
+temp	float	$tmp87	%read{58,646} %write{58,646}
+temp	int	$tmp88	%read{58,646} %write{58,646}
+temp	int	$tmp89	%read{58,646} %write{58,646}
+temp	int	$tmp90	%read{58,646} %write{58,646}
+temp	float	$tmp91	%read{58,646} %write{58,646}
+temp	float	$tmp92	%read{58,646} %write{58,646}
+temp	int	$tmp93	%read{58,646} %write{58,646}
+temp	int	$tmp94	%read{58,646} %write{58,646}
+temp	int	$tmp95	%read{58,646} %write{58,646}
+temp	float	$tmp96	%read{58,646} %write{58,646}
+temp	float	$tmp97	%read{58,646} %write{58,646}
+temp	int	$tmp98	%read{58,646} %write{58,646}
+temp	int	$tmp99	%read{58,646} %write{58,646}
+temp	int	$tmp100	%read{58,646} %write{58,646}
+temp	int	$tmp101	%read{58,646} %write{58,646}
+const	point	$const22	0.1 -0.1 0		%read{170,182} %write{2147483647,-1}
+const	point	$const23	0.89999998 0.1 0		%read{175,497} %write{2147483647,-1}
+temp	float	$tmp104	%read{58,646} %write{58,646}
+temp	float	$tmp105	%read{58,646} %write{58,646}
+temp	int	$tmp106	%read{58,646} %write{58,646}
+temp	int	$tmp107	%read{58,646} %write{58,646}
+temp	float	$tmp108	%read{58,646} %write{58,646}
+temp	float	$tmp109	%read{58,646} %write{58,646}
+temp	int	$tmp110	%read{58,646} %write{58,646}
+temp	int	$tmp111	%read{58,646} %write{58,646}
+temp	int	$tmp112	%read{58,646} %write{58,646}
+temp	float	$tmp113	%read{58,646} %write{58,646}
+temp	float	$tmp114	%read{58,646} %write{58,646}
+temp	int	$tmp115	%read{58,646} %write{58,646}
+temp	int	$tmp116	%read{58,646} %write{58,646}
+temp	int	$tmp117	%read{58,646} %write{58,646}
+temp	float	$tmp118	%read{58,646} %write{58,646}
+temp	float	$tmp119	%read{58,646} %write{58,646}
+temp	int	$tmp120	%read{58,646} %write{58,646}
+temp	int	$tmp121	%read{58,646} %write{58,646}
+const	int	$const24	2		%read{198,592} %write{2147483647,-1}
+temp	int	$tmp122	%read{58,646} %write{58,646}
+temp	int	$tmp123	%read{58,646} %write{58,646}
+const	int	$const25	3		%read{201,597} %write{2147483647,-1}
+temp	int	$tmp124	%read{58,646} %write{58,646}
+temp	int	$tmp125	%read{58,646} %write{58,646}
+temp	int	$tmp126	%read{58,646} %write{58,646}
+const	int	$const26	5		%read{206,526} %write{2147483647,-1}
+temp	int	$tmp127	%read{58,646} %write{58,646}
+temp	int	$tmp128	%read{58,646} %write{58,646}
+temp	int	$tmp129	%read{58,646} %write{58,646}
+const	int	$const27	6		%read{211,531} %write{2147483647,-1}
+temp	int	$tmp130	%read{58,646} %write{58,646}
+temp	int	$tmp131	%read{58,646} %write{58,646}
+temp	int	$tmp132	%read{58,646} %write{58,646}
+const	int	$const28	8		%read{216,612} %write{2147483647,-1}
+temp	int	$tmp133	%read{58,646} %write{58,646}
+temp	int	$tmp134	%read{58,646} %write{58,646}
+temp	int	$tmp135	%read{58,646} %write{58,646}
+const	int	$const29	9		%read{221,617} %write{2147483647,-1}
+temp	int	$tmp136	%read{58,646} %write{58,646}
+temp	int	$tmp137	%read{58,646} %write{58,646}
+temp	int	$tmp138	%read{58,646} %write{58,646}
+temp	int	$tmp139	%read{58,646} %write{58,646}
+temp	int	$tmp140	%read{58,646} %write{58,646}
+temp	int	$tmp141	%read{58,646} %write{58,646}
+const	point	$const30	0.1 0.89999998 0		%read{236,392} %write{2147483647,-1}
+const	point	$const31	0.89999998 1.1 0		%read{241,573} %write{2147483647,-1}
+temp	float	$tmp144	%read{58,646} %write{58,646}
+temp	float	$tmp145	%read{58,646} %write{58,646}
+temp	int	$tmp146	%read{58,646} %write{58,646}
+temp	int	$tmp147	%read{58,646} %write{58,646}
+temp	float	$tmp148	%read{58,646} %write{58,646}
+temp	float	$tmp149	%read{58,646} %write{58,646}
+temp	int	$tmp150	%read{58,646} %write{58,646}
+temp	int	$tmp151	%read{58,646} %write{58,646}
+temp	int	$tmp152	%read{58,646} %write{58,646}
+temp	float	$tmp153	%read{58,646} %write{58,646}
+temp	float	$tmp154	%read{58,646} %write{58,646}
+temp	int	$tmp155	%read{58,646} %write{58,646}
+temp	int	$tmp156	%read{58,646} %write{58,646}
+temp	int	$tmp157	%read{58,646} %write{58,646}
+temp	float	$tmp158	%read{58,646} %write{58,646}
+temp	float	$tmp159	%read{58,646} %write{58,646}
+temp	int	$tmp160	%read{58,646} %write{58,646}
+temp	int	$tmp161	%read{58,646} %write{58,646}
+temp	int	$tmp162	%read{58,646} %write{58,646}
+temp	int	$tmp163	%read{58,646} %write{58,646}
+temp	int	$tmp164	%read{58,646} %write{58,646}
+temp	int	$tmp165	%read{58,646} %write{58,646}
+temp	int	$tmp166	%read{58,646} %write{58,646}
+const	int	$const32	4		%read{272,602} %write{2147483647,-1}
+temp	int	$tmp167	%read{58,646} %write{58,646}
+temp	int	$tmp168	%read{58,646} %write{58,646}
+temp	int	$tmp169	%read{58,646} %write{58,646}
+temp	int	$tmp170	%read{58,646} %write{58,646}
+temp	int	$tmp171	%read{58,646} %write{58,646}
+temp	int	$tmp172	%read{58,646} %write{58,646}
+temp	int	$tmp173	%read{58,646} %write{58,646}
+temp	int	$tmp174	%read{58,646} %write{58,646}
+temp	int	$tmp175	%read{58,646} %write{58,646}
+temp	int	$tmp176	%read{58,646} %write{58,646}
+temp	int	$tmp177	%read{58,646} %write{58,646}
+temp	int	$tmp178	%read{58,646} %write{58,646}
+temp	int	$tmp179	%read{58,646} %write{58,646}
+temp	int	$tmp180	%read{58,646} %write{58,646}
+temp	int	$tmp181	%read{58,646} %write{58,646}
+const	point	$const33	0.1 1.9 0		%read{302,443} %write{2147483647,-1}
+const	point	$const34	0.89999998 2.0999999 0		%read{307,321} %write{2147483647,-1}
+temp	float	$tmp184	%read{58,646} %write{58,646}
+temp	float	$tmp185	%read{58,646} %write{58,646}
+temp	int	$tmp186	%read{58,646} %write{58,646}
+temp	int	$tmp187	%read{58,646} %write{58,646}
+temp	float	$tmp188	%read{58,646} %write{58,646}
+temp	float	$tmp189	%read{58,646} %write{58,646}
+temp	int	$tmp190	%read{58,646} %write{58,646}
+temp	int	$tmp191	%read{58,646} %write{58,646}
+temp	int	$tmp192	%read{58,646} %write{58,646}
+temp	float	$tmp193	%read{58,646} %write{58,646}
+temp	float	$tmp194	%read{58,646} %write{58,646}
+temp	int	$tmp195	%read{58,646} %write{58,646}
+temp	int	$tmp196	%read{58,646} %write{58,646}
+temp	int	$tmp197	%read{58,646} %write{58,646}
+temp	float	$tmp198	%read{58,646} %write{58,646}
+temp	float	$tmp199	%read{58,646} %write{58,646}
+temp	int	$tmp200	%read{58,646} %write{58,646}
+temp	int	$tmp201	%read{58,646} %write{58,646}
+temp	int	$tmp202	%read{58,646} %write{58,646}
+temp	int	$tmp203	%read{58,646} %write{58,646}
+temp	int	$tmp204	%read{58,646} %write{58,646}
+temp	int	$tmp205	%read{58,646} %write{58,646}
+temp	int	$tmp206	%read{58,646} %write{58,646}
+temp	int	$tmp207	%read{58,646} %write{58,646}
+temp	int	$tmp208	%read{58,646} %write{58,646}
+temp	int	$tmp209	%read{58,646} %write{58,646}
+temp	int	$tmp210	%read{58,646} %write{58,646}
+temp	int	$tmp211	%read{58,646} %write{58,646}
+temp	int	$tmp212	%read{58,646} %write{58,646}
+const	int	$const35	7		%read{348,607} %write{2147483647,-1}
+temp	int	$tmp213	%read{58,646} %write{58,646}
+temp	int	$tmp214	%read{58,646} %write{58,646}
+temp	int	$tmp215	%read{58,646} %write{58,646}
+temp	int	$tmp216	%read{58,646} %write{58,646}
+temp	int	$tmp217	%read{58,646} %write{58,646}
+temp	int	$tmp218	%read{58,646} %write{58,646}
+temp	int	$tmp219	%read{58,646} %write{58,646}
+temp	int	$tmp220	%read{58,646} %write{58,646}
+temp	int	$tmp221	%read{58,646} %write{58,646}
+temp	int	$tmp222	%read{58,646} %write{58,646}
+temp	int	$tmp223	%read{58,646} %write{58,646}
+temp	int	$tmp224	%read{58,646} %write{58,646}
+const	point	$const36	-0.1 0.1 0		%read{373,385} %write{2147483647,-1}
+temp	float	$tmp227	%read{58,646} %write{58,646}
+temp	float	$tmp228	%read{58,646} %write{58,646}
+temp	int	$tmp229	%read{58,646} %write{58,646}
+temp	int	$tmp230	%read{58,646} %write{58,646}
+temp	float	$tmp231	%read{58,646} %write{58,646}
+temp	float	$tmp232	%read{58,646} %write{58,646}
+temp	int	$tmp233	%read{58,646} %write{58,646}
+temp	int	$tmp234	%read{58,646} %write{58,646}
+temp	int	$tmp235	%read{58,646} %write{58,646}
+temp	float	$tmp236	%read{58,646} %write{58,646}
+temp	float	$tmp237	%read{58,646} %write{58,646}
+temp	int	$tmp238	%read{58,646} %write{58,646}
+temp	int	$tmp239	%read{58,646} %write{58,646}
+temp	int	$tmp240	%read{58,646} %write{58,646}
+temp	float	$tmp241	%read{58,646} %write{58,646}
+temp	float	$tmp242	%read{58,646} %write{58,646}
+temp	int	$tmp243	%read{58,646} %write{58,646}
+temp	int	$tmp244	%read{58,646} %write{58,646}
+temp	int	$tmp245	%read{58,646} %write{58,646}
+temp	int	$tmp246	%read{58,646} %write{58,646}
+temp	int	$tmp247	%read{58,646} %write{58,646}
+temp	int	$tmp248	%read{58,646} %write{58,646}
+temp	int	$tmp249	%read{58,646} %write{58,646}
+temp	int	$tmp250	%read{58,646} %write{58,646}
+temp	int	$tmp251	%read{58,646} %write{58,646}
+temp	int	$tmp252	%read{58,646} %write{58,646}
+temp	int	$tmp253	%read{58,646} %write{58,646}
+temp	int	$tmp254	%read{58,646} %write{58,646}
+temp	int	$tmp255	%read{58,646} %write{58,646}
+const	point	$const37	-0.1 1.1 0		%read{424,436} %write{2147483647,-1}
+temp	float	$tmp258	%read{58,646} %write{58,646}
+temp	float	$tmp259	%read{58,646} %write{58,646}
+temp	int	$tmp260	%read{58,646} %write{58,646}
+temp	int	$tmp261	%read{58,646} %write{58,646}
+temp	float	$tmp262	%read{58,646} %write{58,646}
+temp	float	$tmp263	%read{58,646} %write{58,646}
+temp	int	$tmp264	%read{58,646} %write{58,646}
+temp	int	$tmp265	%read{58,646} %write{58,646}
+temp	int	$tmp266	%read{58,646} %write{58,646}
+temp	float	$tmp267	%read{58,646} %write{58,646}
+temp	float	$tmp268	%read{58,646} %write{58,646}
+temp	int	$tmp269	%read{58,646} %write{58,646}
+temp	int	$tmp270	%read{58,646} %write{58,646}
+temp	int	$tmp271	%read{58,646} %write{58,646}
+temp	float	$tmp272	%read{58,646} %write{58,646}
+temp	float	$tmp273	%read{58,646} %write{58,646}
+temp	int	$tmp274	%read{58,646} %write{58,646}
+temp	int	$tmp275	%read{58,646} %write{58,646}
+temp	int	$tmp276	%read{58,646} %write{58,646}
+temp	int	$tmp277	%read{58,646} %write{58,646}
+temp	int	$tmp278	%read{58,646} %write{58,646}
+temp	int	$tmp279	%read{58,646} %write{58,646}
+temp	int	$tmp280	%read{58,646} %write{58,646}
+temp	int	$tmp281	%read{58,646} %write{58,646}
+temp	int	$tmp282	%read{58,646} %write{58,646}
+temp	int	$tmp283	%read{58,646} %write{58,646}
+temp	int	$tmp284	%read{58,646} %write{58,646}
+temp	int	$tmp285	%read{58,646} %write{58,646}
+temp	int	$tmp286	%read{58,646} %write{58,646}
+temp	int	$tmp287	%read{58,646} %write{58,646}
+temp	int	$tmp288	%read{58,646} %write{58,646}
+temp	int	$tmp289	%read{58,646} %write{58,646}
+temp	int	$tmp290	%read{58,646} %write{58,646}
+temp	int	$tmp291	%read{58,646} %write{58,646}
+temp	int	$tmp292	%read{58,646} %write{58,646}
+const	point	$const38	1.1 0.89999998 0		%read{490,504} %write{2147483647,-1}
+temp	float	$tmp295	%read{58,646} %write{58,646}
+temp	float	$tmp296	%read{58,646} %write{58,646}
+temp	int	$tmp297	%read{58,646} %write{58,646}
+temp	int	$tmp298	%read{58,646} %write{58,646}
+temp	float	$tmp299	%read{58,646} %write{58,646}
+temp	float	$tmp300	%read{58,646} %write{58,646}
+temp	int	$tmp301	%read{58,646} %write{58,646}
+temp	int	$tmp302	%read{58,646} %write{58,646}
+temp	int	$tmp303	%read{58,646} %write{58,646}
+temp	float	$tmp304	%read{58,646} %write{58,646}
+temp	float	$tmp305	%read{58,646} %write{58,646}
+temp	int	$tmp306	%read{58,646} %write{58,646}
+temp	int	$tmp307	%read{58,646} %write{58,646}
+temp	int	$tmp308	%read{58,646} %write{58,646}
+temp	float	$tmp309	%read{58,646} %write{58,646}
+temp	float	$tmp310	%read{58,646} %write{58,646}
+temp	int	$tmp311	%read{58,646} %write{58,646}
+temp	int	$tmp312	%read{58,646} %write{58,646}
+temp	int	$tmp313	%read{58,646} %write{58,646}
+temp	int	$tmp314	%read{58,646} %write{58,646}
+temp	int	$tmp315	%read{58,646} %write{58,646}
+temp	int	$tmp316	%read{58,646} %write{58,646}
+temp	int	$tmp317	%read{58,646} %write{58,646}
+temp	int	$tmp318	%read{58,646} %write{58,646}
+temp	int	$tmp319	%read{58,646} %write{58,646}
+temp	int	$tmp320	%read{58,646} %write{58,646}
+temp	int	$tmp321	%read{58,646} %write{58,646}
+temp	int	$tmp322	%read{58,646} %write{58,646}
+temp	int	$tmp323	%read{58,646} %write{58,646}
+temp	int	$tmp324	%read{58,646} %write{58,646}
+temp	int	$tmp325	%read{58,646} %write{58,646}
+temp	int	$tmp326	%read{58,646} %write{58,646}
+temp	int	$tmp327	%read{58,646} %write{58,646}
+temp	int	$tmp328	%read{58,646} %write{58,646}
+temp	int	$tmp329	%read{58,646} %write{58,646}
+temp	int	$tmp330	%read{58,646} %write{58,646}
+temp	int	$tmp331	%read{58,646} %write{58,646}
+temp	int	$tmp332	%read{58,646} %write{58,646}
+temp	int	$tmp333	%read{58,646} %write{58,646}
+temp	int	$tmp334	%read{58,646} %write{58,646}
+temp	int	$tmp335	%read{58,646} %write{58,646}
+temp	int	$tmp336	%read{58,646} %write{58,646}
+temp	int	$tmp337	%read{58,646} %write{58,646}
+temp	int	$tmp338	%read{58,646} %write{58,646}
+const	point	$const39	1.1 1.9 0		%read{566,580} %write{2147483647,-1}
+temp	float	$tmp341	%read{58,646} %write{58,646}
+temp	float	$tmp342	%read{58,646} %write{58,646}
+temp	int	$tmp343	%read{58,646} %write{58,646}
+temp	int	$tmp344	%read{58,646} %write{58,646}
+temp	float	$tmp345	%read{58,646} %write{58,646}
+temp	float	$tmp346	%read{58,646} %write{58,646}
+temp	int	$tmp347	%read{58,646} %write{58,646}
+temp	int	$tmp348	%read{58,646} %write{58,646}
+temp	int	$tmp349	%read{58,646} %write{58,646}
+temp	float	$tmp350	%read{58,646} %write{58,646}
+temp	float	$tmp351	%read{58,646} %write{58,646}
+temp	int	$tmp352	%read{58,646} %write{58,646}
+temp	int	$tmp353	%read{58,646} %write{58,646}
+temp	int	$tmp354	%read{58,646} %write{58,646}
+temp	float	$tmp355	%read{58,646} %write{58,646}
+temp	float	$tmp356	%read{58,646} %write{58,646}
+temp	int	$tmp357	%read{58,646} %write{58,646}
+temp	int	$tmp358	%read{58,646} %write{58,646}
+temp	int	$tmp359	%read{58,646} %write{58,646}
+temp	int	$tmp360	%read{58,646} %write{58,646}
+temp	int	$tmp361	%read{58,646} %write{58,646}
+temp	int	$tmp362	%read{58,646} %write{58,646}
+temp	int	$tmp363	%read{58,646} %write{58,646}
+temp	int	$tmp364	%read{58,646} %write{58,646}
+temp	int	$tmp365	%read{58,646} %write{58,646}
+temp	int	$tmp366	%read{58,646} %write{58,646}
+temp	int	$tmp367	%read{58,646} %write{58,646}
+temp	int	$tmp368	%read{58,646} %write{58,646}
+temp	int	$tmp369	%read{58,646} %write{58,646}
+temp	int	$tmp370	%read{58,646} %write{58,646}
+temp	int	$tmp371	%read{58,646} %write{58,646}
+temp	int	$tmp372	%read{58,646} %write{58,646}
+temp	int	$tmp373	%read{58,646} %write{58,646}
+temp	int	$tmp374	%read{58,646} %write{58,646}
+temp	int	$tmp375	%read{58,646} %write{58,646}
+temp	int	$tmp376	%read{58,646} %write{58,646}
+temp	int	$tmp377	%read{58,646} %write{58,646}
+temp	int	$tmp378	%read{58,646} %write{58,646}
+temp	int	$tmp379	%read{58,646} %write{58,646}
+temp	int	$tmp380	%read{58,646} %write{58,646}
+temp	int	$tmp381	%read{58,646} %write{58,646}
+temp	int	$tmp382	%read{58,646} %write{58,646}
+temp	int	$tmp383	%read{58,646} %write{58,646}
+const	float	$const40	1		%read{638,642} %write{2147483647,-1}
+temp	int	$tmp384	%read{58,646} %write{58,646}
+const	point	$const41	0.60000002 0 0		%read{644,644} %write{2147483647,-1}
+temp	int	$tmp386	%read{2147483647,-1} %write{58,646}
+code UVW
+# source/3dsMax-OSL-Shaders/Digits.osl:101
+# 	float   Number = 42,
+	vector		UVW u v $const2 	%filename{"source/3dsMax-OSL-Shaders/Digits.osl"} %line{101} %argrw{"wrrr"}
+code Out
+# source/3dsMax-OSL-Shaders/Digits.osl:111
+# 	output float Fac = 0.0,
+	assign		Out BGColor 	%filename{"source/3dsMax-OSL-Shaders/Digits.osl"} %line{111} %argrw{"wr"}
+code NumberOut
+# source/3dsMax-OSL-Shaders/Digits.osl:113
+# )
+	assign		NumberOut Number 	%filename{"source/3dsMax-OSL-Shaders/Digits.osl"} %line{113} %argrw{"wr"}
+code ___main___
+# source/3dsMax-OSL-Shaders/Digits.osl:116
+# 
+	assign		mult $const3 	%filename{"source/3dsMax-OSL-Shaders/Digits.osl"} %line{116} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:118
+# 		 
+	div		px UVW Scale 	%line{118} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:120
+# 	
+	aref		$tmp1 mult Decimals 	%line{120} %argrw{"wrr"}
+	assign		$tmp3 $tmp1 	%argrw{"wr"}
+	mul		$tmp2 Number $tmp3 	%argrw{"wrr"}
+	assign		number $tmp2 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:122
+# 	if (number < 0) 
+	assign		minus $const1 	%line{122} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:123
+# 	{
+	lt		$tmp4 number $const1 	%line{123} %argrw{"wrr"}
+	if		$tmp4 14 14 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Digits.osl:125
+# 		minus  = 1;
+	neg		number number 	%line{125} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:126
+# 	}
+	assign		minus $const4 	%line{126} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:129
+# 	// Figure out how many digits we need
+	assign		digits Digits 	%line{129} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:131
+# 	// ...but at least one
+	fabs		$tmp8 Number 	%line{131} %argrw{"wr"}
+	functioncall	$const6 20 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:108
+# float  log (float a,  float b) { return log(a)/log(b); }
+	log		$tmp9 $tmp8 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{108} %argrw{"wr"}
+	log		$tmp10 $const5 	%argrw{"wr"}
+	div		$tmp7 $tmp9 $tmp10 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:131
+# 	// ...but at least one
+	floor		$tmp6 $tmp7 	%filename{"source/3dsMax-OSL-Shaders/Digits.osl"} %line{131} %argrw{"wr"}
+	assign		$tmp5 $tmp6 	%argrw{"wr"}
+	add		leftOfDecimalPoint $tmp5 $const4 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:133
+# 		leftOfDecimalPoint = 1;
+	le		$tmp11 leftOfDecimalPoint $const1 	%line{133} %argrw{"wrr"}
+	if		$tmp11 26 26 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Digits.osl:134
+# 		
+	assign		leftOfDecimalPoint $const4 	%line{134} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:136
+# 	
+	add		maxdigi leftOfDecimalPoint Decimals 	%line{136} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:138
+# 		digits = maxdigi;
+	gt		$tmp12 maxdigi digits 	%line{138} %argrw{"wrr"}
+	if		$tmp12 30 30 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Digits.osl:139
+# 
+	assign		digits maxdigi 	%line{139} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:141
+# 	{
+	compref		$tmp13 px $const1 	%line{141} %argrw{"wrr"}
+	gt		$tmp14 $tmp13 $const1 	%argrw{"wrr"}
+	neq		$tmp15 $tmp14 $const1 	%argrw{"wrr"}
+	if		$tmp15 38 38 	%argrw{"r"}
+	compref		$tmp16 px $const1 	%argrw{"wrr"}
+	lt		$tmp17 $tmp16 $const4 	%argrw{"wrr"}
+	neq		$tmp18 $tmp17 $const1 	%argrw{"wrr"}
+	assign		$tmp15 $tmp18 	%argrw{"wr"}
+	neq		$tmp19 $tmp15 $const1 	%argrw{"wrr"}
+	if		$tmp19 44 44 	%argrw{"r"}
+	compref		$tmp20 px $const4 	%argrw{"wrr"}
+	gt		$tmp21 $tmp20 $const1 	%argrw{"wrr"}
+	neq		$tmp22 $tmp21 $const1 	%argrw{"wrr"}
+	assign		$tmp19 $tmp22 	%argrw{"wr"}
+	neq		$tmp23 $tmp19 $const1 	%argrw{"wrr"}
+	if		$tmp23 50 50 	%argrw{"r"}
+	compref		$tmp24 px $const4 	%argrw{"wrr"}
+	lt		$tmp25 $tmp24 $const4 	%argrw{"wrr"}
+	neq		$tmp26 $tmp25 $const1 	%argrw{"wrr"}
+	assign		$tmp23 $tmp26 	%argrw{"wr"}
+	if		$tmp23 647 647 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Digits.osl:143
+# 		px *= (digits * 0.8);
+	sub		px px $const7 	%line{143} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:144
+# 		px += point(0.9, 0.5, 0.0);	
+	assign		$tmp29 digits 	%line{144} %argrw{"wr"}
+	mul		$tmp28 $tmp29 $const8 	%argrw{"wrr"}
+	mul		px px $tmp28 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:145
+# 	
+	add		px px $const7 	%line{145} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:147
+# 		{
+	for		$tmp31 58 59 645 647 	%line{147} %argrw{"r"}
+	assign		___334_i $const1 	%argrw{"wr"}
+	lt		$tmp31 ___334_i digits 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:149
+# 		
+	assign		$tmp32 number 	%line{149} %argrw{"wr"}
+	mod		$tmp33 $tmp32 $const9 	%argrw{"wrr"}
+	eq		$tmp34 Decimals ___334_i 	%argrw{"wrr"}
+	neq		$tmp35 minus $const1 	%argrw{"wrr"}
+	if		$tmp35 68 68 	%argrw{"r"}
+	sub		$tmp36 digits $const4 	%argrw{"wrr"}
+	eq		$tmp37 ___334_i $tmp36 	%argrw{"wrr"}
+	neq		$tmp38 $tmp37 $const1 	%argrw{"wrr"}
+	assign		$tmp35 $tmp38 	%argrw{"wr"}
+	functioncall	$const10 631 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Digits.osl:20
+# 	pt -= point(0.5, 0.2, 0.0);
+	assign		___323_pt px 	%line{20} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:21
+# 	pt *= 2.5;
+	sub		___323_pt ___323_pt $const11 	%line{21} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:22
+# 	pt += point(0.5, 0.2, 0.0);
+	mul		___323_pt ___323_pt $const12 	%line{22} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:23
+# 
+	add		___323_pt ___323_pt $const11 	%line{23} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:25
+# 		return 1;
+	neq		$tmp41 $tmp35 $const1 	%line{25} %argrw{"wrr"}
+	if		$tmp41 106 106 	%argrw{"r"}
+	functioncall	$const15 104 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Digits.osl:10
+# 		pt[1] > start[1] && pt[1] < end[1])
+	compref		$tmp45 ___323_pt $const1 	%line{10} %argrw{"wrr"}
+	compref		$tmp46 $const13 $const1 	%argrw{"wrr"}
+	gt		$tmp47 $tmp45 $tmp46 	%argrw{"wrr"}
+	neq		$tmp48 $tmp47 $const1 	%argrw{"wrr"}
+	if		$tmp48 86 86 	%argrw{"r"}
+	compref		$tmp49 ___323_pt $const1 	%argrw{"wrr"}
+	compref		$tmp50 $const14 $const1 	%argrw{"wrr"}
+	lt		$tmp51 $tmp49 $tmp50 	%argrw{"wrr"}
+	neq		$tmp52 $tmp51 $const1 	%argrw{"wrr"}
+	assign		$tmp48 $tmp52 	%argrw{"wr"}
+	neq		$tmp53 $tmp48 $const1 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:11
+# 		return 1;
+	if		$tmp53 93 93 	%line{11} %argrw{"r"}
+	compref		$tmp54 ___323_pt $const4 	%argrw{"wrr"}
+	compref		$tmp55 $const13 $const4 	%argrw{"wrr"}
+	gt		$tmp56 $tmp54 $tmp55 	%argrw{"wrr"}
+	neq		$tmp57 $tmp56 $const1 	%argrw{"wrr"}
+	assign		$tmp53 $tmp57 	%argrw{"wr"}
+	neq		$tmp58 $tmp53 $const1 	%argrw{"wrr"}
+	if		$tmp58 100 100 	%argrw{"r"}
+	compref		$tmp59 ___323_pt $const4 	%argrw{"wrr"}
+	compref		$tmp60 $const14 $const4 	%argrw{"wrr"}
+	lt		$tmp61 $tmp59 $tmp60 	%argrw{"wrr"}
+	neq		$tmp62 $tmp61 $const1 	%argrw{"wrr"}
+	assign		$tmp58 $tmp62 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:10
+# 		pt[1] > start[1] && pt[1] < end[1])
+	if		$tmp58 103 103 	%line{10} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/Digits.osl:12
+# 	
+	assign		$tmp42 $const4 	%line{12} %argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/Digits.osl:14
+# }
+	assign		$tmp42 $const1 	%line{14} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:25
+# 		return 1;
+	neq		$tmp63 $tmp42 $const1 	%line{25} %argrw{"wrr"}
+	assign		$tmp41 $tmp63 	%argrw{"wr"}
+	if		$tmp41 109 109 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Digits.osl:26
+# 		
+	assign		___335_x $const4 	%line{26} %argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/Digits.osl:28
+# 	    pt[0] >  1.3 || pt[1] >  2.1)
+	compref		$tmp64 ___323_pt $const1 	%line{28} %argrw{"wrr"}
+	lt		$tmp65 $tmp64 $const16 	%argrw{"wrr"}
+	neq		$tmp66 $tmp65 $const1 	%argrw{"wrr"}
+	if		$tmp66 113 117 	%argrw{"r"}
+	compref		$tmp67 ___323_pt $const4 	%argrw{"wrr"}
+	lt		$tmp68 $tmp67 $const16 	%argrw{"wrr"}
+	neq		$tmp69 $tmp68 $const1 	%argrw{"wrr"}
+	assign		$tmp66 $tmp69 	%argrw{"wr"}
+	neq		$tmp70 $tmp66 $const1 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:29
+# 	    return -1;
+	if		$tmp70 119 123 	%line{29} %argrw{"r"}
+	compref		$tmp71 ___323_pt $const1 	%argrw{"wrr"}
+	gt		$tmp72 $tmp71 $const17 	%argrw{"wrr"}
+	neq		$tmp73 $tmp72 $const1 	%argrw{"wrr"}
+	assign		$tmp70 $tmp73 	%argrw{"wr"}
+	neq		$tmp74 $tmp70 $const1 	%argrw{"wrr"}
+	if		$tmp74 125 129 	%argrw{"r"}
+	compref		$tmp75 ___323_pt $const4 	%argrw{"wrr"}
+	gt		$tmp76 $tmp75 $const18 	%argrw{"wrr"}
+	neq		$tmp77 $tmp76 $const1 	%argrw{"wrr"}
+	assign		$tmp74 $tmp77 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:28
+# 	    pt[0] >  1.3 || pt[1] >  2.1)
+	if		$tmp74 132 132 	%line{28} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/Digits.osl:30
+# 
+	assign		___335_x $const19 	%line{30} %argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/Digits.osl:32
+# 	{
+	neq		$tmp78 $tmp34 $const1 	%line{32} %argrw{"wrr"}
+	if		$tmp78 165 165 	%argrw{"r"}
+	functioncall	$const15 163 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Digits.osl:10
+# 		pt[1] > start[1] && pt[1] < end[1])
+	compref		$tmp82 ___323_pt $const1 	%line{10} %argrw{"wrr"}
+	compref		$tmp83 $const20 $const1 	%argrw{"wrr"}
+	gt		$tmp84 $tmp82 $tmp83 	%argrw{"wrr"}
+	neq		$tmp85 $tmp84 $const1 	%argrw{"wrr"}
+	if		$tmp85 145 145 	%argrw{"r"}
+	compref		$tmp86 ___323_pt $const1 	%argrw{"wrr"}
+	compref		$tmp87 $const21 $const1 	%argrw{"wrr"}
+	lt		$tmp88 $tmp86 $tmp87 	%argrw{"wrr"}
+	neq		$tmp89 $tmp88 $const1 	%argrw{"wrr"}
+	assign		$tmp85 $tmp89 	%argrw{"wr"}
+	neq		$tmp90 $tmp85 $const1 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:11
+# 		return 1;
+	if		$tmp90 152 152 	%line{11} %argrw{"r"}
+	compref		$tmp91 ___323_pt $const4 	%argrw{"wrr"}
+	compref		$tmp92 $const20 $const4 	%argrw{"wrr"}
+	gt		$tmp93 $tmp91 $tmp92 	%argrw{"wrr"}
+	neq		$tmp94 $tmp93 $const1 	%argrw{"wrr"}
+	assign		$tmp90 $tmp94 	%argrw{"wr"}
+	neq		$tmp95 $tmp90 $const1 	%argrw{"wrr"}
+	if		$tmp95 159 159 	%argrw{"r"}
+	compref		$tmp96 ___323_pt $const4 	%argrw{"wrr"}
+	compref		$tmp97 $const21 $const4 	%argrw{"wrr"}
+	lt		$tmp98 $tmp96 $tmp97 	%argrw{"wrr"}
+	neq		$tmp99 $tmp98 $const1 	%argrw{"wrr"}
+	assign		$tmp95 $tmp99 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:10
+# 		pt[1] > start[1] && pt[1] < end[1])
+	if		$tmp95 162 162 	%line{10} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/Digits.osl:12
+# 	
+	assign		$tmp79 $const4 	%line{12} %argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/Digits.osl:14
+# }
+	assign		$tmp79 $const1 	%line{14} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:32
+# 	{
+	neq		$tmp100 $tmp79 $const1 	%line{32} %argrw{"wrr"}
+	assign		$tmp78 $tmp100 	%argrw{"wr"}
+	if		$tmp78 168 168 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Digits.osl:34
+# 	}
+	assign		___335_x $const4 	%line{34} %argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/Digits.osl:37
+# 	{
+	functioncall	$const15 197 	%line{37} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/Digits.osl:10
+# 		pt[1] > start[1] && pt[1] < end[1])
+	compref		$tmp104 ___323_pt $const1 	%line{10} %argrw{"wrr"}
+	compref		$tmp105 $const22 $const1 	%argrw{"wrr"}
+	gt		$tmp106 $tmp104 $tmp105 	%argrw{"wrr"}
+	neq		$tmp107 $tmp106 $const1 	%argrw{"wrr"}
+	if		$tmp107 179 179 	%argrw{"r"}
+	compref		$tmp108 ___323_pt $const1 	%argrw{"wrr"}
+	compref		$tmp109 $const23 $const1 	%argrw{"wrr"}
+	lt		$tmp110 $tmp108 $tmp109 	%argrw{"wrr"}
+	neq		$tmp111 $tmp110 $const1 	%argrw{"wrr"}
+	assign		$tmp107 $tmp111 	%argrw{"wr"}
+	neq		$tmp112 $tmp107 $const1 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:11
+# 		return 1;
+	if		$tmp112 186 186 	%line{11} %argrw{"r"}
+	compref		$tmp113 ___323_pt $const4 	%argrw{"wrr"}
+	compref		$tmp114 $const22 $const4 	%argrw{"wrr"}
+	gt		$tmp115 $tmp113 $tmp114 	%argrw{"wrr"}
+	neq		$tmp116 $tmp115 $const1 	%argrw{"wrr"}
+	assign		$tmp112 $tmp116 	%argrw{"wr"}
+	neq		$tmp117 $tmp112 $const1 	%argrw{"wrr"}
+	if		$tmp117 193 193 	%argrw{"r"}
+	compref		$tmp118 ___323_pt $const4 	%argrw{"wrr"}
+	compref		$tmp119 $const23 $const4 	%argrw{"wrr"}
+	lt		$tmp120 $tmp118 $tmp119 	%argrw{"wrr"}
+	neq		$tmp121 $tmp120 $const1 	%argrw{"wrr"}
+	assign		$tmp117 $tmp121 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:10
+# 		pt[1] > start[1] && pt[1] < end[1])
+	if		$tmp117 196 196 	%line{10} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/Digits.osl:12
+# 	
+	assign		$tmp101 $const4 	%line{12} %argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/Digits.osl:14
+# }
+	assign		$tmp101 $const1 	%line{14} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:37
+# 	{
+	if		$tmp101 234 234 	%line{37} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/Digits.osl:39
+# 			return 1;
+	eq		$tmp122 $tmp33 $const24 	%line{39} %argrw{"wrr"}
+	neq		$tmp123 $tmp122 $const1 	%argrw{"wrr"}
+	if		$tmp123 201 204 	%argrw{"r"}
+	eq		$tmp124 $tmp33 $const25 	%argrw{"wrr"}
+	neq		$tmp125 $tmp124 $const1 	%argrw{"wrr"}
+	assign		$tmp123 $tmp125 	%argrw{"wr"}
+	neq		$tmp126 $tmp123 $const1 	%argrw{"wrr"}
+	if		$tmp126 206 209 	%argrw{"r"}
+	eq		$tmp127 $tmp33 $const26 	%argrw{"wrr"}
+	neq		$tmp128 $tmp127 $const1 	%argrw{"wrr"}
+	assign		$tmp126 $tmp128 	%argrw{"wr"}
+	neq		$tmp129 $tmp126 $const1 	%argrw{"wrr"}
+	if		$tmp129 211 214 	%argrw{"r"}
+	eq		$tmp130 $tmp33 $const27 	%argrw{"wrr"}
+	neq		$tmp131 $tmp130 $const1 	%argrw{"wrr"}
+	assign		$tmp129 $tmp131 	%argrw{"wr"}
+	neq		$tmp132 $tmp129 $const1 	%argrw{"wrr"}
+	if		$tmp132 216 219 	%argrw{"r"}
+	eq		$tmp133 $tmp33 $const28 	%argrw{"wrr"}
+	neq		$tmp134 $tmp133 $const1 	%argrw{"wrr"}
+	assign		$tmp132 $tmp134 	%argrw{"wr"}
+	neq		$tmp135 $tmp132 $const1 	%argrw{"wrr"}
+	if		$tmp135 221 224 	%argrw{"r"}
+	eq		$tmp136 $tmp33 $const29 	%argrw{"wrr"}
+	neq		$tmp137 $tmp136 $const1 	%argrw{"wrr"}
+	assign		$tmp135 $tmp137 	%argrw{"wr"}
+	neq		$tmp138 $tmp135 $const1 	%argrw{"wrr"}
+	if		$tmp138 226 229 	%argrw{"r"}
+	eq		$tmp139 $tmp33 $const1 	%argrw{"wrr"}
+	neq		$tmp140 $tmp139 $const1 	%argrw{"wrr"}
+	assign		$tmp138 $tmp140 	%argrw{"wr"}
+	if		$tmp138 232 234 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Digits.osl:40
+# 		else
+	assign		___335_x $const4 	%line{40} %argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/Digits.osl:42
+# 	}
+	assign		___335_x $const1 	%line{42} %argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/Digits.osl:45
+# 	{
+	functioncall	$const15 263 	%line{45} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/Digits.osl:10
+# 		pt[1] > start[1] && pt[1] < end[1])
+	compref		$tmp144 ___323_pt $const1 	%line{10} %argrw{"wrr"}
+	compref		$tmp145 $const30 $const1 	%argrw{"wrr"}
+	gt		$tmp146 $tmp144 $tmp145 	%argrw{"wrr"}
+	neq		$tmp147 $tmp146 $const1 	%argrw{"wrr"}
+	if		$tmp147 245 245 	%argrw{"r"}
+	compref		$tmp148 ___323_pt $const1 	%argrw{"wrr"}
+	compref		$tmp149 $const31 $const1 	%argrw{"wrr"}
+	lt		$tmp150 $tmp148 $tmp149 	%argrw{"wrr"}
+	neq		$tmp151 $tmp150 $const1 	%argrw{"wrr"}
+	assign		$tmp147 $tmp151 	%argrw{"wr"}
+	neq		$tmp152 $tmp147 $const1 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:11
+# 		return 1;
+	if		$tmp152 252 252 	%line{11} %argrw{"r"}
+	compref		$tmp153 ___323_pt $const4 	%argrw{"wrr"}
+	compref		$tmp154 $const30 $const4 	%argrw{"wrr"}
+	gt		$tmp155 $tmp153 $tmp154 	%argrw{"wrr"}
+	neq		$tmp156 $tmp155 $const1 	%argrw{"wrr"}
+	assign		$tmp152 $tmp156 	%argrw{"wr"}
+	neq		$tmp157 $tmp152 $const1 	%argrw{"wrr"}
+	if		$tmp157 259 259 	%argrw{"r"}
+	compref		$tmp158 ___323_pt $const4 	%argrw{"wrr"}
+	compref		$tmp159 $const31 $const4 	%argrw{"wrr"}
+	lt		$tmp160 $tmp158 $tmp159 	%argrw{"wrr"}
+	neq		$tmp161 $tmp160 $const1 	%argrw{"wrr"}
+	assign		$tmp157 $tmp161 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:10
+# 		pt[1] > start[1] && pt[1] < end[1])
+	if		$tmp157 262 262 	%line{10} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/Digits.osl:12
+# 	
+	assign		$tmp141 $const4 	%line{12} %argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/Digits.osl:14
+# }
+	assign		$tmp141 $const1 	%line{14} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:45
+# 	{
+	if		$tmp141 300 300 	%line{45} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/Digits.osl:47
+# 			return 1;
+	eq		$tmp162 $tmp33 $const24 	%line{47} %argrw{"wrr"}
+	neq		$tmp163 $tmp162 $const1 	%argrw{"wrr"}
+	if		$tmp163 267 270 	%argrw{"r"}
+	eq		$tmp164 $tmp33 $const25 	%argrw{"wrr"}
+	neq		$tmp165 $tmp164 $const1 	%argrw{"wrr"}
+	assign		$tmp163 $tmp165 	%argrw{"wr"}
+	neq		$tmp166 $tmp163 $const1 	%argrw{"wrr"}
+	if		$tmp166 272 275 	%argrw{"r"}
+	eq		$tmp167 $tmp33 $const32 	%argrw{"wrr"}
+	neq		$tmp168 $tmp167 $const1 	%argrw{"wrr"}
+	assign		$tmp166 $tmp168 	%argrw{"wr"}
+	neq		$tmp169 $tmp166 $const1 	%argrw{"wrr"}
+	if		$tmp169 277 280 	%argrw{"r"}
+	eq		$tmp170 $tmp33 $const26 	%argrw{"wrr"}
+	neq		$tmp171 $tmp170 $const1 	%argrw{"wrr"}
+	assign		$tmp169 $tmp171 	%argrw{"wr"}
+	neq		$tmp172 $tmp169 $const1 	%argrw{"wrr"}
+	if		$tmp172 282 285 	%argrw{"r"}
+	eq		$tmp173 $tmp33 $const27 	%argrw{"wrr"}
+	neq		$tmp174 $tmp173 $const1 	%argrw{"wrr"}
+	assign		$tmp172 $tmp174 	%argrw{"wr"}
+	neq		$tmp175 $tmp172 $const1 	%argrw{"wrr"}
+	if		$tmp175 287 290 	%argrw{"r"}
+	eq		$tmp176 $tmp33 $const28 	%argrw{"wrr"}
+	neq		$tmp177 $tmp176 $const1 	%argrw{"wrr"}
+	assign		$tmp175 $tmp177 	%argrw{"wr"}
+	neq		$tmp178 $tmp175 $const1 	%argrw{"wrr"}
+	if		$tmp178 292 295 	%argrw{"r"}
+	eq		$tmp179 $tmp33 $const29 	%argrw{"wrr"}
+	neq		$tmp180 $tmp179 $const1 	%argrw{"wrr"}
+	assign		$tmp178 $tmp180 	%argrw{"wr"}
+	if		$tmp178 298 300 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Digits.osl:48
+# 		else
+	assign		___335_x $const4 	%line{48} %argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/Digits.osl:50
+# 	}
+	assign		___335_x $const1 	%line{50} %argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/Digits.osl:53
+# 	{
+	functioncall	$const15 329 	%line{53} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/Digits.osl:10
+# 		pt[1] > start[1] && pt[1] < end[1])
+	compref		$tmp184 ___323_pt $const1 	%line{10} %argrw{"wrr"}
+	compref		$tmp185 $const33 $const1 	%argrw{"wrr"}
+	gt		$tmp186 $tmp184 $tmp185 	%argrw{"wrr"}
+	neq		$tmp187 $tmp186 $const1 	%argrw{"wrr"}
+	if		$tmp187 311 311 	%argrw{"r"}
+	compref		$tmp188 ___323_pt $const1 	%argrw{"wrr"}
+	compref		$tmp189 $const34 $const1 	%argrw{"wrr"}
+	lt		$tmp190 $tmp188 $tmp189 	%argrw{"wrr"}
+	neq		$tmp191 $tmp190 $const1 	%argrw{"wrr"}
+	assign		$tmp187 $tmp191 	%argrw{"wr"}
+	neq		$tmp192 $tmp187 $const1 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:11
+# 		return 1;
+	if		$tmp192 318 318 	%line{11} %argrw{"r"}
+	compref		$tmp193 ___323_pt $const4 	%argrw{"wrr"}
+	compref		$tmp194 $const33 $const4 	%argrw{"wrr"}
+	gt		$tmp195 $tmp193 $tmp194 	%argrw{"wrr"}
+	neq		$tmp196 $tmp195 $const1 	%argrw{"wrr"}
+	assign		$tmp192 $tmp196 	%argrw{"wr"}
+	neq		$tmp197 $tmp192 $const1 	%argrw{"wrr"}
+	if		$tmp197 325 325 	%argrw{"r"}
+	compref		$tmp198 ___323_pt $const4 	%argrw{"wrr"}
+	compref		$tmp199 $const34 $const4 	%argrw{"wrr"}
+	lt		$tmp200 $tmp198 $tmp199 	%argrw{"wrr"}
+	neq		$tmp201 $tmp200 $const1 	%argrw{"wrr"}
+	assign		$tmp197 $tmp201 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:10
+# 		pt[1] > start[1] && pt[1] < end[1])
+	if		$tmp197 328 328 	%line{10} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/Digits.osl:12
+# 	
+	assign		$tmp181 $const4 	%line{12} %argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/Digits.osl:14
+# }
+	assign		$tmp181 $const1 	%line{14} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:53
+# 	{
+	if		$tmp181 371 371 	%line{53} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/Digits.osl:55
+# 			return 1;
+	eq		$tmp202 $tmp33 $const24 	%line{55} %argrw{"wrr"}
+	neq		$tmp203 $tmp202 $const1 	%argrw{"wrr"}
+	if		$tmp203 333 336 	%argrw{"r"}
+	eq		$tmp204 $tmp33 $const25 	%argrw{"wrr"}
+	neq		$tmp205 $tmp204 $const1 	%argrw{"wrr"}
+	assign		$tmp203 $tmp205 	%argrw{"wr"}
+	neq		$tmp206 $tmp203 $const1 	%argrw{"wrr"}
+	if		$tmp206 338 341 	%argrw{"r"}
+	eq		$tmp207 $tmp33 $const26 	%argrw{"wrr"}
+	neq		$tmp208 $tmp207 $const1 	%argrw{"wrr"}
+	assign		$tmp206 $tmp208 	%argrw{"wr"}
+	neq		$tmp209 $tmp206 $const1 	%argrw{"wrr"}
+	if		$tmp209 343 346 	%argrw{"r"}
+	eq		$tmp210 $tmp33 $const27 	%argrw{"wrr"}
+	neq		$tmp211 $tmp210 $const1 	%argrw{"wrr"}
+	assign		$tmp209 $tmp211 	%argrw{"wr"}
+	neq		$tmp212 $tmp209 $const1 	%argrw{"wrr"}
+	if		$tmp212 348 351 	%argrw{"r"}
+	eq		$tmp213 $tmp33 $const35 	%argrw{"wrr"}
+	neq		$tmp214 $tmp213 $const1 	%argrw{"wrr"}
+	assign		$tmp212 $tmp214 	%argrw{"wr"}
+	neq		$tmp215 $tmp212 $const1 	%argrw{"wrr"}
+	if		$tmp215 353 356 	%argrw{"r"}
+	eq		$tmp216 $tmp33 $const28 	%argrw{"wrr"}
+	neq		$tmp217 $tmp216 $const1 	%argrw{"wrr"}
+	assign		$tmp215 $tmp217 	%argrw{"wr"}
+	neq		$tmp218 $tmp215 $const1 	%argrw{"wrr"}
+	if		$tmp218 358 361 	%argrw{"r"}
+	eq		$tmp219 $tmp33 $const29 	%argrw{"wrr"}
+	neq		$tmp220 $tmp219 $const1 	%argrw{"wrr"}
+	assign		$tmp218 $tmp220 	%argrw{"wr"}
+	neq		$tmp221 $tmp218 $const1 	%argrw{"wrr"}
+	if		$tmp221 363 366 	%argrw{"r"}
+	eq		$tmp222 $tmp33 $const1 	%argrw{"wrr"}
+	neq		$tmp223 $tmp222 $const1 	%argrw{"wrr"}
+	assign		$tmp221 $tmp223 	%argrw{"wr"}
+	if		$tmp221 369 371 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Digits.osl:56
+# 		else
+	assign		___335_x $const4 	%line{56} %argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/Digits.osl:58
+# 	}
+	assign		___335_x $const1 	%line{58} %argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/Digits.osl:61
+# 	{
+	functioncall	$const15 400 	%line{61} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/Digits.osl:10
+# 		pt[1] > start[1] && pt[1] < end[1])
+	compref		$tmp227 ___323_pt $const1 	%line{10} %argrw{"wrr"}
+	compref		$tmp228 $const36 $const1 	%argrw{"wrr"}
+	gt		$tmp229 $tmp227 $tmp228 	%argrw{"wrr"}
+	neq		$tmp230 $tmp229 $const1 	%argrw{"wrr"}
+	if		$tmp230 382 382 	%argrw{"r"}
+	compref		$tmp231 ___323_pt $const1 	%argrw{"wrr"}
+	compref		$tmp232 $const30 $const1 	%argrw{"wrr"}
+	lt		$tmp233 $tmp231 $tmp232 	%argrw{"wrr"}
+	neq		$tmp234 $tmp233 $const1 	%argrw{"wrr"}
+	assign		$tmp230 $tmp234 	%argrw{"wr"}
+	neq		$tmp235 $tmp230 $const1 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:11
+# 		return 1;
+	if		$tmp235 389 389 	%line{11} %argrw{"r"}
+	compref		$tmp236 ___323_pt $const4 	%argrw{"wrr"}
+	compref		$tmp237 $const36 $const4 	%argrw{"wrr"}
+	gt		$tmp238 $tmp236 $tmp237 	%argrw{"wrr"}
+	neq		$tmp239 $tmp238 $const1 	%argrw{"wrr"}
+	assign		$tmp235 $tmp239 	%argrw{"wr"}
+	neq		$tmp240 $tmp235 $const1 	%argrw{"wrr"}
+	if		$tmp240 396 396 	%argrw{"r"}
+	compref		$tmp241 ___323_pt $const4 	%argrw{"wrr"}
+	compref		$tmp242 $const30 $const4 	%argrw{"wrr"}
+	lt		$tmp243 $tmp241 $tmp242 	%argrw{"wrr"}
+	neq		$tmp244 $tmp243 $const1 	%argrw{"wrr"}
+	assign		$tmp240 $tmp244 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:10
+# 		pt[1] > start[1] && pt[1] < end[1])
+	if		$tmp240 399 399 	%line{10} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/Digits.osl:12
+# 	
+	assign		$tmp224 $const4 	%line{12} %argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/Digits.osl:14
+# }
+	assign		$tmp224 $const1 	%line{14} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:61
+# 	{
+	if		$tmp224 422 422 	%line{61} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/Digits.osl:63
+# 			return 1;
+	eq		$tmp245 $tmp33 $const24 	%line{63} %argrw{"wrr"}
+	neq		$tmp246 $tmp245 $const1 	%argrw{"wrr"}
+	if		$tmp246 404 407 	%argrw{"r"}
+	eq		$tmp247 $tmp33 $const27 	%argrw{"wrr"}
+	neq		$tmp248 $tmp247 $const1 	%argrw{"wrr"}
+	assign		$tmp246 $tmp248 	%argrw{"wr"}
+	neq		$tmp249 $tmp246 $const1 	%argrw{"wrr"}
+	if		$tmp249 409 412 	%argrw{"r"}
+	eq		$tmp250 $tmp33 $const28 	%argrw{"wrr"}
+	neq		$tmp251 $tmp250 $const1 	%argrw{"wrr"}
+	assign		$tmp249 $tmp251 	%argrw{"wr"}
+	neq		$tmp252 $tmp249 $const1 	%argrw{"wrr"}
+	if		$tmp252 414 417 	%argrw{"r"}
+	eq		$tmp253 $tmp33 $const1 	%argrw{"wrr"}
+	neq		$tmp254 $tmp253 $const1 	%argrw{"wrr"}
+	assign		$tmp252 $tmp254 	%argrw{"wr"}
+	if		$tmp252 420 422 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Digits.osl:64
+# 		else
+	assign		___335_x $const4 	%line{64} %argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/Digits.osl:66
+# 	}
+	assign		___335_x $const1 	%line{66} %argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/Digits.osl:69
+# 	{
+	functioncall	$const15 451 	%line{69} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/Digits.osl:10
+# 		pt[1] > start[1] && pt[1] < end[1])
+	compref		$tmp258 ___323_pt $const1 	%line{10} %argrw{"wrr"}
+	compref		$tmp259 $const37 $const1 	%argrw{"wrr"}
+	gt		$tmp260 $tmp258 $tmp259 	%argrw{"wrr"}
+	neq		$tmp261 $tmp260 $const1 	%argrw{"wrr"}
+	if		$tmp261 433 433 	%argrw{"r"}
+	compref		$tmp262 ___323_pt $const1 	%argrw{"wrr"}
+	compref		$tmp263 $const33 $const1 	%argrw{"wrr"}
+	lt		$tmp264 $tmp262 $tmp263 	%argrw{"wrr"}
+	neq		$tmp265 $tmp264 $const1 	%argrw{"wrr"}
+	assign		$tmp261 $tmp265 	%argrw{"wr"}
+	neq		$tmp266 $tmp261 $const1 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:11
+# 		return 1;
+	if		$tmp266 440 440 	%line{11} %argrw{"r"}
+	compref		$tmp267 ___323_pt $const4 	%argrw{"wrr"}
+	compref		$tmp268 $const37 $const4 	%argrw{"wrr"}
+	gt		$tmp269 $tmp267 $tmp268 	%argrw{"wrr"}
+	neq		$tmp270 $tmp269 $const1 	%argrw{"wrr"}
+	assign		$tmp266 $tmp270 	%argrw{"wr"}
+	neq		$tmp271 $tmp266 $const1 	%argrw{"wrr"}
+	if		$tmp271 447 447 	%argrw{"r"}
+	compref		$tmp272 ___323_pt $const4 	%argrw{"wrr"}
+	compref		$tmp273 $const33 $const4 	%argrw{"wrr"}
+	lt		$tmp274 $tmp272 $tmp273 	%argrw{"wrr"}
+	neq		$tmp275 $tmp274 $const1 	%argrw{"wrr"}
+	assign		$tmp271 $tmp275 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:10
+# 		pt[1] > start[1] && pt[1] < end[1])
+	if		$tmp271 450 450 	%line{10} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/Digits.osl:12
+# 	
+	assign		$tmp255 $const4 	%line{12} %argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/Digits.osl:14
+# }
+	assign		$tmp255 $const1 	%line{14} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:69
+# 	{
+	if		$tmp255 483 483 	%line{69} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/Digits.osl:71
+# 			return 1;
+	eq		$tmp276 $tmp33 $const32 	%line{71} %argrw{"wrr"}
+	neq		$tmp277 $tmp276 $const1 	%argrw{"wrr"}
+	if		$tmp277 455 458 	%argrw{"r"}
+	eq		$tmp278 $tmp33 $const26 	%argrw{"wrr"}
+	neq		$tmp279 $tmp278 $const1 	%argrw{"wrr"}
+	assign		$tmp277 $tmp279 	%argrw{"wr"}
+	neq		$tmp280 $tmp277 $const1 	%argrw{"wrr"}
+	if		$tmp280 460 463 	%argrw{"r"}
+	eq		$tmp281 $tmp33 $const27 	%argrw{"wrr"}
+	neq		$tmp282 $tmp281 $const1 	%argrw{"wrr"}
+	assign		$tmp280 $tmp282 	%argrw{"wr"}
+	neq		$tmp283 $tmp280 $const1 	%argrw{"wrr"}
+	if		$tmp283 465 468 	%argrw{"r"}
+	eq		$tmp284 $tmp33 $const28 	%argrw{"wrr"}
+	neq		$tmp285 $tmp284 $const1 	%argrw{"wrr"}
+	assign		$tmp283 $tmp285 	%argrw{"wr"}
+	neq		$tmp286 $tmp283 $const1 	%argrw{"wrr"}
+	if		$tmp286 470 473 	%argrw{"r"}
+	eq		$tmp287 $tmp33 $const29 	%argrw{"wrr"}
+	neq		$tmp288 $tmp287 $const1 	%argrw{"wrr"}
+	assign		$tmp286 $tmp288 	%argrw{"wr"}
+	neq		$tmp289 $tmp286 $const1 	%argrw{"wrr"}
+	if		$tmp289 475 478 	%argrw{"r"}
+	eq		$tmp290 $tmp33 $const1 	%argrw{"wrr"}
+	neq		$tmp291 $tmp290 $const1 	%argrw{"wrr"}
+	assign		$tmp289 $tmp291 	%argrw{"wr"}
+	if		$tmp289 481 483 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Digits.osl:72
+# 		else
+	assign		___335_x $const4 	%line{72} %argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/Digits.osl:74
+# 	}
+	assign		___335_x $const1 	%line{74} %argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/Digits.osl:77
+# 	{
+	functioncall	$const15 512 	%line{77} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/Digits.osl:10
+# 		pt[1] > start[1] && pt[1] < end[1])
+	compref		$tmp295 ___323_pt $const1 	%line{10} %argrw{"wrr"}
+	compref		$tmp296 $const23 $const1 	%argrw{"wrr"}
+	gt		$tmp297 $tmp295 $tmp296 	%argrw{"wrr"}
+	neq		$tmp298 $tmp297 $const1 	%argrw{"wrr"}
+	if		$tmp298 494 494 	%argrw{"r"}
+	compref		$tmp299 ___323_pt $const1 	%argrw{"wrr"}
+	compref		$tmp300 $const38 $const1 	%argrw{"wrr"}
+	lt		$tmp301 $tmp299 $tmp300 	%argrw{"wrr"}
+	neq		$tmp302 $tmp301 $const1 	%argrw{"wrr"}
+	assign		$tmp298 $tmp302 	%argrw{"wr"}
+	neq		$tmp303 $tmp298 $const1 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:11
+# 		return 1;
+	if		$tmp303 501 501 	%line{11} %argrw{"r"}
+	compref		$tmp304 ___323_pt $const4 	%argrw{"wrr"}
+	compref		$tmp305 $const23 $const4 	%argrw{"wrr"}
+	gt		$tmp306 $tmp304 $tmp305 	%argrw{"wrr"}
+	neq		$tmp307 $tmp306 $const1 	%argrw{"wrr"}
+	assign		$tmp303 $tmp307 	%argrw{"wr"}
+	neq		$tmp308 $tmp303 $const1 	%argrw{"wrr"}
+	if		$tmp308 508 508 	%argrw{"r"}
+	compref		$tmp309 ___323_pt $const4 	%argrw{"wrr"}
+	compref		$tmp310 $const38 $const4 	%argrw{"wrr"}
+	lt		$tmp311 $tmp309 $tmp310 	%argrw{"wrr"}
+	neq		$tmp312 $tmp311 $const1 	%argrw{"wrr"}
+	assign		$tmp308 $tmp312 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:10
+# 		pt[1] > start[1] && pt[1] < end[1])
+	if		$tmp308 511 511 	%line{10} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/Digits.osl:12
+# 	
+	assign		$tmp292 $const4 	%line{12} %argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/Digits.osl:14
+# }
+	assign		$tmp292 $const1 	%line{14} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:77
+# 	{
+	if		$tmp292 559 559 	%line{77} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/Digits.osl:79
+# 			return 1;
+	eq		$tmp313 $tmp33 $const4 	%line{79} %argrw{"wrr"}
+	neq		$tmp314 $tmp313 $const1 	%argrw{"wrr"}
+	if		$tmp314 516 519 	%argrw{"r"}
+	eq		$tmp315 $tmp33 $const25 	%argrw{"wrr"}
+	neq		$tmp316 $tmp315 $const1 	%argrw{"wrr"}
+	assign		$tmp314 $tmp316 	%argrw{"wr"}
+	neq		$tmp317 $tmp314 $const1 	%argrw{"wrr"}
+	if		$tmp317 521 524 	%argrw{"r"}
+	eq		$tmp318 $tmp33 $const32 	%argrw{"wrr"}
+	neq		$tmp319 $tmp318 $const1 	%argrw{"wrr"}
+	assign		$tmp317 $tmp319 	%argrw{"wr"}
+	neq		$tmp320 $tmp317 $const1 	%argrw{"wrr"}
+	if		$tmp320 526 529 	%argrw{"r"}
+	eq		$tmp321 $tmp33 $const26 	%argrw{"wrr"}
+	neq		$tmp322 $tmp321 $const1 	%argrw{"wrr"}
+	assign		$tmp320 $tmp322 	%argrw{"wr"}
+	neq		$tmp323 $tmp320 $const1 	%argrw{"wrr"}
+	if		$tmp323 531 534 	%argrw{"r"}
+	eq		$tmp324 $tmp33 $const27 	%argrw{"wrr"}
+	neq		$tmp325 $tmp324 $const1 	%argrw{"wrr"}
+	assign		$tmp323 $tmp325 	%argrw{"wr"}
+	neq		$tmp326 $tmp323 $const1 	%argrw{"wrr"}
+	if		$tmp326 536 539 	%argrw{"r"}
+	eq		$tmp327 $tmp33 $const35 	%argrw{"wrr"}
+	neq		$tmp328 $tmp327 $const1 	%argrw{"wrr"}
+	assign		$tmp326 $tmp328 	%argrw{"wr"}
+	neq		$tmp329 $tmp326 $const1 	%argrw{"wrr"}
+	if		$tmp329 541 544 	%argrw{"r"}
+	eq		$tmp330 $tmp33 $const28 	%argrw{"wrr"}
+	neq		$tmp331 $tmp330 $const1 	%argrw{"wrr"}
+	assign		$tmp329 $tmp331 	%argrw{"wr"}
+	neq		$tmp332 $tmp329 $const1 	%argrw{"wrr"}
+	if		$tmp332 546 549 	%argrw{"r"}
+	eq		$tmp333 $tmp33 $const29 	%argrw{"wrr"}
+	neq		$tmp334 $tmp333 $const1 	%argrw{"wrr"}
+	assign		$tmp332 $tmp334 	%argrw{"wr"}
+	neq		$tmp335 $tmp332 $const1 	%argrw{"wrr"}
+	if		$tmp335 551 554 	%argrw{"r"}
+	eq		$tmp336 $tmp33 $const1 	%argrw{"wrr"}
+	neq		$tmp337 $tmp336 $const1 	%argrw{"wrr"}
+	assign		$tmp335 $tmp337 	%argrw{"wr"}
+	if		$tmp335 557 559 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Digits.osl:80
+# 		else
+	assign		___335_x $const4 	%line{80} %argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/Digits.osl:82
+# 	}
+	assign		___335_x $const1 	%line{82} %argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/Digits.osl:85
+# 	{
+	functioncall	$const15 588 	%line{85} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/Digits.osl:10
+# 		pt[1] > start[1] && pt[1] < end[1])
+	compref		$tmp341 ___323_pt $const1 	%line{10} %argrw{"wrr"}
+	compref		$tmp342 $const31 $const1 	%argrw{"wrr"}
+	gt		$tmp343 $tmp341 $tmp342 	%argrw{"wrr"}
+	neq		$tmp344 $tmp343 $const1 	%argrw{"wrr"}
+	if		$tmp344 570 570 	%argrw{"r"}
+	compref		$tmp345 ___323_pt $const1 	%argrw{"wrr"}
+	compref		$tmp346 $const39 $const1 	%argrw{"wrr"}
+	lt		$tmp347 $tmp345 $tmp346 	%argrw{"wrr"}
+	neq		$tmp348 $tmp347 $const1 	%argrw{"wrr"}
+	assign		$tmp344 $tmp348 	%argrw{"wr"}
+	neq		$tmp349 $tmp344 $const1 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:11
+# 		return 1;
+	if		$tmp349 577 577 	%line{11} %argrw{"r"}
+	compref		$tmp350 ___323_pt $const4 	%argrw{"wrr"}
+	compref		$tmp351 $const31 $const4 	%argrw{"wrr"}
+	gt		$tmp352 $tmp350 $tmp351 	%argrw{"wrr"}
+	neq		$tmp353 $tmp352 $const1 	%argrw{"wrr"}
+	assign		$tmp349 $tmp353 	%argrw{"wr"}
+	neq		$tmp354 $tmp349 $const1 	%argrw{"wrr"}
+	if		$tmp354 584 584 	%argrw{"r"}
+	compref		$tmp355 ___323_pt $const4 	%argrw{"wrr"}
+	compref		$tmp356 $const39 $const4 	%argrw{"wrr"}
+	lt		$tmp357 $tmp355 $tmp356 	%argrw{"wrr"}
+	neq		$tmp358 $tmp357 $const1 	%argrw{"wrr"}
+	assign		$tmp354 $tmp358 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:10
+# 		pt[1] > start[1] && pt[1] < end[1])
+	if		$tmp354 587 587 	%line{10} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/Digits.osl:12
+# 	
+	assign		$tmp338 $const4 	%line{12} %argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/Digits.osl:14
+# }
+	assign		$tmp338 $const1 	%line{14} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:85
+# 	{
+	if		$tmp338 630 630 	%line{85} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/Digits.osl:87
+# 			return 1;
+	eq		$tmp359 $tmp33 $const4 	%line{87} %argrw{"wrr"}
+	neq		$tmp360 $tmp359 $const1 	%argrw{"wrr"}
+	if		$tmp360 592 595 	%argrw{"r"}
+	eq		$tmp361 $tmp33 $const24 	%argrw{"wrr"}
+	neq		$tmp362 $tmp361 $const1 	%argrw{"wrr"}
+	assign		$tmp360 $tmp362 	%argrw{"wr"}
+	neq		$tmp363 $tmp360 $const1 	%argrw{"wrr"}
+	if		$tmp363 597 600 	%argrw{"r"}
+	eq		$tmp364 $tmp33 $const25 	%argrw{"wrr"}
+	neq		$tmp365 $tmp364 $const1 	%argrw{"wrr"}
+	assign		$tmp363 $tmp365 	%argrw{"wr"}
+	neq		$tmp366 $tmp363 $const1 	%argrw{"wrr"}
+	if		$tmp366 602 605 	%argrw{"r"}
+	eq		$tmp367 $tmp33 $const32 	%argrw{"wrr"}
+	neq		$tmp368 $tmp367 $const1 	%argrw{"wrr"}
+	assign		$tmp366 $tmp368 	%argrw{"wr"}
+	neq		$tmp369 $tmp366 $const1 	%argrw{"wrr"}
+	if		$tmp369 607 610 	%argrw{"r"}
+	eq		$tmp370 $tmp33 $const35 	%argrw{"wrr"}
+	neq		$tmp371 $tmp370 $const1 	%argrw{"wrr"}
+	assign		$tmp369 $tmp371 	%argrw{"wr"}
+	neq		$tmp372 $tmp369 $const1 	%argrw{"wrr"}
+	if		$tmp372 612 615 	%argrw{"r"}
+	eq		$tmp373 $tmp33 $const28 	%argrw{"wrr"}
+	neq		$tmp374 $tmp373 $const1 	%argrw{"wrr"}
+	assign		$tmp372 $tmp374 	%argrw{"wr"}
+	neq		$tmp375 $tmp372 $const1 	%argrw{"wrr"}
+	if		$tmp375 617 620 	%argrw{"r"}
+	eq		$tmp376 $tmp33 $const29 	%argrw{"wrr"}
+	neq		$tmp377 $tmp376 $const1 	%argrw{"wrr"}
+	assign		$tmp375 $tmp377 	%argrw{"wr"}
+	neq		$tmp378 $tmp375 $const1 	%argrw{"wrr"}
+	if		$tmp378 622 625 	%argrw{"r"}
+	eq		$tmp379 $tmp33 $const1 	%argrw{"wrr"}
+	neq		$tmp380 $tmp379 $const1 	%argrw{"wrr"}
+	assign		$tmp378 $tmp380 	%argrw{"wr"}
+	if		$tmp378 628 630 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Digits.osl:88
+# 		else
+	assign		___335_x $const4 	%line{88} %argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/Digits.osl:90
+# 	}
+	assign		___335_x $const1 	%line{90} %argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/Digits.osl:93
+# }
+	assign		___335_x $const19 	%line{93} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:151
+# 			{
+	eq		$tmp381 ___335_x $const1 	%line{151} %argrw{"wrr"}
+	neq		$tmp382 $tmp381 $const1 	%argrw{"wrr"}
+	if		$tmp382 636 636 	%argrw{"r"}
+	neq		$tmp383 UseOffColor $const1 	%argrw{"wrr"}
+	assign		$tmp382 $tmp383 	%argrw{"wr"}
+	if		$tmp382 639 639 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Digits.osl:153
+# 				Fac = 1.0;
+	assign		Out OffColor 	%line{153} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:154
+# 			}
+	assign		Fac $const40 	%line{154} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:156
+# 			{
+	eq		$tmp384 ___335_x $const4 	%line{156} %argrw{"wrr"}
+	if		$tmp384 643 643 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Digits.osl:158
+# 				Fac = 1.0;
+	assign		Out OnColor 	%line{158} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:159
+# 			}
+	assign		Fac $const40 	%line{159} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:162
+# 		
+	div		number number $const9 	%line{162} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:164
+# 		}
+	add		px px $const41 	%line{164} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Digits.osl:147
+# 		{
+	assign		$tmp386 ___334_i 	%line{147} %argrw{"wr"}
+	add		___334_i ___334_i $const4 	%argrw{"wrr"}
+	end

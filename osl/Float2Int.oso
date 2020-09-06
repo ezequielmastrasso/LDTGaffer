@@ -1,0 +1,47 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader Float2Int	%meta{string,help,"Turns a float into an integer"} %meta{string,label,"Float-to-Int"} %meta{string,category,"Math Float"} 
+param	float	Input	0		%read{2,12} %write{2147483647,-1}
+param	string	Mode	"floor"		%meta{string,widget,"popup"} %meta{string,options,"floor|ceil|round|trunc"} %meta{string,help,"One of 'floor', 'ceil', 'round' or 'trunc' conversion modes."}  %read{0,8} %write{2147483647,-1}
+oparam	int	Out	0		%read{2147483647,-1} %write{3,13}
+const	string	$const1	"ceil"		%read{0,0} %write{2147483647,-1}
+temp	int	$tmp1	%read{1,1} %write{0,0}
+temp	float	$tmp2	%read{3,3} %write{2,2}
+const	string	$const2	"round"		%read{4,4} %write{2147483647,-1}
+temp	int	$tmp3	%read{5,5} %write{4,4}
+temp	float	$tmp4	%read{7,7} %write{6,6}
+const	string	$const3	"trunc"		%read{8,8} %write{2147483647,-1}
+temp	int	$tmp5	%read{9,9} %write{8,8}
+temp	float	$tmp6	%read{11,11} %write{10,10}
+temp	float	$tmp7	%read{13,13} %write{12,12}
+code ___main___
+# source/3dsMax-OSL-Shaders/Float2Int.osl:21
+# 		Out = int(ceil(Input));
+	eq		$tmp1 Mode $const1 	%filename{"source/3dsMax-OSL-Shaders/Float2Int.osl"} %line{21} %argrw{"wrr"}
+	if		$tmp1 4 14 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Float2Int.osl:22
+# 	else 
+	ceil		$tmp2 Input 	%line{22} %argrw{"wr"}
+	assign		Out $tmp2 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Float2Int.osl:24
+# 		Out = int(round(Input));
+	eq		$tmp3 Mode $const2 	%line{24} %argrw{"wrr"}
+	if		$tmp3 8 14 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Float2Int.osl:25
+# 	else
+	round		$tmp4 Input 	%line{25} %argrw{"wr"}
+	assign		Out $tmp4 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Float2Int.osl:27
+# 		Out = int(trunc(Input));
+	eq		$tmp5 Mode $const3 	%line{27} %argrw{"wrr"}
+	if		$tmp5 12 14 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Float2Int.osl:28
+# 	else	
+	trunc		$tmp6 Input 	%line{28} %argrw{"wr"}
+	assign		Out $tmp6 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Float2Int.osl:30
+# }
+	floor		$tmp7 Input 	%line{30} %argrw{"wr"}
+	assign		Out $tmp7 	%argrw{"wr"}
+	end

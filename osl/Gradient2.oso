@@ -1,0 +1,145 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader Gradient2	%meta{string,help,"A Gradient with arbitrary number of inputs."} %meta{string,version,"2.0"} %meta{string,label,"Simple Gradient"} 
+param	point	Input	0 0 0		%read{2,2} %write{0,0} %initexpr
+param	int	Layers	6		%meta{int,min,2} %meta{int,max,26} %meta{int,connectable,0} %meta{string,widget,"null"}  %read{2147483647,-1} %write{2147483647,-1}
+param	string	Add	"Add Layer"		%meta{string,widget,"max:actionButton"} %meta{int,connectable,0} %meta{string,packName," "} %meta{string,actionID,"UpdateGradientShader(1)"}  %read{2147483647,-1} %write{2147483647,-1}
+param	string	Delete	"Delete Layer"		%meta{string,widget,"max:actionButton"} %meta{int,connectable,0} %meta{string,packName," "} %meta{string,actionID,"UpdateGradientShader(-1)"}  %read{2147483647,-1} %write{2147483647,-1}
+param	float	Hardness	0		%meta{float,min,0} %meta{float,max,0.99900001}  %read{13,61} %write{2147483647,-1}
+param	color	A_Col	0.96592599 0.34202 0.173648		%meta{string,label,"  A Color Value  "}  %read{1,14} %write{2147483647,-1}
+param	float	A_Pos	0		%meta{string,label,"  A Position "}  %read{3,11} %write{2147483647,-1}
+param	color	B_Col	0.86602497 0.64278799 0.34202		%meta{string,label,"  B Color Value  "}  %read{14,26} %write{2147483647,-1}
+param	float	B_Pos	0.2		%meta{string,label,"  B Position "}  %read{6,23} %write{2147483647,-1}
+param	color	C_Col	0.70710701 0.86602497 0.5		%meta{string,label,"  C Color Value  "}  %read{26,38} %write{2147483647,-1}
+param	float	C_Pos	0.40000001		%meta{string,label,"  C Position "}  %read{18,35} %write{2147483647,-1}
+param	color	D_Col	0.5 0.98480803 0.64278799		%meta{string,label,"  D Color Value  "}  %read{38,50} %write{2147483647,-1}
+param	float	D_Pos	0.60000002		%meta{string,label,"  D Position "}  %read{30,47} %write{2147483647,-1}
+param	color	E_Col	0.25881901 0.98480803 0.76604402		%meta{string,label,"  E Color Value  "}  %read{50,62} %write{2147483647,-1}
+param	float	E_Pos	0.80000001		%meta{string,label,"  E Position "}  %read{42,59} %write{2147483647,-1}
+param	color	F_Col	0 0.86602497 0.86602497		%meta{string,label,"  F Color Value  "}  %read{62,62} %write{2147483647,-1}
+param	float	F_Pos	1		%meta{string,label,"  F Position "}  %read{54,59} %write{2147483647,-1}
+oparam	color	Out	0 0 0		%read{2147483647,-1} %write{1,62}
+global	float	u	%read{0,0} %write{2147483647,-1}
+global	float	v	%read{0,0} %write{2147483647,-1}
+local	float	inValue	%read{3,58} %write{2,2}
+local	float	___322_where	%read{13,14} %write{12,13}
+local	float	___323_where	%read{25,26} %write{24,25}
+local	float	___324_where	%read{37,38} %write{36,37}
+local	float	___325_where	%read{49,50} %write{48,49}
+local	float	___326_where	%read{61,62} %write{60,61}
+const	int	$const1	0		%read{2,55} %write{2147483647,-1}
+const	float	$const2	0		%read{0,0} %write{2147483647,-1}
+temp	int	$tmp1	%read{4,4} %write{3,3}
+temp	int	$tmp2	%read{5,9} %write{4,8}
+temp	int	$tmp3	%read{7,7} %write{6,6}
+temp	int	$tmp4	%read{8,8} %write{7,7}
+temp	float	$tmp5	%read{12,12} %write{10,10}
+temp	float	$tmp6	%read{12,12} %write{11,11}
+const	float	$const3	1		%read{13,61} %write{2147483647,-1}
+temp	int	$tmp7	%read{16,16} %write{15,15}
+temp	int	$tmp8	%read{17,21} %write{16,20}
+temp	int	$tmp9	%read{19,19} %write{18,18}
+temp	int	$tmp10	%read{20,20} %write{19,19}
+temp	float	$tmp11	%read{24,24} %write{22,22}
+temp	float	$tmp12	%read{24,24} %write{23,23}
+temp	int	$tmp13	%read{28,28} %write{27,27}
+temp	int	$tmp14	%read{29,33} %write{28,32}
+temp	int	$tmp15	%read{31,31} %write{30,30}
+temp	int	$tmp16	%read{32,32} %write{31,31}
+temp	float	$tmp17	%read{36,36} %write{34,34}
+temp	float	$tmp18	%read{36,36} %write{35,35}
+temp	int	$tmp19	%read{40,40} %write{39,39}
+temp	int	$tmp20	%read{41,45} %write{40,44}
+temp	int	$tmp21	%read{43,43} %write{42,42}
+temp	int	$tmp22	%read{44,44} %write{43,43}
+temp	float	$tmp23	%read{48,48} %write{46,46}
+temp	float	$tmp24	%read{48,48} %write{47,47}
+temp	int	$tmp25	%read{52,52} %write{51,51}
+temp	int	$tmp26	%read{53,57} %write{52,56}
+temp	int	$tmp27	%read{55,55} %write{54,54}
+temp	int	$tmp28	%read{56,56} %write{55,55}
+temp	float	$tmp29	%read{60,60} %write{58,58}
+temp	float	$tmp30	%read{60,60} %write{59,59}
+code Input
+# source/3dsMax-OSL-Shaders/SimpleGradient.osl:13
+# 
+	point		Input u v $const2 	%filename{"source/3dsMax-OSL-Shaders/SimpleGradient.osl"} %line{13} %argrw{"wrrr"}
+code ___main___
+# source/3dsMax-OSL-Shaders/SimpleGradient.osl:44
+# 	float inValue = Input[0]; // We use X coordinate of point
+	assign		Out A_Col 	%filename{"source/3dsMax-OSL-Shaders/SimpleGradient.osl"} %line{44} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/SimpleGradient.osl:45
+# 
+	compref		inValue Input $const1 	%line{45} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/SimpleGradient.osl:56
+# 	INT(B, C)
+	ge		$tmp1 inValue A_Pos 	%line{56} %argrw{"wrr"}
+	neq		$tmp2 $tmp1 $const1 	%argrw{"wrr"}
+	if		$tmp2 9 9 	%argrw{"r"}
+	lt		$tmp3 inValue B_Pos 	%argrw{"wrr"}
+	neq		$tmp4 $tmp3 $const1 	%argrw{"wrr"}
+	assign		$tmp2 $tmp4 	%argrw{"wr"}
+	if		$tmp2 15 15 	%argrw{"r"}
+	sub		$tmp5 inValue A_Pos 	%argrw{"wrr"}
+	sub		$tmp6 B_Pos A_Pos 	%argrw{"wrr"}
+	div		___322_where $tmp5 $tmp6 	%argrw{"wrr"}
+	smoothstep	___322_where Hardness $const3 ___322_where 	%argrw{"wrrr"}
+	mix		Out A_Col B_Col ___322_where 	%argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/SimpleGradient.osl:57
+# 	INT(C, D)
+	ge		$tmp7 inValue B_Pos 	%line{57} %argrw{"wrr"}
+	neq		$tmp8 $tmp7 $const1 	%argrw{"wrr"}
+	if		$tmp8 21 21 	%argrw{"r"}
+	lt		$tmp9 inValue C_Pos 	%argrw{"wrr"}
+	neq		$tmp10 $tmp9 $const1 	%argrw{"wrr"}
+	assign		$tmp8 $tmp10 	%argrw{"wr"}
+	if		$tmp8 27 27 	%argrw{"r"}
+	sub		$tmp11 inValue B_Pos 	%argrw{"wrr"}
+	sub		$tmp12 C_Pos B_Pos 	%argrw{"wrr"}
+	div		___323_where $tmp11 $tmp12 	%argrw{"wrr"}
+	smoothstep	___323_where Hardness $const3 ___323_where 	%argrw{"wrrr"}
+	mix		Out B_Col C_Col ___323_where 	%argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/SimpleGradient.osl:58
+# 	INT(D, E)
+	ge		$tmp13 inValue C_Pos 	%line{58} %argrw{"wrr"}
+	neq		$tmp14 $tmp13 $const1 	%argrw{"wrr"}
+	if		$tmp14 33 33 	%argrw{"r"}
+	lt		$tmp15 inValue D_Pos 	%argrw{"wrr"}
+	neq		$tmp16 $tmp15 $const1 	%argrw{"wrr"}
+	assign		$tmp14 $tmp16 	%argrw{"wr"}
+	if		$tmp14 39 39 	%argrw{"r"}
+	sub		$tmp17 inValue C_Pos 	%argrw{"wrr"}
+	sub		$tmp18 D_Pos C_Pos 	%argrw{"wrr"}
+	div		___324_where $tmp17 $tmp18 	%argrw{"wrr"}
+	smoothstep	___324_where Hardness $const3 ___324_where 	%argrw{"wrrr"}
+	mix		Out C_Col D_Col ___324_where 	%argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/SimpleGradient.osl:59
+# 	INT(E, F)
+	ge		$tmp19 inValue D_Pos 	%line{59} %argrw{"wrr"}
+	neq		$tmp20 $tmp19 $const1 	%argrw{"wrr"}
+	if		$tmp20 45 45 	%argrw{"r"}
+	lt		$tmp21 inValue E_Pos 	%argrw{"wrr"}
+	neq		$tmp22 $tmp21 $const1 	%argrw{"wrr"}
+	assign		$tmp20 $tmp22 	%argrw{"wr"}
+	if		$tmp20 51 51 	%argrw{"r"}
+	sub		$tmp23 inValue D_Pos 	%argrw{"wrr"}
+	sub		$tmp24 E_Pos D_Pos 	%argrw{"wrr"}
+	div		___325_where $tmp23 $tmp24 	%argrw{"wrr"}
+	smoothstep	___325_where Hardness $const3 ___325_where 	%argrw{"wrrr"}
+	mix		Out D_Col E_Col ___325_where 	%argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/SimpleGradient.osl:60
+# 	//====INT-END====
+	ge		$tmp25 inValue E_Pos 	%line{60} %argrw{"wrr"}
+	neq		$tmp26 $tmp25 $const1 	%argrw{"wrr"}
+	if		$tmp26 57 57 	%argrw{"r"}
+	lt		$tmp27 inValue F_Pos 	%argrw{"wrr"}
+	neq		$tmp28 $tmp27 $const1 	%argrw{"wrr"}
+	assign		$tmp26 $tmp28 	%argrw{"wr"}
+	if		$tmp26 63 63 	%argrw{"r"}
+	sub		$tmp29 inValue E_Pos 	%argrw{"wrr"}
+	sub		$tmp30 F_Pos E_Pos 	%argrw{"wrr"}
+	div		___326_where $tmp29 $tmp30 	%argrw{"wrr"}
+	smoothstep	___326_where Hardness $const3 ___326_where 	%argrw{"wrrr"}
+	mix		Out E_Col F_Col ___326_where 	%argrw{"wrrr"}
+	end

@@ -1,0 +1,12 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader ColorComp	%meta{string,help,"Inverts (Complements) a color number (1 - Input)"} %meta{string,label,"Invert (color)"} %meta{string,category,"Math Color"} 
+param	color	Input	0 0 0		%read{0,0} %write{2147483647,-1}
+oparam	color	Out	0 0 0		%read{2147483647,-1} %write{0,0}
+const	float	$const2	1		%read{0,0} %write{2147483647,-1}
+code ___main___
+# source/3dsMax-OSL-Shaders/ColorComp.osl:17
+# }
+	sub		Out $const2 Input 	%filename{"source/3dsMax-OSL-Shaders/ColorComp.osl"} %line{17} %argrw{"wrr"}
+	end

@@ -1,0 +1,288 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader MAweave
+param	vector	Vector	0 0 0		%read{18,24} %write{2147483647,-1}
+param	color	WarpColor	0.80000001 0 0		%read{71,104} %write{2147483647,-1}
+param	color	WeftColor	0 0.80000001 0		%read{82,93} %write{2147483647,-1}
+param	int	skip	1		%read{2,52} %write{2147483647,-1}
+param	int	underrun	1		%read{0,0} %write{2147483647,-1}
+param	int	overrun	1		%read{0,55} %write{2147483647,-1}
+param	float	WarpWidth	0.80000001		%read{56,56} %write{2147483647,-1}
+param	float	WeftWidth	0.80000001		%read{59,59} %write{2147483647,-1}
+oparam	color	Color	0 0 0		%read{2147483647,-1} %write{71,104}
+oparam	int	Index	0		%read{2147483647,-1} %write{70,103}
+oparam	float	Dist	0		%read{2147483647,-1} %write{73,106}
+local	int	___322_a	%read{6,16} %write{4,15}
+local	int	___322_b	%read{8,15} %write{5,15}
+local	int	ny	%read{2,54} %write{0,0}
+local	int	nx	%read{30,38} %write{17,17}
+local	float	x	%read{31,39} %write{23,23}
+local	float	y	%read{35,46} %write{29,29}
+local	int	ix	%read{52,52} %write{33,33}
+local	int	iy	%read{53,53} %write{37,37}
+local	float	cx	%read{63,105} %write{44,44}
+local	float	cy	%read{74,94} %write{51,51}
+local	int	top	%read{62,62} %write{55,55}
+local	float	lx	%read{58,96} %write{57,57}
+local	float	hx	%read{66,99} %write{58,58}
+local	float	ly	%read{74,85} %write{60,60}
+local	float	hy	%read{77,88} %write{61,61}
+const	string	$const1	"scm"		%read{1,1} %write{2147483647,-1}
+temp	int	$tmp1	%read{17,17} %write{2,2}
+temp	int	$tmp2	%read{17,17} %write{8,16}
+const	string	$const2	"gcd"		%read{3,3} %write{2147483647,-1}
+const	int	$const3	0		%read{6,100} %write{2147483647,-1}
+temp	int	$tmp3	%read{7,7} %write{6,6}
+temp	int	$tmp4	%read{10,15} %write{11,15}
+temp	int	$tmp5	%read{11,15} %write{11,15}
+temp	float	$tmp6	%read{20,23} %write{18,18}
+const	float	$const4	1		%read{20,61} %write{2147483647,-1}
+const	string	$const5	"mod"		%read{19,47} %write{2147483647,-1}
+temp	float	$tmp7	%read{22,22} %write{21,21}
+temp	float	$tmp8	%read{21,21} %write{20,20}
+temp	float	$tmp9	%read{23,23} %write{22,22}
+const	int	$const6	1		%read{24,103} %write{2147483647,-1}
+temp	float	$tmp10	%read{26,29} %write{24,24}
+temp	float	$tmp11	%read{28,28} %write{27,27}
+temp	float	$tmp12	%read{27,27} %write{26,26}
+temp	float	$tmp13	%read{29,29} %write{28,28}
+temp	float	$tmp14	%read{33,33} %write{32,32}
+temp	float	$tmp15	%read{32,32} %write{31,31}
+temp	float	$tmp16	%read{31,31} %write{30,30}
+temp	float	$tmp17	%read{37,37} %write{36,36}
+temp	float	$tmp18	%read{36,36} %write{35,35}
+temp	float	$tmp19	%read{35,35} %write{34,34}
+temp	float	$tmp20	%read{41,44} %write{39,39}
+temp	float	$tmp21	%read{39,39} %write{38,38}
+temp	float	$tmp22	%read{43,43} %write{42,42}
+temp	float	$tmp23	%read{42,42} %write{41,41}
+temp	float	$tmp24	%read{44,44} %write{43,43}
+temp	float	$tmp25	%read{48,51} %write{46,46}
+temp	float	$tmp26	%read{46,46} %write{45,45}
+temp	float	$tmp27	%read{50,50} %write{49,49}
+temp	float	$tmp28	%read{49,49} %write{48,48}
+temp	float	$tmp29	%read{51,51} %write{50,50}
+temp	int	$tmp30	%read{53,53} %write{52,52}
+temp	int	$tmp31	%read{54,54} %write{53,53}
+temp	int	$tmp32	%read{55,55} %write{54,54}
+temp	float	$tmp33	%read{57,57} %write{56,56}
+const	int	$const7	2		%read{81,92} %write{2147483647,-1}
+const	float	$const8	2		%read{57,60} %write{2147483647,-1}
+temp	float	$tmp34	%read{60,60} %write{59,59}
+temp	int	$tmp35	%read{64,64} %write{63,63}
+temp	int	$tmp36	%read{65,69} %write{64,68}
+temp	int	$tmp37	%read{67,67} %write{66,66}
+temp	int	$tmp38	%read{68,68} %write{67,67}
+const	float	$const9	0.5		%read{72,105} %write{2147483647,-1}
+temp	float	$tmp39	%read{73,73} %write{72,72}
+temp	int	$tmp40	%read{75,75} %write{74,74}
+temp	int	$tmp41	%read{76,80} %write{75,79}
+temp	int	$tmp42	%read{78,78} %write{77,77}
+temp	int	$tmp43	%read{79,79} %write{78,78}
+temp	float	$tmp44	%read{84,84} %write{83,83}
+temp	int	$tmp45	%read{86,86} %write{85,85}
+temp	int	$tmp46	%read{87,91} %write{86,90}
+temp	int	$tmp47	%read{89,89} %write{88,88}
+temp	int	$tmp48	%read{90,90} %write{89,89}
+temp	float	$tmp49	%read{95,95} %write{94,94}
+temp	int	$tmp50	%read{97,97} %write{96,96}
+temp	int	$tmp51	%read{98,102} %write{97,101}
+temp	int	$tmp52	%read{100,100} %write{99,99}
+temp	int	$tmp53	%read{101,101} %write{100,100}
+temp	float	$tmp54	%read{106,106} %write{105,105}
+code ___main___
+# source/sambler-osl-shaders/cloth/MAweave/MAweave.osl:44
+#     int nx = scm(skip,ny);
+	add		ny underrun overrun 	%filename{"source/sambler-osl-shaders/cloth/MAweave/MAweave.osl"} %line{44} %argrw{"wrr"}
+# source/sambler-osl-shaders/cloth/MAweave/MAweave.osl:45
+#     
+	functioncall	$const1 18 	%line{45} %argrw{"r"}
+# source/sambler-osl-shaders/cloth/MAweave/MAweave.osl:29
+# 
+	mul		$tmp1 skip ny 	%line{29} %argrw{"wrr"}
+	functioncall	$const2 17 	%argrw{"r"}
+# source/sambler-osl-shaders/cloth/MAweave/MAweave.osl:16
+#     if (a == 0) { return b; }
+	assign		___322_a skip 	%line{16} %argrw{"wr"}
+	assign		___322_b ny 	%argrw{"wr"}
+# source/sambler-osl-shaders/cloth/MAweave/MAweave.osl:17
+#     while (b != 0) {
+	eq		$tmp3 ___322_a $const3 	%line{17} %argrw{"wrr"}
+	if		$tmp3 10 10 	%argrw{"r"}
+	assign		$tmp2 ___322_b 	%argrw{"wr"}
+	return
+# source/sambler-osl-shaders/cloth/MAweave/MAweave.osl:18
+#         if (a > b) {
+	while		$tmp4 11 12 16 16 	%line{18} %argrw{"r"}
+	neq		$tmp4 ___322_b $const3 	%argrw{"wrr"}
+# source/sambler-osl-shaders/cloth/MAweave/MAweave.osl:19
+#             a = a - b;
+	gt		$tmp5 ___322_a ___322_b 	%line{19} %argrw{"wrr"}
+	if		$tmp5 15 16 	%argrw{"r"}
+# source/sambler-osl-shaders/cloth/MAweave/MAweave.osl:20
+#         } else {
+	sub		___322_a ___322_a ___322_b 	%line{20} %argrw{"wrr"}
+# source/sambler-osl-shaders/cloth/MAweave/MAweave.osl:22
+#         }
+	sub		___322_b ___322_b ___322_a 	%line{22} %argrw{"wrr"}
+# source/sambler-osl-shaders/cloth/MAweave/MAweave.osl:25
+# }
+	assign		$tmp2 ___322_a 	%line{25} %argrw{"wr"}
+# source/sambler-osl-shaders/cloth/MAweave/MAweave.osl:29
+# 
+	div		nx $tmp1 $tmp2 	%line{29} %argrw{"wrr"}
+# source/sambler-osl-shaders/cloth/MAweave/MAweave.osl:47
+#     float y = mod(Vector[1],1.0);
+	compref		$tmp6 Vector $const3 	%line{47} %argrw{"wrr"}
+	functioncall	$const5 24 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:136
+# float  mod (float  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp8 $tmp6 $const4 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{136} %argrw{"wrr"}
+	floor		$tmp7 $tmp8 	%argrw{"wr"}
+	mul		$tmp9 $const4 $tmp7 	%argrw{"wrr"}
+	sub		x $tmp6 $tmp9 	%argrw{"wrr"}
+# source/sambler-osl-shaders/cloth/MAweave/MAweave.osl:48
+#     
+	compref		$tmp10 Vector $const6 	%filename{"source/sambler-osl-shaders/cloth/MAweave/MAweave.osl"} %line{48} %argrw{"wrr"}
+	functioncall	$const5 30 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:136
+# float  mod (float  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp12 $tmp10 $const4 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{136} %argrw{"wrr"}
+	floor		$tmp11 $tmp12 	%argrw{"wr"}
+	mul		$tmp13 $const4 $tmp11 	%argrw{"wrr"}
+	sub		y $tmp10 $tmp13 	%argrw{"wrr"}
+# source/sambler-osl-shaders/cloth/MAweave/MAweave.osl:50
+#     int iy = int(floor(y*ny));
+	assign		$tmp16 nx 	%filename{"source/sambler-osl-shaders/cloth/MAweave/MAweave.osl"} %line{50} %argrw{"wr"}
+	mul		$tmp15 x $tmp16 	%argrw{"wrr"}
+	floor		$tmp14 $tmp15 	%argrw{"wr"}
+	assign		ix $tmp14 	%argrw{"wr"}
+# source/sambler-osl-shaders/cloth/MAweave/MAweave.osl:51
+#     
+	assign		$tmp19 ny 	%line{51} %argrw{"wr"}
+	mul		$tmp18 y $tmp19 	%argrw{"wrr"}
+	floor		$tmp17 $tmp18 	%argrw{"wr"}
+	assign		iy $tmp17 	%argrw{"wr"}
+# source/sambler-osl-shaders/cloth/MAweave/MAweave.osl:53
+#     float cy = mod(y*ny,1.0);
+	assign		$tmp21 nx 	%line{53} %argrw{"wr"}
+	mul		$tmp20 x $tmp21 	%argrw{"wrr"}
+	functioncall	$const5 45 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:136
+# float  mod (float  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp23 $tmp20 $const4 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{136} %argrw{"wrr"}
+	floor		$tmp22 $tmp23 	%argrw{"wr"}
+	mul		$tmp24 $const4 $tmp22 	%argrw{"wrr"}
+	sub		cx $tmp20 $tmp24 	%argrw{"wrr"}
+# source/sambler-osl-shaders/cloth/MAweave/MAweave.osl:54
+#     
+	assign		$tmp26 ny 	%filename{"source/sambler-osl-shaders/cloth/MAweave/MAweave.osl"} %line{54} %argrw{"wr"}
+	mul		$tmp25 y $tmp26 	%argrw{"wrr"}
+	functioncall	$const5 52 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:136
+# float  mod (float  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp28 $tmp25 $const4 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{136} %argrw{"wrr"}
+	floor		$tmp27 $tmp28 	%argrw{"wr"}
+	mul		$tmp29 $const4 $tmp27 	%argrw{"wrr"}
+	sub		cy $tmp25 $tmp29 	%argrw{"wrr"}
+# source/sambler-osl-shaders/cloth/MAweave/MAweave.osl:57
+#     
+	mul		$tmp30 skip ix 	%filename{"source/sambler-osl-shaders/cloth/MAweave/MAweave.osl"} %line{57} %argrw{"wrr"}
+	add		$tmp31 iy $tmp30 	%argrw{"wrr"}
+	mod		$tmp32 $tmp31 ny 	%argrw{"wrr"}
+	lt		top $tmp32 overrun 	%argrw{"wrr"}
+# source/sambler-osl-shaders/cloth/MAweave/MAweave.osl:59
+#     float hx = 1-lx;
+	sub		$tmp33 $const4 WarpWidth 	%line{59} %argrw{"wrr"}
+	div		lx $tmp33 $const8 	%argrw{"wrr"}
+# source/sambler-osl-shaders/cloth/MAweave/MAweave.osl:60
+#     float ly = (1-WeftWidth)/2;
+	sub		hx $const4 lx 	%line{60} %argrw{"wrr"}
+# source/sambler-osl-shaders/cloth/MAweave/MAweave.osl:61
+#     float hy = 1-lx;
+	sub		$tmp34 $const4 WeftWidth 	%line{61} %argrw{"wrr"}
+	div		ly $tmp34 $const8 	%argrw{"wrr"}
+# source/sambler-osl-shaders/cloth/MAweave/MAweave.osl:62
+#     
+	sub		hy $const4 lx 	%line{62} %argrw{"wrr"}
+# source/sambler-osl-shaders/cloth/MAweave/MAweave.osl:64
+#         if ( cx > lx && cx < hx ){
+	if		top 85 107 	%line{64} %argrw{"r"}
+# source/sambler-osl-shaders/cloth/MAweave/MAweave.osl:65
+#             Index = 1;
+	gt		$tmp35 cx lx 	%line{65} %argrw{"wrr"}
+	neq		$tmp36 $tmp35 $const3 	%argrw{"wrr"}
+	if		$tmp36 69 69 	%argrw{"r"}
+	lt		$tmp37 cx hx 	%argrw{"wrr"}
+	neq		$tmp38 $tmp37 $const3 	%argrw{"wrr"}
+	assign		$tmp36 $tmp38 	%argrw{"wr"}
+	if		$tmp36 74 85 	%argrw{"r"}
+# source/sambler-osl-shaders/cloth/MAweave/MAweave.osl:66
+#             Color = WarpColor;
+	assign		Index $const6 	%line{66} %argrw{"wr"}
+# source/sambler-osl-shaders/cloth/MAweave/MAweave.osl:67
+#             Dist = abs(0.5-cx);
+	assign		Color WarpColor 	%line{67} %argrw{"wr"}
+# source/sambler-osl-shaders/cloth/MAweave/MAweave.osl:68
+#         } else if (cy > ly && cy < hy ){
+	sub		$tmp39 $const9 cx 	%line{68} %argrw{"wrr"}
+	abs		Dist $tmp39 	%argrw{"wr"}
+# source/sambler-osl-shaders/cloth/MAweave/MAweave.osl:69
+#             Index = 2;
+	gt		$tmp40 cy ly 	%line{69} %argrw{"wrr"}
+	neq		$tmp41 $tmp40 $const3 	%argrw{"wrr"}
+	if		$tmp41 80 80 	%argrw{"r"}
+	lt		$tmp42 cy hy 	%argrw{"wrr"}
+	neq		$tmp43 $tmp42 $const3 	%argrw{"wrr"}
+	assign		$tmp41 $tmp43 	%argrw{"wr"}
+	if		$tmp41 85 85 	%argrw{"r"}
+# source/sambler-osl-shaders/cloth/MAweave/MAweave.osl:70
+#             Color = WeftColor;
+	assign		Index $const7 	%line{70} %argrw{"wr"}
+# source/sambler-osl-shaders/cloth/MAweave/MAweave.osl:71
+#             Dist = abs(0.5-cy);
+	assign		Color WeftColor 	%line{71} %argrw{"wr"}
+# source/sambler-osl-shaders/cloth/MAweave/MAweave.osl:72
+#         }
+	sub		$tmp44 $const9 cy 	%line{72} %argrw{"wrr"}
+	abs		Dist $tmp44 	%argrw{"wr"}
+# source/sambler-osl-shaders/cloth/MAweave/MAweave.osl:75
+#             Index = 2;
+	gt		$tmp45 cy ly 	%line{75} %argrw{"wrr"}
+	neq		$tmp46 $tmp45 $const3 	%argrw{"wrr"}
+	if		$tmp46 91 91 	%argrw{"r"}
+	lt		$tmp47 cy hy 	%argrw{"wrr"}
+	neq		$tmp48 $tmp47 $const3 	%argrw{"wrr"}
+	assign		$tmp46 $tmp48 	%argrw{"wr"}
+	if		$tmp46 96 107 	%argrw{"r"}
+# source/sambler-osl-shaders/cloth/MAweave/MAweave.osl:76
+#             Color = WeftColor;
+	assign		Index $const7 	%line{76} %argrw{"wr"}
+# source/sambler-osl-shaders/cloth/MAweave/MAweave.osl:77
+#             Dist = abs(0.5-cy); 
+	assign		Color WeftColor 	%line{77} %argrw{"wr"}
+# source/sambler-osl-shaders/cloth/MAweave/MAweave.osl:78
+#         } else if ( cx > lx && cx < hx ){
+	sub		$tmp49 $const9 cy 	%line{78} %argrw{"wrr"}
+	abs		Dist $tmp49 	%argrw{"wr"}
+# source/sambler-osl-shaders/cloth/MAweave/MAweave.osl:79
+#             Index = 1;
+	gt		$tmp50 cx lx 	%line{79} %argrw{"wrr"}
+	neq		$tmp51 $tmp50 $const3 	%argrw{"wrr"}
+	if		$tmp51 102 102 	%argrw{"r"}
+	lt		$tmp52 cx hx 	%argrw{"wrr"}
+	neq		$tmp53 $tmp52 $const3 	%argrw{"wrr"}
+	assign		$tmp51 $tmp53 	%argrw{"wr"}
+	if		$tmp51 107 107 	%argrw{"r"}
+# source/sambler-osl-shaders/cloth/MAweave/MAweave.osl:80
+#             Color = WarpColor;
+	assign		Index $const6 	%line{80} %argrw{"wr"}
+# source/sambler-osl-shaders/cloth/MAweave/MAweave.osl:81
+#             Dist = abs(0.5-cx); 
+	assign		Color WarpColor 	%line{81} %argrw{"wr"}
+# source/sambler-osl-shaders/cloth/MAweave/MAweave.osl:82
+#         }
+	sub		$tmp54 $const9 cx 	%line{82} %argrw{"wrr"}
+	abs		Dist $tmp54 	%argrw{"wr"}
+	end

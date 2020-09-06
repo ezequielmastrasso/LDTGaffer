@@ -1,0 +1,340 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader BaAmbientOcclusion
+param	color	Effect	0 0 0		%read{120,121} %write{2147483647,-1}
+param	color	No_Effect	1 1 1		%read{120,121} %write{2147483647,-1}
+param	int	Mode	0		%read{96,102} %write{2147483647,-1}
+param	int	InvertEffect	0		%read{119,119} %write{2147483647,-1}
+param	float	Distance	0.2		%read{95,95} %write{2147483647,-1}
+param	int	Samples	1		%read{14,116} %write{2147483647,-1}
+oparam	color	Color	0 0 0		%read{2147483647,-1} %write{120,121}
+oparam	float	Fac	0		%read{120,121} %write{118,118}
+global	point	P	%read{1,31} %write{2147483647,-1} %derivs
+global	normal	N	%read{32,32} %write{2147483647,-1} %derivs
+local	int	___322_chash	%read{8,11} %write{7,10} %derivs
+local	float	___323_res	%read{14,115} %write{14,115} %derivs
+local	float	___324_r	%read{14,115} %write{14,115} %derivs
+local	float	___324_phi	%read{14,115} %write{14,115} %derivs
+local	float	___324_a	%read{14,115} %write{14,115} %derivs
+local	float	___324_b	%read{14,115} %write{14,115} %derivs
+local	vector	___332_T	%read{14,115} %write{14,115} %derivs
+local	vector	___332_B	%read{14,115} %write{14,115} %derivs
+local	float	___332_costheta	%read{14,115} %write{14,115} %derivs
+local	int	i	%read{14,115} %write{13,115}
+local	int	rng	%read{14,115} %write{11,115} %derivs
+local	float	f	%read{4,4} %write{3,3} %derivs
+local	float	randu	%read{14,115} %write{14,115} %derivs
+local	float	randv	%read{14,115} %write{14,115} %derivs
+local	float	ray_t	%read{14,115} %write{14,115}
+local	float	hits	%read{14,117} %write{0,115}
+local	vector	ray_P	%read{14,115} %write{14,115} %derivs
+local	vector	ray_R	%read{14,115} %write{14,115} %derivs
+const	int	$const1	0		%read{0,96} %write{2147483647,-1}
+temp	float	$tmp1	%read{3,3} %write{2,2} %derivs
+const	float	$const2	123456		%read{1,1} %write{2147483647,-1}
+temp	point	$tmp2	%read{2,2} %write{1,1} %derivs
+const	float	$const3	1		%read{3,118} %write{2147483647,-1}
+temp	int	$tmp3	%read{7,7} %write{5,5} %derivs
+temp	float	$tmp4	%read{5,5} %write{4,4} %derivs
+const	float	$const5	2.1374836e+09		%read{4,24} %write{2147483647,-1}
+const	string	$const6	"rng_seed"		%read{6,6} %write{2147483647,-1}
+temp	int	$tmp5	%read{9,9} %write{8,8}
+const	int	$const7	1		%read{10,115} %write{2147483647,-1}
+const	int	$const8	891694213		%read{11,29} %write{2147483647,-1}
+temp	int	$tmp6	%read{12,115} %write{13,115}
+const	string	$const9	"rng_uniform"		%read{15,23} %write{2147483647,-1}
+temp	float	$tmp7	%read{14,115} %write{14,115} %derivs
+temp	float	$tmp8	%read{14,115} %write{14,115} %derivs
+temp	float	$tmp9	%read{14,115} %write{14,115} %derivs
+const	float	$const10	0.5		%read{19,28} %write{2147483647,-1}
+temp	float	$tmp10	%read{14,115} %write{14,115} %derivs
+temp	float	$tmp11	%read{14,115} %write{14,115} %derivs
+temp	float	$tmp12	%read{14,115} %write{14,115} %derivs
+temp	float	$tmp13	%read{14,115} %write{14,115} %derivs
+temp	float	$tmp14	%read{14,115} %write{14,115} %derivs
+temp	normal	$tmp15	%read{14,115} %write{14,115} %derivs
+const	string	$const11	"sample_cos_hemisphere"		%read{33,33} %write{2147483647,-1}
+const	string	$const12	"make_orthonormals"		%read{34,34} %write{2147483647,-1}
+temp	float	$tmp16	%read{14,115} %write{14,115}
+temp	float	$tmp17	%read{14,115} %write{14,115}
+temp	int	$tmp18	%read{14,115} %write{14,115}
+temp	int	$tmp19	%read{14,115} %write{14,115}
+temp	float	$tmp20	%read{14,115} %write{14,115}
+const	int	$const13	2		%read{41,41} %write{2147483647,-1}
+temp	float	$tmp21	%read{14,115} %write{14,115}
+temp	int	$tmp22	%read{14,115} %write{14,115}
+temp	int	$tmp23	%read{14,115} %write{14,115}
+const	vector	$const14	1 1 1		%read{46,46} %write{2147483647,-1}
+const	vector	$const15	-1 1 1		%read{47,47} %write{2147483647,-1}
+const	string	$const16	"to_unit_disk"		%read{50,50} %write{2147483647,-1}
+const	float	$const17	2		%read{51,65} %write{2147483647,-1}
+temp	float	$tmp26	%read{14,115} %write{14,115} %derivs
+temp	float	$tmp27	%read{14,115} %write{14,115} %derivs
+temp	float	$tmp28	%read{14,115} %write{14,115}
+temp	int	$tmp29	%read{14,115} %write{14,115}
+temp	int	$tmp30	%read{14,115} %write{14,115}
+const	float	$const18	0.78539819		%read{62,78} %write{2147483647,-1}
+temp	float	$tmp31	%read{14,115} %write{14,115} %derivs
+temp	float	$tmp32	%read{14,115} %write{14,115} %derivs
+temp	float	$tmp33	%read{14,115} %write{14,115} %derivs
+temp	int	$tmp34	%read{14,115} %write{14,115}
+const	float	$const19	4		%read{71,71} %write{2147483647,-1}
+temp	float	$tmp35	%read{14,115} %write{14,115} %derivs
+temp	float	$tmp36	%read{14,115} %write{14,115} %derivs
+const	float	$const20	0		%read{74,88} %write{2147483647,-1}
+temp	int	$tmp37	%read{14,115} %write{14,115}
+const	float	$const21	6		%read{77,77} %write{2147483647,-1}
+temp	float	$tmp38	%read{14,115} %write{14,115} %derivs
+temp	float	$tmp39	%read{14,115} %write{14,115} %derivs
+temp	float	$tmp40	%read{14,115} %write{14,115} %derivs
+temp	float	$tmp41	%read{14,115} %write{14,115} %derivs
+temp	float	$tmp42	%read{14,115} %write{14,115} %derivs
+temp	float	$tmp43	%read{14,115} %write{14,115} %derivs
+temp	float	$tmp44	%read{14,115} %write{14,115} %derivs
+temp	float	$tmp45	%read{14,115} %write{14,115} %derivs
+temp	float	$tmp46	%read{14,115} %write{14,115} %derivs
+temp	vector	$tmp47	%read{14,115} %write{14,115} %derivs
+temp	vector	$tmp48	%read{14,115} %write{14,115} %derivs
+temp	vector	$tmp49	%read{14,115} %write{14,115} %derivs
+temp	vector	$tmp50	%read{14,115} %write{14,115} %derivs
+temp	int	$tmp51	%read{14,115} %write{14,115}
+temp	int	$tmp52	%read{14,115} %write{14,115}
+temp	vector	$tmp53	%read{14,115} %write{14,115} %derivs
+const	string	$const22	"maxdist"		%read{99,111} %write{2147483647,-1}
+temp	int	$tmp54	%read{14,115} %write{14,115}
+temp	int	$tmp55	%read{14,115} %write{14,115}
+temp	int	$tmp56	%read{14,115} %write{14,115}
+temp	vector	$tmp57	%read{14,115} %write{14,115} %derivs
+temp	int	$tmp58	%read{14,115} %write{14,115}
+temp	int	$tmp59	%read{2147483647,-1} %write{14,115}
+temp	float	$tmp60	%read{118,118} %write{117,117}
+temp	float	$tmp61	%read{117,117} %write{116,116}
+code ___main___
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:102
+#   vector ray_P, ray_R;
+	assign		hits $const1 	%filename{"source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl"} %line{102} %argrw{"wr"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:105
+#   rng_seed(rng, int(f * 2137483647));
+	mul		$tmp2 P $const2 	%line{105} %argrw{"wrr"}
+	cellnoise	$tmp1 $tmp2 	%argrw{"wr"}
+	fmod		f $tmp1 $const3 	%argrw{"wrr"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:106
+# 
+	mul		$tmp4 f $const5 	%line{106} %argrw{"wrr"}
+	assign		$tmp3 $tmp4 	%argrw{"wr"}
+	functioncall	$const6 12 	%argrw{"r"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:28
+#   if (chash == 0) chash = 1;
+	assign		___322_chash $tmp3 	%line{28} %argrw{"wr"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:29
+#   rng = chash * 891694213;
+	eq		$tmp5 ___322_chash $const1 	%line{29} %argrw{"wrr"}
+	if		$tmp5 11 11 	%argrw{"r"}
+	assign		___322_chash $const7 	%argrw{"wr"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:30
+# }
+	mul		rng ___322_chash $const8 	%line{30} %argrw{"wrr"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:108
+#     randu = rng_uniform(rng);
+	for		$tmp6 14 15 114 116 	%line{108} %argrw{"r"}
+	assign		i $const1 	%argrw{"wr"}
+	lt		$tmp6 i Samples 	%argrw{"wrr"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:109
+#     randv = rng_uniform(rng);
+	functioncall	$const9 23 	%line{109} %argrw{"r"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:35
+#   rng *= 891694213;
+	assign		$tmp7 $const5 	%line{35} %argrw{"wr"}
+	assign		$tmp9 rng 	%argrw{"wr"}
+	div		$tmp8 $tmp9 $tmp7 	%argrw{"wrr"}
+	mul		$tmp10 $tmp8 $const10 	%argrw{"wrr"}
+	add		___323_res $tmp10 $const10 	%argrw{"wrr"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:36
+#   return res;
+	mul		rng rng $const8 	%line{36} %argrw{"wrr"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:37
+# }
+	assign		randu ___323_res 	%line{37} %argrw{"wr"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:110
+# 
+	functioncall	$const9 31 	%line{110} %argrw{"r"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:35
+#   rng *= 891694213;
+	assign		$tmp11 $const5 	%line{35} %argrw{"wr"}
+	assign		$tmp13 rng 	%argrw{"wr"}
+	div		$tmp12 $tmp13 $tmp11 	%argrw{"wrr"}
+	mul		$tmp14 $tmp12 $const10 	%argrw{"wrr"}
+	add		___323_res $tmp14 $const10 	%argrw{"wrr"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:36
+#   return res;
+	mul		rng rng $const8 	%line{36} %argrw{"wrr"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:37
+# }
+	assign		randv ___323_res 	%line{37} %argrw{"wr"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:112
+#     ray_R = sample_cos_hemisphere(-N, randu, randv);
+	assign		ray_P P 	%line{112} %argrw{"wr"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:113
+#     ray_t = Distance;
+	neg		$tmp15 N 	%line{113} %argrw{"wr"}
+	functioncall	$const11 95 	%argrw{"r"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:84
+#   to_unit_disk(randu, randv, randu, randv);
+	functioncall	$const12 50 	%line{84} %argrw{"r"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:73
+#   else a = cross(vector(-1, 1, 1), N);
+	compref		$tmp16 $tmp15 $const1 	%line{73} %argrw{"wrr"}
+	compref		$tmp17 $tmp15 $const7 	%argrw{"wrr"}
+	neq		$tmp18 $tmp16 $tmp17 	%argrw{"wrr"}
+	neq		$tmp19 $tmp18 $const1 	%argrw{"wrr"}
+	if		$tmp19 40 45 	%argrw{"r"}
+	compref		$tmp20 $tmp15 $const1 	%argrw{"wrr"}
+	compref		$tmp21 $tmp15 $const13 	%argrw{"wrr"}
+	neq		$tmp22 $tmp20 $tmp21 	%argrw{"wrr"}
+	neq		$tmp23 $tmp22 $const1 	%argrw{"wrr"}
+	assign		$tmp19 $tmp23 	%argrw{"wr"}
+	if		$tmp19 47 48 	%argrw{"r"}
+	cross		___332_T $const14 $tmp15 	%argrw{"wrr"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:74
+# 
+	cross		___332_T $const15 $tmp15 	%line{74} %argrw{"wrr"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:76
+#   b = cross(N, a);
+	normalize	___332_T ___332_T 	%line{76} %argrw{"wr"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:77
+# }
+	cross		___332_B $tmp15 ___332_T 	%line{77} %argrw{"wrr"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:85
+#   float costheta = sqrt(max(1.0 - randu * randu - randv * randv, 0.0));
+	functioncall	$const16 84 	%line{85} %argrw{"r"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:43
+#   float b = 2.0 * y - 1.0;
+	mul		$tmp26 $const17 randu 	%line{43} %argrw{"wrr"}
+	sub		___324_a $tmp26 $const3 	%argrw{"wrr"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:44
+# 
+	mul		$tmp27 $const17 randv 	%line{44} %argrw{"wrr"}
+	sub		___324_b $tmp27 $const3 	%argrw{"wrr"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:46
+#     if(a > b) {
+	neg		$tmp28 ___324_b 	%line{46} %argrw{"wr"}
+	gt		$tmp29 ___324_a $tmp28 	%argrw{"wrr"}
+	if		$tmp29 67 80 	%argrw{"r"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:47
+#       r = a;
+	gt		$tmp30 ___324_a ___324_b 	%line{47} %argrw{"wrr"}
+	if		$tmp30 63 67 	%argrw{"r"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:48
+#       phi = M_PI_4 *(b/a);
+	assign		___324_r ___324_a 	%line{48} %argrw{"wr"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:49
+#     }
+	div		$tmp31 ___324_b ___324_a 	%line{49} %argrw{"wrr"}
+	mul		___324_phi $const18 $tmp31 	%argrw{"wrr"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:52
+#       phi = M_PI_4 *(2.0 - a/b);
+	assign		___324_r ___324_b 	%line{52} %argrw{"wr"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:53
+#     }
+	div		$tmp32 ___324_a ___324_b 	%line{53} %argrw{"wrr"}
+	sub		$tmp33 $const17 $tmp32 	%argrw{"wrr"}
+	mul		___324_phi $const18 $tmp33 	%argrw{"wrr"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:57
+#       r = -a;
+	lt		$tmp34 ___324_a ___324_b 	%line{57} %argrw{"wrr"}
+	if		$tmp34 73 80 	%argrw{"r"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:58
+#       phi = M_PI_4 *(4.0 + b/a);
+	neg		___324_r ___324_a 	%line{58} %argrw{"wr"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:59
+#     }
+	div		$tmp35 ___324_b ___324_a 	%line{59} %argrw{"wrr"}
+	add		$tmp36 $const19 $tmp35 	%argrw{"wrr"}
+	mul		___324_phi $const18 $tmp36 	%argrw{"wrr"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:62
+#       if(b != 0.0) phi = M_PI_4 *(6.0 - a/b);
+	neg		___324_r ___324_b 	%line{62} %argrw{"wr"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:63
+#       else phi = 0.0;
+	neq		$tmp37 ___324_b $const20 	%line{63} %argrw{"wrr"}
+	if		$tmp37 79 80 	%argrw{"r"}
+	div		$tmp38 ___324_a ___324_b 	%argrw{"wrr"}
+	sub		$tmp39 $const21 $tmp38 	%argrw{"wrr"}
+	mul		___324_phi $const18 $tmp39 	%argrw{"wrr"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:64
+#     }
+	assign		___324_phi $const20 	%line{64} %argrw{"wr"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:67
+#   y_out = r * sin(phi);
+	cos		$tmp40 ___324_phi 	%line{67} %argrw{"wr"}
+	mul		randu ___324_r $tmp40 	%argrw{"wrr"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:68
+# }
+	sin		$tmp41 ___324_phi 	%line{68} %argrw{"wr"}
+	mul		randv ___324_r $tmp41 	%argrw{"wrr"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:86
+# 
+	mul		$tmp43 randu randu 	%line{86} %argrw{"wrr"}
+	sub		$tmp44 $const3 $tmp43 	%argrw{"wrr"}
+	mul		$tmp45 randv randv 	%argrw{"wrr"}
+	sub		$tmp46 $tmp44 $tmp45 	%argrw{"wrr"}
+	max		$tmp42 $tmp46 $const20 	%argrw{"wrr"}
+	sqrt		___332_costheta $tmp42 	%argrw{"wr"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:88
+# }
+	mul		$tmp47 randu ___332_T 	%line{88} %argrw{"wrr"}
+	mul		$tmp48 randv ___332_B 	%argrw{"wrr"}
+	add		$tmp49 $tmp47 $tmp48 	%argrw{"wrr"}
+	mul		$tmp50 ___332_costheta $tmp15 	%argrw{"wrr"}
+	add		ray_R $tmp49 $tmp50 	%argrw{"wrr"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:114
+# 
+	assign		ray_t Distance 	%line{114} %argrw{"wr"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:116
+#       if(trace(ray_P, -ray_R, "maxdist", ray_t)) hits += 1.0;
+	eq		$tmp51 Mode $const1 	%line{116} %argrw{"wrr"}
+	if		$tmp51 102 114 	%argrw{"r"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:117
+#     }
+	neg		$tmp53 ray_R 	%line{117} %argrw{"wr"}
+	trace		$tmp52 ray_P $tmp53 $const22 ray_t 	%argrw{"wrrrr"} %argderivs{1,2}
+	if		$tmp52 102 102 	%argrw{"r"}
+	add		hits hits $const3 	%argrw{"wrr"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:119
+#       if(trace(ray_P, ray_R, "maxdist", ray_t)) hits += 1.0;
+	eq		$tmp54 Mode $const7 	%line{119} %argrw{"wrr"}
+	if		$tmp54 107 114 	%argrw{"r"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:120
+#     }
+	trace		$tmp55 ray_P ray_R $const22 ray_t 	%line{120} %argrw{"wrrrr"} %argderivs{1,2}
+	if		$tmp55 107 107 	%argrw{"r"}
+	add		hits hits $const3 	%argrw{"wrr"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:123
+#       if(trace(ray_P, ray_R, "maxdist", ray_t)) hits += 1.0;
+	neg		$tmp57 ray_R 	%line{123} %argrw{"wr"}
+	trace		$tmp56 ray_P $tmp57 $const22 ray_t 	%argrw{"wrrrr"} %argderivs{1,2}
+	if		$tmp56 111 111 	%argrw{"r"}
+	add		hits hits $const3 	%argrw{"wrr"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:124
+#     }
+	trace		$tmp58 ray_P ray_R $const22 ray_t 	%line{124} %argrw{"wrrrr"} %argderivs{1,2}
+	if		$tmp58 114 114 	%argrw{"r"}
+	add		hits hits $const3 	%argrw{"wrr"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:108
+#     randu = rng_uniform(rng);
+	assign		$tmp59 i 	%line{108} %argrw{"wr"}
+	add		i i $const7 	%argrw{"wrr"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:127
+#   if(InvertEffect) Color = mix(No_Effect, Effect, Fac);
+	assign		$tmp61 Samples 	%line{127} %argrw{"wr"}
+	div		$tmp60 hits $tmp61 	%argrw{"wrr"}
+	sub		Fac $const3 $tmp60 	%argrw{"wrr"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:128
+#   else Color = mix(Effect, No_Effect, Fac);
+	if		InvertEffect 121 122 	%line{128} %argrw{"r"}
+	mix		Color No_Effect Effect Fac 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/ramps/BaAmbientOcclusion/BaAmbientOcclusion.osl:129
+# }
+	mix		Color Effect No_Effect Fac 	%line{129} %argrw{"wrrr"}
+	end

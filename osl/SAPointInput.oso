@@ -1,0 +1,22 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader SAPointInput
+param	float	X	0		%read{0,0} %write{2147483647,-1}
+param	float	Y	0		%read{1,1} %write{2147483647,-1}
+param	float	Z	0		%read{2,2} %write{2147483647,-1}
+oparam	point	Vector	0 0 0		%read{2147483647,-1} %write{0,2}
+const	int	$const1	0		%read{0,0} %write{2147483647,-1}
+const	int	$const2	1		%read{1,1} %write{2147483647,-1}
+const	int	$const3	2		%read{2,2} %write{2147483647,-1}
+code ___main___
+# source/sambler-osl-shaders/lib/SAPointInput.osl:24
+#     Vector[1] = Y;
+	compassign	Vector $const1 X 	%filename{"source/sambler-osl-shaders/lib/SAPointInput.osl"} %line{24} %argrw{"wrr"}
+# source/sambler-osl-shaders/lib/SAPointInput.osl:25
+#     Vector[2] = Z;
+	compassign	Vector $const2 Y 	%line{25} %argrw{"wrr"}
+# source/sambler-osl-shaders/lib/SAPointInput.osl:26
+# }
+	compassign	Vector $const3 Z 	%line{26} %argrw{"wrr"}
+	end

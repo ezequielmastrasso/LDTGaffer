@@ -1,0 +1,252 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader node_julia_zn_zoom
+param	vector	Vector	0 0 0		%read{3,3} %write{0,0} %initexpr
+param	float	Zoom	10		%read{2,2} %write{2147483647,-1}
+param	float	CenterX	0		%read{10,10} %write{2147483647,-1}
+param	float	CenterY	0		%read{13,13} %write{2147483647,-1}
+param	int	MaxIterations	31		%read{8,88} %write{2147483647,-1}
+param	int	Exponent	2		%read{22,22} %write{2147483647,-1}
+param	float	SeedX	-1.25		%read{46,46} %write{2147483647,-1}
+param	float	SeedY	0		%read{49,49} %write{2147483647,-1}
+param	float	Bailout	2		%read{68,85} %write{2147483647,-1}
+oparam	vector	Transformed	0 0 0		%read{2147483647,-1} %write{1,92} %initexpr
+oparam	float	Fac	0		%read{2147483647,-1} %write{91,91}
+global	point	P	%read{0,1} %write{2147483647,-1}
+local	point	p	%read{9,16} %write{3,14}
+local	float	factor	%read{87,91} %write{4,90}
+local	float	auxiliar	%read{83,83} %write{5,82}
+local	int	i	%read{19,73} %write{6,72}
+local	int	j	%read{19,72} %write{7,72}
+local	int	prevIteration	%read{19,72} %write{8,72}
+local	point	pa	%read{19,92} %write{15,72}
+local	point	pb	%read{19,72} %write{16,72}
+local	point	pc	%read{19,72} %write{17,72}
+temp	float	$tmp1	%read{3,3} %write{2,2}
+const	float	$const2	2		%read{2,2} %write{2147483647,-1}
+const	float	$const3	0		%read{4,5} %write{2147483647,-1}
+const	int	$const4	0		%read{6,76} %write{2147483647,-1}
+temp	float	$tmp2	%read{10,10} %write{9,9}
+temp	float	$tmp3	%read{11,11} %write{10,10}
+const	int	$const5	1		%read{12,79} %write{2147483647,-1}
+temp	float	$tmp4	%read{13,13} %write{12,12}
+temp	float	$tmp5	%read{14,14} %write{13,13}
+const	point	$const6	0 0 0		%read{17,17} %write{2147483647,-1}
+temp	int	$tmp6	%read{18,72} %write{19,72}
+temp	int	$tmp7	%read{19,72} %write{19,72}
+temp	float	$tmp8	%read{19,72} %write{19,72}
+temp	float	$tmp9	%read{19,72} %write{19,72}
+temp	float	$tmp10	%read{19,72} %write{19,72}
+temp	float	$tmp11	%read{19,72} %write{19,72}
+temp	float	$tmp12	%read{19,72} %write{19,72}
+temp	float	$tmp13	%read{19,72} %write{19,72}
+temp	float	$tmp14	%read{19,72} %write{19,72}
+temp	float	$tmp15	%read{19,72} %write{19,72}
+temp	float	$tmp16	%read{19,72} %write{19,72}
+temp	float	$tmp17	%read{19,72} %write{19,72}
+temp	float	$tmp18	%read{19,72} %write{19,72}
+temp	float	$tmp19	%read{19,72} %write{19,72}
+temp	float	$tmp20	%read{19,72} %write{19,72}
+temp	float	$tmp21	%read{19,72} %write{19,72}
+temp	float	$tmp22	%read{19,72} %write{19,72}
+temp	float	$tmp23	%read{19,72} %write{19,72}
+temp	int	$tmp24	%read{2147483647,-1} %write{19,72}
+temp	float	$tmp25	%read{19,72} %write{19,72}
+temp	float	$tmp26	%read{19,72} %write{19,72}
+temp	float	$tmp27	%read{19,72} %write{19,72}
+temp	float	$tmp28	%read{19,72} %write{19,72}
+temp	float	$tmp29	%read{19,72} %write{19,72}
+temp	float	$tmp30	%read{19,72} %write{19,72}
+temp	int	$tmp31	%read{2147483647,-1} %write{19,72}
+temp	int	$tmp32	%read{19,72} %write{19,72}
+temp	int	$tmp33	%read{19,72} %write{19,72}
+temp	float	$tmp34	%read{19,72} %write{19,72}
+temp	float	$tmp35	%read{19,72} %write{19,72}
+temp	float	$tmp36	%read{19,72} %write{19,72}
+temp	float	$tmp37	%read{19,72} %write{19,72}
+temp	float	$tmp38	%read{19,72} %write{19,72}
+temp	float	$tmp39	%read{19,72} %write{19,72}
+temp	float	$tmp40	%read{19,72} %write{19,72}
+temp	float	$tmp41	%read{19,72} %write{19,72}
+temp	int	$tmp42	%read{19,72} %write{19,72}
+temp	int	$tmp43	%read{19,72} %write{19,72}
+temp	float	$tmp44	%read{74,74} %write{73,73}
+temp	float	$tmp45	%read{77,77} %write{75,75}
+temp	float	$tmp46	%read{77,77} %write{76,76}
+temp	float	$tmp47	%read{81,81} %write{77,77}
+temp	float	$tmp48	%read{80,80} %write{78,78}
+temp	float	$tmp49	%read{80,80} %write{79,79}
+temp	float	$tmp50	%read{81,81} %write{80,80}
+temp	float	$tmp51	%read{82,82} %write{81,81}
+temp	float	$tmp52	%read{86,86} %write{84,84}
+temp	float	$tmp53	%read{84,84} %write{83,83}
+temp	float	$tmp54	%read{86,86} %write{85,85}
+temp	float	$tmp55	%read{87,87} %write{86,86}
+temp	float	$tmp56	%read{90,90} %write{89,89}
+temp	float	$tmp57	%read{89,89} %write{88,88}
+code Vector
+# source/sambler-osl-shaders/patterns/ElJuliaSets/ElJuliaSets.osl:13
+#         float Zoom = 10.0,
+	assign		Vector P 	%filename{"source/sambler-osl-shaders/patterns/ElJuliaSets/ElJuliaSets.osl"} %line{13} %argrw{"wr"}
+code Transformed
+# source/sambler-osl-shaders/patterns/ElJuliaSets/ElJuliaSets.osl:22
+#         output float Fac = 0.0)
+	assign		Transformed P 	%filename{"source/sambler-osl-shaders/patterns/ElJuliaSets/ElJuliaSets.osl"} %line{22} %argrw{"wr"}
+code ___main___
+# source/sambler-osl-shaders/patterns/ElJuliaSets/ElJuliaSets.osl:25
+#     float factor = 0.0;
+	mul		$tmp1 $const2 Zoom 	%filename{"source/sambler-osl-shaders/patterns/ElJuliaSets/ElJuliaSets.osl"} %line{25} %argrw{"wrr"}
+	div		p Vector $tmp1 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElJuliaSets/ElJuliaSets.osl:26
+#     float auxiliar = 0.0;
+	assign		factor $const3 	%line{26} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/ElJuliaSets/ElJuliaSets.osl:27
+#     int i = 0;
+	assign		auxiliar $const3 	%line{27} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/ElJuliaSets/ElJuliaSets.osl:28
+#     int j = 0;
+	assign		i $const4 	%line{28} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/ElJuliaSets/ElJuliaSets.osl:29
+#     int prevIteration = MaxIterations;
+	assign		j $const4 	%line{29} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/ElJuliaSets/ElJuliaSets.osl:30
+# 
+	assign		prevIteration MaxIterations 	%line{30} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/ElJuliaSets/ElJuliaSets.osl:33
+#     p[1] += CenterY;
+	compref		$tmp2 p $const4 	%line{33} %argrw{"wrr"}
+	add		$tmp3 $tmp2 CenterX 	%argrw{"wrr"}
+	compassign	p $const4 $tmp3 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElJuliaSets/ElJuliaSets.osl:34
+# 
+	compref		$tmp4 p $const5 	%line{34} %argrw{"wrr"}
+	add		$tmp5 $tmp4 CenterY 	%argrw{"wrr"}
+	compassign	p $const5 $tmp5 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElJuliaSets/ElJuliaSets.osl:37
+#     point pb = p;
+	assign		pa p 	%line{37} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/ElJuliaSets/ElJuliaSets.osl:38
+#     point pc = point(0.0);
+	assign		pb p 	%line{38} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/ElJuliaSets/ElJuliaSets.osl:39
+# 
+	assign		pc $const6 	%line{39} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/ElJuliaSets/ElJuliaSets.osl:41
+#     {
+	dowhile		$tmp6 19 20 73 73 	%line{41} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/ElJuliaSets/ElJuliaSets.osl:63
+# 
+	lt		$tmp6 i prevIteration 	%line{63} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElJuliaSets/ElJuliaSets.osl:44
+#         {
+	for		$tmp7 22 23 43 45 	%line{44} %argrw{"r"}
+	assign		j $const5 	%argrw{"wr"}
+	lt		$tmp7 j Exponent 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElJuliaSets/ElJuliaSets.osl:46
+#             pc[1] = pa[0]*pb[1] + pa[1]*pb[0];
+	compref		$tmp8 pa $const4 	%line{46} %argrw{"wrr"}
+	compref		$tmp9 pb $const4 	%argrw{"wrr"}
+	mul		$tmp10 $tmp8 $tmp9 	%argrw{"wrr"}
+	compref		$tmp11 pa $const5 	%argrw{"wrr"}
+	compref		$tmp12 pb $const5 	%argrw{"wrr"}
+	mul		$tmp13 $tmp11 $tmp12 	%argrw{"wrr"}
+	sub		$tmp14 $tmp10 $tmp13 	%argrw{"wrr"}
+	compassign	pc $const4 $tmp14 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElJuliaSets/ElJuliaSets.osl:47
+#             // for next product
+	compref		$tmp15 pa $const4 	%line{47} %argrw{"wrr"}
+	compref		$tmp16 pb $const5 	%argrw{"wrr"}
+	mul		$tmp17 $tmp15 $tmp16 	%argrw{"wrr"}
+	compref		$tmp18 pa $const5 	%argrw{"wrr"}
+	compref		$tmp19 pb $const4 	%argrw{"wrr"}
+	mul		$tmp20 $tmp18 $tmp19 	%argrw{"wrr"}
+	add		$tmp21 $tmp17 $tmp20 	%argrw{"wrr"}
+	compassign	pc $const5 $tmp21 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElJuliaSets/ElJuliaSets.osl:49
+#             pb[1] = pc[1];
+	compref		$tmp22 pc $const4 	%line{49} %argrw{"wrr"}
+	compassign	pb $const4 $tmp22 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElJuliaSets/ElJuliaSets.osl:50
+#         }
+	compref		$tmp23 pc $const5 	%line{50} %argrw{"wrr"}
+	compassign	pb $const5 $tmp23 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElJuliaSets/ElJuliaSets.osl:44
+#         {
+	assign		$tmp24 j 	%line{44} %argrw{"wr"}
+	add		j j $const5 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElJuliaSets/ElJuliaSets.osl:53
+#         pa[1] = pc[1] + SeedY;
+	compref		$tmp25 pc $const4 	%line{53} %argrw{"wrr"}
+	add		$tmp26 $tmp25 SeedX 	%argrw{"wrr"}
+	compassign	pa $const4 $tmp26 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElJuliaSets/ElJuliaSets.osl:54
+#         pb[0] = pa[0];
+	compref		$tmp27 pc $const5 	%line{54} %argrw{"wrr"}
+	add		$tmp28 $tmp27 SeedY 	%argrw{"wrr"}
+	compassign	pa $const5 $tmp28 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElJuliaSets/ElJuliaSets.osl:55
+#         pb[1] = pa[1];
+	compref		$tmp29 pa $const4 	%line{55} %argrw{"wrr"}
+	compassign	pb $const4 $tmp29 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElJuliaSets/ElJuliaSets.osl:56
+# 
+	compref		$tmp30 pa $const5 	%line{56} %argrw{"wrr"}
+	compassign	pb $const5 $tmp30 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElJuliaSets/ElJuliaSets.osl:58
+#         if ((prevIteration == MaxIterations) && (sqrt((pa[0]*pa[0]) + (pa[1]*pa[1])) > Bailout))
+	assign		$tmp31 i 	%line{58} %argrw{"wr"}
+	add		i i $const5 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElJuliaSets/ElJuliaSets.osl:59
+#         {
+	eq		$tmp32 prevIteration MaxIterations 	%line{59} %argrw{"wrr"}
+	neq		$tmp33 $tmp32 $const4 	%argrw{"wrr"}
+	if		$tmp33 71 71 	%argrw{"r"}
+	compref		$tmp35 pa $const4 	%argrw{"wrr"}
+	compref		$tmp36 pa $const4 	%argrw{"wrr"}
+	mul		$tmp37 $tmp35 $tmp36 	%argrw{"wrr"}
+	compref		$tmp38 pa $const5 	%argrw{"wrr"}
+	compref		$tmp39 pa $const5 	%argrw{"wrr"}
+	mul		$tmp40 $tmp38 $tmp39 	%argrw{"wrr"}
+	add		$tmp41 $tmp37 $tmp40 	%argrw{"wrr"}
+	sqrt		$tmp34 $tmp41 	%argrw{"wr"}
+	gt		$tmp42 $tmp34 Bailout 	%argrw{"wrr"}
+	neq		$tmp43 $tmp42 $const4 	%argrw{"wrr"}
+	assign		$tmp33 $tmp43 	%argrw{"wr"}
+	if		$tmp33 73 73 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/ElJuliaSets/ElJuliaSets.osl:61
+#         }
+	add		prevIteration i $const5 	%line{61} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElJuliaSets/ElJuliaSets.osl:67
+#     auxiliar = sqrt((pa[0]*pa[0]) + (pa[1]*pa[1]));
+	assign		$tmp44 i 	%line{67} %argrw{"wr"}
+	assign		factor $tmp44 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/ElJuliaSets/ElJuliaSets.osl:68
+#     factor = factor - (log(log(auxiliar))/log(Bailout));
+	compref		$tmp45 pa $const4 	%line{68} %argrw{"wrr"}
+	compref		$tmp46 pa $const4 	%argrw{"wrr"}
+	mul		$tmp47 $tmp45 $tmp46 	%argrw{"wrr"}
+	compref		$tmp48 pa $const5 	%argrw{"wrr"}
+	compref		$tmp49 pa $const5 	%argrw{"wrr"}
+	mul		$tmp50 $tmp48 $tmp49 	%argrw{"wrr"}
+	add		$tmp51 $tmp47 $tmp50 	%argrw{"wrr"}
+	sqrt		auxiliar $tmp51 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/ElJuliaSets/ElJuliaSets.osl:69
+#     factor = factor / float(MaxIterations);
+	log		$tmp53 auxiliar 	%line{69} %argrw{"wr"}
+	log		$tmp52 $tmp53 	%argrw{"wr"}
+	log		$tmp54 Bailout 	%argrw{"wr"}
+	div		$tmp55 $tmp52 $tmp54 	%argrw{"wrr"}
+	sub		factor factor $tmp55 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElJuliaSets/ElJuliaSets.osl:70
+# 
+	assign		$tmp57 MaxIterations 	%line{70} %argrw{"wr"}
+	assign		$tmp56 $tmp57 	%argrw{"wr"}
+	div		factor factor $tmp56 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElJuliaSets/ElJuliaSets.osl:72
+#     Transformed = pa;
+	assign		Fac factor 	%line{72} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/ElJuliaSets/ElJuliaSets.osl:73
+# }
+	assign		Transformed pa 	%line{73} %argrw{"wr"}
+	end

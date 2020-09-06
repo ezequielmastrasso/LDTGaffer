@@ -1,0 +1,1864 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader MAFlowNoise
+param	vector	Vector	0 0 0		%read{49,285} %write{0,0} %initexpr
+param	int	Dimensions	2		%read{47,279} %write{2147483647,-1}
+param	float	Scale	1		%read{50,286} %write{2147483647,-1}
+param	float	Angle	0		%read{43,43} %write{2147483647,-1}
+param	int	Octaves	1		%read{57,291} %write{2147483647,-1}
+param	float	H	1		%read{45,45} %write{2147483647,-1}
+param	float	Lacunarity	2		%read{46,746} %write{2147483647,-1}
+param	float	Advection	0		%read{211,721} %write{2147483647,-1}
+oparam	float	Fac	0		%read{57,748} %write{57,748}
+global	point	P	%read{0,0} %write{2147483647,-1}
+local	int	___322_xi	%read{57,748} %write{57,748}
+local	int[512]	perm	%read{57,748} %write{1,1}
+local	int[512]	permMod12	%read{2147483647,-1} %write{2,2}
+local	vector[8]	grad2	%read{57,278} %write{3,10}
+local	vector[16]	grad3u	%read{291,748} %write{11,26}
+local	vector[16]	grad3v	%read{291,748} %write{27,42}
+local	int	___323_h	%read{57,278} %write{57,278}
+local	float	___323_gx0	%read{57,278} %write{57,278}
+local	float	___323_gy0	%read{57,278} %write{57,278}
+local	int	___324_h	%read{291,748} %write{291,748}
+local	float	___324_gux	%read{291,748} %write{291,748}
+local	float	___324_guy	%read{291,748} %write{291,748}
+local	float	___324_guz	%read{291,748} %write{291,748}
+local	float	___324_gvx	%read{291,748} %write{291,748}
+local	float	___324_gvy	%read{291,748} %write{291,748}
+local	float	___324_gvz	%read{291,748} %write{291,748}
+local	float	angle	%read{53,748} %write{43,748}
+local	float	pwr	%read{57,748} %write{44,748}
+local	float	pwHL	%read{57,748} %write{46,46}
+local	float	___326_x	%read{57,278} %write{50,278}
+local	float	___326_y	%read{57,278} %write{52,278}
+local	float	___326_dnoise_dx	%read{57,278} %write{57,278}
+local	float	___326_dnoise_dy	%read{57,278} %write{57,278}
+local	float	___326_sin_t	%read{57,278} %write{53,53}
+local	float	___326_cos_t	%read{57,278} %write{54,54}
+local	int	___327_p	%read{57,278} %write{56,278}
+local	float	___328_n0	%read{57,278} %write{57,278}
+local	float	___328_n1	%read{57,278} %write{57,278}
+local	float	___328_n2	%read{57,278} %write{57,278}
+local	float	___328_gx0	%read{57,278} %write{57,278}
+local	float	___328_gy0	%read{57,278} %write{57,278}
+local	float	___328_gx1	%read{57,278} %write{57,278}
+local	float	___328_gy1	%read{57,278} %write{57,278}
+local	float	___328_gx2	%read{57,278} %write{57,278}
+local	float	___328_gy2	%read{57,278} %write{57,278}
+local	float	___328_s	%read{57,278} %write{57,278}
+local	float	___328_xs	%read{57,278} %write{57,278}
+local	float	___328_ys	%read{57,278} %write{57,278}
+local	int	___328_i	%read{57,278} %write{57,278}
+local	int	___328_j	%read{57,278} %write{57,278}
+local	float	___328_t	%read{57,278} %write{57,278}
+local	float	___328_X0	%read{57,278} %write{57,278}
+local	float	___328_Y0	%read{57,278} %write{57,278}
+local	float	___328_x0	%read{57,278} %write{57,278}
+local	float	___328_y0	%read{57,278} %write{57,278}
+local	int	___328_i1	%read{57,278} %write{57,278}
+local	int	___328_j1	%read{57,278} %write{57,278}
+local	float	___328_x1	%read{57,278} %write{57,278}
+local	float	___328_y1	%read{57,278} %write{57,278}
+local	float	___328_x2	%read{57,278} %write{57,278}
+local	float	___328_y2	%read{57,278} %write{57,278}
+local	int	___328_ii	%read{57,278} %write{57,278}
+local	int	___328_jj	%read{57,278} %write{57,278}
+local	float	___328_t0	%read{57,278} %write{57,278}
+local	float	___328_t20	%read{57,278} %write{57,278}
+local	float	___328_t40	%read{57,278} %write{57,278}
+local	float	___328_t1	%read{57,278} %write{57,278}
+local	float	___328_t21	%read{57,278} %write{57,278}
+local	float	___328_t41	%read{57,278} %write{57,278}
+local	float	___328_t2	%read{57,278} %write{57,278}
+local	float	___328_t22	%read{57,278} %write{57,278}
+local	float	___328_t42	%read{57,278} %write{57,278}
+local	float	___328_noise	%read{57,278} %write{57,278}
+local	float	___334_temp0	%read{57,278} %write{57,278}
+local	float	___334_temp1	%read{57,278} %write{57,278}
+local	float	___334_temp2	%read{57,278} %write{57,278}
+local	float	___334_advect_x	%read{57,278} %write{57,278}
+local	float	___334_advect_y	%read{57,278} %write{57,278}
+local	float	___336_x	%read{291,748} %write{282,748}
+local	float	___336_y	%read{291,748} %write{284,748}
+local	float	___336_z	%read{291,748} %write{286,748}
+local	float	___336_dnoise_dx	%read{291,748} %write{291,748}
+local	float	___336_dnoise_dy	%read{291,748} %write{291,748}
+local	float	___336_dnoise_dz	%read{291,748} %write{291,748}
+local	float	___336_n0	%read{291,748} %write{291,748}
+local	float	___336_n1	%read{291,748} %write{291,748}
+local	float	___336_n2	%read{291,748} %write{291,748}
+local	float	___336_n3	%read{291,748} %write{291,748}
+local	float	___336_noise	%read{291,748} %write{291,748}
+local	float	___336_gx0	%read{291,748} %write{291,748}
+local	float	___336_gy0	%read{291,748} %write{291,748}
+local	float	___336_gz0	%read{291,748} %write{291,748}
+local	float	___336_gx1	%read{291,748} %write{291,748}
+local	float	___336_gy1	%read{291,748} %write{291,748}
+local	float	___336_gz1	%read{291,748} %write{291,748}
+local	float	___336_gx2	%read{291,748} %write{291,748}
+local	float	___336_gy2	%read{291,748} %write{291,748}
+local	float	___336_gz2	%read{291,748} %write{291,748}
+local	float	___336_gx3	%read{291,748} %write{291,748}
+local	float	___336_gy3	%read{291,748} %write{291,748}
+local	float	___336_gz3	%read{291,748} %write{291,748}
+local	float	___336_sin_t	%read{291,748} %write{287,287}
+local	float	___336_cos_t	%read{291,748} %write{288,288}
+local	int	___337_p	%read{291,748} %write{290,748}
+local	float	___338_s	%read{291,748} %write{291,748}
+local	float	___338_xs	%read{291,748} %write{291,748}
+local	float	___338_ys	%read{291,748} %write{291,748}
+local	float	___338_zs	%read{291,748} %write{291,748}
+local	int	___338_i	%read{291,748} %write{291,748}
+local	int	___338_j	%read{291,748} %write{291,748}
+local	int	___338_k	%read{291,748} %write{291,748}
+local	float	___338_t	%read{291,748} %write{291,748}
+local	float	___338_X0	%read{291,748} %write{291,748}
+local	float	___338_Y0	%read{291,748} %write{291,748}
+local	float	___338_Z0	%read{291,748} %write{291,748}
+local	float	___338_x0	%read{291,748} %write{291,748}
+local	float	___338_y0	%read{291,748} %write{291,748}
+local	float	___338_z0	%read{291,748} %write{291,748}
+local	int	___338_i1	%read{291,748} %write{291,748}
+local	int	___338_j1	%read{291,748} %write{291,748}
+local	int	___338_k1	%read{291,748} %write{291,748}
+local	int	___338_i2	%read{291,748} %write{291,748}
+local	int	___338_j2	%read{291,748} %write{291,748}
+local	int	___338_k2	%read{291,748} %write{291,748}
+local	float	___338_x1	%read{291,748} %write{291,748}
+local	float	___338_y1	%read{291,748} %write{291,748}
+local	float	___338_z1	%read{291,748} %write{291,748}
+local	float	___338_x2	%read{291,748} %write{291,748}
+local	float	___338_y2	%read{291,748} %write{291,748}
+local	float	___338_z2	%read{291,748} %write{291,748}
+local	float	___338_x3	%read{291,748} %write{291,748}
+local	float	___338_y3	%read{291,748} %write{291,748}
+local	float	___338_z3	%read{291,748} %write{291,748}
+local	int	___338_ii	%read{291,748} %write{291,748}
+local	int	___338_jj	%read{291,748} %write{291,748}
+local	int	___338_kk	%read{291,748} %write{291,748}
+local	float	___338_t0	%read{291,748} %write{291,748}
+local	float	___338_t20	%read{291,748} %write{291,748}
+local	float	___338_t40	%read{291,748} %write{291,748}
+local	float	___338_t1	%read{291,748} %write{291,748}
+local	float	___338_t21	%read{291,748} %write{291,748}
+local	float	___338_t41	%read{291,748} %write{291,748}
+local	float	___338_t2	%read{291,748} %write{291,748}
+local	float	___338_t22	%read{291,748} %write{291,748}
+local	float	___338_t42	%read{291,748} %write{291,748}
+local	float	___338_t3	%read{291,748} %write{291,748}
+local	float	___338_t23	%read{291,748} %write{291,748}
+local	float	___338_t43	%read{291,748} %write{291,748}
+local	float	___351_temp0	%read{291,748} %write{291,748}
+local	float	___351_temp1	%read{291,748} %write{291,748}
+local	float	___351_temp2	%read{291,748} %write{291,748}
+local	float	___351_temp3	%read{291,748} %write{291,748}
+local	float	___351_advect_x	%read{291,748} %write{291,748}
+local	float	___351_advect_y	%read{291,748} %write{291,748}
+local	float	___351_advect_z	%read{291,748} %write{291,748}
+const	int[512]	$const1	151 160 137 91 90 15 131 13 201 95 96 53 194 233 7 225 140 36 103 30 69 142 8 99 37 240 21 10 23 190 6 148 247 120 234 75 0 26 197 62 94 252 219 203 117 35 11 32 57 177 33 88 237 149 56 87 174 20 125 136 171 168 68 175 74 165 71 134 139 48 27 166 77 146 158 231 83 111 229 122 60 211 133 230 220 105 92 41 55 46 245 40 244 102 143 54 65 25 63 161 1 216 80 73 209 76 132 187 208 89 18 169 200 196 135 130 116 188 159 86 164 100 109 198 173 186 3 64 52 217 226 250 124 123 5 202 38 147 118 126 255 82 85 212 207 206 59 227 47 16 58 17 182 189 28 42 223 183 170 213 119 248 152 2 44 154 163 70 221 153 101 155 167 43 172 9 129 22 39 253 19 98 108 110 79 113 224 232 178 185 112 104 218 246 97 228 251 34 242 193 238 210 144 12 191 179 162 241 81 51 145 235 249 14 239 107 49 192 214 31 181 199 106 157 184 84 204 176 115 121 50 45 127 4 150 254 138 236 205 93 222 114 67 29 24 72 243 141 128 195 78 66 215 61 156 180 151 160 137 91 90 15 131 13 201 95 96 53 194 233 7 225 140 36 103 30 69 142 8 99 37 240 21 10 23 190 6 148 247 120 234 75 0 26 197 62 94 252 219 203 117 35 11 32 57 177 33 88 237 149 56 87 174 20 125 136 171 168 68 175 74 165 71 134 139 48 27 166 77 146 158 231 83 111 229 122 60 211 133 230 220 105 92 41 55 46 245 40 244 102 143 54 65 25 63 161 1 216 80 73 209 76 132 187 208 89 18 169 200 196 135 130 116 188 159 86 164 100 109 198 173 186 3 64 52 217 226 250 124 123 5 202 38 147 118 126 255 82 85 212 207 206 59 227 47 16 58 17 182 189 28 42 223 183 170 213 119 248 152 2 44 154 163 70 221 153 101 155 167 43 172 9 129 22 39 253 19 98 108 110 79 113 224 232 178 185 112 104 218 246 97 228 251 34 242 193 238 210 144 12 191 179 162 241 81 51 145 235 249 14 239 107 49 192 214 31 181 199 106 157 184 84 204 176 115 121 50 45 127 4 150 254 138 236 205 93 222 114 67 29 24 72 243 141 128 195 78 66 215 61 156 180 		%read{1,1} %write{2147483647,-1}
+const	int[512]	$const2	7 4 5 7 6 3 11 1 9 11 0 5 2 5 7 9 8 0 7 6 9 10 8 3 1 0 9 10 11 10 6 4 7 0 6 3 0 2 5 2 10 0 3 11 9 11 11 8 9 9 9 4 9 5 8 3 6 8 5 4 3 0 8 7 2 9 11 2 7 0 3 10 5 2 2 3 11 3 1 2 0 7 1 2 4 9 8 5 7 10 5 4 4 6 11 6 5 1 3 5 1 0 8 1 5 4 0 7 4 5 6 1 8 4 3 10 8 8 3 2 8 4 1 6 5 6 3 4 4 1 10 10 4 3 5 10 2 3 10 6 3 10 1 8 3 2 11 11 11 4 10 5 2 9 4 6 7 3 2 9 11 8 8 2 8 10 7 10 5 9 5 11 11 7 4 9 9 10 3 1 7 2 0 2 7 5 8 4 10 5 4 8 2 6 1 0 11 10 2 1 10 6 0 0 11 11 6 1 9 3 1 7 9 2 11 11 1 0 10 7 1 7 10 1 4 0 0 8 7 1 2 9 7 4 6 2 6 8 1 9 6 6 7 5 0 0 3 9 8 3 6 6 11 1 0 0 7 4 5 7 6 3 11 1 9 11 0 5 2 5 7 9 8 0 7 6 9 10 8 3 1 0 9 10 11 10 6 4 7 0 6 3 0 2 5 2 10 0 3 11 9 11 11 8 9 9 9 4 9 5 8 3 6 8 5 4 3 0 8 7 2 9 11 2 7 0 3 10 5 2 2 3 11 3 1 2 0 7 1 2 4 9 8 5 7 10 5 4 4 6 11 6 5 1 3 5 1 0 8 1 5 4 0 7 4 5 6 1 8 4 3 10 8 8 3 2 8 4 1 6 5 6 3 4 4 1 10 10 4 3 5 10 2 3 10 6 3 10 1 8 3 2 11 11 11 4 10 5 2 9 4 6 7 3 2 9 11 8 8 2 8 10 7 10 5 9 5 11 11 7 4 9 9 10 3 1 7 2 0 2 7 5 8 4 10 5 4 8 2 6 1 0 11 10 2 1 10 6 0 0 11 11 6 1 9 3 1 7 9 2 11 11 1 0 10 7 1 7 10 1 4 0 0 8 7 1 2 9 7 4 6 2 6 8 1 9 6 6 7 5 0 0 3 9 8 3 6 6 11 1 0 0 		%read{2,2} %write{2147483647,-1}
+const	vector	$const3	-1 -1 0		%read{3,38} %write{2147483647,-1}
+const	int	$const4	0		%read{3,632} %write{2147483647,-1}
+const	vector	$const5	1 0 0		%read{4,4} %write{2147483647,-1}
+const	int	$const6	1		%read{4,748} %write{2147483647,-1}
+const	vector	$const7	-1 0 0		%read{5,5} %write{2147483647,-1}
+const	int	$const8	2		%read{5,609} %write{2147483647,-1}
+const	vector	$const9	1 1 0		%read{6,36} %write{2147483647,-1}
+const	int	$const10	3		%read{6,279} %write{2147483647,-1}
+const	vector	$const11	-1 1 0		%read{7,37} %write{2147483647,-1}
+const	int	$const12	4		%read{7,31} %write{2147483647,-1}
+const	vector	$const13	0 -1 0		%read{8,8} %write{2147483647,-1}
+const	int	$const14	5		%read{8,32} %write{2147483647,-1}
+const	vector	$const15	0 1 0		%read{9,9} %write{2147483647,-1}
+const	int	$const16	6		%read{9,33} %write{2147483647,-1}
+const	vector	$const17	1 -1 0		%read{10,35} %write{2147483647,-1}
+const	int	$const18	7		%read{10,191} %write{2147483647,-1}
+const	vector	$const19	1 0 1		%read{11,39} %write{2147483647,-1}
+const	vector	$const20	0 1 1		%read{12,12} %write{2147483647,-1}
+const	vector	$const21	-1 0 1		%read{13,40} %write{2147483647,-1}
+const	vector	$const22	0 -1 1		%read{14,14} %write{2147483647,-1}
+const	vector	$const23	1 0 -1		%read{15,15} %write{2147483647,-1}
+const	vector	$const24	0 1 -1		%read{16,41} %write{2147483647,-1}
+const	vector	$const25	-1 0 -1		%read{17,17} %write{2147483647,-1}
+const	vector	$const26	0 -1 -1		%read{18,42} %write{2147483647,-1}
+const	vector	$const27	0.81649655 0.81649655 0.81649655		%read{19,30} %write{2147483647,-1}
+const	int	$const28	8		%read{19,35} %write{2147483647,-1}
+const	vector	$const29	-0.81649655 0.81649655 -0.81649655		%read{20,34} %write{2147483647,-1}
+const	int	$const30	9		%read{20,36} %write{2147483647,-1}
+const	vector	$const31	-0.81649655 -0.81649655 0.81649655		%read{21,28} %write{2147483647,-1}
+const	int	$const32	10		%read{21,37} %write{2147483647,-1}
+const	vector	$const33	0.81649655 -0.81649655 -0.81649655		%read{22,32} %write{2147483647,-1}
+const	int	$const34	11		%read{22,38} %write{2147483647,-1}
+const	vector	$const35	-0.81649655 0.81649655 0.81649655		%read{23,27} %write{2147483647,-1}
+const	int	$const36	12		%read{23,39} %write{2147483647,-1}
+const	vector	$const37	0.81649655 -0.81649655 0.81649655		%read{24,29} %write{2147483647,-1}
+const	int	$const38	13		%read{24,40} %write{2147483647,-1}
+const	int	$const39	14		%read{25,41} %write{2147483647,-1}
+const	int	$const40	15		%read{26,597} %write{2147483647,-1}
+const	vector	$const41	-0.81649655 -0.81649655 -0.81649655		%read{31,31} %write{2147483647,-1}
+const	vector	$const42	0.81649655 0.81649655 -0.81649655		%read{33,33} %write{2147483647,-1}
+const	float	$const43	1		%read{44,405} %write{2147483647,-1}
+temp	float	$tmp41	%read{46,46} %write{45,45}
+temp	int	$tmp42	%read{48,48} %write{47,47}
+temp	float	$tmp43	%read{50,50} %write{49,49}
+temp	float	$tmp44	%read{52,52} %write{51,51}
+temp	int	$tmp45	%read{55,278} %write{56,278}
+temp	float	$tmp46	%read{57,278} %write{57,278}
+const	float	$const44	0.36602539		%read{59,59} %write{2147483647,-1}
+const	string	$const45	"FASTFLOOR"		%read{62,312} %write{2147483647,-1}
+temp	int	$tmp47	%read{57,278} %write{57,278}
+temp	int	$tmp48	%read{57,278} %write{57,278}
+temp	int	$tmp49	%read{57,278} %write{57,278}
+const	float	$const46	0.21132487		%read{78,101} %write{2147483647,-1}
+temp	float	$tmp50	%read{57,278} %write{57,278}
+temp	float	$tmp51	%read{57,278} %write{57,278}
+temp	float	$tmp52	%read{57,278} %write{57,278}
+temp	int	$tmp53	%read{57,278} %write{57,278}
+temp	float	$tmp54	%read{57,278} %write{57,278}
+temp	float	$tmp55	%read{57,278} %write{57,278}
+temp	float	$tmp56	%read{57,278} %write{57,278}
+temp	float	$tmp57	%read{57,278} %write{57,278}
+temp	float	$tmp58	%read{57,278} %write{57,278}
+const	float	$const47	2		%read{98,397} %write{2147483647,-1}
+temp	float	$tmp59	%read{57,278} %write{57,278}
+temp	float	$tmp60	%read{57,278} %write{57,278}
+temp	float	$tmp61	%read{57,278} %write{57,278}
+const	int	$const48	255		%read{103,410} %write{2147483647,-1}
+const	float	$const49	0.5		%read{106,174} %write{2147483647,-1}
+temp	float	$tmp62	%read{57,278} %write{57,278}
+temp	float	$tmp63	%read{57,278} %write{57,278}
+temp	float	$tmp64	%read{57,278} %write{57,278}
+const	float	$const50	0		%read{109,581} %write{2147483647,-1}
+temp	int	$tmp65	%read{57,278} %write{57,278}
+temp	int	$tmp66	%read{57,278} %write{57,278}
+temp	int	$tmp67	%read{57,278} %write{57,278}
+temp	int	$tmp68	%read{57,278} %write{57,278}
+const	string	$const51	"gradrot2"		%read{120,190} %write{2147483647,-1}
+temp	vector	$tmp69	%read{57,278} %write{57,278}
+temp	vector	$tmp70	%read{57,278} %write{57,278}
+temp	float	$tmp71	%read{57,278} %write{57,278}
+temp	float	$tmp72	%read{57,278} %write{57,278}
+temp	float	$tmp73	%read{57,278} %write{57,278}
+temp	float	$tmp74	%read{57,278} %write{57,278}
+temp	float	$tmp75	%read{57,278} %write{57,278}
+temp	float	$tmp76	%read{57,278} %write{57,278}
+temp	float	$tmp77	%read{57,278} %write{57,278}
+temp	float	$tmp78	%read{57,278} %write{57,278}
+temp	float	$tmp79	%read{57,278} %write{57,278}
+temp	float	$tmp80	%read{57,278} %write{57,278}
+temp	int	$tmp81	%read{57,278} %write{57,278}
+temp	int	$tmp82	%read{57,278} %write{57,278}
+temp	int	$tmp83	%read{57,278} %write{57,278}
+temp	int	$tmp84	%read{57,278} %write{57,278}
+temp	int	$tmp85	%read{57,278} %write{57,278}
+temp	int	$tmp86	%read{57,278} %write{57,278}
+temp	vector	$tmp87	%read{57,278} %write{57,278}
+temp	vector	$tmp88	%read{57,278} %write{57,278}
+temp	float	$tmp89	%read{57,278} %write{57,278}
+temp	float	$tmp90	%read{57,278} %write{57,278}
+temp	float	$tmp91	%read{57,278} %write{57,278}
+temp	float	$tmp92	%read{57,278} %write{57,278}
+temp	float	$tmp93	%read{57,278} %write{57,278}
+temp	float	$tmp94	%read{57,278} %write{57,278}
+temp	float	$tmp95	%read{57,278} %write{57,278}
+temp	float	$tmp96	%read{57,278} %write{57,278}
+temp	float	$tmp97	%read{57,278} %write{57,278}
+temp	float	$tmp98	%read{57,278} %write{57,278}
+temp	int	$tmp99	%read{57,278} %write{57,278}
+temp	int	$tmp100	%read{57,278} %write{57,278}
+temp	int	$tmp101	%read{57,278} %write{57,278}
+temp	int	$tmp102	%read{57,278} %write{57,278}
+temp	int	$tmp103	%read{57,278} %write{57,278}
+temp	int	$tmp104	%read{57,278} %write{57,278}
+temp	vector	$tmp105	%read{57,278} %write{57,278}
+temp	vector	$tmp106	%read{57,278} %write{57,278}
+temp	float	$tmp107	%read{57,278} %write{57,278}
+temp	float	$tmp108	%read{57,278} %write{57,278}
+temp	float	$tmp109	%read{57,278} %write{57,278}
+temp	float	$tmp110	%read{57,278} %write{57,278}
+temp	float	$tmp111	%read{57,278} %write{57,278}
+temp	float	$tmp112	%read{57,278} %write{57,278}
+temp	float	$tmp113	%read{57,278} %write{57,278}
+const	float	$const52	70		%read{210,253} %write{2147483647,-1}
+temp	float	$tmp114	%read{57,278} %write{57,278}
+temp	float	$tmp115	%read{57,278} %write{57,278}
+temp	int	$tmp116	%read{57,278} %write{57,278}
+temp	float	$tmp117	%read{57,278} %write{57,278}
+temp	float	$tmp118	%read{57,278} %write{57,278}
+temp	float	$tmp119	%read{57,278} %write{57,278}
+temp	float	$tmp120	%read{57,278} %write{57,278}
+temp	float	$tmp121	%read{57,278} %write{57,278}
+temp	float	$tmp122	%read{57,278} %write{57,278}
+temp	float	$tmp123	%read{57,278} %write{57,278}
+temp	float	$tmp124	%read{57,278} %write{57,278}
+temp	float	$tmp125	%read{57,278} %write{57,278}
+temp	float	$tmp126	%read{57,278} %write{57,278}
+temp	float	$tmp127	%read{57,278} %write{57,278}
+temp	float	$tmp128	%read{57,278} %write{57,278}
+temp	float	$tmp129	%read{57,278} %write{57,278}
+temp	float	$tmp130	%read{57,278} %write{57,278}
+temp	float	$tmp131	%read{57,278} %write{57,278}
+temp	float	$tmp132	%read{57,278} %write{57,278}
+const	float	$const53	-8		%read{238,689} %write{2147483647,-1}
+temp	float	$tmp133	%read{57,278} %write{57,278}
+temp	float	$tmp134	%read{57,278} %write{57,278}
+temp	float	$tmp135	%read{57,278} %write{57,278}
+temp	float	$tmp136	%read{57,278} %write{57,278}
+temp	float	$tmp137	%read{57,278} %write{57,278}
+temp	float	$tmp138	%read{57,278} %write{57,278}
+temp	float	$tmp139	%read{57,278} %write{57,278}
+temp	float	$tmp140	%read{57,278} %write{57,278}
+temp	float	$tmp141	%read{57,278} %write{57,278}
+temp	float	$tmp142	%read{57,278} %write{57,278}
+temp	float	$tmp143	%read{57,278} %write{57,278}
+temp	float	$tmp144	%read{57,278} %write{57,278}
+temp	float	$tmp145	%read{57,278} %write{57,278}
+temp	float	$tmp146	%read{57,278} %write{57,278}
+temp	float	$tmp147	%read{57,278} %write{57,278}
+temp	float	$tmp148	%read{57,278} %write{57,278}
+temp	float	$tmp149	%read{57,278} %write{57,278}
+temp	float	$tmp150	%read{57,278} %write{57,278}
+temp	float	$tmp151	%read{57,278} %write{57,278}
+temp	float	$tmp152	%read{57,278} %write{57,278}
+temp	int	$tmp153	%read{2147483647,-1} %write{57,278}
+temp	int	$tmp154	%read{280,280} %write{279,279}
+temp	float	$tmp155	%read{282,282} %write{281,281}
+temp	float	$tmp156	%read{284,284} %write{283,283}
+temp	float	$tmp157	%read{286,286} %write{285,285}
+temp	int	$tmp158	%read{289,748} %write{290,748}
+temp	float	$tmp159	%read{291,748} %write{291,748}
+temp	float	$tmp160	%read{291,748} %write{291,748}
+const	float	$const54	0.33333334		%read{294,294} %write{2147483647,-1}
+temp	int	$tmp161	%read{291,748} %write{291,748}
+temp	int	$tmp162	%read{291,748} %write{291,748}
+temp	int	$tmp163	%read{291,748} %write{291,748}
+temp	int	$tmp164	%read{291,748} %write{291,748}
+temp	int	$tmp165	%read{291,748} %write{291,748}
+temp	float	$tmp166	%read{291,748} %write{291,748}
+const	float	$const55	0.16666667		%read{322,406} %write{2147483647,-1}
+temp	float	$tmp167	%read{291,748} %write{291,748}
+temp	float	$tmp168	%read{291,748} %write{291,748}
+temp	float	$tmp169	%read{291,748} %write{291,748}
+temp	int	$tmp170	%read{291,748} %write{291,748}
+temp	int	$tmp171	%read{291,748} %write{291,748}
+temp	int	$tmp172	%read{291,748} %write{291,748}
+temp	int	$tmp173	%read{291,748} %write{291,748}
+temp	int	$tmp174	%read{291,748} %write{291,748}
+temp	float	$tmp175	%read{291,748} %write{291,748}
+temp	float	$tmp176	%read{291,748} %write{291,748}
+temp	float	$tmp177	%read{291,748} %write{291,748}
+temp	float	$tmp178	%read{291,748} %write{291,748}
+temp	float	$tmp179	%read{291,748} %write{291,748}
+temp	float	$tmp180	%read{291,748} %write{291,748}
+temp	float	$tmp181	%read{291,748} %write{291,748}
+temp	float	$tmp182	%read{291,748} %write{291,748}
+temp	float	$tmp183	%read{291,748} %write{291,748}
+temp	float	$tmp184	%read{291,748} %write{291,748}
+temp	float	$tmp185	%read{291,748} %write{291,748}
+temp	float	$tmp186	%read{291,748} %write{291,748}
+temp	float	$tmp187	%read{291,748} %write{291,748}
+temp	float	$tmp188	%read{291,748} %write{291,748}
+temp	float	$tmp189	%read{291,748} %write{291,748}
+temp	float	$tmp190	%read{291,748} %write{291,748}
+const	float	$const56	3		%read{400,406} %write{2147483647,-1}
+temp	float	$tmp191	%read{291,748} %write{291,748}
+temp	float	$tmp192	%read{291,748} %write{291,748}
+temp	float	$tmp193	%read{291,748} %write{291,748}
+temp	float	$tmp194	%read{291,748} %write{291,748}
+temp	float	$tmp195	%read{291,748} %write{291,748}
+const	float	$const57	0.60000002		%read{412,574} %write{2147483647,-1}
+temp	float	$tmp196	%read{291,748} %write{291,748}
+temp	float	$tmp197	%read{291,748} %write{291,748}
+temp	float	$tmp198	%read{291,748} %write{291,748}
+temp	float	$tmp199	%read{291,748} %write{291,748}
+temp	float	$tmp200	%read{291,748} %write{291,748}
+temp	int	$tmp201	%read{291,748} %write{291,748}
+temp	int	$tmp202	%read{291,748} %write{291,748}
+temp	int	$tmp203	%read{291,748} %write{291,748}
+temp	int	$tmp204	%read{291,748} %write{291,748}
+temp	int	$tmp205	%read{291,748} %write{291,748}
+temp	int	$tmp206	%read{291,748} %write{291,748}
+const	string	$const58	"gradrot3"		%read{431,596} %write{2147483647,-1}
+temp	vector	$tmp207	%read{291,748} %write{291,748}
+temp	vector	$tmp208	%read{291,748} %write{291,748}
+temp	vector	$tmp209	%read{291,748} %write{291,748}
+temp	vector	$tmp210	%read{291,748} %write{291,748}
+temp	vector	$tmp211	%read{291,748} %write{291,748}
+temp	vector	$tmp212	%read{291,748} %write{291,748}
+temp	float	$tmp213	%read{291,748} %write{291,748}
+temp	float	$tmp214	%read{291,748} %write{291,748}
+temp	float	$tmp215	%read{291,748} %write{291,748}
+temp	float	$tmp216	%read{291,748} %write{291,748}
+temp	float	$tmp217	%read{291,748} %write{291,748}
+temp	float	$tmp218	%read{291,748} %write{291,748}
+temp	float	$tmp219	%read{291,748} %write{291,748}
+const	string	$const59	"graddotp3"		%read{456,674} %write{2147483647,-1}
+temp	float	$tmp220	%read{291,748} %write{291,748}
+temp	float	$tmp221	%read{291,748} %write{291,748}
+temp	float	$tmp222	%read{291,748} %write{291,748}
+temp	float	$tmp223	%read{291,748} %write{291,748}
+temp	float	$tmp224	%read{291,748} %write{291,748}
+temp	float	$tmp225	%read{291,748} %write{291,748}
+temp	float	$tmp226	%read{291,748} %write{291,748}
+temp	float	$tmp227	%read{291,748} %write{291,748}
+temp	float	$tmp228	%read{291,748} %write{291,748}
+temp	int	$tmp229	%read{291,748} %write{291,748}
+temp	int	$tmp230	%read{291,748} %write{291,748}
+temp	int	$tmp231	%read{291,748} %write{291,748}
+temp	int	$tmp232	%read{291,748} %write{291,748}
+temp	int	$tmp233	%read{291,748} %write{291,748}
+temp	int	$tmp234	%read{291,748} %write{291,748}
+temp	int	$tmp235	%read{291,748} %write{291,748}
+temp	int	$tmp236	%read{291,748} %write{291,748}
+temp	int	$tmp237	%read{291,748} %write{291,748}
+temp	vector	$tmp238	%read{291,748} %write{291,748}
+temp	vector	$tmp239	%read{291,748} %write{291,748}
+temp	vector	$tmp240	%read{291,748} %write{291,748}
+temp	vector	$tmp241	%read{291,748} %write{291,748}
+temp	vector	$tmp242	%read{291,748} %write{291,748}
+temp	vector	$tmp243	%read{291,748} %write{291,748}
+temp	float	$tmp244	%read{291,748} %write{291,748}
+temp	float	$tmp245	%read{291,748} %write{291,748}
+temp	float	$tmp246	%read{291,748} %write{291,748}
+temp	float	$tmp247	%read{291,748} %write{291,748}
+temp	float	$tmp248	%read{291,748} %write{291,748}
+temp	float	$tmp249	%read{291,748} %write{291,748}
+temp	float	$tmp250	%read{291,748} %write{291,748}
+temp	float	$tmp251	%read{291,748} %write{291,748}
+temp	float	$tmp252	%read{291,748} %write{291,748}
+temp	float	$tmp253	%read{291,748} %write{291,748}
+temp	float	$tmp254	%read{291,748} %write{291,748}
+temp	float	$tmp255	%read{291,748} %write{291,748}
+temp	float	$tmp256	%read{291,748} %write{291,748}
+temp	float	$tmp257	%read{291,748} %write{291,748}
+temp	float	$tmp258	%read{291,748} %write{291,748}
+temp	float	$tmp259	%read{291,748} %write{291,748}
+temp	int	$tmp260	%read{291,748} %write{291,748}
+temp	int	$tmp261	%read{291,748} %write{291,748}
+temp	int	$tmp262	%read{291,748} %write{291,748}
+temp	int	$tmp263	%read{291,748} %write{291,748}
+temp	int	$tmp264	%read{291,748} %write{291,748}
+temp	int	$tmp265	%read{291,748} %write{291,748}
+temp	int	$tmp266	%read{291,748} %write{291,748}
+temp	int	$tmp267	%read{291,748} %write{291,748}
+temp	int	$tmp268	%read{291,748} %write{291,748}
+temp	vector	$tmp269	%read{291,748} %write{291,748}
+temp	vector	$tmp270	%read{291,748} %write{291,748}
+temp	vector	$tmp271	%read{291,748} %write{291,748}
+temp	vector	$tmp272	%read{291,748} %write{291,748}
+temp	vector	$tmp273	%read{291,748} %write{291,748}
+temp	vector	$tmp274	%read{291,748} %write{291,748}
+temp	float	$tmp275	%read{291,748} %write{291,748}
+temp	float	$tmp276	%read{291,748} %write{291,748}
+temp	float	$tmp277	%read{291,748} %write{291,748}
+temp	float	$tmp278	%read{291,748} %write{291,748}
+temp	float	$tmp279	%read{291,748} %write{291,748}
+temp	float	$tmp280	%read{291,748} %write{291,748}
+temp	float	$tmp281	%read{291,748} %write{291,748}
+temp	float	$tmp282	%read{291,748} %write{291,748}
+temp	float	$tmp283	%read{291,748} %write{291,748}
+temp	float	$tmp284	%read{291,748} %write{291,748}
+temp	float	$tmp285	%read{291,748} %write{291,748}
+temp	float	$tmp286	%read{291,748} %write{291,748}
+temp	float	$tmp287	%read{291,748} %write{291,748}
+temp	float	$tmp288	%read{291,748} %write{291,748}
+temp	float	$tmp289	%read{291,748} %write{291,748}
+temp	float	$tmp290	%read{291,748} %write{291,748}
+temp	int	$tmp291	%read{291,748} %write{291,748}
+temp	int	$tmp292	%read{291,748} %write{291,748}
+temp	int	$tmp293	%read{291,748} %write{291,748}
+temp	int	$tmp294	%read{291,748} %write{291,748}
+temp	int	$tmp295	%read{291,748} %write{291,748}
+temp	int	$tmp296	%read{291,748} %write{291,748}
+temp	int	$tmp297	%read{291,748} %write{291,748}
+temp	int	$tmp298	%read{291,748} %write{291,748}
+temp	int	$tmp299	%read{291,748} %write{291,748}
+temp	vector	$tmp300	%read{291,748} %write{291,748}
+temp	vector	$tmp301	%read{291,748} %write{291,748}
+temp	vector	$tmp302	%read{291,748} %write{291,748}
+temp	vector	$tmp303	%read{291,748} %write{291,748}
+temp	vector	$tmp304	%read{291,748} %write{291,748}
+temp	vector	$tmp305	%read{291,748} %write{291,748}
+temp	float	$tmp306	%read{291,748} %write{291,748}
+temp	float	$tmp307	%read{291,748} %write{291,748}
+temp	float	$tmp308	%read{291,748} %write{291,748}
+temp	float	$tmp309	%read{291,748} %write{291,748}
+temp	float	$tmp310	%read{291,748} %write{291,748}
+temp	float	$tmp311	%read{291,748} %write{291,748}
+temp	float	$tmp312	%read{291,748} %write{291,748}
+temp	float	$tmp313	%read{291,748} %write{291,748}
+temp	float	$tmp314	%read{291,748} %write{291,748}
+temp	float	$tmp315	%read{291,748} %write{291,748}
+temp	float	$tmp316	%read{291,748} %write{291,748}
+const	float	$const60	28		%read{631,716} %write{2147483647,-1}
+temp	float	$tmp317	%read{291,748} %write{291,748}
+temp	float	$tmp318	%read{291,748} %write{291,748}
+temp	float	$tmp319	%read{291,748} %write{291,748}
+temp	int	$tmp320	%read{291,748} %write{291,748}
+temp	float	$tmp321	%read{291,748} %write{291,748}
+temp	float	$tmp322	%read{291,748} %write{291,748}
+temp	float	$tmp323	%read{291,748} %write{291,748}
+temp	float	$tmp324	%read{291,748} %write{291,748}
+temp	float	$tmp325	%read{291,748} %write{291,748}
+temp	float	$tmp326	%read{291,748} %write{291,748}
+temp	float	$tmp327	%read{291,748} %write{291,748}
+temp	float	$tmp328	%read{291,748} %write{291,748}
+temp	float	$tmp329	%read{291,748} %write{291,748}
+temp	float	$tmp330	%read{291,748} %write{291,748}
+temp	float	$tmp331	%read{291,748} %write{291,748}
+temp	float	$tmp332	%read{291,748} %write{291,748}
+temp	float	$tmp333	%read{291,748} %write{291,748}
+temp	float	$tmp334	%read{291,748} %write{291,748}
+temp	float	$tmp335	%read{291,748} %write{291,748}
+temp	float	$tmp336	%read{291,748} %write{291,748}
+temp	float	$tmp337	%read{291,748} %write{291,748}
+temp	float	$tmp338	%read{291,748} %write{291,748}
+temp	float	$tmp339	%read{291,748} %write{291,748}
+temp	float	$tmp340	%read{291,748} %write{291,748}
+temp	float	$tmp341	%read{291,748} %write{291,748}
+temp	float	$tmp342	%read{291,748} %write{291,748}
+temp	float	$tmp343	%read{291,748} %write{291,748}
+temp	float	$tmp344	%read{291,748} %write{291,748}
+temp	float	$tmp345	%read{291,748} %write{291,748}
+temp	float	$tmp346	%read{291,748} %write{291,748}
+temp	float	$tmp347	%read{291,748} %write{291,748}
+temp	float	$tmp348	%read{291,748} %write{291,748}
+temp	float	$tmp349	%read{291,748} %write{291,748}
+temp	float	$tmp350	%read{291,748} %write{291,748}
+temp	float	$tmp351	%read{291,748} %write{291,748}
+temp	float	$tmp352	%read{291,748} %write{291,748}
+temp	float	$tmp353	%read{291,748} %write{291,748}
+temp	float	$tmp354	%read{291,748} %write{291,748}
+temp	float	$tmp355	%read{291,748} %write{291,748}
+temp	float	$tmp356	%read{291,748} %write{291,748}
+temp	float	$tmp357	%read{291,748} %write{291,748}
+temp	float	$tmp358	%read{291,748} %write{291,748}
+temp	float	$tmp359	%read{291,748} %write{291,748}
+temp	float	$tmp360	%read{291,748} %write{291,748}
+temp	float	$tmp361	%read{291,748} %write{291,748}
+temp	float	$tmp362	%read{291,748} %write{291,748}
+temp	float	$tmp363	%read{291,748} %write{291,748}
+temp	float	$tmp364	%read{291,748} %write{291,748}
+temp	float	$tmp365	%read{291,748} %write{291,748}
+temp	float	$tmp366	%read{291,748} %write{291,748}
+temp	float	$tmp367	%read{291,748} %write{291,748}
+temp	float	$tmp368	%read{291,748} %write{291,748}
+temp	float	$tmp369	%read{291,748} %write{291,748}
+temp	float	$tmp370	%read{291,748} %write{291,748}
+temp	float	$tmp371	%read{291,748} %write{291,748}
+temp	float	$tmp372	%read{291,748} %write{291,748}
+temp	float	$tmp373	%read{291,748} %write{291,748}
+temp	float	$tmp374	%read{291,748} %write{291,748}
+temp	float	$tmp375	%read{291,748} %write{291,748}
+temp	float	$tmp376	%read{291,748} %write{291,748}
+temp	float	$tmp377	%read{291,748} %write{291,748}
+temp	float	$tmp378	%read{291,748} %write{291,748}
+temp	float	$tmp379	%read{291,748} %write{291,748}
+temp	float	$tmp380	%read{291,748} %write{291,748}
+temp	float	$tmp381	%read{291,748} %write{291,748}
+temp	float	$tmp382	%read{291,748} %write{291,748}
+temp	float	$tmp383	%read{291,748} %write{291,748}
+temp	float	$tmp384	%read{291,748} %write{291,748}
+temp	float	$tmp385	%read{291,748} %write{291,748}
+temp	float	$tmp386	%read{291,748} %write{291,748}
+temp	float	$tmp387	%read{291,748} %write{291,748}
+temp	float	$tmp388	%read{291,748} %write{291,748}
+temp	int	$tmp389	%read{2147483647,-1} %write{291,748}
+code Vector
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:30
+#     int Dimensions = 2, /* 2 or 3 */
+	assign		Vector P 	%filename{"source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl"} %line{30} %argrw{"wr"}
+code ___main___
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:65
+#  // MJA precomputing this table instead of calculating it as done in the 
+	assign		perm $const1 	%filename{"source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl"} %line{65} %argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:88
+#  
+	assign		permMod12 $const2 	%line{88} %argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:97
+# 
+	aassign		grad2 $const4 $const3 	%line{97} %argrw{"wrr"}
+	aassign		grad2 $const6 $const5 	%argrw{"wrr"}
+	aassign		grad2 $const8 $const7 	%argrw{"wrr"}
+	aassign		grad2 $const10 $const9 	%argrw{"wrr"}
+	aassign		grad2 $const12 $const11 	%argrw{"wrr"}
+	aassign		grad2 $const14 $const13 	%argrw{"wrr"}
+	aassign		grad2 $const16 $const15 	%argrw{"wrr"}
+	aassign		grad2 $const18 $const17 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:121
+# 
+	aassign		grad3u $const4 $const19 	%line{121} %argrw{"wrr"}
+	aassign		grad3u $const6 $const20 	%argrw{"wrr"}
+	aassign		grad3u $const8 $const21 	%argrw{"wrr"}
+	aassign		grad3u $const10 $const22 	%argrw{"wrr"}
+	aassign		grad3u $const12 $const23 	%argrw{"wrr"}
+	aassign		grad3u $const14 $const24 	%argrw{"wrr"}
+	aassign		grad3u $const16 $const25 	%argrw{"wrr"}
+	aassign		grad3u $const18 $const26 	%argrw{"wrr"}
+	aassign		grad3u $const28 $const27 	%argrw{"wrr"}
+	aassign		grad3u $const30 $const29 	%argrw{"wrr"}
+	aassign		grad3u $const32 $const31 	%argrw{"wrr"}
+	aassign		grad3u $const34 $const33 	%argrw{"wrr"}
+	aassign		grad3u $const36 $const35 	%argrw{"wrr"}
+	aassign		grad3u $const38 $const37 	%argrw{"wrr"}
+	aassign		grad3u $const39 $const33 	%argrw{"wrr"}
+	aassign		grad3u $const40 $const29 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:132
+# 
+	aassign		grad3v $const4 $const35 	%line{132} %argrw{"wrr"}
+	aassign		grad3v $const6 $const31 	%argrw{"wrr"}
+	aassign		grad3v $const8 $const37 	%argrw{"wrr"}
+	aassign		grad3v $const10 $const27 	%argrw{"wrr"}
+	aassign		grad3v $const12 $const41 	%argrw{"wrr"}
+	aassign		grad3v $const14 $const33 	%argrw{"wrr"}
+	aassign		grad3v $const16 $const42 	%argrw{"wrr"}
+	aassign		grad3v $const18 $const29 	%argrw{"wrr"}
+	aassign		grad3v $const28 $const17 	%argrw{"wrr"}
+	aassign		grad3v $const30 $const9 	%argrw{"wrr"}
+	aassign		grad3v $const32 $const11 	%argrw{"wrr"}
+	aassign		grad3v $const34 $const3 	%argrw{"wrr"}
+	aassign		grad3v $const36 $const19 	%argrw{"wrr"}
+	aassign		grad3v $const38 $const21 	%argrw{"wrr"}
+	aassign		grad3v $const39 $const24 	%argrw{"wrr"}
+	aassign		grad3v $const40 $const26 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:168
+# 
+	assign		angle Angle 	%line{168} %argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:170
+#  float pwHL = pow(Lacunarity,-H);
+	assign		pwr $const43 	%line{170} %argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:171
+#  
+	neg		$tmp41 H 	%line{171} %argrw{"wr"}
+	pow		pwHL Lacunarity $tmp41 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:184
+#   float x = Vector[0]*Scale;
+	le		$tmp42 Dimensions $const8 	%line{184} %argrw{"wrr"}
+	if		$tmp42 279 749 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:185
+#   float y = Vector[1]*Scale;
+	compref		$tmp43 Vector $const4 	%line{185} %argrw{"wrr"}
+	mul		___326_x $tmp43 Scale 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:186
+#   float dnoise_dx;
+	compref		$tmp44 Vector $const6 	%line{186} %argrw{"wrr"}
+	mul		___326_y $tmp44 Scale 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:190
+#   cos_t = cos( angle );
+	sin		___326_sin_t angle 	%line{190} %argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:191
+#   for(int p=0; p < Octaves; p++){
+	cos		___326_cos_t angle 	%line{191} %argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:192
+#    float n0, n1, n2; /* Noise contributions from the three simplex corners */
+	for		$tmp45 57 58 277 279 	%line{192} %argrw{"r"}
+	assign		___327_p $const4 	%argrw{"wr"}
+	lt		$tmp45 ___327_p Octaves 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:197
+#    float xs = x + s;
+	add		$tmp46 ___326_x ___326_y 	%line{197} %argrw{"wrr"}
+	mul		___328_s $tmp46 $const44 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:198
+#    float ys = y + s;
+	add		___328_xs ___326_x ___328_s 	%line{198} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:199
+#    int i = FASTFLOOR( xs );
+	add		___328_ys ___326_y ___328_s 	%line{199} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:200
+#    int j = FASTFLOOR( ys );
+	functioncall	$const45 69 	%line{200} %argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:25
+#  return x < xi ? xi-1 : xi;
+	assign		___322_xi ___328_xs 	%line{25} %argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:26
+# }
+	lt		$tmp47 ___328_xs ___322_xi 	%line{26} %argrw{"wrr"}
+	if		$tmp47 67 68 	%argrw{"r"}
+	sub		___328_i ___322_xi $const6 	%argrw{"wrr"}
+	assign		___328_i ___322_xi 	%argrw{"wr"}
+	return
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:201
+# 
+	functioncall	$const45 76 	%line{201} %argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:25
+#  return x < xi ? xi-1 : xi;
+	assign		___322_xi ___328_ys 	%line{25} %argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:26
+# }
+	lt		$tmp48 ___328_ys ___322_xi 	%line{26} %argrw{"wrr"}
+	if		$tmp48 74 75 	%argrw{"r"}
+	sub		___328_j ___322_xi $const6 	%argrw{"wrr"}
+	assign		___328_j ___322_xi 	%argrw{"wr"}
+	return
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:203
+#    float X0 = i - t; /* Unskew the cell origin back to (x,y) space */
+	add		$tmp49 ___328_i ___328_j 	%line{203} %argrw{"wrr"}
+	assign		$tmp50 $tmp49 	%argrw{"wr"}
+	mul		___328_t $tmp50 $const46 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:204
+#    float Y0 = j - t;
+	assign		$tmp51 ___328_i 	%line{204} %argrw{"wr"}
+	sub		___328_X0 $tmp51 ___328_t 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:205
+#    float x0 = x - X0; /* The x,y distances from the cell origin */
+	assign		$tmp52 ___328_j 	%line{205} %argrw{"wr"}
+	sub		___328_Y0 $tmp52 ___328_t 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:206
+#    float y0 = y - Y0;
+	sub		___328_x0 ___326_x ___328_X0 	%line{206} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:207
+# 
+	sub		___328_y0 ___326_y ___328_Y0 	%line{207} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:212
+#    else { i1 = 0; j1 = 1; }      /* upper triangle, YX order: (0,0)->(0,1)->(1,1) */
+	gt		$tmp53 ___328_x0 ___328_y0 	%line{212} %argrw{"wrr"}
+	if		$tmp53 89 91 	%argrw{"r"}
+	assign		___328_i1 $const6 	%argrw{"wr"}
+	assign		___328_j1 $const4 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:213
+# 
+	assign		___328_i1 $const4 	%line{213} %argrw{"wr"}
+	assign		___328_j1 $const6 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:218
+#    float y1 = y0 - j1 + G2;
+	assign		$tmp55 ___328_i1 	%line{218} %argrw{"wr"}
+	sub		$tmp54 ___328_x0 $tmp55 	%argrw{"wrr"}
+	add		___328_x1 $tmp54 $const46 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:219
+#    float x2 = x0 - 1.0 + 2.0 * G2; /* Offsets for last corner in (x,y) unskewed coords */
+	assign		$tmp57 ___328_j1 	%line{219} %argrw{"wr"}
+	sub		$tmp56 ___328_y0 $tmp57 	%argrw{"wrr"}
+	add		___328_y1 $tmp56 $const46 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:220
+#    float y2 = y0 - 1.0 + 2.0 * G2;
+	sub		$tmp58 ___328_x0 $const43 	%line{220} %argrw{"wrr"}
+	mul		$tmp59 $const47 $const46 	%argrw{"wrr"}
+	add		___328_x2 $tmp58 $tmp59 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:221
+# 
+	sub		$tmp60 ___328_y0 $const43 	%line{221} %argrw{"wrr"}
+	mul		$tmp61 $const47 $const46 	%argrw{"wrr"}
+	add		___328_y2 $tmp60 $tmp61 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:224
+#    int jj = j & 255;
+	bitand		___328_ii ___328_i $const48 	%line{224} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:225
+# 
+	bitand		___328_jj ___328_j $const48 	%line{225} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:228
+#    float t20, t40;
+	mul		$tmp62 ___328_x0 ___328_x0 	%line{228} %argrw{"wrr"}
+	sub		$tmp63 $const49 $tmp62 	%argrw{"wrr"}
+	mul		$tmp64 ___328_y0 ___328_y0 	%argrw{"wrr"}
+	sub		___328_t0 $tmp63 $tmp64 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:230
+#    else {
+	lt		$tmp65 ___328_t0 $const50 	%line{230} %argrw{"wrr"}
+	if		$tmp65 117 138 	%argrw{"r"}
+	assign		___328_gy0 $const50 	%argrw{"wr"}
+	assign		___328_gx0 ___328_gy0 	%argrw{"wr"}
+	assign		___328_n0 ___328_gx0 	%argrw{"wr"}
+	assign		___328_t0 ___328_n0 	%argrw{"wr"}
+	assign		___328_t20 ___328_t0 	%argrw{"wr"}
+	assign		___328_t40 ___328_t20 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:232
+#      t20 = t0 * t0;
+	aref		$tmp66 perm ___328_jj 	%line{232} %argrw{"wrr"}
+	add		$tmp67 ___328_ii $tmp66 	%argrw{"wrr"}
+	aref		$tmp68 perm $tmp67 	%argrw{"wrr"}
+	functioncall	$const51 132 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:142
+#   float gx0 = grad2[h][0];
+	bitand		___323_h $tmp68 $const18 	%line{142} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:143
+#   float gy0 = grad2[h][1];
+	aref		$tmp69 grad2 ___323_h 	%line{143} %argrw{"wrr"}
+	compref		___323_gx0 $tmp69 $const4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:144
+#   gx = cos_t * gx0 - sin_t * gy0;
+	aref		$tmp70 grad2 ___323_h 	%line{144} %argrw{"wrr"}
+	compref		___323_gy0 $tmp70 $const6 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:145
+#   gy = sin_t * gx0 + cos_t * gy0;
+	mul		$tmp71 ___326_cos_t ___323_gx0 	%line{145} %argrw{"wrr"}
+	mul		$tmp72 ___326_sin_t ___323_gy0 	%argrw{"wrr"}
+	sub		___328_gx0 $tmp71 $tmp72 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:146
+#   return;
+	mul		$tmp73 ___326_sin_t ___323_gx0 	%line{146} %argrw{"wrr"}
+	mul		$tmp74 ___326_cos_t ___323_gy0 	%argrw{"wrr"}
+	add		___328_gy0 $tmp73 $tmp74 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:233
+#      t40 = t20 * t20;
+	mul		___328_t20 ___328_t0 ___328_t0 	%line{233} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:234
+#      n0 = t40 * ( gx0 * x0 + gy0 * y0 );
+	mul		___328_t40 ___328_t20 ___328_t20 	%line{234} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:235
+#    }
+	mul		$tmp75 ___328_gx0 ___328_x0 	%line{235} %argrw{"wrr"}
+	mul		$tmp76 ___328_gy0 ___328_y0 	%argrw{"wrr"}
+	add		$tmp77 $tmp75 $tmp76 	%argrw{"wrr"}
+	mul		___328_n0 ___328_t40 $tmp77 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:238
+#    float t21, t41;
+	mul		$tmp78 ___328_x1 ___328_x1 	%line{238} %argrw{"wrr"}
+	sub		$tmp79 $const49 $tmp78 	%argrw{"wrr"}
+	mul		$tmp80 ___328_y1 ___328_y1 	%argrw{"wrr"}
+	sub		___328_t1 $tmp79 $tmp80 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:240
+#    else {
+	lt		$tmp81 ___328_t1 $const50 	%line{240} %argrw{"wrr"}
+	if		$tmp81 150 173 	%argrw{"r"}
+	assign		___328_gy1 $const50 	%argrw{"wr"}
+	assign		___328_gx1 ___328_gy1 	%argrw{"wr"}
+	assign		___328_n1 ___328_gx1 	%argrw{"wr"}
+	assign		___328_t1 ___328_n1 	%argrw{"wr"}
+	assign		___328_t41 ___328_t1 	%argrw{"wr"}
+	assign		___328_t21 ___328_t41 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:242
+#      t21 = t1 * t1;
+	add		$tmp82 ___328_ii ___328_i1 	%line{242} %argrw{"wrr"}
+	add		$tmp83 ___328_jj ___328_j1 	%argrw{"wrr"}
+	aref		$tmp84 perm $tmp83 	%argrw{"wrr"}
+	add		$tmp85 $tmp82 $tmp84 	%argrw{"wrr"}
+	aref		$tmp86 perm $tmp85 	%argrw{"wrr"}
+	functioncall	$const51 167 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:142
+#   float gx0 = grad2[h][0];
+	bitand		___323_h $tmp86 $const18 	%line{142} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:143
+#   float gy0 = grad2[h][1];
+	aref		$tmp87 grad2 ___323_h 	%line{143} %argrw{"wrr"}
+	compref		___323_gx0 $tmp87 $const4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:144
+#   gx = cos_t * gx0 - sin_t * gy0;
+	aref		$tmp88 grad2 ___323_h 	%line{144} %argrw{"wrr"}
+	compref		___323_gy0 $tmp88 $const6 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:145
+#   gy = sin_t * gx0 + cos_t * gy0;
+	mul		$tmp89 ___326_cos_t ___323_gx0 	%line{145} %argrw{"wrr"}
+	mul		$tmp90 ___326_sin_t ___323_gy0 	%argrw{"wrr"}
+	sub		___328_gx1 $tmp89 $tmp90 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:146
+#   return;
+	mul		$tmp91 ___326_sin_t ___323_gx0 	%line{146} %argrw{"wrr"}
+	mul		$tmp92 ___326_cos_t ___323_gy0 	%argrw{"wrr"}
+	add		___328_gy1 $tmp91 $tmp92 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:243
+#      t41 = t21 * t21;
+	mul		___328_t21 ___328_t1 ___328_t1 	%line{243} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:244
+#      n1 = t41 * ( gx1 * x1 + gy1 * y1 );
+	mul		___328_t41 ___328_t21 ___328_t21 	%line{244} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:245
+#    }
+	mul		$tmp93 ___328_gx1 ___328_x1 	%line{245} %argrw{"wrr"}
+	mul		$tmp94 ___328_gy1 ___328_y1 	%argrw{"wrr"}
+	add		$tmp95 $tmp93 $tmp94 	%argrw{"wrr"}
+	mul		___328_n1 ___328_t41 $tmp95 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:248
+#    float t22, t42;
+	mul		$tmp96 ___328_x2 ___328_x2 	%line{248} %argrw{"wrr"}
+	sub		$tmp97 $const49 $tmp96 	%argrw{"wrr"}
+	mul		$tmp98 ___328_y2 ___328_y2 	%argrw{"wrr"}
+	sub		___328_t2 $tmp97 $tmp98 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:250
+#    else {
+	lt		$tmp99 ___328_t2 $const50 	%line{250} %argrw{"wrr"}
+	if		$tmp99 185 208 	%argrw{"r"}
+	assign		___328_gy2 $const50 	%argrw{"wr"}
+	assign		___328_gx2 ___328_gy2 	%argrw{"wr"}
+	assign		___328_n2 ___328_gx2 	%argrw{"wr"}
+	assign		___328_t2 ___328_n2 	%argrw{"wr"}
+	assign		___328_t22 ___328_t2 	%argrw{"wr"}
+	assign		___328_t42 ___328_t22 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:252
+#      t22 = t2 * t2;
+	add		$tmp100 ___328_ii $const6 	%line{252} %argrw{"wrr"}
+	add		$tmp101 ___328_jj $const6 	%argrw{"wrr"}
+	aref		$tmp102 perm $tmp101 	%argrw{"wrr"}
+	add		$tmp103 $tmp100 $tmp102 	%argrw{"wrr"}
+	aref		$tmp104 perm $tmp103 	%argrw{"wrr"}
+	functioncall	$const51 202 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:142
+#   float gx0 = grad2[h][0];
+	bitand		___323_h $tmp104 $const18 	%line{142} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:143
+#   float gy0 = grad2[h][1];
+	aref		$tmp105 grad2 ___323_h 	%line{143} %argrw{"wrr"}
+	compref		___323_gx0 $tmp105 $const4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:144
+#   gx = cos_t * gx0 - sin_t * gy0;
+	aref		$tmp106 grad2 ___323_h 	%line{144} %argrw{"wrr"}
+	compref		___323_gy0 $tmp106 $const6 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:145
+#   gy = sin_t * gx0 + cos_t * gy0;
+	mul		$tmp107 ___326_cos_t ___323_gx0 	%line{145} %argrw{"wrr"}
+	mul		$tmp108 ___326_sin_t ___323_gy0 	%argrw{"wrr"}
+	sub		___328_gx2 $tmp107 $tmp108 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:146
+#   return;
+	mul		$tmp109 ___326_sin_t ___323_gx0 	%line{146} %argrw{"wrr"}
+	mul		$tmp110 ___326_cos_t ___323_gy0 	%argrw{"wrr"}
+	add		___328_gy2 $tmp109 $tmp110 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:253
+#      t42 = t22 * t22;
+	mul		___328_t22 ___328_t2 ___328_t2 	%line{253} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:254
+#      n2 = t42 * ( gx2 * x2 + gy2 * y2 );
+	mul		___328_t42 ___328_t22 ___328_t22 	%line{254} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:255
+#    }
+	mul		$tmp111 ___328_gx2 ___328_x2 	%line{255} %argrw{"wrr"}
+	mul		$tmp112 ___328_gy2 ___328_y2 	%argrw{"wrr"}
+	add		$tmp113 $tmp111 $tmp112 	%argrw{"wrr"}
+	mul		___328_n2 ___328_t42 $tmp113 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:260
+# 
+	add		$tmp114 ___328_n0 ___328_n1 	%line{260} %argrw{"wrr"}
+	add		$tmp115 $tmp114 ___328_n2 	%argrw{"wrr"}
+	mul		___328_noise $const52 $tmp115 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:264
+#    /*  A straight, unoptimised calculation would be like:
+	neq		$tmp116 Advection $const4 	%line{264} %argrw{"wrr"}
+	if		$tmp116 272 277 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:273
+#     dnoise_dx = temp0 * x0;
+	mul		$tmp117 ___328_t20 ___328_t0 	%line{273} %argrw{"wrr"}
+	mul		$tmp118 ___328_gx0 ___328_x0 	%argrw{"wrr"}
+	mul		$tmp119 ___328_gy0 ___328_y0 	%argrw{"wrr"}
+	add		$tmp120 $tmp118 $tmp119 	%argrw{"wrr"}
+	mul		___334_temp0 $tmp117 $tmp120 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:274
+#     dnoise_dy = temp0 * y0;
+	mul		___326_dnoise_dx ___334_temp0 ___328_x0 	%line{274} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:275
+#     float temp1 = t21 * t1 * ( gx1 * x1 + gy1 * y1 );
+	mul		___326_dnoise_dy ___334_temp0 ___328_y0 	%line{275} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:276
+#     dnoise_dx += temp1 * x1;
+	mul		$tmp121 ___328_t21 ___328_t1 	%line{276} %argrw{"wrr"}
+	mul		$tmp122 ___328_gx1 ___328_x1 	%argrw{"wrr"}
+	mul		$tmp123 ___328_gy1 ___328_y1 	%argrw{"wrr"}
+	add		$tmp124 $tmp122 $tmp123 	%argrw{"wrr"}
+	mul		___334_temp1 $tmp121 $tmp124 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:277
+#     dnoise_dy += temp1 * y1;
+	mul		$tmp125 ___334_temp1 ___328_x1 	%line{277} %argrw{"wrr"}
+	add		___326_dnoise_dx ___326_dnoise_dx $tmp125 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:278
+#     float temp2 = t22 * t2 * ( gx2* x2 + gy2 * y2 );
+	mul		$tmp126 ___334_temp1 ___328_y1 	%line{278} %argrw{"wrr"}
+	add		___326_dnoise_dy ___326_dnoise_dy $tmp126 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:279
+#     dnoise_dx += temp2 * x2;
+	mul		$tmp127 ___328_t22 ___328_t2 	%line{279} %argrw{"wrr"}
+	mul		$tmp128 ___328_gx2 ___328_x2 	%argrw{"wrr"}
+	mul		$tmp129 ___328_gy2 ___328_y2 	%argrw{"wrr"}
+	add		$tmp130 $tmp128 $tmp129 	%argrw{"wrr"}
+	mul		___334_temp2 $tmp127 $tmp130 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:280
+#     dnoise_dy += temp2 * y2;
+	mul		$tmp131 ___334_temp2 ___328_x2 	%line{280} %argrw{"wrr"}
+	add		___326_dnoise_dx ___326_dnoise_dx $tmp131 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:281
+#     dnoise_dx *= -8.0;
+	mul		$tmp132 ___334_temp2 ___328_y2 	%line{281} %argrw{"wrr"}
+	add		___326_dnoise_dy ___326_dnoise_dy $tmp132 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:282
+#     dnoise_dy *= -8.0;
+	mul		___326_dnoise_dx ___326_dnoise_dx $const53 	%line{282} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:283
+#     dnoise_dx += t40 * gx0 + t41 * gx1 + t42 * gx2;
+	mul		___326_dnoise_dy ___326_dnoise_dy $const53 	%line{283} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:284
+#     dnoise_dy += t40 * gy0 + t41 * gy1 + t42 * gy2;
+	mul		$tmp133 ___328_t40 ___328_gx0 	%line{284} %argrw{"wrr"}
+	mul		$tmp134 ___328_t41 ___328_gx1 	%argrw{"wrr"}
+	add		$tmp135 $tmp133 $tmp134 	%argrw{"wrr"}
+	mul		$tmp136 ___328_t42 ___328_gx2 	%argrw{"wrr"}
+	add		$tmp137 $tmp135 $tmp136 	%argrw{"wrr"}
+	add		___326_dnoise_dx ___326_dnoise_dx $tmp137 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:285
+#     dnoise_dx *= 70.0; /* Scale derivative to match the noise scaling */ // MJA scale factor was 40
+	mul		$tmp138 ___328_t40 ___328_gy0 	%line{285} %argrw{"wrr"}
+	mul		$tmp139 ___328_t41 ___328_gy1 	%argrw{"wrr"}
+	add		$tmp140 $tmp138 $tmp139 	%argrw{"wrr"}
+	mul		$tmp141 ___328_t42 ___328_gy2 	%argrw{"wrr"}
+	add		$tmp142 $tmp140 $tmp141 	%argrw{"wrr"}
+	add		___326_dnoise_dy ___326_dnoise_dy $tmp142 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:286
+#     dnoise_dy *= 70.0;
+	mul		___326_dnoise_dx ___326_dnoise_dx $const52 	%line{286} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:287
+#     
+	mul		___326_dnoise_dy ___326_dnoise_dy $const52 	%line{287} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:289
+#     float advect_y = -Advection * dnoise_dy;
+	neg		$tmp143 Advection 	%line{289} %argrw{"wr"}
+	mul		___334_advect_x $tmp143 ___326_dnoise_dx 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:290
+#     Fac += noise * pwr;
+	neg		$tmp144 Advection 	%line{290} %argrw{"wr"}
+	mul		___334_advect_y $tmp144 ___326_dnoise_dy 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:291
+# 
+	mul		$tmp145 ___328_noise pwr 	%line{291} %argrw{"wrr"}
+	add		Fac Fac $tmp145 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:293
+#     x *= Lacunarity;
+	mul		pwr pwr pwHL 	%line{293} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:294
+#     y *= Lacunarity;
+	mul		___326_x ___326_x Lacunarity 	%line{294} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:295
+# 
+	mul		___326_y ___326_y Lacunarity 	%line{295} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:297
+#     y += advect_y*pow(Lacunarity,p);
+	assign		$tmp147 ___327_p 	%line{297} %argrw{"wr"}
+	pow		$tmp146 Lacunarity $tmp147 	%argrw{"wrr"}
+	mul		$tmp148 ___334_advect_x $tmp146 	%argrw{"wrr"}
+	add		___326_x ___326_x $tmp148 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:298
+#     angle *= Lacunarity;
+	assign		$tmp150 ___327_p 	%line{298} %argrw{"wr"}
+	pow		$tmp149 Lacunarity $tmp150 	%argrw{"wrr"}
+	mul		$tmp151 ___334_advect_y $tmp149 	%argrw{"wrr"}
+	add		___326_y ___326_y $tmp151 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:299
+#    }else{
+	mul		angle angle Lacunarity 	%line{299} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:301
+#     pwr *= pwHL;
+	mul		$tmp152 ___328_noise pwr 	%line{301} %argrw{"wrr"}
+	add		Fac Fac $tmp152 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:302
+#     x *= Lacunarity;
+	mul		pwr pwr pwHL 	%line{302} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:303
+#     y *= Lacunarity;
+	mul		___326_x ___326_x Lacunarity 	%line{303} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:304
+#    }
+	mul		___326_y ___326_y Lacunarity 	%line{304} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:192
+#    float n0, n1, n2; /* Noise contributions from the three simplex corners */
+	assign		$tmp153 ___327_p 	%line{192} %argrw{"wr"}
+	add		___327_p ___327_p $const6 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:307
+#  /* Skewing factors for 3D simplex grid:
+	ge		$tmp154 Dimensions $const10 	%line{307} %argrw{"wrr"}
+	if		$tmp154 749 749 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:314
+#   float y=Vector[1]*Scale;
+	compref		$tmp155 Vector $const4 	%line{314} %argrw{"wrr"}
+	mul		___336_x $tmp155 Scale 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:315
+#   float z=Vector[2]*Scale;
+	compref		$tmp156 Vector $const6 	%line{315} %argrw{"wrr"}
+	mul		___336_y $tmp156 Scale 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:316
+#         float dnoise_dx;
+	compref		$tmp157 Vector $const8 	%line{316} %argrw{"wrr"}
+	mul		___336_z $tmp157 Scale 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:326
+#   cos_t = cos( angle );
+	sin		___336_sin_t angle 	%line{326} %argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:327
+#   for(int p=0; p < Octaves; p++){
+	cos		___336_cos_t angle 	%line{327} %argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:328
+#    /* Skew the input space to determine which simplex cell we're in */
+	for		$tmp158 291 292 747 749 	%line{328} %argrw{"r"}
+	assign		___337_p $const4 	%argrw{"wr"}
+	lt		$tmp158 ___337_p Octaves 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:330
+#    float xs = x+s;
+	add		$tmp159 ___336_x ___336_y 	%line{330} %argrw{"wrr"}
+	add		$tmp160 $tmp159 ___336_z 	%argrw{"wrr"}
+	mul		___338_s $tmp160 $const54 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:331
+#    float ys = y+s;
+	add		___338_xs ___336_x ___338_s 	%line{331} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:332
+#    float zs = z+s;
+	add		___338_ys ___336_y ___338_s 	%line{332} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:333
+#    int i = FASTFLOOR(xs);
+	add		___338_zs ___336_z ___338_s 	%line{333} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:334
+#    int j = FASTFLOOR(ys);
+	functioncall	$const45 305 	%line{334} %argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:25
+#  return x < xi ? xi-1 : xi;
+	assign		___322_xi ___338_xs 	%line{25} %argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:26
+# }
+	lt		$tmp161 ___338_xs ___322_xi 	%line{26} %argrw{"wrr"}
+	if		$tmp161 303 304 	%argrw{"r"}
+	sub		___338_i ___322_xi $const6 	%argrw{"wrr"}
+	assign		___338_i ___322_xi 	%argrw{"wr"}
+	return
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:335
+#    int k = FASTFLOOR(zs);
+	functioncall	$const45 312 	%line{335} %argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:25
+#  return x < xi ? xi-1 : xi;
+	assign		___322_xi ___338_ys 	%line{25} %argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:26
+# }
+	lt		$tmp162 ___338_ys ___322_xi 	%line{26} %argrw{"wrr"}
+	if		$tmp162 310 311 	%argrw{"r"}
+	sub		___338_j ___322_xi $const6 	%argrw{"wrr"}
+	assign		___338_j ___322_xi 	%argrw{"wr"}
+	return
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:336
+# 
+	functioncall	$const45 319 	%line{336} %argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:25
+#  return x < xi ? xi-1 : xi;
+	assign		___322_xi ___338_zs 	%line{25} %argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:26
+# }
+	lt		$tmp163 ___338_zs ___322_xi 	%line{26} %argrw{"wrr"}
+	if		$tmp163 317 318 	%argrw{"r"}
+	sub		___338_k ___322_xi $const6 	%argrw{"wrr"}
+	assign		___338_k ___322_xi 	%argrw{"wr"}
+	return
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:338
+#    float X0 = i-t; /* Unskew the cell origin back to (x,y,z) space */
+	add		$tmp164 ___338_i ___338_j 	%line{338} %argrw{"wrr"}
+	add		$tmp165 $tmp164 ___338_k 	%argrw{"wrr"}
+	assign		$tmp166 $tmp165 	%argrw{"wr"}
+	mul		___338_t $tmp166 $const55 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:339
+#    float Y0 = j-t;
+	assign		$tmp167 ___338_i 	%line{339} %argrw{"wr"}
+	sub		___338_X0 $tmp167 ___338_t 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:340
+#    float Z0 = k-t;
+	assign		$tmp168 ___338_j 	%line{340} %argrw{"wr"}
+	sub		___338_Y0 $tmp168 ___338_t 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:341
+#    float x0 = x-X0; /* The x,y,z distances from the cell origin */
+	assign		$tmp169 ___338_k 	%line{341} %argrw{"wr"}
+	sub		___338_Z0 $tmp169 ___338_t 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:342
+#    float y0 = y-Y0;
+	sub		___338_x0 ___336_x ___338_X0 	%line{342} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:343
+#    float z0 = z-Z0;
+	sub		___338_y0 ___336_y ___338_Y0 	%line{343} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:344
+# 
+	sub		___338_z0 ___336_z ___338_Z0 	%line{344} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:352
+#      if(y0>=z0)
+	ge		$tmp170 ___338_x0 ___338_y0 	%line{352} %argrw{"wrr"}
+	if		$tmp170 356 378 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:353
+#     { i1=1; j1=0; k1=0; i2=1; j2=1; k2=0; } /* X Y Z order */
+	ge		$tmp171 ___338_y0 ___338_z0 	%line{353} %argrw{"wrr"}
+	if		$tmp171 342 356 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:354
+#     else if(x0>=z0) { i1=1; j1=0; k1=0; i2=1; j2=0; k2=1; } /* X Z Y order */
+	assign		___338_i1 $const6 	%line{354} %argrw{"wr"}
+	assign		___338_j1 $const4 	%argrw{"wr"}
+	assign		___338_k1 $const4 	%argrw{"wr"}
+	assign		___338_i2 $const6 	%argrw{"wr"}
+	assign		___338_j2 $const6 	%argrw{"wr"}
+	assign		___338_k2 $const4 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:355
+#     else { i1=0; j1=0; k1=1; i2=1; j2=0; k2=1; } /* Z X Y order */
+	ge		$tmp172 ___338_x0 ___338_z0 	%line{355} %argrw{"wrr"}
+	if		$tmp172 350 356 	%argrw{"r"}
+	assign		___338_i1 $const6 	%argrw{"wr"}
+	assign		___338_j1 $const4 	%argrw{"wr"}
+	assign		___338_k1 $const4 	%argrw{"wr"}
+	assign		___338_i2 $const6 	%argrw{"wr"}
+	assign		___338_j2 $const4 	%argrw{"wr"}
+	assign		___338_k2 $const6 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:356
+#      }
+	assign		___338_i1 $const4 	%line{356} %argrw{"wr"}
+	assign		___338_j1 $const4 	%argrw{"wr"}
+	assign		___338_k1 $const6 	%argrw{"wr"}
+	assign		___338_i2 $const6 	%argrw{"wr"}
+	assign		___338_j2 $const4 	%argrw{"wr"}
+	assign		___338_k2 $const6 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:359
+#      else if(x0 < z0) { i1=0; j1=1; k1=0; i2=0; j2=1; k2=1; } /* Y Z X order */
+	lt		$tmp173 ___338_y0 ___338_z0 	%line{359} %argrw{"wrr"}
+	if		$tmp173 364 378 	%argrw{"r"}
+	assign		___338_i1 $const4 	%argrw{"wr"}
+	assign		___338_j1 $const4 	%argrw{"wr"}
+	assign		___338_k1 $const6 	%argrw{"wr"}
+	assign		___338_i2 $const4 	%argrw{"wr"}
+	assign		___338_j2 $const6 	%argrw{"wr"}
+	assign		___338_k2 $const6 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:360
+#      else { i1=0; j1=1; k1=0; i2=1; j2=1; k2=0; } /* Y X Z order */
+	lt		$tmp174 ___338_x0 ___338_z0 	%line{360} %argrw{"wrr"}
+	if		$tmp174 372 378 	%argrw{"r"}
+	assign		___338_i1 $const4 	%argrw{"wr"}
+	assign		___338_j1 $const6 	%argrw{"wr"}
+	assign		___338_k1 $const4 	%argrw{"wr"}
+	assign		___338_i2 $const4 	%argrw{"wr"}
+	assign		___338_j2 $const6 	%argrw{"wr"}
+	assign		___338_k2 $const6 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:361
+#    }
+	assign		___338_i1 $const4 	%line{361} %argrw{"wr"}
+	assign		___338_j1 $const6 	%argrw{"wr"}
+	assign		___338_k1 $const4 	%argrw{"wr"}
+	assign		___338_i2 $const6 	%argrw{"wr"}
+	assign		___338_j2 $const6 	%argrw{"wr"}
+	assign		___338_k2 $const4 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:369
+#    float y1 = y0 - j1 + G3;
+	assign		$tmp176 ___338_i1 	%line{369} %argrw{"wr"}
+	sub		$tmp175 ___338_x0 $tmp176 	%argrw{"wrr"}
+	add		___338_x1 $tmp175 $const55 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:370
+#    float z1 = z0 - k1 + G3;
+	assign		$tmp178 ___338_j1 	%line{370} %argrw{"wr"}
+	sub		$tmp177 ___338_y0 $tmp178 	%argrw{"wrr"}
+	add		___338_y1 $tmp177 $const55 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:371
+#    float x2 = x0 - i2 + 2.0 * G3; /* Offsets for third corner in (x,y,z) coords */
+	assign		$tmp180 ___338_k1 	%line{371} %argrw{"wr"}
+	sub		$tmp179 ___338_z0 $tmp180 	%argrw{"wrr"}
+	add		___338_z1 $tmp179 $const55 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:372
+#    float y2 = y0 - j2 + 2.0 * G3;
+	assign		$tmp182 ___338_i2 	%line{372} %argrw{"wr"}
+	sub		$tmp181 ___338_x0 $tmp182 	%argrw{"wrr"}
+	mul		$tmp183 $const47 $const55 	%argrw{"wrr"}
+	add		___338_x2 $tmp181 $tmp183 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:373
+#    float z2 = z0 - k2 + 2.0 * G3;
+	assign		$tmp185 ___338_j2 	%line{373} %argrw{"wr"}
+	sub		$tmp184 ___338_y0 $tmp185 	%argrw{"wrr"}
+	mul		$tmp186 $const47 $const55 	%argrw{"wrr"}
+	add		___338_y2 $tmp184 $tmp186 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:374
+#    float x3 = x0 - 1.0 + 3.0 * G3; /* Offsets for last corner in (x,y,z) coords */
+	assign		$tmp188 ___338_k2 	%line{374} %argrw{"wr"}
+	sub		$tmp187 ___338_z0 $tmp188 	%argrw{"wrr"}
+	mul		$tmp189 $const47 $const55 	%argrw{"wrr"}
+	add		___338_z2 $tmp187 $tmp189 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:375
+#    float y3 = y0 - 1.0 + 3.0 * G3;
+	sub		$tmp190 ___338_x0 $const43 	%line{375} %argrw{"wrr"}
+	mul		$tmp191 $const56 $const55 	%argrw{"wrr"}
+	add		___338_x3 $tmp190 $tmp191 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:376
+#    float z3 = z0 - 1.0 + 3.0 * G3;
+	sub		$tmp192 ___338_y0 $const43 	%line{376} %argrw{"wrr"}
+	mul		$tmp193 $const56 $const55 	%argrw{"wrr"}
+	add		___338_y3 $tmp192 $tmp193 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:377
+# 
+	sub		$tmp194 ___338_z0 $const43 	%line{377} %argrw{"wrr"}
+	mul		$tmp195 $const56 $const55 	%argrw{"wrr"}
+	add		___338_z3 $tmp194 $tmp195 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:380
+#    int jj = j & 255;
+	bitand		___338_ii ___338_i $const48 	%line{380} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:381
+#    int kk = k & 255;
+	bitand		___338_jj ___338_j $const48 	%line{381} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:382
+# 
+	bitand		___338_kk ___338_k $const48 	%line{382} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:385
+#    float t20, t40;
+	mul		$tmp196 ___338_x0 ___338_x0 	%line{385} %argrw{"wrr"}
+	sub		$tmp197 $const57 $tmp196 	%argrw{"wrr"}
+	mul		$tmp198 ___338_y0 ___338_y0 	%argrw{"wrr"}
+	sub		$tmp199 $tmp197 $tmp198 	%argrw{"wrr"}
+	mul		$tmp200 ___338_z0 ___338_z0 	%argrw{"wrr"}
+	sub		___338_t0 $tmp199 $tmp200 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:387
+#    else {
+	lt		$tmp201 ___338_t0 $const50 	%line{387} %argrw{"wrr"}
+	if		$tmp201 426 463 	%argrw{"r"}
+	assign		___336_gz0 $const50 	%argrw{"wr"}
+	assign		___336_gy0 ___336_gz0 	%argrw{"wr"}
+	assign		___336_gx0 ___336_gy0 	%argrw{"wr"}
+	assign		___338_t40 ___336_gx0 	%argrw{"wr"}
+	assign		___338_t20 ___338_t40 	%argrw{"wr"}
+	assign		___338_t0 ___338_t20 	%argrw{"wr"}
+	assign		___336_n0 ___338_t0 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:389
+#      t20 = t0 * t0;
+	aref		$tmp202 perm ___338_kk 	%line{389} %argrw{"wrr"}
+	add		$tmp203 ___338_jj $tmp202 	%argrw{"wrr"}
+	aref		$tmp204 perm $tmp203 	%argrw{"wrr"}
+	add		$tmp205 ___338_ii $tmp204 	%argrw{"wrr"}
+	aref		$tmp206 perm $tmp205 	%argrw{"wrr"}
+	functioncall	$const58 454 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:151
+#   float gux = grad3u[h][0];
+	bitand		___324_h $tmp206 $const40 	%line{151} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:152
+#   float guy = grad3u[h][1];
+	aref		$tmp207 grad3u ___324_h 	%line{152} %argrw{"wrr"}
+	compref		___324_gux $tmp207 $const4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:153
+#   float guz = grad3u[h][2];
+	aref		$tmp208 grad3u ___324_h 	%line{153} %argrw{"wrr"}
+	compref		___324_guy $tmp208 $const6 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:154
+#   float gvx = grad3v[h][0];
+	aref		$tmp209 grad3u ___324_h 	%line{154} %argrw{"wrr"}
+	compref		___324_guz $tmp209 $const8 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:155
+#   float gvy = grad3v[h][1];
+	aref		$tmp210 grad3v ___324_h 	%line{155} %argrw{"wrr"}
+	compref		___324_gvx $tmp210 $const4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:156
+#   float gvz = grad3v[h][2];
+	aref		$tmp211 grad3v ___324_h 	%line{156} %argrw{"wrr"}
+	compref		___324_gvy $tmp211 $const6 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:157
+#   gx = cos_t * gux + sin_t * gvx;
+	aref		$tmp212 grad3v ___324_h 	%line{157} %argrw{"wrr"}
+	compref		___324_gvz $tmp212 $const8 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:158
+#   gy = cos_t * guy + sin_t * gvy;
+	mul		$tmp213 ___336_cos_t ___324_gux 	%line{158} %argrw{"wrr"}
+	mul		$tmp214 ___336_sin_t ___324_gvx 	%argrw{"wrr"}
+	add		___336_gx0 $tmp213 $tmp214 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:159
+#   gz = cos_t * guz + sin_t * gvz;
+	mul		$tmp215 ___336_cos_t ___324_guy 	%line{159} %argrw{"wrr"}
+	mul		$tmp216 ___336_sin_t ___324_gvy 	%argrw{"wrr"}
+	add		___336_gy0 $tmp215 $tmp216 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:160
+#   return;
+	mul		$tmp217 ___336_cos_t ___324_guz 	%line{160} %argrw{"wrr"}
+	mul		$tmp218 ___336_sin_t ___324_gvz 	%argrw{"wrr"}
+	add		___336_gz0 $tmp217 $tmp218 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:390
+#      t40 = t20 * t20;
+	mul		___338_t20 ___338_t0 ___338_t0 	%line{390} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:391
+#      n0 = t40 * graddotp3( gx0, gy0, gz0, x0, y0, z0 );
+	mul		___338_t40 ___338_t20 ___338_t20 	%line{391} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:392
+#    }
+	functioncall	$const59 462 	%line{392} %argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:165
+#  }
+	mul		$tmp220 ___336_gx0 ___338_x0 	%line{165} %argrw{"wrr"}
+	mul		$tmp221 ___336_gy0 ___338_y0 	%argrw{"wrr"}
+	add		$tmp222 $tmp220 $tmp221 	%argrw{"wrr"}
+	mul		$tmp223 ___336_gz0 ___338_z0 	%argrw{"wrr"}
+	add		$tmp219 $tmp222 $tmp223 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:392
+#    }
+	mul		___336_n0 ___338_t40 $tmp219 	%line{392} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:395
+#    float t21, t41;
+	mul		$tmp224 ___338_x1 ___338_x1 	%line{395} %argrw{"wrr"}
+	sub		$tmp225 $const57 $tmp224 	%argrw{"wrr"}
+	mul		$tmp226 ___338_y1 ___338_y1 	%argrw{"wrr"}
+	sub		$tmp227 $tmp225 $tmp226 	%argrw{"wrr"}
+	mul		$tmp228 ___338_z1 ___338_z1 	%argrw{"wrr"}
+	sub		___338_t1 $tmp227 $tmp228 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:397
+#    else {
+	lt		$tmp229 ___338_t1 $const50 	%line{397} %argrw{"wrr"}
+	if		$tmp229 478 518 	%argrw{"r"}
+	assign		___336_gz1 $const50 	%argrw{"wr"}
+	assign		___336_gy1 ___336_gz1 	%argrw{"wr"}
+	assign		___336_gx1 ___336_gy1 	%argrw{"wr"}
+	assign		___338_t41 ___336_gx1 	%argrw{"wr"}
+	assign		___338_t21 ___338_t41 	%argrw{"wr"}
+	assign		___338_t1 ___338_t21 	%argrw{"wr"}
+	assign		___336_n1 ___338_t1 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:399
+#      t21 = t1 * t1;
+	add		$tmp230 ___338_ii ___338_i1 	%line{399} %argrw{"wrr"}
+	add		$tmp231 ___338_jj ___338_j1 	%argrw{"wrr"}
+	add		$tmp232 ___338_kk ___338_k1 	%argrw{"wrr"}
+	aref		$tmp233 perm $tmp232 	%argrw{"wrr"}
+	add		$tmp234 $tmp231 $tmp233 	%argrw{"wrr"}
+	aref		$tmp235 perm $tmp234 	%argrw{"wrr"}
+	add		$tmp236 $tmp230 $tmp235 	%argrw{"wrr"}
+	aref		$tmp237 perm $tmp236 	%argrw{"wrr"}
+	functioncall	$const58 509 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:151
+#   float gux = grad3u[h][0];
+	bitand		___324_h $tmp237 $const40 	%line{151} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:152
+#   float guy = grad3u[h][1];
+	aref		$tmp238 grad3u ___324_h 	%line{152} %argrw{"wrr"}
+	compref		___324_gux $tmp238 $const4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:153
+#   float guz = grad3u[h][2];
+	aref		$tmp239 grad3u ___324_h 	%line{153} %argrw{"wrr"}
+	compref		___324_guy $tmp239 $const6 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:154
+#   float gvx = grad3v[h][0];
+	aref		$tmp240 grad3u ___324_h 	%line{154} %argrw{"wrr"}
+	compref		___324_guz $tmp240 $const8 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:155
+#   float gvy = grad3v[h][1];
+	aref		$tmp241 grad3v ___324_h 	%line{155} %argrw{"wrr"}
+	compref		___324_gvx $tmp241 $const4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:156
+#   float gvz = grad3v[h][2];
+	aref		$tmp242 grad3v ___324_h 	%line{156} %argrw{"wrr"}
+	compref		___324_gvy $tmp242 $const6 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:157
+#   gx = cos_t * gux + sin_t * gvx;
+	aref		$tmp243 grad3v ___324_h 	%line{157} %argrw{"wrr"}
+	compref		___324_gvz $tmp243 $const8 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:158
+#   gy = cos_t * guy + sin_t * gvy;
+	mul		$tmp244 ___336_cos_t ___324_gux 	%line{158} %argrw{"wrr"}
+	mul		$tmp245 ___336_sin_t ___324_gvx 	%argrw{"wrr"}
+	add		___336_gx1 $tmp244 $tmp245 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:159
+#   gz = cos_t * guz + sin_t * gvz;
+	mul		$tmp246 ___336_cos_t ___324_guy 	%line{159} %argrw{"wrr"}
+	mul		$tmp247 ___336_sin_t ___324_gvy 	%argrw{"wrr"}
+	add		___336_gy1 $tmp246 $tmp247 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:160
+#   return;
+	mul		$tmp248 ___336_cos_t ___324_guz 	%line{160} %argrw{"wrr"}
+	mul		$tmp249 ___336_sin_t ___324_gvz 	%argrw{"wrr"}
+	add		___336_gz1 $tmp248 $tmp249 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:400
+#      t41 = t21 * t21;
+	mul		___338_t21 ___338_t1 ___338_t1 	%line{400} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:401
+#      n1 = t41 * graddotp3( gx1, gy1, gz1, x1, y1, z1 );
+	mul		___338_t41 ___338_t21 ___338_t21 	%line{401} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:402
+#    }
+	functioncall	$const59 517 	%line{402} %argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:165
+#  }
+	mul		$tmp251 ___336_gx1 ___338_x1 	%line{165} %argrw{"wrr"}
+	mul		$tmp252 ___336_gy1 ___338_y1 	%argrw{"wrr"}
+	add		$tmp253 $tmp251 $tmp252 	%argrw{"wrr"}
+	mul		$tmp254 ___336_gz1 ___338_z1 	%argrw{"wrr"}
+	add		$tmp250 $tmp253 $tmp254 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:402
+#    }
+	mul		___336_n1 ___338_t41 $tmp250 	%line{402} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:405
+#    float t22, t42;
+	mul		$tmp255 ___338_x2 ___338_x2 	%line{405} %argrw{"wrr"}
+	sub		$tmp256 $const57 $tmp255 	%argrw{"wrr"}
+	mul		$tmp257 ___338_y2 ___338_y2 	%argrw{"wrr"}
+	sub		$tmp258 $tmp256 $tmp257 	%argrw{"wrr"}
+	mul		$tmp259 ___338_z2 ___338_z2 	%argrw{"wrr"}
+	sub		___338_t2 $tmp258 $tmp259 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:407
+#    else {
+	lt		$tmp260 ___338_t2 $const50 	%line{407} %argrw{"wrr"}
+	if		$tmp260 533 573 	%argrw{"r"}
+	assign		___336_gz2 $const50 	%argrw{"wr"}
+	assign		___336_gy2 ___336_gz2 	%argrw{"wr"}
+	assign		___336_gx2 ___336_gy2 	%argrw{"wr"}
+	assign		___338_t42 ___336_gx2 	%argrw{"wr"}
+	assign		___338_t22 ___338_t42 	%argrw{"wr"}
+	assign		___338_t2 ___338_t22 	%argrw{"wr"}
+	assign		___336_n2 ___338_t2 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:409
+#      t22 = t2 * t2;
+	add		$tmp261 ___338_ii ___338_i2 	%line{409} %argrw{"wrr"}
+	add		$tmp262 ___338_jj ___338_j2 	%argrw{"wrr"}
+	add		$tmp263 ___338_kk ___338_k2 	%argrw{"wrr"}
+	aref		$tmp264 perm $tmp263 	%argrw{"wrr"}
+	add		$tmp265 $tmp262 $tmp264 	%argrw{"wrr"}
+	aref		$tmp266 perm $tmp265 	%argrw{"wrr"}
+	add		$tmp267 $tmp261 $tmp266 	%argrw{"wrr"}
+	aref		$tmp268 perm $tmp267 	%argrw{"wrr"}
+	functioncall	$const58 564 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:151
+#   float gux = grad3u[h][0];
+	bitand		___324_h $tmp268 $const40 	%line{151} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:152
+#   float guy = grad3u[h][1];
+	aref		$tmp269 grad3u ___324_h 	%line{152} %argrw{"wrr"}
+	compref		___324_gux $tmp269 $const4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:153
+#   float guz = grad3u[h][2];
+	aref		$tmp270 grad3u ___324_h 	%line{153} %argrw{"wrr"}
+	compref		___324_guy $tmp270 $const6 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:154
+#   float gvx = grad3v[h][0];
+	aref		$tmp271 grad3u ___324_h 	%line{154} %argrw{"wrr"}
+	compref		___324_guz $tmp271 $const8 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:155
+#   float gvy = grad3v[h][1];
+	aref		$tmp272 grad3v ___324_h 	%line{155} %argrw{"wrr"}
+	compref		___324_gvx $tmp272 $const4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:156
+#   float gvz = grad3v[h][2];
+	aref		$tmp273 grad3v ___324_h 	%line{156} %argrw{"wrr"}
+	compref		___324_gvy $tmp273 $const6 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:157
+#   gx = cos_t * gux + sin_t * gvx;
+	aref		$tmp274 grad3v ___324_h 	%line{157} %argrw{"wrr"}
+	compref		___324_gvz $tmp274 $const8 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:158
+#   gy = cos_t * guy + sin_t * gvy;
+	mul		$tmp275 ___336_cos_t ___324_gux 	%line{158} %argrw{"wrr"}
+	mul		$tmp276 ___336_sin_t ___324_gvx 	%argrw{"wrr"}
+	add		___336_gx2 $tmp275 $tmp276 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:159
+#   gz = cos_t * guz + sin_t * gvz;
+	mul		$tmp277 ___336_cos_t ___324_guy 	%line{159} %argrw{"wrr"}
+	mul		$tmp278 ___336_sin_t ___324_gvy 	%argrw{"wrr"}
+	add		___336_gy2 $tmp277 $tmp278 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:160
+#   return;
+	mul		$tmp279 ___336_cos_t ___324_guz 	%line{160} %argrw{"wrr"}
+	mul		$tmp280 ___336_sin_t ___324_gvz 	%argrw{"wrr"}
+	add		___336_gz2 $tmp279 $tmp280 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:410
+#      t42 = t22 * t22;
+	mul		___338_t22 ___338_t2 ___338_t2 	%line{410} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:411
+#      n2 = t42 * graddotp3( gx2, gy2, gz2, x2, y2, z2 );
+	mul		___338_t42 ___338_t22 ___338_t22 	%line{411} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:412
+#    }
+	functioncall	$const59 572 	%line{412} %argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:165
+#  }
+	mul		$tmp282 ___336_gx2 ___338_x2 	%line{165} %argrw{"wrr"}
+	mul		$tmp283 ___336_gy2 ___338_y2 	%argrw{"wrr"}
+	add		$tmp284 $tmp282 $tmp283 	%argrw{"wrr"}
+	mul		$tmp285 ___336_gz2 ___338_z2 	%argrw{"wrr"}
+	add		$tmp281 $tmp284 $tmp285 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:412
+#    }
+	mul		___336_n2 ___338_t42 $tmp281 	%line{412} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:415
+#    float t23, t43;
+	mul		$tmp286 ___338_x3 ___338_x3 	%line{415} %argrw{"wrr"}
+	sub		$tmp287 $const57 $tmp286 	%argrw{"wrr"}
+	mul		$tmp288 ___338_y3 ___338_y3 	%argrw{"wrr"}
+	sub		$tmp289 $tmp287 $tmp288 	%argrw{"wrr"}
+	mul		$tmp290 ___338_z3 ___338_z3 	%argrw{"wrr"}
+	sub		___338_t3 $tmp289 $tmp290 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:417
+#    else {
+	lt		$tmp291 ___338_t3 $const50 	%line{417} %argrw{"wrr"}
+	if		$tmp291 588 628 	%argrw{"r"}
+	assign		___336_gz3 $const50 	%argrw{"wr"}
+	assign		___336_gy3 ___336_gz3 	%argrw{"wr"}
+	assign		___336_gx3 ___336_gy3 	%argrw{"wr"}
+	assign		___338_t43 ___336_gx3 	%argrw{"wr"}
+	assign		___338_t23 ___338_t43 	%argrw{"wr"}
+	assign		___338_t3 ___338_t23 	%argrw{"wr"}
+	assign		___336_n3 ___338_t3 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:419
+#      t23 = t3 * t3;
+	add		$tmp292 ___338_ii $const6 	%line{419} %argrw{"wrr"}
+	add		$tmp293 ___338_jj $const6 	%argrw{"wrr"}
+	add		$tmp294 ___338_kk $const6 	%argrw{"wrr"}
+	aref		$tmp295 perm $tmp294 	%argrw{"wrr"}
+	add		$tmp296 $tmp293 $tmp295 	%argrw{"wrr"}
+	aref		$tmp297 perm $tmp296 	%argrw{"wrr"}
+	add		$tmp298 $tmp292 $tmp297 	%argrw{"wrr"}
+	aref		$tmp299 perm $tmp298 	%argrw{"wrr"}
+	functioncall	$const58 619 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:151
+#   float gux = grad3u[h][0];
+	bitand		___324_h $tmp299 $const40 	%line{151} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:152
+#   float guy = grad3u[h][1];
+	aref		$tmp300 grad3u ___324_h 	%line{152} %argrw{"wrr"}
+	compref		___324_gux $tmp300 $const4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:153
+#   float guz = grad3u[h][2];
+	aref		$tmp301 grad3u ___324_h 	%line{153} %argrw{"wrr"}
+	compref		___324_guy $tmp301 $const6 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:154
+#   float gvx = grad3v[h][0];
+	aref		$tmp302 grad3u ___324_h 	%line{154} %argrw{"wrr"}
+	compref		___324_guz $tmp302 $const8 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:155
+#   float gvy = grad3v[h][1];
+	aref		$tmp303 grad3v ___324_h 	%line{155} %argrw{"wrr"}
+	compref		___324_gvx $tmp303 $const4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:156
+#   float gvz = grad3v[h][2];
+	aref		$tmp304 grad3v ___324_h 	%line{156} %argrw{"wrr"}
+	compref		___324_gvy $tmp304 $const6 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:157
+#   gx = cos_t * gux + sin_t * gvx;
+	aref		$tmp305 grad3v ___324_h 	%line{157} %argrw{"wrr"}
+	compref		___324_gvz $tmp305 $const8 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:158
+#   gy = cos_t * guy + sin_t * gvy;
+	mul		$tmp306 ___336_cos_t ___324_gux 	%line{158} %argrw{"wrr"}
+	mul		$tmp307 ___336_sin_t ___324_gvx 	%argrw{"wrr"}
+	add		___336_gx3 $tmp306 $tmp307 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:159
+#   gz = cos_t * guz + sin_t * gvz;
+	mul		$tmp308 ___336_cos_t ___324_guy 	%line{159} %argrw{"wrr"}
+	mul		$tmp309 ___336_sin_t ___324_gvy 	%argrw{"wrr"}
+	add		___336_gy3 $tmp308 $tmp309 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:160
+#   return;
+	mul		$tmp310 ___336_cos_t ___324_guz 	%line{160} %argrw{"wrr"}
+	mul		$tmp311 ___336_sin_t ___324_gvz 	%argrw{"wrr"}
+	add		___336_gz3 $tmp310 $tmp311 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:420
+#      t43 = t23 * t23;
+	mul		___338_t23 ___338_t3 ___338_t3 	%line{420} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:421
+#      n3 = t43 * graddotp3( gx3, gy3, gz3, x3, y3, z3 );
+	mul		___338_t43 ___338_t23 ___338_t23 	%line{421} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:422
+#    }
+	functioncall	$const59 627 	%line{422} %argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:165
+#  }
+	mul		$tmp313 ___336_gx3 ___338_x3 	%line{165} %argrw{"wrr"}
+	mul		$tmp314 ___336_gy3 ___338_y3 	%argrw{"wrr"}
+	add		$tmp315 $tmp313 $tmp314 	%argrw{"wrr"}
+	mul		$tmp316 ___336_gz3 ___338_z3 	%argrw{"wrr"}
+	add		$tmp312 $tmp315 $tmp316 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:422
+#    }
+	mul		___336_n3 ___338_t43 $tmp312 	%line{422} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:427
+# 
+	add		$tmp317 ___336_n0 ___336_n1 	%line{427} %argrw{"wrr"}
+	add		$tmp318 $tmp317 ___336_n2 	%argrw{"wrr"}
+	add		$tmp319 $tmp318 ___336_n3 	%argrw{"wrr"}
+	mul		___336_noise $const60 $tmp319 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:431
+#    /*  A straight, unoptimised calculation would be like:
+	neq		$tmp320 Advection $const4 	%line{431} %argrw{"wrr"}
+	if		$tmp320 741 747 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:446
+#     dnoise_dx = temp0 * x0;
+	mul		$tmp321 ___338_t20 ___338_t0 	%line{446} %argrw{"wrr"}
+	functioncall	$const59 641 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:165
+#  }
+	mul		$tmp323 ___336_gx0 ___338_x0 	%line{165} %argrw{"wrr"}
+	mul		$tmp324 ___336_gy0 ___338_y0 	%argrw{"wrr"}
+	add		$tmp325 $tmp323 $tmp324 	%argrw{"wrr"}
+	mul		$tmp326 ___336_gz0 ___338_z0 	%argrw{"wrr"}
+	add		$tmp322 $tmp325 $tmp326 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:446
+#     dnoise_dx = temp0 * x0;
+	mul		___351_temp0 $tmp321 $tmp322 	%line{446} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:447
+#     dnoise_dy = temp0 * y0;
+	mul		___336_dnoise_dx ___351_temp0 ___338_x0 	%line{447} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:448
+#     dnoise_dz = temp0 * z0;
+	mul		___336_dnoise_dy ___351_temp0 ___338_y0 	%line{448} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:449
+#     float temp1 = t21 * t1 * graddotp3( gx1, gy1, gz1, x1, y1, z1 );
+	mul		___336_dnoise_dz ___351_temp0 ___338_z0 	%line{449} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:450
+#     dnoise_dx += temp1 * x1;
+	mul		$tmp327 ___338_t21 ___338_t1 	%line{450} %argrw{"wrr"}
+	functioncall	$const59 652 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:165
+#  }
+	mul		$tmp329 ___336_gx1 ___338_x1 	%line{165} %argrw{"wrr"}
+	mul		$tmp330 ___336_gy1 ___338_y1 	%argrw{"wrr"}
+	add		$tmp331 $tmp329 $tmp330 	%argrw{"wrr"}
+	mul		$tmp332 ___336_gz1 ___338_z1 	%argrw{"wrr"}
+	add		$tmp328 $tmp331 $tmp332 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:450
+#     dnoise_dx += temp1 * x1;
+	mul		___351_temp1 $tmp327 $tmp328 	%line{450} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:451
+#     dnoise_dy += temp1 * y1;
+	mul		$tmp333 ___351_temp1 ___338_x1 	%line{451} %argrw{"wrr"}
+	add		___336_dnoise_dx ___336_dnoise_dx $tmp333 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:452
+#     dnoise_dz += temp1 * z1;
+	mul		$tmp334 ___351_temp1 ___338_y1 	%line{452} %argrw{"wrr"}
+	add		___336_dnoise_dy ___336_dnoise_dy $tmp334 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:453
+#     float temp2 = t22 * t2 * graddotp3( gx2, gy2, gz2, x2, y2, z2 );
+	mul		$tmp335 ___351_temp1 ___338_z1 	%line{453} %argrw{"wrr"}
+	add		___336_dnoise_dz ___336_dnoise_dz $tmp335 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:454
+#     dnoise_dx += temp2 * x2;
+	mul		$tmp336 ___338_t22 ___338_t2 	%line{454} %argrw{"wrr"}
+	functioncall	$const59 666 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:165
+#  }
+	mul		$tmp338 ___336_gx2 ___338_x2 	%line{165} %argrw{"wrr"}
+	mul		$tmp339 ___336_gy2 ___338_y2 	%argrw{"wrr"}
+	add		$tmp340 $tmp338 $tmp339 	%argrw{"wrr"}
+	mul		$tmp341 ___336_gz2 ___338_z2 	%argrw{"wrr"}
+	add		$tmp337 $tmp340 $tmp341 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:454
+#     dnoise_dx += temp2 * x2;
+	mul		___351_temp2 $tmp336 $tmp337 	%line{454} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:455
+#     dnoise_dy += temp2 * y2;
+	mul		$tmp342 ___351_temp2 ___338_x2 	%line{455} %argrw{"wrr"}
+	add		___336_dnoise_dx ___336_dnoise_dx $tmp342 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:456
+#     dnoise_dz += temp2 * z2;
+	mul		$tmp343 ___351_temp2 ___338_y2 	%line{456} %argrw{"wrr"}
+	add		___336_dnoise_dy ___336_dnoise_dy $tmp343 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:457
+#     float temp3 = t23 * t3 * graddotp3( gx3, gy3, gz3, x3, y3, z3 );
+	mul		$tmp344 ___351_temp2 ___338_z2 	%line{457} %argrw{"wrr"}
+	add		___336_dnoise_dz ___336_dnoise_dz $tmp344 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:458
+#     dnoise_dx += temp3 * x3;
+	mul		$tmp345 ___338_t23 ___338_t3 	%line{458} %argrw{"wrr"}
+	functioncall	$const59 680 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:165
+#  }
+	mul		$tmp347 ___336_gx3 ___338_x3 	%line{165} %argrw{"wrr"}
+	mul		$tmp348 ___336_gy3 ___338_y3 	%argrw{"wrr"}
+	add		$tmp349 $tmp347 $tmp348 	%argrw{"wrr"}
+	mul		$tmp350 ___336_gz3 ___338_z3 	%argrw{"wrr"}
+	add		$tmp346 $tmp349 $tmp350 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:458
+#     dnoise_dx += temp3 * x3;
+	mul		___351_temp3 $tmp345 $tmp346 	%line{458} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:459
+#     dnoise_dy += temp3 * y3;
+	mul		$tmp351 ___351_temp3 ___338_x3 	%line{459} %argrw{"wrr"}
+	add		___336_dnoise_dx ___336_dnoise_dx $tmp351 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:460
+#     dnoise_dz += temp3 * z3;
+	mul		$tmp352 ___351_temp3 ___338_y3 	%line{460} %argrw{"wrr"}
+	add		___336_dnoise_dy ___336_dnoise_dy $tmp352 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:461
+#     dnoise_dx *= -8.0;
+	mul		$tmp353 ___351_temp3 ___338_z3 	%line{461} %argrw{"wrr"}
+	add		___336_dnoise_dz ___336_dnoise_dz $tmp353 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:462
+#     dnoise_dy *= -8.0;
+	mul		___336_dnoise_dx ___336_dnoise_dx $const53 	%line{462} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:463
+#     dnoise_dz *= -8.0;
+	mul		___336_dnoise_dy ___336_dnoise_dy $const53 	%line{463} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:464
+#     /* This corrects a bug in the original implementation */
+	mul		___336_dnoise_dz ___336_dnoise_dz $const53 	%line{464} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:466
+#     dnoise_dy += t40 * gy0 + t41 * gy1 + t42 * gy2 + t43 * gy3;
+	mul		$tmp354 ___338_t40 ___336_gx0 	%line{466} %argrw{"wrr"}
+	mul		$tmp355 ___338_t41 ___336_gx1 	%argrw{"wrr"}
+	add		$tmp356 $tmp354 $tmp355 	%argrw{"wrr"}
+	mul		$tmp357 ___338_t42 ___336_gx2 	%argrw{"wrr"}
+	add		$tmp358 $tmp356 $tmp357 	%argrw{"wrr"}
+	mul		$tmp359 ___338_t43 ___336_gx3 	%argrw{"wrr"}
+	add		$tmp360 $tmp358 $tmp359 	%argrw{"wrr"}
+	add		___336_dnoise_dx ___336_dnoise_dx $tmp360 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:467
+#     dnoise_dz += t40 * gz0 + t41 * gz1 + t42 * gz2 + t43 * gz3;
+	mul		$tmp361 ___338_t40 ___336_gy0 	%line{467} %argrw{"wrr"}
+	mul		$tmp362 ___338_t41 ___336_gy1 	%argrw{"wrr"}
+	add		$tmp363 $tmp361 $tmp362 	%argrw{"wrr"}
+	mul		$tmp364 ___338_t42 ___336_gy2 	%argrw{"wrr"}
+	add		$tmp365 $tmp363 $tmp364 	%argrw{"wrr"}
+	mul		$tmp366 ___338_t43 ___336_gy3 	%argrw{"wrr"}
+	add		$tmp367 $tmp365 $tmp366 	%argrw{"wrr"}
+	add		___336_dnoise_dy ___336_dnoise_dy $tmp367 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:468
+#     dnoise_dx *= 28.0; /* Scale derivative to match the noise scaling */
+	mul		$tmp368 ___338_t40 ___336_gz0 	%line{468} %argrw{"wrr"}
+	mul		$tmp369 ___338_t41 ___336_gz1 	%argrw{"wrr"}
+	add		$tmp370 $tmp368 $tmp369 	%argrw{"wrr"}
+	mul		$tmp371 ___338_t42 ___336_gz2 	%argrw{"wrr"}
+	add		$tmp372 $tmp370 $tmp371 	%argrw{"wrr"}
+	mul		$tmp373 ___338_t43 ___336_gz3 	%argrw{"wrr"}
+	add		$tmp374 $tmp372 $tmp373 	%argrw{"wrr"}
+	add		___336_dnoise_dz ___336_dnoise_dz $tmp374 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:469
+#     dnoise_dy *= 28.0;
+	mul		___336_dnoise_dx ___336_dnoise_dx $const60 	%line{469} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:470
+#     dnoise_dz *= 28.0;
+	mul		___336_dnoise_dy ___336_dnoise_dy $const60 	%line{470} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:471
+# 
+	mul		___336_dnoise_dz ___336_dnoise_dz $const60 	%line{471} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:473
+#     float advect_y = -Advection * dnoise_dy;
+	neg		$tmp375 Advection 	%line{473} %argrw{"wr"}
+	mul		___351_advect_x $tmp375 ___336_dnoise_dx 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:474
+#     float advect_z = -Advection * dnoise_dz;
+	neg		$tmp376 Advection 	%line{474} %argrw{"wr"}
+	mul		___351_advect_y $tmp376 ___336_dnoise_dy 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:475
+#     Fac += noise * pwr;
+	neg		$tmp377 Advection 	%line{475} %argrw{"wr"}
+	mul		___351_advect_z $tmp377 ___336_dnoise_dz 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:476
+# 
+	mul		$tmp378 ___336_noise pwr 	%line{476} %argrw{"wrr"}
+	add		Fac Fac $tmp378 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:478
+#     x *= Lacunarity;
+	mul		pwr pwr pwHL 	%line{478} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:479
+#     y *= Lacunarity;
+	mul		___336_x ___336_x Lacunarity 	%line{479} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:480
+# 
+	mul		___336_y ___336_y Lacunarity 	%line{480} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:482
+#     y += advect_y*pow(Lacunarity,p);
+	assign		$tmp380 ___337_p 	%line{482} %argrw{"wr"}
+	pow		$tmp379 Lacunarity $tmp380 	%argrw{"wrr"}
+	mul		$tmp381 ___351_advect_x $tmp379 	%argrw{"wrr"}
+	add		___336_x ___336_x $tmp381 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:483
+#     y += advect_z*pow(Lacunarity,p);
+	assign		$tmp383 ___337_p 	%line{483} %argrw{"wr"}
+	pow		$tmp382 Lacunarity $tmp383 	%argrw{"wrr"}
+	mul		$tmp384 ___351_advect_y $tmp382 	%argrw{"wrr"}
+	add		___336_y ___336_y $tmp384 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:484
+#     angle *= Lacunarity;
+	assign		$tmp386 ___337_p 	%line{484} %argrw{"wr"}
+	pow		$tmp385 Lacunarity $tmp386 	%argrw{"wrr"}
+	mul		$tmp387 ___351_advect_z $tmp385 	%argrw{"wrr"}
+	add		___336_y ___336_y $tmp387 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:485
+#    }else{
+	mul		angle angle Lacunarity 	%line{485} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:487
+#     pwr *= pwHL;
+	mul		$tmp388 ___336_noise pwr 	%line{487} %argrw{"wrr"}
+	add		Fac Fac $tmp388 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:488
+#     x *= Lacunarity;
+	mul		pwr pwr pwHL 	%line{488} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:489
+#     y *= Lacunarity;
+	mul		___336_x ___336_x Lacunarity 	%line{489} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:490
+#     z *= Lacunarity;
+	mul		___336_y ___336_y Lacunarity 	%line{490} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:491
+#    }
+	mul		___336_z ___336_z Lacunarity 	%line{491} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MAFlowNoise/MAFlowNoise.osl:328
+#    /* Skew the input space to determine which simplex cell we're in */
+	assign		$tmp389 ___337_p 	%line{328} %argrw{"wr"}
+	add		___337_p ___337_p $const6 	%argrw{"wrr"}
+	end

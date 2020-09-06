@@ -1,0 +1,2088 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader MASimplexNoise
+param	vector	Vector	0 0 0		%read{68,461} %write{0,0} %initexpr
+param	int	Dimensions	2		%read{65,454} %write{2147483647,-1}
+param	float	Scale	1		%read{69,463} %write{2147483647,-1}
+param	float	Time	0		%read{463,463} %write{2147483647,-1}
+param	int	Octaves	1		%read{74,466} %write{2147483647,-1}
+param	float	H	1		%read{63,63} %write{2147483647,-1}
+param	float	Lacunarity	2		%read{64,869} %write{2147483647,-1}
+oparam	float	Fac	0		%read{2147483647,-1} %write{67,871}
+global	point	P	%read{0,0} %write{2147483647,-1}
+local	int	___322_xi	%read{74,871} %write{74,871}
+local	vector[12]	grad3	%read{74,453} %write{1,12}
+local	vector[32]	grad4v	%read{466,871} %write{13,44}
+local	float[32]	grad4t	%read{466,871} %write{45,45}
+local	int[512]	perm	%read{74,871} %write{46,46}
+local	int[512]	permMod12	%read{74,453} %write{47,47}
+local	float	F2	%read{74,194} %write{50,50}
+local	float	G2	%read{74,194} %write{53,53}
+local	float	F3	%read{206,453} %write{54,54}
+local	float	G3	%read{206,453} %write{55,55}
+local	float	F4	%read{466,871} %write{58,58}
+local	float	G4	%read{466,871} %write{61,61}
+local	float	pwr	%read{74,871} %write{62,871}
+local	float	pwHL	%read{74,871} %write{64,64}
+local	float	___326_xin	%read{74,194} %write{69,194}
+local	float	___326_yin	%read{74,194} %write{71,194}
+local	int	___327_p	%read{74,194} %write{73,194}
+local	float	___328_n0	%read{74,194} %write{74,194}
+local	float	___328_n1	%read{74,194} %write{74,194}
+local	float	___328_n2	%read{74,194} %write{74,194}
+local	float	___328_s	%read{74,194} %write{74,194}
+local	int	___328_i	%read{74,194} %write{74,194}
+local	int	___328_j	%read{74,194} %write{74,194}
+local	float	___328_t	%read{74,194} %write{74,194}
+local	float	___328_X0	%read{74,194} %write{74,194}
+local	float	___328_Y0	%read{74,194} %write{74,194}
+local	float	___328_x0	%read{74,194} %write{74,194}
+local	float	___328_y0	%read{74,194} %write{74,194}
+local	int	___328_i1	%read{74,194} %write{74,194}
+local	int	___328_j1	%read{74,194} %write{74,194}
+local	float	___328_x1	%read{74,194} %write{74,194}
+local	float	___328_y1	%read{74,194} %write{74,194}
+local	float	___328_x2	%read{74,194} %write{74,194}
+local	float	___328_y2	%read{74,194} %write{74,194}
+local	int	___328_ii	%read{74,194} %write{74,194}
+local	int	___328_jj	%read{74,194} %write{74,194}
+local	int	___328_gi0	%read{74,194} %write{74,194}
+local	int	___328_gi1	%read{74,194} %write{74,194}
+local	int	___328_gi2	%read{74,194} %write{74,194}
+local	float	___328_t0	%read{74,194} %write{74,194}
+local	float	___328_t1	%read{74,194} %write{74,194}
+local	float	___328_t2	%read{74,194} %write{74,194}
+local	float	___334_xin	%read{206,453} %write{199,453}
+local	float	___334_yin	%read{206,453} %write{201,453}
+local	float	___334_zin	%read{206,453} %write{203,453}
+local	int	___335_p	%read{206,453} %write{205,453}
+local	float	___336_n0	%read{206,453} %write{206,453}
+local	float	___336_n1	%read{206,453} %write{206,453}
+local	float	___336_n2	%read{206,453} %write{206,453}
+local	float	___336_n3	%read{206,453} %write{206,453}
+local	float	___336_s	%read{206,453} %write{206,453}
+local	int	___336_i	%read{206,453} %write{206,453}
+local	int	___336_j	%read{206,453} %write{206,453}
+local	int	___336_k	%read{206,453} %write{206,453}
+local	float	___336_t	%read{206,453} %write{206,453}
+local	float	___336_X0	%read{206,453} %write{206,453}
+local	float	___336_Y0	%read{206,453} %write{206,453}
+local	float	___336_Z0	%read{206,453} %write{206,453}
+local	float	___336_x0	%read{206,453} %write{206,453}
+local	float	___336_y0	%read{206,453} %write{206,453}
+local	float	___336_z0	%read{206,453} %write{206,453}
+local	int	___336_i1	%read{206,453} %write{206,453}
+local	int	___336_j1	%read{206,453} %write{206,453}
+local	int	___336_k1	%read{206,453} %write{206,453}
+local	int	___336_i2	%read{206,453} %write{206,453}
+local	int	___336_j2	%read{206,453} %write{206,453}
+local	int	___336_k2	%read{206,453} %write{206,453}
+local	float	___336_x1	%read{206,453} %write{206,453}
+local	float	___336_y1	%read{206,453} %write{206,453}
+local	float	___336_z1	%read{206,453} %write{206,453}
+local	float	___336_x2	%read{206,453} %write{206,453}
+local	float	___336_y2	%read{206,453} %write{206,453}
+local	float	___336_z2	%read{206,453} %write{206,453}
+local	float	___336_x3	%read{206,453} %write{206,453}
+local	float	___336_y3	%read{206,453} %write{206,453}
+local	float	___336_z3	%read{206,453} %write{206,453}
+local	int	___336_ii	%read{206,453} %write{206,453}
+local	int	___336_jj	%read{206,453} %write{206,453}
+local	int	___336_kk	%read{206,453} %write{206,453}
+local	int	___336_gi0	%read{206,453} %write{206,453}
+local	int	___336_gi1	%read{206,453} %write{206,453}
+local	int	___336_gi2	%read{206,453} %write{206,453}
+local	int	___336_gi3	%read{206,453} %write{206,453}
+local	float	___336_t0	%read{206,453} %write{206,453}
+local	float	___336_t1	%read{206,453} %write{206,453}
+local	float	___336_t2	%read{206,453} %write{206,453}
+local	float	___336_t3	%read{206,453} %write{206,453}
+local	float	___349_x	%read{466,871} %write{458,871}
+local	float	___349_y	%read{466,871} %write{460,871}
+local	float	___349_z	%read{466,871} %write{462,871}
+local	float	___349_w	%read{466,871} %write{463,871}
+local	int	___350_p	%read{466,871} %write{465,871}
+local	float	___351_n0	%read{466,871} %write{466,871}
+local	float	___351_n1	%read{466,871} %write{466,871}
+local	float	___351_n2	%read{466,871} %write{466,871}
+local	float	___351_n3	%read{466,871} %write{466,871}
+local	float	___351_n4	%read{466,871} %write{466,871}
+local	float	___351_s	%read{466,871} %write{466,871}
+local	int	___351_i	%read{466,871} %write{466,871}
+local	int	___351_j	%read{466,871} %write{466,871}
+local	int	___351_k	%read{466,871} %write{466,871}
+local	int	___351_l	%read{466,871} %write{466,871}
+local	float	___351_t	%read{466,871} %write{466,871}
+local	float	___351_X0	%read{466,871} %write{466,871}
+local	float	___351_Y0	%read{466,871} %write{466,871}
+local	float	___351_Z0	%read{466,871} %write{466,871}
+local	float	___351_W0	%read{466,871} %write{466,871}
+local	float	___351_x0	%read{466,871} %write{466,871}
+local	float	___351_y0	%read{466,871} %write{466,871}
+local	float	___351_z0	%read{466,871} %write{466,871}
+local	float	___351_w0	%read{466,871} %write{466,871}
+local	int	___351_rankx	%read{466,871} %write{466,871}
+local	int	___351_ranky	%read{466,871} %write{466,871}
+local	int	___351_rankz	%read{466,871} %write{466,871}
+local	int	___351_rankw	%read{466,871} %write{466,871}
+local	int	___351_i1	%read{466,871} %write{466,871}
+local	int	___351_j1	%read{466,871} %write{466,871}
+local	int	___351_k1	%read{466,871} %write{466,871}
+local	int	___351_l1	%read{466,871} %write{466,871}
+local	int	___351_i2	%read{466,871} %write{466,871}
+local	int	___351_j2	%read{466,871} %write{466,871}
+local	int	___351_k2	%read{466,871} %write{466,871}
+local	int	___351_l2	%read{466,871} %write{466,871}
+local	int	___351_i3	%read{466,871} %write{466,871}
+local	int	___351_j3	%read{466,871} %write{466,871}
+local	int	___351_k3	%read{466,871} %write{466,871}
+local	int	___351_l3	%read{466,871} %write{466,871}
+local	float	___351_x1	%read{466,871} %write{466,871}
+local	float	___351_y1	%read{466,871} %write{466,871}
+local	float	___351_z1	%read{466,871} %write{466,871}
+local	float	___351_w1	%read{466,871} %write{466,871}
+local	float	___351_x2	%read{466,871} %write{466,871}
+local	float	___351_y2	%read{466,871} %write{466,871}
+local	float	___351_z2	%read{466,871} %write{466,871}
+local	float	___351_w2	%read{466,871} %write{466,871}
+local	float	___351_x3	%read{466,871} %write{466,871}
+local	float	___351_y3	%read{466,871} %write{466,871}
+local	float	___351_z3	%read{466,871} %write{466,871}
+local	float	___351_w3	%read{466,871} %write{466,871}
+local	float	___351_x4	%read{466,871} %write{466,871}
+local	float	___351_y4	%read{466,871} %write{466,871}
+local	float	___351_z4	%read{466,871} %write{466,871}
+local	float	___351_w4	%read{466,871} %write{466,871}
+local	int	___351_ii	%read{466,871} %write{466,871}
+local	int	___351_jj	%read{466,871} %write{466,871}
+local	int	___351_kk	%read{466,871} %write{466,871}
+local	int	___351_ll	%read{466,871} %write{466,871}
+local	int	___351_gi0	%read{466,871} %write{466,871}
+local	int	___351_gi1	%read{466,871} %write{466,871}
+local	int	___351_gi2	%read{466,871} %write{466,871}
+local	int	___351_gi3	%read{466,871} %write{466,871}
+local	int	___351_gi4	%read{466,871} %write{466,871}
+local	float	___351_t0	%read{466,871} %write{466,871}
+local	float	___351_t1	%read{466,871} %write{466,871}
+local	float	___351_t2	%read{466,871} %write{466,871}
+local	float	___351_t3	%read{466,871} %write{466,871}
+local	float	___351_t4	%read{466,871} %write{466,871}
+const	vector	$const1	1 1 0		%read{1,30} %write{2147483647,-1}
+const	int	$const2	0		%read{1,848} %write{2147483647,-1}
+const	vector	$const3	-1 1 0		%read{2,34} %write{2147483647,-1}
+const	int	$const4	1		%read{2,871} %write{2147483647,-1}
+const	vector	$const5	1 -1 0		%read{3,32} %write{2147483647,-1}
+const	int	$const6	2		%read{3,853} %write{2147483647,-1}
+const	vector	$const7	-1 -1 0		%read{4,36} %write{2147483647,-1}
+const	int	$const8	3		%read{4,572} %write{2147483647,-1}
+const	vector	$const9	1 0 1		%read{5,22} %write{2147483647,-1}
+const	int	$const10	4		%read{5,454} %write{2147483647,-1}
+const	vector	$const11	-1 0 1		%read{6,26} %write{2147483647,-1}
+const	int	$const12	5		%read{6,18} %write{2147483647,-1}
+const	vector	$const13	1 0 -1		%read{7,24} %write{2147483647,-1}
+const	int	$const14	6		%read{7,19} %write{2147483647,-1}
+const	vector	$const15	-1 0 -1		%read{8,28} %write{2147483647,-1}
+const	int	$const16	7		%read{8,20} %write{2147483647,-1}
+const	vector	$const17	0 1 1		%read{9,14} %write{2147483647,-1}
+const	int	$const18	8		%read{9,21} %write{2147483647,-1}
+const	vector	$const19	0 -1 1		%read{10,18} %write{2147483647,-1}
+const	int	$const20	9		%read{10,22} %write{2147483647,-1}
+const	vector	$const21	0 1 -1		%read{11,16} %write{2147483647,-1}
+const	int	$const22	10		%read{11,23} %write{2147483647,-1}
+const	vector	$const23	0 -1 -1		%read{12,20} %write{2147483647,-1}
+const	int	$const24	11		%read{12,24} %write{2147483647,-1}
+const	int	$const25	12		%read{25,25} %write{2147483647,-1}
+const	int	$const26	13		%read{26,26} %write{2147483647,-1}
+const	int	$const27	14		%read{27,27} %write{2147483647,-1}
+const	int	$const28	15		%read{28,28} %write{2147483647,-1}
+const	int	$const29	16		%read{29,29} %write{2147483647,-1}
+const	int	$const30	17		%read{30,30} %write{2147483647,-1}
+const	int	$const31	18		%read{31,31} %write{2147483647,-1}
+const	int	$const32	19		%read{32,32} %write{2147483647,-1}
+const	int	$const33	20		%read{33,33} %write{2147483647,-1}
+const	int	$const34	21		%read{34,34} %write{2147483647,-1}
+const	int	$const35	22		%read{35,35} %write{2147483647,-1}
+const	int	$const36	23		%read{36,36} %write{2147483647,-1}
+const	vector	$const37	1 1 1		%read{37,37} %write{2147483647,-1}
+const	int	$const38	24		%read{37,37} %write{2147483647,-1}
+const	vector	$const39	1 1 -1		%read{38,38} %write{2147483647,-1}
+const	int	$const40	25		%read{38,38} %write{2147483647,-1}
+const	vector	$const41	1 -1 1		%read{39,39} %write{2147483647,-1}
+const	int	$const42	26		%read{39,39} %write{2147483647,-1}
+const	vector	$const43	1 -1 -1		%read{40,40} %write{2147483647,-1}
+const	int	$const44	27		%read{40,40} %write{2147483647,-1}
+const	vector	$const45	-1 1 1		%read{41,41} %write{2147483647,-1}
+const	int	$const46	28		%read{41,41} %write{2147483647,-1}
+const	vector	$const47	-1 1 -1		%read{42,42} %write{2147483647,-1}
+const	int	$const48	29		%read{42,42} %write{2147483647,-1}
+const	vector	$const49	-1 -1 1		%read{43,43} %write{2147483647,-1}
+const	int	$const50	30		%read{43,43} %write{2147483647,-1}
+const	vector	$const51	-1 -1 -1		%read{44,44} %write{2147483647,-1}
+const	int	$const52	31		%read{44,44} %write{2147483647,-1}
+const	float[32]	$const53	1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 0 0 0 0 0 0 0 0 		%read{45,45} %write{2147483647,-1}
+const	int[512]	$const54	151 160 137 91 90 15 131 13 201 95 96 53 194 233 7 225 140 36 103 30 69 142 8 99 37 240 21 10 23 190 6 148 247 120 234 75 0 26 197 62 94 252 219 203 117 35 11 32 57 177 33 88 237 149 56 87 174 20 125 136 171 168 68 175 74 165 71 134 139 48 27 166 77 146 158 231 83 111 229 122 60 211 133 230 220 105 92 41 55 46 245 40 244 102 143 54 65 25 63 161 1 216 80 73 209 76 132 187 208 89 18 169 200 196 135 130 116 188 159 86 164 100 109 198 173 186 3 64 52 217 226 250 124 123 5 202 38 147 118 126 255 82 85 212 207 206 59 227 47 16 58 17 182 189 28 42 223 183 170 213 119 248 152 2 44 154 163 70 221 153 101 155 167 43 172 9 129 22 39 253 19 98 108 110 79 113 224 232 178 185 112 104 218 246 97 228 251 34 242 193 238 210 144 12 191 179 162 241 81 51 145 235 249 14 239 107 49 192 214 31 181 199 106 157 184 84 204 176 115 121 50 45 127 4 150 254 138 236 205 93 222 114 67 29 24 72 243 141 128 195 78 66 215 61 156 180 151 160 137 91 90 15 131 13 201 95 96 53 194 233 7 225 140 36 103 30 69 142 8 99 37 240 21 10 23 190 6 148 247 120 234 75 0 26 197 62 94 252 219 203 117 35 11 32 57 177 33 88 237 149 56 87 174 20 125 136 171 168 68 175 74 165 71 134 139 48 27 166 77 146 158 231 83 111 229 122 60 211 133 230 220 105 92 41 55 46 245 40 244 102 143 54 65 25 63 161 1 216 80 73 209 76 132 187 208 89 18 169 200 196 135 130 116 188 159 86 164 100 109 198 173 186 3 64 52 217 226 250 124 123 5 202 38 147 118 126 255 82 85 212 207 206 59 227 47 16 58 17 182 189 28 42 223 183 170 213 119 248 152 2 44 154 163 70 221 153 101 155 167 43 172 9 129 22 39 253 19 98 108 110 79 113 224 232 178 185 112 104 218 246 97 228 251 34 242 193 238 210 144 12 191 179 162 241 81 51 145 235 249 14 239 107 49 192 214 31 181 199 106 157 184 84 204 176 115 121 50 45 127 4 150 254 138 236 205 93 222 114 67 29 24 72 243 141 128 195 78 66 215 61 156 180 		%read{46,46} %write{2147483647,-1}
+const	int[512]	$const55	7 4 5 7 6 3 11 1 9 11 0 5 2 5 7 9 8 0 7 6 9 10 8 3 1 0 9 10 11 10 6 4 7 0 6 3 0 2 5 2 10 0 3 11 9 11 11 8 9 9 9 4 9 5 8 3 6 8 5 4 3 0 8 7 2 9 11 2 7 0 3 10 5 2 2 3 11 3 1 2 0 7 1 2 4 9 8 5 7 10 5 4 4 6 11 6 5 1 3 5 1 0 8 1 5 4 0 7 4 5 6 1 8 4 3 10 8 8 3 2 8 4 1 6 5 6 3 4 4 1 10 10 4 3 5 10 2 3 10 6 3 10 1 8 3 2 11 11 11 4 10 5 2 9 4 6 7 3 2 9 11 8 8 2 8 10 7 10 5 9 5 11 11 7 4 9 9 10 3 1 7 2 0 2 7 5 8 4 10 5 4 8 2 6 1 0 11 10 2 1 10 6 0 0 11 11 6 1 9 3 1 7 9 2 11 11 1 0 10 7 1 7 10 1 4 0 0 8 7 1 2 9 7 4 6 2 6 8 1 9 6 6 7 5 0 0 3 9 8 3 6 6 11 1 0 0 7 4 5 7 6 3 11 1 9 11 0 5 2 5 7 9 8 0 7 6 9 10 8 3 1 0 9 10 11 10 6 4 7 0 6 3 0 2 5 2 10 0 3 11 9 11 11 8 9 9 9 4 9 5 8 3 6 8 5 4 3 0 8 7 2 9 11 2 7 0 3 10 5 2 2 3 11 3 1 2 0 7 1 2 4 9 8 5 7 10 5 4 4 6 11 6 5 1 3 5 1 0 8 1 5 4 0 7 4 5 6 1 8 4 3 10 8 8 3 2 8 4 1 6 5 6 3 4 4 1 10 10 4 3 5 10 2 3 10 6 3 10 1 8 3 2 11 11 11 4 10 5 2 9 4 6 7 3 2 9 11 8 8 2 8 10 7 10 5 9 5 11 11 7 4 9 9 10 3 1 7 2 0 2 7 5 8 4 10 5 4 8 2 6 1 0 11 10 2 1 10 6 0 0 11 11 6 1 9 3 1 7 9 2 11 11 1 0 10 7 1 7 10 1 4 0 0 8 7 1 2 9 7 4 6 2 6 8 1 9 6 6 7 5 0 0 3 9 8 3 6 6 11 1 0 0 		%read{47,47} %write{2147483647,-1}
+const	float	$const56	0.5		%read{50,170} %write{2147483647,-1}
+temp	float	$tmp45	%read{49,49} %write{48,48}
+const	float	$const57	3		%read{48,650} %write{2147483647,-1}
+const	float	$const58	1		%read{49,661} %write{2147483647,-1}
+temp	float	$tmp46	%read{50,50} %write{49,49}
+temp	float	$tmp47	%read{52,52} %write{51,51}
+temp	float	$tmp48	%read{53,53} %write{52,52}
+const	float	$const59	6		%read{53,55} %write{2147483647,-1}
+temp	float	$tmp49	%read{57,57} %write{56,56}
+const	float	$const60	5		%read{56,60} %write{2147483647,-1}
+temp	float	$tmp50	%read{58,58} %write{57,57}
+const	float	$const61	4		%read{58,662} %write{2147483647,-1}
+temp	float	$tmp51	%read{60,60} %write{59,59}
+temp	float	$tmp52	%read{61,61} %write{60,60}
+const	float	$const62	20		%read{61,61} %write{2147483647,-1}
+temp	float	$tmp53	%read{64,64} %write{63,63}
+temp	int	$tmp54	%read{66,66} %write{65,65}
+temp	float	$tmp55	%read{69,69} %write{68,68}
+temp	float	$tmp56	%read{71,71} %write{70,70}
+temp	int	$tmp57	%read{72,194} %write{73,194}
+temp	float	$tmp58	%read{74,194} %write{74,194}
+temp	float	$tmp59	%read{74,194} %write{74,194}
+const	string	$const63	"fastfloor"		%read{78,496} %write{2147483647,-1}
+temp	int	$tmp60	%read{74,194} %write{74,194}
+temp	float	$tmp61	%read{74,194} %write{74,194}
+temp	int	$tmp62	%read{74,194} %write{74,194}
+temp	int	$tmp63	%read{74,194} %write{74,194}
+temp	float	$tmp64	%read{74,194} %write{74,194}
+temp	float	$tmp65	%read{74,194} %write{74,194}
+temp	float	$tmp66	%read{74,194} %write{74,194}
+temp	int	$tmp67	%read{74,194} %write{74,194}
+temp	float	$tmp68	%read{74,194} %write{74,194}
+temp	float	$tmp69	%read{74,194} %write{74,194}
+temp	float	$tmp70	%read{74,194} %write{74,194}
+temp	float	$tmp71	%read{74,194} %write{74,194}
+temp	float	$tmp72	%read{74,194} %write{74,194}
+const	float	$const64	2		%read{115,634} %write{2147483647,-1}
+temp	float	$tmp73	%read{74,194} %write{74,194}
+temp	float	$tmp74	%read{74,194} %write{74,194}
+temp	float	$tmp75	%read{74,194} %write{74,194}
+const	int	$const65	255		%read{120,667} %write{2147483647,-1}
+temp	int	$tmp76	%read{74,194} %write{74,194}
+temp	int	$tmp77	%read{74,194} %write{74,194}
+temp	int	$tmp78	%read{74,194} %write{74,194}
+temp	int	$tmp79	%read{74,194} %write{74,194}
+temp	int	$tmp80	%read{74,194} %write{74,194}
+temp	int	$tmp81	%read{74,194} %write{74,194}
+temp	int	$tmp82	%read{74,194} %write{74,194}
+temp	int	$tmp83	%read{74,194} %write{74,194}
+temp	int	$tmp84	%read{74,194} %write{74,194}
+temp	int	$tmp85	%read{74,194} %write{74,194}
+temp	float	$tmp86	%read{74,194} %write{74,194}
+temp	float	$tmp87	%read{74,194} %write{74,194}
+temp	float	$tmp88	%read{74,194} %write{74,194}
+temp	int	$tmp89	%read{74,194} %write{74,194}
+const	float	$const66	0		%read{141,842} %write{2147483647,-1}
+temp	float	$tmp90	%read{74,194} %write{74,194}
+temp	float	$tmp91	%read{74,194} %write{74,194}
+temp	vector	$tmp92	%read{74,194} %write{74,194}
+const	string	$const67	"dot"		%read{145,847} %write{2147483647,-1}
+temp	float	$tmp93	%read{74,194} %write{74,194}
+temp	float	$tmp94	%read{74,194} %write{74,194}
+temp	float	$tmp95	%read{74,194} %write{74,194}
+temp	float	$tmp96	%read{74,194} %write{74,194}
+temp	float	$tmp97	%read{74,194} %write{74,194}
+temp	float	$tmp98	%read{74,194} %write{74,194}
+temp	float	$tmp99	%read{74,194} %write{74,194}
+temp	int	$tmp100	%read{74,194} %write{74,194}
+temp	float	$tmp101	%read{74,194} %write{74,194}
+temp	float	$tmp102	%read{74,194} %write{74,194}
+temp	vector	$tmp103	%read{74,194} %write{74,194}
+temp	float	$tmp104	%read{74,194} %write{74,194}
+temp	float	$tmp105	%read{74,194} %write{74,194}
+temp	float	$tmp106	%read{74,194} %write{74,194}
+temp	float	$tmp107	%read{74,194} %write{74,194}
+temp	float	$tmp108	%read{74,194} %write{74,194}
+temp	float	$tmp109	%read{74,194} %write{74,194}
+temp	float	$tmp110	%read{74,194} %write{74,194}
+temp	int	$tmp111	%read{74,194} %write{74,194}
+temp	float	$tmp112	%read{74,194} %write{74,194}
+temp	float	$tmp113	%read{74,194} %write{74,194}
+temp	vector	$tmp114	%read{74,194} %write{74,194}
+temp	float	$tmp115	%read{74,194} %write{74,194}
+temp	float	$tmp116	%read{74,194} %write{74,194}
+temp	float	$tmp117	%read{74,194} %write{74,194}
+temp	float	$tmp118	%read{74,194} %write{74,194}
+const	float	$const68	70		%read{188,188} %write{2147483647,-1}
+temp	float	$tmp119	%read{74,194} %write{74,194}
+temp	float	$tmp120	%read{74,194} %write{74,194}
+temp	float	$tmp121	%read{74,194} %write{74,194}
+temp	int	$tmp122	%read{2147483647,-1} %write{74,194}
+temp	int	$tmp123	%read{196,196} %write{195,195}
+temp	float	$tmp124	%read{199,199} %write{198,198}
+temp	float	$tmp125	%read{201,201} %write{200,200}
+temp	float	$tmp126	%read{203,203} %write{202,202}
+temp	int	$tmp127	%read{204,453} %write{205,453}
+temp	float	$tmp128	%read{206,453} %write{206,453}
+temp	float	$tmp129	%read{206,453} %write{206,453}
+temp	float	$tmp130	%read{206,453} %write{206,453}
+temp	int	$tmp131	%read{206,453} %write{206,453}
+temp	float	$tmp132	%read{206,453} %write{206,453}
+temp	int	$tmp133	%read{206,453} %write{206,453}
+temp	float	$tmp134	%read{206,453} %write{206,453}
+temp	int	$tmp135	%read{206,453} %write{206,453}
+temp	int	$tmp136	%read{206,453} %write{206,453}
+temp	int	$tmp137	%read{206,453} %write{206,453}
+temp	float	$tmp138	%read{206,453} %write{206,453}
+temp	float	$tmp139	%read{206,453} %write{206,453}
+temp	float	$tmp140	%read{206,453} %write{206,453}
+temp	float	$tmp141	%read{206,453} %write{206,453}
+temp	int	$tmp142	%read{206,453} %write{206,453}
+temp	int	$tmp143	%read{206,453} %write{206,453}
+temp	int	$tmp144	%read{206,453} %write{206,453}
+temp	int	$tmp145	%read{206,453} %write{206,453}
+temp	int	$tmp146	%read{206,453} %write{206,453}
+temp	float	$tmp147	%read{206,453} %write{206,453}
+temp	float	$tmp148	%read{206,453} %write{206,453}
+temp	float	$tmp149	%read{206,453} %write{206,453}
+temp	float	$tmp150	%read{206,453} %write{206,453}
+temp	float	$tmp151	%read{206,453} %write{206,453}
+temp	float	$tmp152	%read{206,453} %write{206,453}
+temp	float	$tmp153	%read{206,453} %write{206,453}
+temp	float	$tmp154	%read{206,453} %write{206,453}
+temp	float	$tmp155	%read{206,453} %write{206,453}
+temp	float	$tmp156	%read{206,453} %write{206,453}
+temp	float	$tmp157	%read{206,453} %write{206,453}
+temp	float	$tmp158	%read{206,453} %write{206,453}
+temp	float	$tmp159	%read{206,453} %write{206,453}
+temp	float	$tmp160	%read{206,453} %write{206,453}
+temp	float	$tmp161	%read{206,453} %write{206,453}
+temp	float	$tmp162	%read{206,453} %write{206,453}
+temp	float	$tmp163	%read{206,453} %write{206,453}
+temp	float	$tmp164	%read{206,453} %write{206,453}
+temp	float	$tmp165	%read{206,453} %write{206,453}
+temp	float	$tmp166	%read{206,453} %write{206,453}
+temp	float	$tmp167	%read{206,453} %write{206,453}
+temp	int	$tmp168	%read{206,453} %write{206,453}
+temp	int	$tmp169	%read{206,453} %write{206,453}
+temp	int	$tmp170	%read{206,453} %write{206,453}
+temp	int	$tmp171	%read{206,453} %write{206,453}
+temp	int	$tmp172	%read{206,453} %write{206,453}
+temp	int	$tmp173	%read{206,453} %write{206,453}
+temp	int	$tmp174	%read{206,453} %write{206,453}
+temp	int	$tmp175	%read{206,453} %write{206,453}
+temp	int	$tmp176	%read{206,453} %write{206,453}
+temp	int	$tmp177	%read{206,453} %write{206,453}
+temp	int	$tmp178	%read{206,453} %write{206,453}
+temp	int	$tmp179	%read{206,453} %write{206,453}
+temp	int	$tmp180	%read{206,453} %write{206,453}
+temp	int	$tmp181	%read{206,453} %write{206,453}
+temp	int	$tmp182	%read{206,453} %write{206,453}
+temp	int	$tmp183	%read{206,453} %write{206,453}
+temp	int	$tmp184	%read{206,453} %write{206,453}
+temp	int	$tmp185	%read{206,453} %write{206,453}
+temp	int	$tmp186	%read{206,453} %write{206,453}
+temp	int	$tmp187	%read{206,453} %write{206,453}
+temp	int	$tmp188	%read{206,453} %write{206,453}
+temp	int	$tmp189	%read{206,453} %write{206,453}
+temp	int	$tmp190	%read{206,453} %write{206,453}
+temp	int	$tmp191	%read{206,453} %write{206,453}
+temp	int	$tmp192	%read{206,453} %write{206,453}
+const	float	$const69	0.60000002		%read{356,833} %write{2147483647,-1}
+temp	float	$tmp193	%read{206,453} %write{206,453}
+temp	float	$tmp194	%read{206,453} %write{206,453}
+temp	float	$tmp195	%read{206,453} %write{206,453}
+temp	float	$tmp196	%read{206,453} %write{206,453}
+temp	float	$tmp197	%read{206,453} %write{206,453}
+temp	int	$tmp198	%read{206,453} %write{206,453}
+temp	float	$tmp199	%read{206,453} %write{206,453}
+temp	float	$tmp200	%read{206,453} %write{206,453}
+temp	vector	$tmp201	%read{206,453} %write{206,453}
+temp	float	$tmp202	%read{206,453} %write{206,453}
+temp	float	$tmp203	%read{206,453} %write{206,453}
+temp	float	$tmp204	%read{206,453} %write{206,453}
+temp	float	$tmp205	%read{206,453} %write{206,453}
+temp	float	$tmp206	%read{206,453} %write{206,453}
+temp	float	$tmp207	%read{206,453} %write{206,453}
+temp	float	$tmp208	%read{206,453} %write{206,453}
+temp	float	$tmp209	%read{206,453} %write{206,453}
+temp	float	$tmp210	%read{206,453} %write{206,453}
+temp	float	$tmp211	%read{206,453} %write{206,453}
+temp	float	$tmp212	%read{206,453} %write{206,453}
+temp	float	$tmp213	%read{206,453} %write{206,453}
+temp	int	$tmp214	%read{206,453} %write{206,453}
+temp	float	$tmp215	%read{206,453} %write{206,453}
+temp	float	$tmp216	%read{206,453} %write{206,453}
+temp	vector	$tmp217	%read{206,453} %write{206,453}
+temp	float	$tmp218	%read{206,453} %write{206,453}
+temp	float	$tmp219	%read{206,453} %write{206,453}
+temp	float	$tmp220	%read{206,453} %write{206,453}
+temp	float	$tmp221	%read{206,453} %write{206,453}
+temp	float	$tmp222	%read{206,453} %write{206,453}
+temp	float	$tmp223	%read{206,453} %write{206,453}
+temp	float	$tmp224	%read{206,453} %write{206,453}
+temp	float	$tmp225	%read{206,453} %write{206,453}
+temp	float	$tmp226	%read{206,453} %write{206,453}
+temp	float	$tmp227	%read{206,453} %write{206,453}
+temp	float	$tmp228	%read{206,453} %write{206,453}
+temp	float	$tmp229	%read{206,453} %write{206,453}
+temp	int	$tmp230	%read{206,453} %write{206,453}
+temp	float	$tmp231	%read{206,453} %write{206,453}
+temp	float	$tmp232	%read{206,453} %write{206,453}
+temp	vector	$tmp233	%read{206,453} %write{206,453}
+temp	float	$tmp234	%read{206,453} %write{206,453}
+temp	float	$tmp235	%read{206,453} %write{206,453}
+temp	float	$tmp236	%read{206,453} %write{206,453}
+temp	float	$tmp237	%read{206,453} %write{206,453}
+temp	float	$tmp238	%read{206,453} %write{206,453}
+temp	float	$tmp239	%read{206,453} %write{206,453}
+temp	float	$tmp240	%read{206,453} %write{206,453}
+temp	float	$tmp241	%read{206,453} %write{206,453}
+temp	float	$tmp242	%read{206,453} %write{206,453}
+temp	float	$tmp243	%read{206,453} %write{206,453}
+temp	float	$tmp244	%read{206,453} %write{206,453}
+temp	float	$tmp245	%read{206,453} %write{206,453}
+temp	int	$tmp246	%read{206,453} %write{206,453}
+temp	float	$tmp247	%read{206,453} %write{206,453}
+temp	float	$tmp248	%read{206,453} %write{206,453}
+temp	vector	$tmp249	%read{206,453} %write{206,453}
+temp	float	$tmp250	%read{206,453} %write{206,453}
+temp	float	$tmp251	%read{206,453} %write{206,453}
+temp	float	$tmp252	%read{206,453} %write{206,453}
+temp	float	$tmp253	%read{206,453} %write{206,453}
+temp	float	$tmp254	%read{206,453} %write{206,453}
+temp	float	$tmp255	%read{206,453} %write{206,453}
+temp	float	$tmp256	%read{206,453} %write{206,453}
+const	float	$const70	32		%read{446,446} %write{2147483647,-1}
+temp	float	$tmp257	%read{206,453} %write{206,453}
+temp	float	$tmp258	%read{206,453} %write{206,453}
+temp	float	$tmp259	%read{206,453} %write{206,453}
+temp	float	$tmp260	%read{206,453} %write{206,453}
+temp	int	$tmp261	%read{2147483647,-1} %write{206,453}
+temp	int	$tmp262	%read{455,455} %write{454,454}
+temp	float	$tmp263	%read{458,458} %write{457,457}
+temp	float	$tmp264	%read{460,460} %write{459,459}
+temp	float	$tmp265	%read{462,462} %write{461,461}
+temp	int	$tmp266	%read{464,871} %write{465,871}
+temp	float	$tmp267	%read{466,871} %write{466,871}
+temp	float	$tmp268	%read{466,871} %write{466,871}
+temp	float	$tmp269	%read{466,871} %write{466,871}
+temp	float	$tmp270	%read{466,871} %write{466,871}
+temp	int	$tmp271	%read{466,871} %write{466,871}
+temp	float	$tmp272	%read{466,871} %write{466,871}
+temp	int	$tmp273	%read{466,871} %write{466,871}
+temp	float	$tmp274	%read{466,871} %write{466,871}
+temp	int	$tmp275	%read{466,871} %write{466,871}
+temp	float	$tmp276	%read{466,871} %write{466,871}
+temp	int	$tmp277	%read{466,871} %write{466,871}
+temp	int	$tmp278	%read{466,871} %write{466,871}
+temp	int	$tmp279	%read{466,871} %write{466,871}
+temp	int	$tmp280	%read{466,871} %write{466,871}
+temp	float	$tmp281	%read{466,871} %write{466,871}
+temp	float	$tmp282	%read{466,871} %write{466,871}
+temp	float	$tmp283	%read{466,871} %write{466,871}
+temp	float	$tmp284	%read{466,871} %write{466,871}
+temp	float	$tmp285	%read{466,871} %write{466,871}
+temp	int	$tmp286	%read{466,871} %write{466,871}
+temp	int	$tmp287	%read{2147483647,-1} %write{466,871}
+temp	int	$tmp288	%read{2147483647,-1} %write{466,871}
+temp	int	$tmp289	%read{466,871} %write{466,871}
+temp	int	$tmp290	%read{2147483647,-1} %write{466,871}
+temp	int	$tmp291	%read{2147483647,-1} %write{466,871}
+temp	int	$tmp292	%read{466,871} %write{466,871}
+temp	int	$tmp293	%read{2147483647,-1} %write{466,871}
+temp	int	$tmp294	%read{2147483647,-1} %write{466,871}
+temp	int	$tmp295	%read{466,871} %write{466,871}
+temp	int	$tmp296	%read{2147483647,-1} %write{466,871}
+temp	int	$tmp297	%read{2147483647,-1} %write{466,871}
+temp	int	$tmp298	%read{466,871} %write{466,871}
+temp	int	$tmp299	%read{2147483647,-1} %write{466,871}
+temp	int	$tmp300	%read{2147483647,-1} %write{466,871}
+temp	int	$tmp301	%read{466,871} %write{466,871}
+temp	int	$tmp302	%read{2147483647,-1} %write{466,871}
+temp	int	$tmp303	%read{2147483647,-1} %write{466,871}
+temp	int	$tmp304	%read{466,871} %write{466,871}
+temp	int	$tmp305	%read{466,871} %write{466,871}
+temp	int	$tmp306	%read{466,871} %write{466,871}
+temp	int	$tmp307	%read{466,871} %write{466,871}
+temp	int	$tmp308	%read{466,871} %write{466,871}
+temp	int	$tmp309	%read{466,871} %write{466,871}
+temp	int	$tmp310	%read{466,871} %write{466,871}
+temp	int	$tmp311	%read{466,871} %write{466,871}
+temp	int	$tmp312	%read{466,871} %write{466,871}
+temp	int	$tmp313	%read{466,871} %write{466,871}
+temp	int	$tmp314	%read{466,871} %write{466,871}
+temp	int	$tmp315	%read{466,871} %write{466,871}
+temp	float	$tmp316	%read{466,871} %write{466,871}
+temp	float	$tmp317	%read{466,871} %write{466,871}
+temp	float	$tmp318	%read{466,871} %write{466,871}
+temp	float	$tmp319	%read{466,871} %write{466,871}
+temp	float	$tmp320	%read{466,871} %write{466,871}
+temp	float	$tmp321	%read{466,871} %write{466,871}
+temp	float	$tmp322	%read{466,871} %write{466,871}
+temp	float	$tmp323	%read{466,871} %write{466,871}
+temp	float	$tmp324	%read{466,871} %write{466,871}
+temp	float	$tmp325	%read{466,871} %write{466,871}
+temp	float	$tmp326	%read{466,871} %write{466,871}
+temp	float	$tmp327	%read{466,871} %write{466,871}
+temp	float	$tmp328	%read{466,871} %write{466,871}
+temp	float	$tmp329	%read{466,871} %write{466,871}
+temp	float	$tmp330	%read{466,871} %write{466,871}
+temp	float	$tmp331	%read{466,871} %write{466,871}
+temp	float	$tmp332	%read{466,871} %write{466,871}
+temp	float	$tmp333	%read{466,871} %write{466,871}
+temp	float	$tmp334	%read{466,871} %write{466,871}
+temp	float	$tmp335	%read{466,871} %write{466,871}
+temp	float	$tmp336	%read{466,871} %write{466,871}
+temp	float	$tmp337	%read{466,871} %write{466,871}
+temp	float	$tmp338	%read{466,871} %write{466,871}
+temp	float	$tmp339	%read{466,871} %write{466,871}
+temp	float	$tmp340	%read{466,871} %write{466,871}
+temp	float	$tmp341	%read{466,871} %write{466,871}
+temp	float	$tmp342	%read{466,871} %write{466,871}
+temp	float	$tmp343	%read{466,871} %write{466,871}
+temp	float	$tmp344	%read{466,871} %write{466,871}
+temp	float	$tmp345	%read{466,871} %write{466,871}
+temp	float	$tmp346	%read{466,871} %write{466,871}
+temp	float	$tmp347	%read{466,871} %write{466,871}
+temp	float	$tmp348	%read{466,871} %write{466,871}
+temp	float	$tmp349	%read{466,871} %write{466,871}
+temp	float	$tmp350	%read{466,871} %write{466,871}
+temp	float	$tmp351	%read{466,871} %write{466,871}
+temp	float	$tmp352	%read{466,871} %write{466,871}
+temp	float	$tmp353	%read{466,871} %write{466,871}
+temp	float	$tmp354	%read{466,871} %write{466,871}
+temp	float	$tmp355	%read{466,871} %write{466,871}
+temp	int	$tmp356	%read{466,871} %write{466,871}
+temp	int	$tmp357	%read{466,871} %write{466,871}
+temp	int	$tmp358	%read{466,871} %write{466,871}
+temp	int	$tmp359	%read{466,871} %write{466,871}
+temp	int	$tmp360	%read{466,871} %write{466,871}
+temp	int	$tmp361	%read{466,871} %write{466,871}
+temp	int	$tmp362	%read{466,871} %write{466,871}
+const	int	$const71	32		%read{675,723} %write{2147483647,-1}
+temp	int	$tmp363	%read{466,871} %write{466,871}
+temp	int	$tmp364	%read{466,871} %write{466,871}
+temp	int	$tmp365	%read{466,871} %write{466,871}
+temp	int	$tmp366	%read{466,871} %write{466,871}
+temp	int	$tmp367	%read{466,871} %write{466,871}
+temp	int	$tmp368	%read{466,871} %write{466,871}
+temp	int	$tmp369	%read{466,871} %write{466,871}
+temp	int	$tmp370	%read{466,871} %write{466,871}
+temp	int	$tmp371	%read{466,871} %write{466,871}
+temp	int	$tmp372	%read{466,871} %write{466,871}
+temp	int	$tmp373	%read{466,871} %write{466,871}
+temp	int	$tmp374	%read{466,871} %write{466,871}
+temp	int	$tmp375	%read{466,871} %write{466,871}
+temp	int	$tmp376	%read{466,871} %write{466,871}
+temp	int	$tmp377	%read{466,871} %write{466,871}
+temp	int	$tmp378	%read{466,871} %write{466,871}
+temp	int	$tmp379	%read{466,871} %write{466,871}
+temp	int	$tmp380	%read{466,871} %write{466,871}
+temp	int	$tmp381	%read{466,871} %write{466,871}
+temp	int	$tmp382	%read{466,871} %write{466,871}
+temp	int	$tmp383	%read{466,871} %write{466,871}
+temp	int	$tmp384	%read{466,871} %write{466,871}
+temp	int	$tmp385	%read{466,871} %write{466,871}
+temp	int	$tmp386	%read{466,871} %write{466,871}
+temp	int	$tmp387	%read{466,871} %write{466,871}
+temp	int	$tmp388	%read{466,871} %write{466,871}
+temp	int	$tmp389	%read{466,871} %write{466,871}
+temp	int	$tmp390	%read{466,871} %write{466,871}
+temp	int	$tmp391	%read{466,871} %write{466,871}
+temp	int	$tmp392	%read{466,871} %write{466,871}
+temp	int	$tmp393	%read{466,871} %write{466,871}
+temp	int	$tmp394	%read{466,871} %write{466,871}
+temp	int	$tmp395	%read{466,871} %write{466,871}
+temp	int	$tmp396	%read{466,871} %write{466,871}
+temp	int	$tmp397	%read{466,871} %write{466,871}
+temp	int	$tmp398	%read{466,871} %write{466,871}
+temp	int	$tmp399	%read{466,871} %write{466,871}
+temp	int	$tmp400	%read{466,871} %write{466,871}
+temp	int	$tmp401	%read{466,871} %write{466,871}
+temp	int	$tmp402	%read{466,871} %write{466,871}
+temp	int	$tmp403	%read{466,871} %write{466,871}
+temp	int	$tmp404	%read{466,871} %write{466,871}
+temp	int	$tmp405	%read{466,871} %write{466,871}
+temp	int	$tmp406	%read{466,871} %write{466,871}
+temp	float	$tmp407	%read{466,871} %write{466,871}
+temp	float	$tmp408	%read{466,871} %write{466,871}
+temp	float	$tmp409	%read{466,871} %write{466,871}
+temp	float	$tmp410	%read{466,871} %write{466,871}
+temp	float	$tmp411	%read{466,871} %write{466,871}
+temp	float	$tmp412	%read{466,871} %write{466,871}
+temp	float	$tmp413	%read{466,871} %write{466,871}
+temp	int	$tmp414	%read{466,871} %write{466,871}
+temp	float	$tmp415	%read{466,871} %write{466,871}
+temp	float	$tmp416	%read{466,871} %write{466,871}
+temp	vector	$tmp417	%read{466,871} %write{466,871}
+temp	float	$tmp418	%read{466,871} %write{466,871}
+temp	float	$tmp419	%read{466,871} %write{466,871}
+temp	float	$tmp420	%read{466,871} %write{466,871}
+temp	float	$tmp421	%read{466,871} %write{466,871}
+temp	float	$tmp422	%read{466,871} %write{466,871}
+temp	float	$tmp423	%read{466,871} %write{466,871}
+temp	float	$tmp424	%read{466,871} %write{466,871}
+temp	float	$tmp425	%read{466,871} %write{466,871}
+temp	float	$tmp426	%read{466,871} %write{466,871}
+temp	float	$tmp427	%read{466,871} %write{466,871}
+temp	float	$tmp428	%read{466,871} %write{466,871}
+temp	float	$tmp429	%read{466,871} %write{466,871}
+temp	float	$tmp430	%read{466,871} %write{466,871}
+temp	float	$tmp431	%read{466,871} %write{466,871}
+temp	float	$tmp432	%read{466,871} %write{466,871}
+temp	float	$tmp433	%read{466,871} %write{466,871}
+temp	float	$tmp434	%read{466,871} %write{466,871}
+temp	int	$tmp435	%read{466,871} %write{466,871}
+temp	float	$tmp436	%read{466,871} %write{466,871}
+temp	float	$tmp437	%read{466,871} %write{466,871}
+temp	vector	$tmp438	%read{466,871} %write{466,871}
+temp	float	$tmp439	%read{466,871} %write{466,871}
+temp	float	$tmp440	%read{466,871} %write{466,871}
+temp	float	$tmp441	%read{466,871} %write{466,871}
+temp	float	$tmp442	%read{466,871} %write{466,871}
+temp	float	$tmp443	%read{466,871} %write{466,871}
+temp	float	$tmp444	%read{466,871} %write{466,871}
+temp	float	$tmp445	%read{466,871} %write{466,871}
+temp	float	$tmp446	%read{466,871} %write{466,871}
+temp	float	$tmp447	%read{466,871} %write{466,871}
+temp	float	$tmp448	%read{466,871} %write{466,871}
+temp	float	$tmp449	%read{466,871} %write{466,871}
+temp	float	$tmp450	%read{466,871} %write{466,871}
+temp	float	$tmp451	%read{466,871} %write{466,871}
+temp	float	$tmp452	%read{466,871} %write{466,871}
+temp	float	$tmp453	%read{466,871} %write{466,871}
+temp	float	$tmp454	%read{466,871} %write{466,871}
+temp	float	$tmp455	%read{466,871} %write{466,871}
+temp	int	$tmp456	%read{466,871} %write{466,871}
+temp	float	$tmp457	%read{466,871} %write{466,871}
+temp	float	$tmp458	%read{466,871} %write{466,871}
+temp	vector	$tmp459	%read{466,871} %write{466,871}
+temp	float	$tmp460	%read{466,871} %write{466,871}
+temp	float	$tmp461	%read{466,871} %write{466,871}
+temp	float	$tmp462	%read{466,871} %write{466,871}
+temp	float	$tmp463	%read{466,871} %write{466,871}
+temp	float	$tmp464	%read{466,871} %write{466,871}
+temp	float	$tmp465	%read{466,871} %write{466,871}
+temp	float	$tmp466	%read{466,871} %write{466,871}
+temp	float	$tmp467	%read{466,871} %write{466,871}
+temp	float	$tmp468	%read{466,871} %write{466,871}
+temp	float	$tmp469	%read{466,871} %write{466,871}
+temp	float	$tmp470	%read{466,871} %write{466,871}
+temp	float	$tmp471	%read{466,871} %write{466,871}
+temp	float	$tmp472	%read{466,871} %write{466,871}
+temp	float	$tmp473	%read{466,871} %write{466,871}
+temp	float	$tmp474	%read{466,871} %write{466,871}
+temp	float	$tmp475	%read{466,871} %write{466,871}
+temp	float	$tmp476	%read{466,871} %write{466,871}
+temp	int	$tmp477	%read{466,871} %write{466,871}
+temp	float	$tmp478	%read{466,871} %write{466,871}
+temp	float	$tmp479	%read{466,871} %write{466,871}
+temp	vector	$tmp480	%read{466,871} %write{466,871}
+temp	float	$tmp481	%read{466,871} %write{466,871}
+temp	float	$tmp482	%read{466,871} %write{466,871}
+temp	float	$tmp483	%read{466,871} %write{466,871}
+temp	float	$tmp484	%read{466,871} %write{466,871}
+temp	float	$tmp485	%read{466,871} %write{466,871}
+temp	float	$tmp486	%read{466,871} %write{466,871}
+temp	float	$tmp487	%read{466,871} %write{466,871}
+temp	float	$tmp488	%read{466,871} %write{466,871}
+temp	float	$tmp489	%read{466,871} %write{466,871}
+temp	float	$tmp490	%read{466,871} %write{466,871}
+temp	float	$tmp491	%read{466,871} %write{466,871}
+temp	float	$tmp492	%read{466,871} %write{466,871}
+temp	float	$tmp493	%read{466,871} %write{466,871}
+temp	float	$tmp494	%read{466,871} %write{466,871}
+temp	float	$tmp495	%read{466,871} %write{466,871}
+temp	float	$tmp496	%read{466,871} %write{466,871}
+temp	float	$tmp497	%read{466,871} %write{466,871}
+temp	int	$tmp498	%read{466,871} %write{466,871}
+temp	float	$tmp499	%read{466,871} %write{466,871}
+temp	float	$tmp500	%read{466,871} %write{466,871}
+temp	vector	$tmp501	%read{466,871} %write{466,871}
+temp	float	$tmp502	%read{466,871} %write{466,871}
+temp	float	$tmp503	%read{466,871} %write{466,871}
+temp	float	$tmp504	%read{466,871} %write{466,871}
+temp	float	$tmp505	%read{466,871} %write{466,871}
+temp	float	$tmp506	%read{466,871} %write{466,871}
+temp	float	$tmp507	%read{466,871} %write{466,871}
+temp	float	$tmp508	%read{466,871} %write{466,871}
+temp	float	$tmp509	%read{466,871} %write{466,871}
+temp	float	$tmp510	%read{466,871} %write{466,871}
+temp	float	$tmp511	%read{466,871} %write{466,871}
+const	float	$const72	27		%read{863,863} %write{2147483647,-1}
+temp	float	$tmp512	%read{466,871} %write{466,871}
+temp	float	$tmp513	%read{466,871} %write{466,871}
+temp	float	$tmp514	%read{466,871} %write{466,871}
+temp	float	$tmp515	%read{466,871} %write{466,871}
+temp	float	$tmp516	%read{466,871} %write{466,871}
+temp	int	$tmp517	%read{2147483647,-1} %write{466,871}
+code Vector
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:45
+#     int Dimensions = 2, /* 2, 3 or 4 */
+	assign		Vector P 	%filename{"source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl"} %line{45} %argrw{"wr"}
+code ___main___
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:59
+#  // MJA I couldn't get OSL to compile an array of structs so
+	aassign		grad3 $const2 $const1 	%filename{"source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl"} %line{59} %argrw{"wrr"}
+	aassign		grad3 $const4 $const3 	%argrw{"wrr"}
+	aassign		grad3 $const6 $const5 	%argrw{"wrr"}
+	aassign		grad3 $const8 $const7 	%argrw{"wrr"}
+	aassign		grad3 $const10 $const9 	%argrw{"wrr"}
+	aassign		grad3 $const12 $const11 	%argrw{"wrr"}
+	aassign		grad3 $const14 $const13 	%argrw{"wrr"}
+	aassign		grad3 $const16 $const15 	%argrw{"wrr"}
+	aassign		grad3 $const18 $const17 	%argrw{"wrr"}
+	aassign		grad3 $const20 $const19 	%argrw{"wrr"}
+	aassign		grad3 $const22 $const21 	%argrw{"wrr"}
+	aassign		grad3 $const24 $const23 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:77
+#  float grad4t[32]= { 1,-1,1,-1,1,-1,1,-1,1,-1,1,-1,
+	aassign		grad4v $const2 $const17 	%line{77} %argrw{"wrr"}
+	aassign		grad4v $const4 $const17 	%argrw{"wrr"}
+	aassign		grad4v $const6 $const21 	%argrw{"wrr"}
+	aassign		grad4v $const8 $const21 	%argrw{"wrr"}
+	aassign		grad4v $const10 $const19 	%argrw{"wrr"}
+	aassign		grad4v $const12 $const19 	%argrw{"wrr"}
+	aassign		grad4v $const14 $const23 	%argrw{"wrr"}
+	aassign		grad4v $const16 $const23 	%argrw{"wrr"}
+	aassign		grad4v $const18 $const9 	%argrw{"wrr"}
+	aassign		grad4v $const20 $const9 	%argrw{"wrr"}
+	aassign		grad4v $const22 $const13 	%argrw{"wrr"}
+	aassign		grad4v $const24 $const13 	%argrw{"wrr"}
+	aassign		grad4v $const25 $const11 	%argrw{"wrr"}
+	aassign		grad4v $const26 $const11 	%argrw{"wrr"}
+	aassign		grad4v $const27 $const15 	%argrw{"wrr"}
+	aassign		grad4v $const28 $const15 	%argrw{"wrr"}
+	aassign		grad4v $const29 $const1 	%argrw{"wrr"}
+	aassign		grad4v $const30 $const1 	%argrw{"wrr"}
+	aassign		grad4v $const31 $const5 	%argrw{"wrr"}
+	aassign		grad4v $const32 $const5 	%argrw{"wrr"}
+	aassign		grad4v $const33 $const3 	%argrw{"wrr"}
+	aassign		grad4v $const34 $const3 	%argrw{"wrr"}
+	aassign		grad4v $const35 $const7 	%argrw{"wrr"}
+	aassign		grad4v $const36 $const7 	%argrw{"wrr"}
+	aassign		grad4v $const38 $const37 	%argrw{"wrr"}
+	aassign		grad4v $const40 $const39 	%argrw{"wrr"}
+	aassign		grad4v $const42 $const41 	%argrw{"wrr"}
+	aassign		grad4v $const44 $const43 	%argrw{"wrr"}
+	aassign		grad4v $const46 $const45 	%argrw{"wrr"}
+	aassign		grad4v $const48 $const47 	%argrw{"wrr"}
+	aassign		grad4v $const50 $const49 	%argrw{"wrr"}
+	aassign		grad4v $const52 $const51 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:80
+# 
+	assign		grad4t $const53 	%line{80} %argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:107
+#  // MJA precomputing this table instead of calculating it as done in the
+	assign		perm $const54 	%line{107} %argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:130
+# 
+	assign		permMod12 $const55 	%line{130} %argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:133
+#  float G2 = (3.0-sqrt(3.0))/6.0;
+	sqrt		$tmp45 $const57 	%line{133} %argrw{"wr"}
+	sub		$tmp46 $tmp45 $const58 	%argrw{"wrr"}
+	mul		F2 $const56 $tmp46 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:134
+#  float F3 = 1.0/3.0;
+	sqrt		$tmp47 $const57 	%line{134} %argrw{"wr"}
+	sub		$tmp48 $const57 $tmp47 	%argrw{"wrr"}
+	div		G2 $tmp48 $const59 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:135
+#  float G3 = 1.0/6.0;
+	div		F3 $const58 $const57 	%line{135} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:136
+#  float F4 = (sqrt(5.0)-1.0)/4.0;
+	div		G3 $const58 $const59 	%line{136} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:137
+#  float G4 = (5.0-sqrt(5.0))/20.0;
+	sqrt		$tmp49 $const60 	%line{137} %argrw{"wr"}
+	sub		$tmp50 $tmp49 $const58 	%argrw{"wrr"}
+	div		F4 $tmp50 $const61 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:138
+# 
+	sqrt		$tmp51 $const60 	%line{138} %argrw{"wr"}
+	sub		$tmp52 $const60 $tmp51 	%argrw{"wrr"}
+	div		G4 $tmp52 $const62 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:140
+#  float pwHL = pow(Lacunarity,-H);
+	assign		pwr $const58 	%line{140} %argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:141
+# 
+	neg		$tmp53 H 	%line{141} %argrw{"wr"}
+	pow		pwHL Lacunarity $tmp53 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:143
+#     // 2D simplex noise
+	eq		$tmp54 Dimensions $const6 	%line{143} %argrw{"wrr"}
+	if		$tmp54 195 872 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:145
+#     float xin=Vector[0]*Scale, yin=Vector[1]*Scale;
+	assign		Fac $const2 	%line{145} %argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:146
+#     for(int p=0; p<Octaves; p++){
+	compref		$tmp55 Vector $const2 	%line{146} %argrw{"wrr"}
+	mul		___326_xin $tmp55 Scale 	%argrw{"wrr"}
+	compref		$tmp56 Vector $const4 	%argrw{"wrr"}
+	mul		___326_yin $tmp56 Scale 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:147
+#        float n0, n1, n2; // Noise contributions from the three corners
+	for		$tmp57 74 75 193 195 	%line{147} %argrw{"r"}
+	assign		___327_p $const2 	%argrw{"wr"}
+	lt		$tmp57 ___327_p Octaves 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:150
+#        int i = fastfloor(xin+s);
+	add		$tmp58 ___326_xin ___326_yin 	%line{150} %argrw{"wrr"}
+	mul		___328_s $tmp58 F2 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:151
+#        int j = fastfloor(yin+s);
+	add		$tmp59 ___326_xin ___328_s 	%line{151} %argrw{"wrr"}
+	functioncall	$const63 85 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:29
+#  return x < xi ? xi-1 : xi;
+	assign		___322_xi $tmp59 	%line{29} %argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:30
+# }
+	lt		$tmp60 $tmp59 ___322_xi 	%line{30} %argrw{"wrr"}
+	if		$tmp60 83 84 	%argrw{"r"}
+	sub		___328_i ___322_xi $const4 	%argrw{"wrr"}
+	assign		___328_i ___322_xi 	%argrw{"wr"}
+	return
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:152
+#        float t = (i+j)*G2;
+	add		$tmp61 ___326_yin ___328_s 	%line{152} %argrw{"wrr"}
+	functioncall	$const63 93 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:29
+#  return x < xi ? xi-1 : xi;
+	assign		___322_xi $tmp61 	%line{29} %argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:30
+# }
+	lt		$tmp62 $tmp61 ___322_xi 	%line{30} %argrw{"wrr"}
+	if		$tmp62 91 92 	%argrw{"r"}
+	sub		___328_j ___322_xi $const4 	%argrw{"wrr"}
+	assign		___328_j ___322_xi 	%argrw{"wr"}
+	return
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:153
+#        float X0 = i-t; // Unskew the cell origin back to (x,y) space
+	add		$tmp63 ___328_i ___328_j 	%line{153} %argrw{"wrr"}
+	assign		$tmp64 $tmp63 	%argrw{"wr"}
+	mul		___328_t $tmp64 G2 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:154
+#        float Y0 = j-t;
+	assign		$tmp65 ___328_i 	%line{154} %argrw{"wr"}
+	sub		___328_X0 $tmp65 ___328_t 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:155
+#        float x0 = xin-X0; // The x,y distances from the cell origin
+	assign		$tmp66 ___328_j 	%line{155} %argrw{"wr"}
+	sub		___328_Y0 $tmp66 ___328_t 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:156
+#        float y0 = yin-Y0;
+	sub		___328_x0 ___326_xin ___328_X0 	%line{156} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:157
+#        // For the 2D case, the simplex shape is an equilateral triangle.
+	sub		___328_y0 ___326_yin ___328_Y0 	%line{157} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:161
+#        else {i1=0; j1=1;}      // upper triangle, YX order: (0,0)->(0,1)->(1,1)
+	gt		$tmp67 ___328_x0 ___328_y0 	%line{161} %argrw{"wrr"}
+	if		$tmp67 106 108 	%argrw{"r"}
+	assign		___328_i1 $const4 	%argrw{"wr"}
+	assign		___328_j1 $const2 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:162
+#        // A step of (1,0) in (i,j) means a step of (1-c,-c) in (x,y), and
+	assign		___328_i1 $const2 	%line{162} %argrw{"wr"}
+	assign		___328_j1 $const4 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:166
+#        float y1 = y0 - j1 + G2;
+	assign		$tmp69 ___328_i1 	%line{166} %argrw{"wr"}
+	sub		$tmp68 ___328_x0 $tmp69 	%argrw{"wrr"}
+	add		___328_x1 $tmp68 G2 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:167
+#        float x2 = x0 - 1.0 + 2.0 * G2; // Offsets for last corner in (x,y) unskewed coords
+	assign		$tmp71 ___328_j1 	%line{167} %argrw{"wr"}
+	sub		$tmp70 ___328_y0 $tmp71 	%argrw{"wrr"}
+	add		___328_y1 $tmp70 G2 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:168
+#        float y2 = y0 - 1.0 + 2.0 * G2;
+	sub		$tmp72 ___328_x0 $const58 	%line{168} %argrw{"wrr"}
+	mul		$tmp73 $const64 G2 	%argrw{"wrr"}
+	add		___328_x2 $tmp72 $tmp73 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:169
+#        // Work out the hashed gradient indices of the three simplex corners
+	sub		$tmp74 ___328_y0 $const58 	%line{169} %argrw{"wrr"}
+	mul		$tmp75 $const64 G2 	%argrw{"wrr"}
+	add		___328_y2 $tmp74 $tmp75 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:171
+#        int jj = j & 255;
+	bitand		___328_ii ___328_i $const65 	%line{171} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:172
+#        int gi0 = permMod12[ii+perm[jj]];
+	bitand		___328_jj ___328_j $const65 	%line{172} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:173
+#        int gi1 = permMod12[ii+i1+perm[jj+j1]];
+	aref		$tmp76 perm ___328_jj 	%line{173} %argrw{"wrr"}
+	add		$tmp77 ___328_ii $tmp76 	%argrw{"wrr"}
+	aref		___328_gi0 permMod12 $tmp77 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:174
+#        int gi2 = permMod12[ii+1+perm[jj+1]];
+	add		$tmp78 ___328_ii ___328_i1 	%line{174} %argrw{"wrr"}
+	add		$tmp79 ___328_jj ___328_j1 	%argrw{"wrr"}
+	aref		$tmp80 perm $tmp79 	%argrw{"wrr"}
+	add		$tmp81 $tmp78 $tmp80 	%argrw{"wrr"}
+	aref		___328_gi1 permMod12 $tmp81 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:175
+#        // Calculate the contribution from the three corners
+	add		$tmp82 ___328_ii $const4 	%line{175} %argrw{"wrr"}
+	add		$tmp83 ___328_jj $const4 	%argrw{"wrr"}
+	aref		$tmp84 perm $tmp83 	%argrw{"wrr"}
+	add		$tmp85 $tmp82 $tmp84 	%argrw{"wrr"}
+	aref		___328_gi2 permMod12 $tmp85 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:177
+#        if(t0 < 0) n0 = 0.0;
+	mul		$tmp86 ___328_x0 ___328_x0 	%line{177} %argrw{"wrr"}
+	sub		$tmp87 $const56 $tmp86 	%argrw{"wrr"}
+	mul		$tmp88 ___328_y0 ___328_y0 	%argrw{"wrr"}
+	sub		___328_t0 $tmp87 $tmp88 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:178
+#        else {
+	lt		$tmp89 ___328_t0 $const2 	%line{178} %argrw{"wrr"}
+	if		$tmp89 142 152 	%argrw{"r"}
+	assign		___328_n0 $const66 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:180
+#        n0 = t0 * t0 * dot(grad3[gi0], x0, y0);  // (x,y) of grad3 used for 2D gradient
+	mul		___328_t0 ___328_t0 ___328_t0 	%line{180} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:181
+#        }
+	mul		$tmp90 ___328_t0 ___328_t0 	%line{181} %argrw{"wrr"}
+	aref		$tmp92 grad3 ___328_gi0 	%argrw{"wrr"}
+	functioncall	$const67 151 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:36
+# 
+	compref		$tmp93 $tmp92 $const2 	%line{36} %argrw{"wrr"}
+	mul		$tmp94 $tmp93 ___328_x0 	%argrw{"wrr"}
+	compref		$tmp95 $tmp92 $const4 	%argrw{"wrr"}
+	mul		$tmp96 $tmp95 ___328_y0 	%argrw{"wrr"}
+	add		$tmp91 $tmp94 $tmp96 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:181
+#        }
+	mul		___328_n0 $tmp90 $tmp91 	%line{181} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:183
+#        if(t1 < 0) n1 = 0.0;
+	mul		$tmp97 ___328_x1 ___328_x1 	%line{183} %argrw{"wrr"}
+	sub		$tmp98 $const56 $tmp97 	%argrw{"wrr"}
+	mul		$tmp99 ___328_y1 ___328_y1 	%argrw{"wrr"}
+	sub		___328_t1 $tmp98 $tmp99 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:184
+#        else {
+	lt		$tmp100 ___328_t1 $const2 	%line{184} %argrw{"wrr"}
+	if		$tmp100 159 169 	%argrw{"r"}
+	assign		___328_n1 $const66 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:186
+#        n1 = t1 * t1 * dot(grad3[gi1], x1, y1);
+	mul		___328_t1 ___328_t1 ___328_t1 	%line{186} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:187
+#        }
+	mul		$tmp101 ___328_t1 ___328_t1 	%line{187} %argrw{"wrr"}
+	aref		$tmp103 grad3 ___328_gi1 	%argrw{"wrr"}
+	functioncall	$const67 168 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:36
+# 
+	compref		$tmp104 $tmp103 $const2 	%line{36} %argrw{"wrr"}
+	mul		$tmp105 $tmp104 ___328_x1 	%argrw{"wrr"}
+	compref		$tmp106 $tmp103 $const4 	%argrw{"wrr"}
+	mul		$tmp107 $tmp106 ___328_y1 	%argrw{"wrr"}
+	add		$tmp102 $tmp105 $tmp107 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:187
+#        }
+	mul		___328_n1 $tmp101 $tmp102 	%line{187} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:189
+#        if(t2 < 0) n2 = 0.0;
+	mul		$tmp108 ___328_x2 ___328_x2 	%line{189} %argrw{"wrr"}
+	sub		$tmp109 $const56 $tmp108 	%argrw{"wrr"}
+	mul		$tmp110 ___328_y2 ___328_y2 	%argrw{"wrr"}
+	sub		___328_t2 $tmp109 $tmp110 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:190
+#        else {
+	lt		$tmp111 ___328_t2 $const2 	%line{190} %argrw{"wrr"}
+	if		$tmp111 176 186 	%argrw{"r"}
+	assign		___328_n2 $const66 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:192
+#        n2 = t2 * t2 * dot(grad3[gi2], x2, y2);
+	mul		___328_t2 ___328_t2 ___328_t2 	%line{192} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:193
+#        }
+	mul		$tmp112 ___328_t2 ___328_t2 	%line{193} %argrw{"wrr"}
+	aref		$tmp114 grad3 ___328_gi2 	%argrw{"wrr"}
+	functioncall	$const67 185 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:36
+# 
+	compref		$tmp115 $tmp114 $const2 	%line{36} %argrw{"wrr"}
+	mul		$tmp116 $tmp115 ___328_x2 	%argrw{"wrr"}
+	compref		$tmp117 $tmp114 $const4 	%argrw{"wrr"}
+	mul		$tmp118 $tmp117 ___328_y2 	%argrw{"wrr"}
+	add		$tmp113 $tmp116 $tmp118 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:193
+#        }
+	mul		___328_n2 $tmp112 $tmp113 	%line{193} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:197
+#        pwr *= pwHL;
+	add		$tmp119 ___328_n0 ___328_n1 	%line{197} %argrw{"wrr"}
+	add		$tmp120 $tmp119 ___328_n2 	%argrw{"wrr"}
+	mul		$tmp121 $const68 $tmp120 	%argrw{"wrr"}
+	mul		Fac $tmp121 pwr 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:198
+#        xin *= Lacunarity;
+	mul		pwr pwr pwHL 	%line{198} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:199
+#        yin *= Lacunarity;
+	mul		___326_xin ___326_xin Lacunarity 	%line{199} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:200
+#    }
+	mul		___326_yin ___326_yin Lacunarity 	%line{200} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:147
+#        float n0, n1, n2; // Noise contributions from the three corners
+	assign		$tmp122 ___327_p 	%line{147} %argrw{"wr"}
+	add		___327_p ___327_p $const4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:202
+#     // 3D simplex noise
+	eq		$tmp123 Dimensions $const8 	%line{202} %argrw{"wrr"}
+	if		$tmp123 454 872 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:204
+#     float xin=Vector[0]*Scale, yin=Vector[1]*Scale, zin=Vector[2]*Scale;
+	assign		Fac $const2 	%line{204} %argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:205
+#     for(int p=0; p<Octaves; p++){
+	compref		$tmp124 Vector $const2 	%line{205} %argrw{"wrr"}
+	mul		___334_xin $tmp124 Scale 	%argrw{"wrr"}
+	compref		$tmp125 Vector $const4 	%argrw{"wrr"}
+	mul		___334_yin $tmp125 Scale 	%argrw{"wrr"}
+	compref		$tmp126 Vector $const6 	%argrw{"wrr"}
+	mul		___334_zin $tmp126 Scale 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:206
+#       float n0, n1, n2, n3; // Noise contributions from the four corners
+	for		$tmp127 206 207 452 454 	%line{206} %argrw{"r"}
+	assign		___335_p $const2 	%argrw{"wr"}
+	lt		$tmp127 ___335_p Octaves 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:209
+#       int i = fastfloor(xin+s);
+	add		$tmp128 ___334_xin ___334_yin 	%line{209} %argrw{"wrr"}
+	add		$tmp129 $tmp128 ___334_zin 	%argrw{"wrr"}
+	mul		___336_s $tmp129 F3 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:210
+#       int j = fastfloor(yin+s);
+	add		$tmp130 ___334_xin ___336_s 	%line{210} %argrw{"wrr"}
+	functioncall	$const63 218 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:29
+#  return x < xi ? xi-1 : xi;
+	assign		___322_xi $tmp130 	%line{29} %argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:30
+# }
+	lt		$tmp131 $tmp130 ___322_xi 	%line{30} %argrw{"wrr"}
+	if		$tmp131 216 217 	%argrw{"r"}
+	sub		___336_i ___322_xi $const4 	%argrw{"wrr"}
+	assign		___336_i ___322_xi 	%argrw{"wr"}
+	return
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:211
+#       int k = fastfloor(zin+s);
+	add		$tmp132 ___334_yin ___336_s 	%line{211} %argrw{"wrr"}
+	functioncall	$const63 226 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:29
+#  return x < xi ? xi-1 : xi;
+	assign		___322_xi $tmp132 	%line{29} %argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:30
+# }
+	lt		$tmp133 $tmp132 ___322_xi 	%line{30} %argrw{"wrr"}
+	if		$tmp133 224 225 	%argrw{"r"}
+	sub		___336_j ___322_xi $const4 	%argrw{"wrr"}
+	assign		___336_j ___322_xi 	%argrw{"wr"}
+	return
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:212
+#       float t = (i+j+k)*G3;
+	add		$tmp134 ___334_zin ___336_s 	%line{212} %argrw{"wrr"}
+	functioncall	$const63 234 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:29
+#  return x < xi ? xi-1 : xi;
+	assign		___322_xi $tmp134 	%line{29} %argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:30
+# }
+	lt		$tmp135 $tmp134 ___322_xi 	%line{30} %argrw{"wrr"}
+	if		$tmp135 232 233 	%argrw{"r"}
+	sub		___336_k ___322_xi $const4 	%argrw{"wrr"}
+	assign		___336_k ___322_xi 	%argrw{"wr"}
+	return
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:213
+#       float X0 = i-t; // Unskew the cell origin back to (x,y,z) space
+	add		$tmp136 ___336_i ___336_j 	%line{213} %argrw{"wrr"}
+	add		$tmp137 $tmp136 ___336_k 	%argrw{"wrr"}
+	assign		$tmp138 $tmp137 	%argrw{"wr"}
+	mul		___336_t $tmp138 G3 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:214
+#       float Y0 = j-t;
+	assign		$tmp139 ___336_i 	%line{214} %argrw{"wr"}
+	sub		___336_X0 $tmp139 ___336_t 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:215
+#       float Z0 = k-t;
+	assign		$tmp140 ___336_j 	%line{215} %argrw{"wr"}
+	sub		___336_Y0 $tmp140 ___336_t 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:216
+#       float x0 = xin-X0; // The x,y,z distances from the cell origin
+	assign		$tmp141 ___336_k 	%line{216} %argrw{"wr"}
+	sub		___336_Z0 $tmp141 ___336_t 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:217
+#       float y0 = yin-Y0;
+	sub		___336_x0 ___334_xin ___336_X0 	%line{217} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:218
+#       float z0 = zin-Z0;
+	sub		___336_y0 ___334_yin ___336_Y0 	%line{218} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:219
+#       // For the 3D case, the simplex shape is a slightly irregular tetrahedron.
+	sub		___336_z0 ___334_zin ___336_Z0 	%line{219} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:224
+#       if(y0>=z0)
+	ge		$tmp142 ___336_x0 ___336_y0 	%line{224} %argrw{"wrr"}
+	if		$tmp142 271 293 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:225
+#        { i1=1; j1=0; k1=0; i2=1; j2=1; k2=0; } // X Y Z order
+	ge		$tmp143 ___336_y0 ___336_z0 	%line{225} %argrw{"wrr"}
+	if		$tmp143 257 271 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:226
+#        else if(x0>=z0) { i1=1; j1=0; k1=0; i2=1; j2=0; k2=1; } // X Z Y order
+	assign		___336_i1 $const4 	%line{226} %argrw{"wr"}
+	assign		___336_j1 $const2 	%argrw{"wr"}
+	assign		___336_k1 $const2 	%argrw{"wr"}
+	assign		___336_i2 $const4 	%argrw{"wr"}
+	assign		___336_j2 $const4 	%argrw{"wr"}
+	assign		___336_k2 $const2 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:227
+#        else { i1=0; j1=0; k1=1; i2=1; j2=0; k2=1; } // Z X Y order
+	ge		$tmp144 ___336_x0 ___336_z0 	%line{227} %argrw{"wrr"}
+	if		$tmp144 265 271 	%argrw{"r"}
+	assign		___336_i1 $const4 	%argrw{"wr"}
+	assign		___336_j1 $const2 	%argrw{"wr"}
+	assign		___336_k1 $const2 	%argrw{"wr"}
+	assign		___336_i2 $const4 	%argrw{"wr"}
+	assign		___336_j2 $const2 	%argrw{"wr"}
+	assign		___336_k2 $const4 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:228
+#       }
+	assign		___336_i1 $const2 	%line{228} %argrw{"wr"}
+	assign		___336_j1 $const2 	%argrw{"wr"}
+	assign		___336_k1 $const4 	%argrw{"wr"}
+	assign		___336_i2 $const4 	%argrw{"wr"}
+	assign		___336_j2 $const2 	%argrw{"wr"}
+	assign		___336_k2 $const4 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:231
+#       else if(x0 < z0) { i1=0; j1=1; k1=0; i2=0; j2=1; k2=1; } // Y Z X order
+	lt		$tmp145 ___336_y0 ___336_z0 	%line{231} %argrw{"wrr"}
+	if		$tmp145 279 293 	%argrw{"r"}
+	assign		___336_i1 $const2 	%argrw{"wr"}
+	assign		___336_j1 $const2 	%argrw{"wr"}
+	assign		___336_k1 $const4 	%argrw{"wr"}
+	assign		___336_i2 $const2 	%argrw{"wr"}
+	assign		___336_j2 $const4 	%argrw{"wr"}
+	assign		___336_k2 $const4 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:232
+#       else { i1=0; j1=1; k1=0; i2=1; j2=1; k2=0; } // Y X Z order
+	lt		$tmp146 ___336_x0 ___336_z0 	%line{232} %argrw{"wrr"}
+	if		$tmp146 287 293 	%argrw{"r"}
+	assign		___336_i1 $const2 	%argrw{"wr"}
+	assign		___336_j1 $const4 	%argrw{"wr"}
+	assign		___336_k1 $const2 	%argrw{"wr"}
+	assign		___336_i2 $const2 	%argrw{"wr"}
+	assign		___336_j2 $const4 	%argrw{"wr"}
+	assign		___336_k2 $const4 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:233
+#       }
+	assign		___336_i1 $const2 	%line{233} %argrw{"wr"}
+	assign		___336_j1 $const4 	%argrw{"wr"}
+	assign		___336_k1 $const2 	%argrw{"wr"}
+	assign		___336_i2 $const4 	%argrw{"wr"}
+	assign		___336_j2 $const4 	%argrw{"wr"}
+	assign		___336_k2 $const2 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:239
+#       float y1 = y0 - j1 + G3;
+	assign		$tmp148 ___336_i1 	%line{239} %argrw{"wr"}
+	sub		$tmp147 ___336_x0 $tmp148 	%argrw{"wrr"}
+	add		___336_x1 $tmp147 G3 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:240
+#       float z1 = z0 - k1 + G3;
+	assign		$tmp150 ___336_j1 	%line{240} %argrw{"wr"}
+	sub		$tmp149 ___336_y0 $tmp150 	%argrw{"wrr"}
+	add		___336_y1 $tmp149 G3 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:241
+#       float x2 = x0 - i2 + 2.0*G3; // Offsets for third corner in (x,y,z) coords
+	assign		$tmp152 ___336_k1 	%line{241} %argrw{"wr"}
+	sub		$tmp151 ___336_z0 $tmp152 	%argrw{"wrr"}
+	add		___336_z1 $tmp151 G3 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:242
+#       float y2 = y0 - j2 + 2.0*G3;
+	assign		$tmp154 ___336_i2 	%line{242} %argrw{"wr"}
+	sub		$tmp153 ___336_x0 $tmp154 	%argrw{"wrr"}
+	mul		$tmp155 $const64 G3 	%argrw{"wrr"}
+	add		___336_x2 $tmp153 $tmp155 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:243
+#       float z2 = z0 - k2 + 2.0*G3;
+	assign		$tmp157 ___336_j2 	%line{243} %argrw{"wr"}
+	sub		$tmp156 ___336_y0 $tmp157 	%argrw{"wrr"}
+	mul		$tmp158 $const64 G3 	%argrw{"wrr"}
+	add		___336_y2 $tmp156 $tmp158 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:244
+#       float x3 = x0 - 1.0 + 3.0*G3; // Offsets for last corner in (x,y,z) coords
+	assign		$tmp160 ___336_k2 	%line{244} %argrw{"wr"}
+	sub		$tmp159 ___336_z0 $tmp160 	%argrw{"wrr"}
+	mul		$tmp161 $const64 G3 	%argrw{"wrr"}
+	add		___336_z2 $tmp159 $tmp161 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:245
+#       float y3 = y0 - 1.0 + 3.0*G3;
+	sub		$tmp162 ___336_x0 $const58 	%line{245} %argrw{"wrr"}
+	mul		$tmp163 $const57 G3 	%argrw{"wrr"}
+	add		___336_x3 $tmp162 $tmp163 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:246
+#       float z3 = z0 - 1.0 + 3.0*G3;
+	sub		$tmp164 ___336_y0 $const58 	%line{246} %argrw{"wrr"}
+	mul		$tmp165 $const57 G3 	%argrw{"wrr"}
+	add		___336_y3 $tmp164 $tmp165 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:247
+#       // Work out the hashed gradient indices of the four simplex corners
+	sub		$tmp166 ___336_z0 $const58 	%line{247} %argrw{"wrr"}
+	mul		$tmp167 $const57 G3 	%argrw{"wrr"}
+	add		___336_z3 $tmp166 $tmp167 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:249
+#       int jj = j & 255;
+	bitand		___336_ii ___336_i $const65 	%line{249} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:250
+#       int kk = k & 255;
+	bitand		___336_jj ___336_j $const65 	%line{250} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:251
+#       int gi0 = permMod12[ii+perm[jj+perm[kk]]];
+	bitand		___336_kk ___336_k $const65 	%line{251} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:252
+#       int gi1 = permMod12[ii+i1+perm[jj+j1+perm[kk+k1]]];
+	aref		$tmp168 perm ___336_kk 	%line{252} %argrw{"wrr"}
+	add		$tmp169 ___336_jj $tmp168 	%argrw{"wrr"}
+	aref		$tmp170 perm $tmp169 	%argrw{"wrr"}
+	add		$tmp171 ___336_ii $tmp170 	%argrw{"wrr"}
+	aref		___336_gi0 permMod12 $tmp171 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:253
+#       int gi2 = permMod12[ii+i2+perm[jj+j2+perm[kk+k2]]];
+	add		$tmp172 ___336_ii ___336_i1 	%line{253} %argrw{"wrr"}
+	add		$tmp173 ___336_jj ___336_j1 	%argrw{"wrr"}
+	add		$tmp174 ___336_kk ___336_k1 	%argrw{"wrr"}
+	aref		$tmp175 perm $tmp174 	%argrw{"wrr"}
+	add		$tmp176 $tmp173 $tmp175 	%argrw{"wrr"}
+	aref		$tmp177 perm $tmp176 	%argrw{"wrr"}
+	add		$tmp178 $tmp172 $tmp177 	%argrw{"wrr"}
+	aref		___336_gi1 permMod12 $tmp178 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:254
+#       int gi3 = permMod12[ii+1+perm[jj+1+perm[kk+1]]];
+	add		$tmp179 ___336_ii ___336_i2 	%line{254} %argrw{"wrr"}
+	add		$tmp180 ___336_jj ___336_j2 	%argrw{"wrr"}
+	add		$tmp181 ___336_kk ___336_k2 	%argrw{"wrr"}
+	aref		$tmp182 perm $tmp181 	%argrw{"wrr"}
+	add		$tmp183 $tmp180 $tmp182 	%argrw{"wrr"}
+	aref		$tmp184 perm $tmp183 	%argrw{"wrr"}
+	add		$tmp185 $tmp179 $tmp184 	%argrw{"wrr"}
+	aref		___336_gi2 permMod12 $tmp185 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:255
+#       // Calculate the contribution from the four corners
+	add		$tmp186 ___336_ii $const4 	%line{255} %argrw{"wrr"}
+	add		$tmp187 ___336_jj $const4 	%argrw{"wrr"}
+	add		$tmp188 ___336_kk $const4 	%argrw{"wrr"}
+	aref		$tmp189 perm $tmp188 	%argrw{"wrr"}
+	add		$tmp190 $tmp187 $tmp189 	%argrw{"wrr"}
+	aref		$tmp191 perm $tmp190 	%argrw{"wrr"}
+	add		$tmp192 $tmp186 $tmp191 	%argrw{"wrr"}
+	aref		___336_gi3 permMod12 $tmp192 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:257
+#       if(t0 < 0) n0 = 0.0;
+	mul		$tmp193 ___336_x0 ___336_x0 	%line{257} %argrw{"wrr"}
+	sub		$tmp194 $const69 $tmp193 	%argrw{"wrr"}
+	mul		$tmp195 ___336_y0 ___336_y0 	%argrw{"wrr"}
+	sub		$tmp196 $tmp194 $tmp195 	%argrw{"wrr"}
+	mul		$tmp197 ___336_z0 ___336_z0 	%argrw{"wrr"}
+	sub		___336_t0 $tmp196 $tmp197 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:258
+#       else {
+	lt		$tmp198 ___336_t0 $const2 	%line{258} %argrw{"wrr"}
+	if		$tmp198 364 377 	%argrw{"r"}
+	assign		___336_n0 $const66 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:260
+#       n0 = t0 * t0 * dot(grad3[gi0], x0, y0, z0);
+	mul		___336_t0 ___336_t0 ___336_t0 	%line{260} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:261
+#       }
+	mul		$tmp199 ___336_t0 ___336_t0 	%line{261} %argrw{"wrr"}
+	aref		$tmp201 grad3 ___336_gi0 	%argrw{"wrr"}
+	functioncall	$const67 376 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:39
+# 
+	compref		$tmp202 $tmp201 $const2 	%line{39} %argrw{"wrr"}
+	mul		$tmp203 $tmp202 ___336_x0 	%argrw{"wrr"}
+	compref		$tmp204 $tmp201 $const4 	%argrw{"wrr"}
+	mul		$tmp205 $tmp204 ___336_y0 	%argrw{"wrr"}
+	add		$tmp206 $tmp203 $tmp205 	%argrw{"wrr"}
+	compref		$tmp207 $tmp201 $const6 	%argrw{"wrr"}
+	mul		$tmp208 $tmp207 ___336_z0 	%argrw{"wrr"}
+	add		$tmp200 $tmp206 $tmp208 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:261
+#       }
+	mul		___336_n0 $tmp199 $tmp200 	%line{261} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:263
+#       if(t1 < 0) n1 = 0.0;
+	mul		$tmp209 ___336_x1 ___336_x1 	%line{263} %argrw{"wrr"}
+	sub		$tmp210 $const69 $tmp209 	%argrw{"wrr"}
+	mul		$tmp211 ___336_y1 ___336_y1 	%argrw{"wrr"}
+	sub		$tmp212 $tmp210 $tmp211 	%argrw{"wrr"}
+	mul		$tmp213 ___336_z1 ___336_z1 	%argrw{"wrr"}
+	sub		___336_t1 $tmp212 $tmp213 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:264
+#       else {
+	lt		$tmp214 ___336_t1 $const2 	%line{264} %argrw{"wrr"}
+	if		$tmp214 386 399 	%argrw{"r"}
+	assign		___336_n1 $const66 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:266
+#       n1 = t1 * t1 * dot(grad3[gi1], x1, y1, z1);
+	mul		___336_t1 ___336_t1 ___336_t1 	%line{266} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:267
+#       }
+	mul		$tmp215 ___336_t1 ___336_t1 	%line{267} %argrw{"wrr"}
+	aref		$tmp217 grad3 ___336_gi1 	%argrw{"wrr"}
+	functioncall	$const67 398 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:39
+# 
+	compref		$tmp218 $tmp217 $const2 	%line{39} %argrw{"wrr"}
+	mul		$tmp219 $tmp218 ___336_x1 	%argrw{"wrr"}
+	compref		$tmp220 $tmp217 $const4 	%argrw{"wrr"}
+	mul		$tmp221 $tmp220 ___336_y1 	%argrw{"wrr"}
+	add		$tmp222 $tmp219 $tmp221 	%argrw{"wrr"}
+	compref		$tmp223 $tmp217 $const6 	%argrw{"wrr"}
+	mul		$tmp224 $tmp223 ___336_z1 	%argrw{"wrr"}
+	add		$tmp216 $tmp222 $tmp224 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:267
+#       }
+	mul		___336_n1 $tmp215 $tmp216 	%line{267} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:269
+#       if(t2 < 0) n2 = 0.0;
+	mul		$tmp225 ___336_x2 ___336_x2 	%line{269} %argrw{"wrr"}
+	sub		$tmp226 $const69 $tmp225 	%argrw{"wrr"}
+	mul		$tmp227 ___336_y2 ___336_y2 	%argrw{"wrr"}
+	sub		$tmp228 $tmp226 $tmp227 	%argrw{"wrr"}
+	mul		$tmp229 ___336_z2 ___336_z2 	%argrw{"wrr"}
+	sub		___336_t2 $tmp228 $tmp229 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:270
+#       else {
+	lt		$tmp230 ___336_t2 $const2 	%line{270} %argrw{"wrr"}
+	if		$tmp230 408 421 	%argrw{"r"}
+	assign		___336_n2 $const66 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:272
+#       n2 = t2 * t2 * dot(grad3[gi2], x2, y2, z2);
+	mul		___336_t2 ___336_t2 ___336_t2 	%line{272} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:273
+#       }
+	mul		$tmp231 ___336_t2 ___336_t2 	%line{273} %argrw{"wrr"}
+	aref		$tmp233 grad3 ___336_gi2 	%argrw{"wrr"}
+	functioncall	$const67 420 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:39
+# 
+	compref		$tmp234 $tmp233 $const2 	%line{39} %argrw{"wrr"}
+	mul		$tmp235 $tmp234 ___336_x2 	%argrw{"wrr"}
+	compref		$tmp236 $tmp233 $const4 	%argrw{"wrr"}
+	mul		$tmp237 $tmp236 ___336_y2 	%argrw{"wrr"}
+	add		$tmp238 $tmp235 $tmp237 	%argrw{"wrr"}
+	compref		$tmp239 $tmp233 $const6 	%argrw{"wrr"}
+	mul		$tmp240 $tmp239 ___336_z2 	%argrw{"wrr"}
+	add		$tmp232 $tmp238 $tmp240 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:273
+#       }
+	mul		___336_n2 $tmp231 $tmp232 	%line{273} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:275
+#       if(t3 < 0) n3 = 0.0;
+	mul		$tmp241 ___336_x3 ___336_x3 	%line{275} %argrw{"wrr"}
+	sub		$tmp242 $const69 $tmp241 	%argrw{"wrr"}
+	mul		$tmp243 ___336_y3 ___336_y3 	%argrw{"wrr"}
+	sub		$tmp244 $tmp242 $tmp243 	%argrw{"wrr"}
+	mul		$tmp245 ___336_z3 ___336_z3 	%argrw{"wrr"}
+	sub		___336_t3 $tmp244 $tmp245 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:276
+#       else {
+	lt		$tmp246 ___336_t3 $const2 	%line{276} %argrw{"wrr"}
+	if		$tmp246 430 443 	%argrw{"r"}
+	assign		___336_n3 $const66 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:278
+#       n3 = t3 * t3 * dot(grad3[gi3], x3, y3, z3);
+	mul		___336_t3 ___336_t3 ___336_t3 	%line{278} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:279
+#       }
+	mul		$tmp247 ___336_t3 ___336_t3 	%line{279} %argrw{"wrr"}
+	aref		$tmp249 grad3 ___336_gi3 	%argrw{"wrr"}
+	functioncall	$const67 442 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:39
+# 
+	compref		$tmp250 $tmp249 $const2 	%line{39} %argrw{"wrr"}
+	mul		$tmp251 $tmp250 ___336_x3 	%argrw{"wrr"}
+	compref		$tmp252 $tmp249 $const4 	%argrw{"wrr"}
+	mul		$tmp253 $tmp252 ___336_y3 	%argrw{"wrr"}
+	add		$tmp254 $tmp251 $tmp253 	%argrw{"wrr"}
+	compref		$tmp255 $tmp249 $const6 	%argrw{"wrr"}
+	mul		$tmp256 $tmp255 ___336_z3 	%argrw{"wrr"}
+	add		$tmp248 $tmp254 $tmp256 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:279
+#       }
+	mul		___336_n3 $tmp247 $tmp248 	%line{279} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:283
+#       pwr *= pwHL;
+	add		$tmp257 ___336_n0 ___336_n1 	%line{283} %argrw{"wrr"}
+	add		$tmp258 $tmp257 ___336_n2 	%argrw{"wrr"}
+	add		$tmp259 $tmp258 ___336_n3 	%argrw{"wrr"}
+	mul		$tmp260 $const70 $tmp259 	%argrw{"wrr"}
+	mul		Fac $tmp260 pwr 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:284
+#       xin *= Lacunarity;
+	mul		pwr pwr pwHL 	%line{284} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:285
+#       yin *= Lacunarity;
+	mul		___334_xin ___334_xin Lacunarity 	%line{285} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:286
+#       zin *= Lacunarity;
+	mul		___334_yin ___334_yin Lacunarity 	%line{286} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:287
+#     }
+	mul		___334_zin ___334_zin Lacunarity 	%line{287} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:206
+#       float n0, n1, n2, n3; // Noise contributions from the four corners
+	assign		$tmp261 ___335_p 	%line{206} %argrw{"wr"}
+	add		___335_p ___335_p $const4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:289
+#     // 4D simplex noise, better simplex rank ordering method 2012-03-09
+	eq		$tmp262 Dimensions $const10 	%line{289} %argrw{"wrr"}
+	if		$tmp262 872 872 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:291
+#     float x=Vector[0]*Scale, y=Vector[1]*Scale, z=Vector[2]*Scale, w=Time*Scale;
+	assign		Fac $const2 	%line{291} %argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:292
+#     for(int p=0; p<Octaves; p++){
+	compref		$tmp263 Vector $const2 	%line{292} %argrw{"wrr"}
+	mul		___349_x $tmp263 Scale 	%argrw{"wrr"}
+	compref		$tmp264 Vector $const4 	%argrw{"wrr"}
+	mul		___349_y $tmp264 Scale 	%argrw{"wrr"}
+	compref		$tmp265 Vector $const6 	%argrw{"wrr"}
+	mul		___349_z $tmp265 Scale 	%argrw{"wrr"}
+	mul		___349_w Time Scale 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:293
+#       float n0, n1, n2, n3, n4; // Noise contributions from the five corners
+	for		$tmp266 466 467 870 872 	%line{293} %argrw{"r"}
+	assign		___350_p $const2 	%argrw{"wr"}
+	lt		$tmp266 ___350_p Octaves 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:296
+#       int i = fastfloor(x + s);
+	add		$tmp267 ___349_x ___349_y 	%line{296} %argrw{"wrr"}
+	add		$tmp268 $tmp267 ___349_z 	%argrw{"wrr"}
+	add		$tmp269 $tmp268 ___349_w 	%argrw{"wrr"}
+	mul		___351_s $tmp269 F4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:297
+#       int j = fastfloor(y + s);
+	add		$tmp270 ___349_x ___351_s 	%line{297} %argrw{"wrr"}
+	functioncall	$const63 479 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:29
+#  return x < xi ? xi-1 : xi;
+	assign		___322_xi $tmp270 	%line{29} %argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:30
+# }
+	lt		$tmp271 $tmp270 ___322_xi 	%line{30} %argrw{"wrr"}
+	if		$tmp271 477 478 	%argrw{"r"}
+	sub		___351_i ___322_xi $const4 	%argrw{"wrr"}
+	assign		___351_i ___322_xi 	%argrw{"wr"}
+	return
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:298
+#       int k = fastfloor(z + s);
+	add		$tmp272 ___349_y ___351_s 	%line{298} %argrw{"wrr"}
+	functioncall	$const63 487 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:29
+#  return x < xi ? xi-1 : xi;
+	assign		___322_xi $tmp272 	%line{29} %argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:30
+# }
+	lt		$tmp273 $tmp272 ___322_xi 	%line{30} %argrw{"wrr"}
+	if		$tmp273 485 486 	%argrw{"r"}
+	sub		___351_j ___322_xi $const4 	%argrw{"wrr"}
+	assign		___351_j ___322_xi 	%argrw{"wr"}
+	return
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:299
+#       int l = fastfloor(w + s);
+	add		$tmp274 ___349_z ___351_s 	%line{299} %argrw{"wrr"}
+	functioncall	$const63 495 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:29
+#  return x < xi ? xi-1 : xi;
+	assign		___322_xi $tmp274 	%line{29} %argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:30
+# }
+	lt		$tmp275 $tmp274 ___322_xi 	%line{30} %argrw{"wrr"}
+	if		$tmp275 493 494 	%argrw{"r"}
+	sub		___351_k ___322_xi $const4 	%argrw{"wrr"}
+	assign		___351_k ___322_xi 	%argrw{"wr"}
+	return
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:300
+#       float t = (i + j + k + l) * G4; // Factor for 4D unskewing
+	add		$tmp276 ___349_w ___351_s 	%line{300} %argrw{"wrr"}
+	functioncall	$const63 503 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:29
+#  return x < xi ? xi-1 : xi;
+	assign		___322_xi $tmp276 	%line{29} %argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:30
+# }
+	lt		$tmp277 $tmp276 ___322_xi 	%line{30} %argrw{"wrr"}
+	if		$tmp277 501 502 	%argrw{"r"}
+	sub		___351_l ___322_xi $const4 	%argrw{"wrr"}
+	assign		___351_l ___322_xi 	%argrw{"wr"}
+	return
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:301
+#       float X0 = i - t; // Unskew the cell origin back to (x,y,z,w) space
+	add		$tmp278 ___351_i ___351_j 	%line{301} %argrw{"wrr"}
+	add		$tmp279 $tmp278 ___351_k 	%argrw{"wrr"}
+	add		$tmp280 $tmp279 ___351_l 	%argrw{"wrr"}
+	assign		$tmp281 $tmp280 	%argrw{"wr"}
+	mul		___351_t $tmp281 G4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:302
+#       float Y0 = j - t;
+	assign		$tmp282 ___351_i 	%line{302} %argrw{"wr"}
+	sub		___351_X0 $tmp282 ___351_t 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:303
+#       float Z0 = k - t;
+	assign		$tmp283 ___351_j 	%line{303} %argrw{"wr"}
+	sub		___351_Y0 $tmp283 ___351_t 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:304
+#       float W0 = l - t;
+	assign		$tmp284 ___351_k 	%line{304} %argrw{"wr"}
+	sub		___351_Z0 $tmp284 ___351_t 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:305
+#       float x0 = x - X0;  // The x,y,z,w distances from the cell origin
+	assign		$tmp285 ___351_l 	%line{305} %argrw{"wr"}
+	sub		___351_W0 $tmp285 ___351_t 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:306
+#       float y0 = y - Y0;
+	sub		___351_x0 ___349_x ___351_X0 	%line{306} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:307
+#       float z0 = z - Z0;
+	sub		___351_y0 ___349_y ___351_Y0 	%line{307} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:308
+#       float w0 = w - W0;
+	sub		___351_z0 ___349_z ___351_Z0 	%line{308} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:309
+#       // For the 4D case, the simplex is a 4D shape I won't even try to describe.
+	sub		___351_w0 ___349_w ___351_W0 	%line{309} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:315
+#       int ranky = 0;
+	assign		___351_rankx $const2 	%line{315} %argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:316
+#       int rankz = 0;
+	assign		___351_ranky $const2 	%line{316} %argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:317
+#       int rankw = 0;
+	assign		___351_rankz $const2 	%line{317} %argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:318
+#       if(x0 > y0) rankx++; else ranky++;
+	assign		___351_rankw $const2 	%line{318} %argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:319
+#       if(x0 > z0) rankx++; else rankz++;
+	gt		$tmp286 ___351_x0 ___351_y0 	%line{319} %argrw{"wrr"}
+	if		$tmp286 528 530 	%argrw{"r"}
+	assign		$tmp287 ___351_rankx 	%argrw{"wr"}
+	add		___351_rankx ___351_rankx $const4 	%argrw{"wrr"}
+	assign		$tmp288 ___351_ranky 	%argrw{"wr"}
+	add		___351_ranky ___351_ranky $const4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:320
+#       if(x0 > w0) rankx++; else rankw++;
+	gt		$tmp289 ___351_x0 ___351_z0 	%line{320} %argrw{"wrr"}
+	if		$tmp289 534 536 	%argrw{"r"}
+	assign		$tmp290 ___351_rankx 	%argrw{"wr"}
+	add		___351_rankx ___351_rankx $const4 	%argrw{"wrr"}
+	assign		$tmp291 ___351_rankz 	%argrw{"wr"}
+	add		___351_rankz ___351_rankz $const4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:321
+#       if(y0 > z0) ranky++; else rankz++;
+	gt		$tmp292 ___351_x0 ___351_w0 	%line{321} %argrw{"wrr"}
+	if		$tmp292 540 542 	%argrw{"r"}
+	assign		$tmp293 ___351_rankx 	%argrw{"wr"}
+	add		___351_rankx ___351_rankx $const4 	%argrw{"wrr"}
+	assign		$tmp294 ___351_rankw 	%argrw{"wr"}
+	add		___351_rankw ___351_rankw $const4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:322
+#       if(y0 > w0) ranky++; else rankw++;
+	gt		$tmp295 ___351_y0 ___351_z0 	%line{322} %argrw{"wrr"}
+	if		$tmp295 546 548 	%argrw{"r"}
+	assign		$tmp296 ___351_ranky 	%argrw{"wr"}
+	add		___351_ranky ___351_ranky $const4 	%argrw{"wrr"}
+	assign		$tmp297 ___351_rankz 	%argrw{"wr"}
+	add		___351_rankz ___351_rankz $const4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:323
+#       if(z0 > w0) rankz++; else rankw++;
+	gt		$tmp298 ___351_y0 ___351_w0 	%line{323} %argrw{"wrr"}
+	if		$tmp298 552 554 	%argrw{"r"}
+	assign		$tmp299 ___351_ranky 	%argrw{"wr"}
+	add		___351_ranky ___351_ranky $const4 	%argrw{"wrr"}
+	assign		$tmp300 ___351_rankw 	%argrw{"wr"}
+	add		___351_rankw ___351_rankw $const4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:324
+#       int i1, j1, k1, l1; // The integer offsets for the second simplex corner
+	gt		$tmp301 ___351_z0 ___351_w0 	%line{324} %argrw{"wrr"}
+	if		$tmp301 558 560 	%argrw{"r"}
+	assign		$tmp302 ___351_rankz 	%argrw{"wr"}
+	add		___351_rankz ___351_rankz $const4 	%argrw{"wrr"}
+	assign		$tmp303 ___351_rankw 	%argrw{"wr"}
+	add		___351_rankw ___351_rankw $const4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:333
+#       j1 = ranky >= 3 ? 1 : 0;
+	ge		$tmp304 ___351_rankx $const8 	%line{333} %argrw{"wrr"}
+	if		$tmp304 563 564 	%argrw{"r"}
+	assign		___351_i1 $const4 	%argrw{"wr"}
+	assign		___351_i1 $const2 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:334
+#       k1 = rankz >= 3 ? 1 : 0;
+	ge		$tmp305 ___351_ranky $const8 	%line{334} %argrw{"wrr"}
+	if		$tmp305 567 568 	%argrw{"r"}
+	assign		___351_j1 $const4 	%argrw{"wr"}
+	assign		___351_j1 $const2 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:335
+#       l1 = rankw >= 3 ? 1 : 0;
+	ge		$tmp306 ___351_rankz $const8 	%line{335} %argrw{"wrr"}
+	if		$tmp306 571 572 	%argrw{"r"}
+	assign		___351_k1 $const4 	%argrw{"wr"}
+	assign		___351_k1 $const2 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:336
+#       // Rank 2 denotes the second largest coordinate.
+	ge		$tmp307 ___351_rankw $const8 	%line{336} %argrw{"wrr"}
+	if		$tmp307 575 576 	%argrw{"r"}
+	assign		___351_l1 $const4 	%argrw{"wr"}
+	assign		___351_l1 $const2 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:338
+#       j2 = ranky >= 2 ? 1 : 0;
+	ge		$tmp308 ___351_rankx $const6 	%line{338} %argrw{"wrr"}
+	if		$tmp308 579 580 	%argrw{"r"}
+	assign		___351_i2 $const4 	%argrw{"wr"}
+	assign		___351_i2 $const2 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:339
+#       k2 = rankz >= 2 ? 1 : 0;
+	ge		$tmp309 ___351_ranky $const6 	%line{339} %argrw{"wrr"}
+	if		$tmp309 583 584 	%argrw{"r"}
+	assign		___351_j2 $const4 	%argrw{"wr"}
+	assign		___351_j2 $const2 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:340
+#       l2 = rankw >= 2 ? 1 : 0;
+	ge		$tmp310 ___351_rankz $const6 	%line{340} %argrw{"wrr"}
+	if		$tmp310 587 588 	%argrw{"r"}
+	assign		___351_k2 $const4 	%argrw{"wr"}
+	assign		___351_k2 $const2 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:341
+#       // Rank 1 denotes the second smallest coordinate.
+	ge		$tmp311 ___351_rankw $const6 	%line{341} %argrw{"wrr"}
+	if		$tmp311 591 592 	%argrw{"r"}
+	assign		___351_l2 $const4 	%argrw{"wr"}
+	assign		___351_l2 $const2 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:343
+#       j3 = ranky >= 1 ? 1 : 0;
+	ge		$tmp312 ___351_rankx $const4 	%line{343} %argrw{"wrr"}
+	if		$tmp312 595 596 	%argrw{"r"}
+	assign		___351_i3 $const4 	%argrw{"wr"}
+	assign		___351_i3 $const2 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:344
+#       k3 = rankz >= 1 ? 1 : 0;
+	ge		$tmp313 ___351_ranky $const4 	%line{344} %argrw{"wrr"}
+	if		$tmp313 599 600 	%argrw{"r"}
+	assign		___351_j3 $const4 	%argrw{"wr"}
+	assign		___351_j3 $const2 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:345
+#       l3 = rankw >= 1 ? 1 : 0;
+	ge		$tmp314 ___351_rankz $const4 	%line{345} %argrw{"wrr"}
+	if		$tmp314 603 604 	%argrw{"r"}
+	assign		___351_k3 $const4 	%argrw{"wr"}
+	assign		___351_k3 $const2 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:346
+#       // The fifth corner has all coordinate offsets = 1, so no need to compute that.
+	ge		$tmp315 ___351_rankw $const4 	%line{346} %argrw{"wrr"}
+	if		$tmp315 607 608 	%argrw{"r"}
+	assign		___351_l3 $const4 	%argrw{"wr"}
+	assign		___351_l3 $const2 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:348
+#       float y1 = y0 - j1 + G4;
+	assign		$tmp317 ___351_i1 	%line{348} %argrw{"wr"}
+	sub		$tmp316 ___351_x0 $tmp317 	%argrw{"wrr"}
+	add		___351_x1 $tmp316 G4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:349
+#       float z1 = z0 - k1 + G4;
+	assign		$tmp319 ___351_j1 	%line{349} %argrw{"wr"}
+	sub		$tmp318 ___351_y0 $tmp319 	%argrw{"wrr"}
+	add		___351_y1 $tmp318 G4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:350
+#       float w1 = w0 - l1 + G4;
+	assign		$tmp321 ___351_k1 	%line{350} %argrw{"wr"}
+	sub		$tmp320 ___351_z0 $tmp321 	%argrw{"wrr"}
+	add		___351_z1 $tmp320 G4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:351
+#       float x2 = x0 - i2 + 2.0*G4; // Offsets for third corner in (x,y,z,w) coords
+	assign		$tmp323 ___351_l1 	%line{351} %argrw{"wr"}
+	sub		$tmp322 ___351_w0 $tmp323 	%argrw{"wrr"}
+	add		___351_w1 $tmp322 G4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:352
+#       float y2 = y0 - j2 + 2.0*G4;
+	assign		$tmp325 ___351_i2 	%line{352} %argrw{"wr"}
+	sub		$tmp324 ___351_x0 $tmp325 	%argrw{"wrr"}
+	mul		$tmp326 $const64 G4 	%argrw{"wrr"}
+	add		___351_x2 $tmp324 $tmp326 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:353
+#       float z2 = z0 - k2 + 2.0*G4;
+	assign		$tmp328 ___351_j2 	%line{353} %argrw{"wr"}
+	sub		$tmp327 ___351_y0 $tmp328 	%argrw{"wrr"}
+	mul		$tmp329 $const64 G4 	%argrw{"wrr"}
+	add		___351_y2 $tmp327 $tmp329 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:354
+#       float w2 = w0 - l2 + 2.0*G4;
+	assign		$tmp331 ___351_k2 	%line{354} %argrw{"wr"}
+	sub		$tmp330 ___351_z0 $tmp331 	%argrw{"wrr"}
+	mul		$tmp332 $const64 G4 	%argrw{"wrr"}
+	add		___351_z2 $tmp330 $tmp332 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:355
+#       float x3 = x0 - i3 + 3.0*G4; // Offsets for fourth corner in (x,y,z,w) coords
+	assign		$tmp334 ___351_l2 	%line{355} %argrw{"wr"}
+	sub		$tmp333 ___351_w0 $tmp334 	%argrw{"wrr"}
+	mul		$tmp335 $const64 G4 	%argrw{"wrr"}
+	add		___351_w2 $tmp333 $tmp335 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:356
+#       float y3 = y0 - j3 + 3.0*G4;
+	assign		$tmp337 ___351_i3 	%line{356} %argrw{"wr"}
+	sub		$tmp336 ___351_x0 $tmp337 	%argrw{"wrr"}
+	mul		$tmp338 $const57 G4 	%argrw{"wrr"}
+	add		___351_x3 $tmp336 $tmp338 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:357
+#       float z3 = z0 - k3 + 3.0*G4;
+	assign		$tmp340 ___351_j3 	%line{357} %argrw{"wr"}
+	sub		$tmp339 ___351_y0 $tmp340 	%argrw{"wrr"}
+	mul		$tmp341 $const57 G4 	%argrw{"wrr"}
+	add		___351_y3 $tmp339 $tmp341 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:358
+#       float w3 = w0 - l3 + 3.0*G4;
+	assign		$tmp343 ___351_k3 	%line{358} %argrw{"wr"}
+	sub		$tmp342 ___351_z0 $tmp343 	%argrw{"wrr"}
+	mul		$tmp344 $const57 G4 	%argrw{"wrr"}
+	add		___351_z3 $tmp342 $tmp344 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:359
+#       float x4 = x0 - 1.0 + 4.0*G4; // Offsets for last corner in (x,y,z,w) coords
+	assign		$tmp346 ___351_l3 	%line{359} %argrw{"wr"}
+	sub		$tmp345 ___351_w0 $tmp346 	%argrw{"wrr"}
+	mul		$tmp347 $const57 G4 	%argrw{"wrr"}
+	add		___351_w3 $tmp345 $tmp347 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:360
+#       float y4 = y0 - 1.0 + 4.0*G4;
+	sub		$tmp348 ___351_x0 $const58 	%line{360} %argrw{"wrr"}
+	mul		$tmp349 $const61 G4 	%argrw{"wrr"}
+	add		___351_x4 $tmp348 $tmp349 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:361
+#       float z4 = z0 - 1.0 + 4.0*G4;
+	sub		$tmp350 ___351_y0 $const58 	%line{361} %argrw{"wrr"}
+	mul		$tmp351 $const61 G4 	%argrw{"wrr"}
+	add		___351_y4 $tmp350 $tmp351 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:362
+#       float w4 = w0 - 1.0 + 4.0*G4;
+	sub		$tmp352 ___351_z0 $const58 	%line{362} %argrw{"wrr"}
+	mul		$tmp353 $const61 G4 	%argrw{"wrr"}
+	add		___351_z4 $tmp352 $tmp353 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:363
+#       // Work out the hashed gradient indices of the five simplex corners
+	sub		$tmp354 ___351_w0 $const58 	%line{363} %argrw{"wrr"}
+	mul		$tmp355 $const61 G4 	%argrw{"wrr"}
+	add		___351_w4 $tmp354 $tmp355 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:365
+#       int jj = j & 255;
+	bitand		___351_ii ___351_i $const65 	%line{365} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:366
+#       int kk = k & 255;
+	bitand		___351_jj ___351_j $const65 	%line{366} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:367
+#       int ll = l & 255;
+	bitand		___351_kk ___351_k $const65 	%line{367} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:368
+#       int gi0 = perm[ii+perm[jj+perm[kk+perm[ll]]]] % 32;
+	bitand		___351_ll ___351_l $const65 	%line{368} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:369
+#       int gi1 = perm[ii+i1+perm[jj+j1+perm[kk+k1+perm[ll+l1]]]] % 32;
+	aref		$tmp356 perm ___351_ll 	%line{369} %argrw{"wrr"}
+	add		$tmp357 ___351_kk $tmp356 	%argrw{"wrr"}
+	aref		$tmp358 perm $tmp357 	%argrw{"wrr"}
+	add		$tmp359 ___351_jj $tmp358 	%argrw{"wrr"}
+	aref		$tmp360 perm $tmp359 	%argrw{"wrr"}
+	add		$tmp361 ___351_ii $tmp360 	%argrw{"wrr"}
+	aref		$tmp362 perm $tmp361 	%argrw{"wrr"}
+	mod		___351_gi0 $tmp362 $const71 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:370
+#       int gi2 = perm[ii+i2+perm[jj+j2+perm[kk+k2+perm[ll+l2]]]] % 32;
+	add		$tmp363 ___351_ii ___351_i1 	%line{370} %argrw{"wrr"}
+	add		$tmp364 ___351_jj ___351_j1 	%argrw{"wrr"}
+	add		$tmp365 ___351_kk ___351_k1 	%argrw{"wrr"}
+	add		$tmp366 ___351_ll ___351_l1 	%argrw{"wrr"}
+	aref		$tmp367 perm $tmp366 	%argrw{"wrr"}
+	add		$tmp368 $tmp365 $tmp367 	%argrw{"wrr"}
+	aref		$tmp369 perm $tmp368 	%argrw{"wrr"}
+	add		$tmp370 $tmp364 $tmp369 	%argrw{"wrr"}
+	aref		$tmp371 perm $tmp370 	%argrw{"wrr"}
+	add		$tmp372 $tmp363 $tmp371 	%argrw{"wrr"}
+	aref		$tmp373 perm $tmp372 	%argrw{"wrr"}
+	mod		___351_gi1 $tmp373 $const71 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:371
+#       int gi3 = perm[ii+i3+perm[jj+j3+perm[kk+k3+perm[ll+l3]]]] % 32;
+	add		$tmp374 ___351_ii ___351_i2 	%line{371} %argrw{"wrr"}
+	add		$tmp375 ___351_jj ___351_j2 	%argrw{"wrr"}
+	add		$tmp376 ___351_kk ___351_k2 	%argrw{"wrr"}
+	add		$tmp377 ___351_ll ___351_l2 	%argrw{"wrr"}
+	aref		$tmp378 perm $tmp377 	%argrw{"wrr"}
+	add		$tmp379 $tmp376 $tmp378 	%argrw{"wrr"}
+	aref		$tmp380 perm $tmp379 	%argrw{"wrr"}
+	add		$tmp381 $tmp375 $tmp380 	%argrw{"wrr"}
+	aref		$tmp382 perm $tmp381 	%argrw{"wrr"}
+	add		$tmp383 $tmp374 $tmp382 	%argrw{"wrr"}
+	aref		$tmp384 perm $tmp383 	%argrw{"wrr"}
+	mod		___351_gi2 $tmp384 $const71 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:372
+#       int gi4 = perm[ii+1+perm[jj+1+perm[kk+1+perm[ll+1]]]] % 32;
+	add		$tmp385 ___351_ii ___351_i3 	%line{372} %argrw{"wrr"}
+	add		$tmp386 ___351_jj ___351_j3 	%argrw{"wrr"}
+	add		$tmp387 ___351_kk ___351_k3 	%argrw{"wrr"}
+	add		$tmp388 ___351_ll ___351_l3 	%argrw{"wrr"}
+	aref		$tmp389 perm $tmp388 	%argrw{"wrr"}
+	add		$tmp390 $tmp387 $tmp389 	%argrw{"wrr"}
+	aref		$tmp391 perm $tmp390 	%argrw{"wrr"}
+	add		$tmp392 $tmp386 $tmp391 	%argrw{"wrr"}
+	aref		$tmp393 perm $tmp392 	%argrw{"wrr"}
+	add		$tmp394 $tmp385 $tmp393 	%argrw{"wrr"}
+	aref		$tmp395 perm $tmp394 	%argrw{"wrr"}
+	mod		___351_gi3 $tmp395 $const71 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:373
+#       // Calculate the contribution from the five corners
+	add		$tmp396 ___351_ii $const4 	%line{373} %argrw{"wrr"}
+	add		$tmp397 ___351_jj $const4 	%argrw{"wrr"}
+	add		$tmp398 ___351_kk $const4 	%argrw{"wrr"}
+	add		$tmp399 ___351_ll $const4 	%argrw{"wrr"}
+	aref		$tmp400 perm $tmp399 	%argrw{"wrr"}
+	add		$tmp401 $tmp398 $tmp400 	%argrw{"wrr"}
+	aref		$tmp402 perm $tmp401 	%argrw{"wrr"}
+	add		$tmp403 $tmp397 $tmp402 	%argrw{"wrr"}
+	aref		$tmp404 perm $tmp403 	%argrw{"wrr"}
+	add		$tmp405 $tmp396 $tmp404 	%argrw{"wrr"}
+	aref		$tmp406 perm $tmp405 	%argrw{"wrr"}
+	mod		___351_gi4 $tmp406 $const71 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:379
+#       if(t0 < 0) n0 = 0.0;
+	mul		$tmp407 ___351_x0 ___351_x0 	%line{379} %argrw{"wrr"}
+	sub		$tmp408 $const69 $tmp407 	%argrw{"wrr"}
+	mul		$tmp409 ___351_y0 ___351_y0 	%argrw{"wrr"}
+	sub		$tmp410 $tmp408 $tmp409 	%argrw{"wrr"}
+	mul		$tmp411 ___351_z0 ___351_z0 	%argrw{"wrr"}
+	sub		$tmp412 $tmp410 $tmp411 	%argrw{"wrr"}
+	mul		$tmp413 ___351_w0 ___351_w0 	%argrw{"wrr"}
+	sub		___351_t0 $tmp412 $tmp413 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:380
+#       else {
+	lt		$tmp414 ___351_t0 $const2 	%line{380} %argrw{"wrr"}
+	if		$tmp414 735 751 	%argrw{"r"}
+	assign		___351_n0 $const66 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:382
+#       n0 = t0 * t0 * dot(grad4v[gi0], grad4t[gi0], x0, y0, z0, w0);
+	mul		___351_t0 ___351_t0 ___351_t0 	%line{382} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:383
+#       }
+	mul		$tmp415 ___351_t0 ___351_t0 	%line{383} %argrw{"wrr"}
+	aref		$tmp417 grad4v ___351_gi0 	%argrw{"wrr"}
+	aref		$tmp418 grad4t ___351_gi0 	%argrw{"wrr"}
+	functioncall	$const67 750 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:42
+# 
+	compref		$tmp419 $tmp417 $const2 	%line{42} %argrw{"wrr"}
+	mul		$tmp420 $tmp419 ___351_x0 	%argrw{"wrr"}
+	compref		$tmp421 $tmp417 $const4 	%argrw{"wrr"}
+	mul		$tmp422 $tmp421 ___351_y0 	%argrw{"wrr"}
+	add		$tmp423 $tmp420 $tmp422 	%argrw{"wrr"}
+	compref		$tmp424 $tmp417 $const6 	%argrw{"wrr"}
+	mul		$tmp425 $tmp424 ___351_z0 	%argrw{"wrr"}
+	add		$tmp426 $tmp423 $tmp425 	%argrw{"wrr"}
+	mul		$tmp427 $tmp418 ___351_w0 	%argrw{"wrr"}
+	add		$tmp416 $tmp426 $tmp427 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:383
+#       }
+	mul		___351_n0 $tmp415 $tmp416 	%line{383} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:385
+#       if(t1 < 0) n1 = 0.0;
+	mul		$tmp428 ___351_x1 ___351_x1 	%line{385} %argrw{"wrr"}
+	sub		$tmp429 $const69 $tmp428 	%argrw{"wrr"}
+	mul		$tmp430 ___351_y1 ___351_y1 	%argrw{"wrr"}
+	sub		$tmp431 $tmp429 $tmp430 	%argrw{"wrr"}
+	mul		$tmp432 ___351_z1 ___351_z1 	%argrw{"wrr"}
+	sub		$tmp433 $tmp431 $tmp432 	%argrw{"wrr"}
+	mul		$tmp434 ___351_w1 ___351_w1 	%argrw{"wrr"}
+	sub		___351_t1 $tmp433 $tmp434 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:386
+#       else {
+	lt		$tmp435 ___351_t1 $const2 	%line{386} %argrw{"wrr"}
+	if		$tmp435 762 778 	%argrw{"r"}
+	assign		___351_n1 $const66 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:388
+#       n1 = t1 * t1 * dot(grad4v[gi1], grad4t[gi1], x1, y1, z1, w1);
+	mul		___351_t1 ___351_t1 ___351_t1 	%line{388} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:389
+#       }
+	mul		$tmp436 ___351_t1 ___351_t1 	%line{389} %argrw{"wrr"}
+	aref		$tmp438 grad4v ___351_gi1 	%argrw{"wrr"}
+	aref		$tmp439 grad4t ___351_gi1 	%argrw{"wrr"}
+	functioncall	$const67 777 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:42
+# 
+	compref		$tmp440 $tmp438 $const2 	%line{42} %argrw{"wrr"}
+	mul		$tmp441 $tmp440 ___351_x1 	%argrw{"wrr"}
+	compref		$tmp442 $tmp438 $const4 	%argrw{"wrr"}
+	mul		$tmp443 $tmp442 ___351_y1 	%argrw{"wrr"}
+	add		$tmp444 $tmp441 $tmp443 	%argrw{"wrr"}
+	compref		$tmp445 $tmp438 $const6 	%argrw{"wrr"}
+	mul		$tmp446 $tmp445 ___351_z1 	%argrw{"wrr"}
+	add		$tmp447 $tmp444 $tmp446 	%argrw{"wrr"}
+	mul		$tmp448 $tmp439 ___351_w1 	%argrw{"wrr"}
+	add		$tmp437 $tmp447 $tmp448 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:389
+#       }
+	mul		___351_n1 $tmp436 $tmp437 	%line{389} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:391
+#       if(t2 < 0) n2 = 0.0;
+	mul		$tmp449 ___351_x2 ___351_x2 	%line{391} %argrw{"wrr"}
+	sub		$tmp450 $const69 $tmp449 	%argrw{"wrr"}
+	mul		$tmp451 ___351_y2 ___351_y2 	%argrw{"wrr"}
+	sub		$tmp452 $tmp450 $tmp451 	%argrw{"wrr"}
+	mul		$tmp453 ___351_z2 ___351_z2 	%argrw{"wrr"}
+	sub		$tmp454 $tmp452 $tmp453 	%argrw{"wrr"}
+	mul		$tmp455 ___351_w2 ___351_w2 	%argrw{"wrr"}
+	sub		___351_t2 $tmp454 $tmp455 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:392
+#       else {
+	lt		$tmp456 ___351_t2 $const2 	%line{392} %argrw{"wrr"}
+	if		$tmp456 789 805 	%argrw{"r"}
+	assign		___351_n2 $const66 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:394
+#       n2 = t2 * t2 * dot(grad4v[gi2], grad4t[gi2], x2, y2, z2, w2);
+	mul		___351_t2 ___351_t2 ___351_t2 	%line{394} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:395
+#       }
+	mul		$tmp457 ___351_t2 ___351_t2 	%line{395} %argrw{"wrr"}
+	aref		$tmp459 grad4v ___351_gi2 	%argrw{"wrr"}
+	aref		$tmp460 grad4t ___351_gi2 	%argrw{"wrr"}
+	functioncall	$const67 804 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:42
+# 
+	compref		$tmp461 $tmp459 $const2 	%line{42} %argrw{"wrr"}
+	mul		$tmp462 $tmp461 ___351_x2 	%argrw{"wrr"}
+	compref		$tmp463 $tmp459 $const4 	%argrw{"wrr"}
+	mul		$tmp464 $tmp463 ___351_y2 	%argrw{"wrr"}
+	add		$tmp465 $tmp462 $tmp464 	%argrw{"wrr"}
+	compref		$tmp466 $tmp459 $const6 	%argrw{"wrr"}
+	mul		$tmp467 $tmp466 ___351_z2 	%argrw{"wrr"}
+	add		$tmp468 $tmp465 $tmp467 	%argrw{"wrr"}
+	mul		$tmp469 $tmp460 ___351_w2 	%argrw{"wrr"}
+	add		$tmp458 $tmp468 $tmp469 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:395
+#       }
+	mul		___351_n2 $tmp457 $tmp458 	%line{395} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:397
+#       if(t3 < 0) n3 = 0.0;
+	mul		$tmp470 ___351_x3 ___351_x3 	%line{397} %argrw{"wrr"}
+	sub		$tmp471 $const69 $tmp470 	%argrw{"wrr"}
+	mul		$tmp472 ___351_y3 ___351_y3 	%argrw{"wrr"}
+	sub		$tmp473 $tmp471 $tmp472 	%argrw{"wrr"}
+	mul		$tmp474 ___351_z3 ___351_z3 	%argrw{"wrr"}
+	sub		$tmp475 $tmp473 $tmp474 	%argrw{"wrr"}
+	mul		$tmp476 ___351_w3 ___351_w3 	%argrw{"wrr"}
+	sub		___351_t3 $tmp475 $tmp476 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:398
+#       else {
+	lt		$tmp477 ___351_t3 $const2 	%line{398} %argrw{"wrr"}
+	if		$tmp477 816 832 	%argrw{"r"}
+	assign		___351_n3 $const66 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:400
+#       n3 = t3 * t3 * dot(grad4v[gi3], grad4t[gi3], x3, y3, z3, w3);
+	mul		___351_t3 ___351_t3 ___351_t3 	%line{400} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:401
+#       }
+	mul		$tmp478 ___351_t3 ___351_t3 	%line{401} %argrw{"wrr"}
+	aref		$tmp480 grad4v ___351_gi3 	%argrw{"wrr"}
+	aref		$tmp481 grad4t ___351_gi3 	%argrw{"wrr"}
+	functioncall	$const67 831 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:42
+# 
+	compref		$tmp482 $tmp480 $const2 	%line{42} %argrw{"wrr"}
+	mul		$tmp483 $tmp482 ___351_x3 	%argrw{"wrr"}
+	compref		$tmp484 $tmp480 $const4 	%argrw{"wrr"}
+	mul		$tmp485 $tmp484 ___351_y3 	%argrw{"wrr"}
+	add		$tmp486 $tmp483 $tmp485 	%argrw{"wrr"}
+	compref		$tmp487 $tmp480 $const6 	%argrw{"wrr"}
+	mul		$tmp488 $tmp487 ___351_z3 	%argrw{"wrr"}
+	add		$tmp489 $tmp486 $tmp488 	%argrw{"wrr"}
+	mul		$tmp490 $tmp481 ___351_w3 	%argrw{"wrr"}
+	add		$tmp479 $tmp489 $tmp490 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:401
+#       }
+	mul		___351_n3 $tmp478 $tmp479 	%line{401} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:403
+#       if(t4 < 0) n4 = 0.0;
+	mul		$tmp491 ___351_x4 ___351_x4 	%line{403} %argrw{"wrr"}
+	sub		$tmp492 $const69 $tmp491 	%argrw{"wrr"}
+	mul		$tmp493 ___351_y4 ___351_y4 	%argrw{"wrr"}
+	sub		$tmp494 $tmp492 $tmp493 	%argrw{"wrr"}
+	mul		$tmp495 ___351_z4 ___351_z4 	%argrw{"wrr"}
+	sub		$tmp496 $tmp494 $tmp495 	%argrw{"wrr"}
+	mul		$tmp497 ___351_w4 ___351_w4 	%argrw{"wrr"}
+	sub		___351_t4 $tmp496 $tmp497 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:404
+#       else {
+	lt		$tmp498 ___351_t4 $const2 	%line{404} %argrw{"wrr"}
+	if		$tmp498 843 859 	%argrw{"r"}
+	assign		___351_n4 $const66 	%argrw{"wr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:406
+#       n4 = t4 * t4 * dot(grad4v[gi4], grad4t[gi4], x4, y4, z4, w4);
+	mul		___351_t4 ___351_t4 ___351_t4 	%line{406} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:407
+#       }
+	mul		$tmp499 ___351_t4 ___351_t4 	%line{407} %argrw{"wrr"}
+	aref		$tmp501 grad4v ___351_gi4 	%argrw{"wrr"}
+	aref		$tmp502 grad4t ___351_gi4 	%argrw{"wrr"}
+	functioncall	$const67 858 	%argrw{"r"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:42
+# 
+	compref		$tmp503 $tmp501 $const2 	%line{42} %argrw{"wrr"}
+	mul		$tmp504 $tmp503 ___351_x4 	%argrw{"wrr"}
+	compref		$tmp505 $tmp501 $const4 	%argrw{"wrr"}
+	mul		$tmp506 $tmp505 ___351_y4 	%argrw{"wrr"}
+	add		$tmp507 $tmp504 $tmp506 	%argrw{"wrr"}
+	compref		$tmp508 $tmp501 $const6 	%argrw{"wrr"}
+	mul		$tmp509 $tmp508 ___351_z4 	%argrw{"wrr"}
+	add		$tmp510 $tmp507 $tmp509 	%argrw{"wrr"}
+	mul		$tmp511 $tmp502 ___351_w4 	%argrw{"wrr"}
+	add		$tmp500 $tmp510 $tmp511 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:407
+#       }
+	mul		___351_n4 $tmp499 $tmp500 	%line{407} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:410
+#       pwr *= pwHL;
+	add		$tmp512 ___351_n0 ___351_n1 	%line{410} %argrw{"wrr"}
+	add		$tmp513 $tmp512 ___351_n2 	%argrw{"wrr"}
+	add		$tmp514 $tmp513 ___351_n3 	%argrw{"wrr"}
+	add		$tmp515 $tmp514 ___351_n4 	%argrw{"wrr"}
+	mul		$tmp516 $const72 $tmp515 	%argrw{"wrr"}
+	mul		Fac $tmp516 pwr 	%argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:411
+#       x *= Lacunarity;
+	mul		pwr pwr pwHL 	%line{411} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:412
+#       y *= Lacunarity;
+	mul		___349_x ___349_x Lacunarity 	%line{412} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:413
+#       z *= Lacunarity;
+	mul		___349_y ___349_y Lacunarity 	%line{413} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:414
+#       w *= Lacunarity;
+	mul		___349_z ___349_z Lacunarity 	%line{414} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:415
+#     }
+	mul		___349_w ___349_w Lacunarity 	%line{415} %argrw{"wrr"}
+# source/sambler-osl-shaders/random-noise/MASimplexNoise/MASimplexNoise.osl:293
+#       float n0, n1, n2, n3, n4; // Noise contributions from the five corners
+	assign		$tmp517 ___350_p 	%line{293} %argrw{"wr"}
+	add		___350_p ___350_p $const4 	%argrw{"wrr"}
+	end

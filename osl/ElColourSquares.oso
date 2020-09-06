@@ -1,0 +1,580 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader ElColourSquares
+param	float	Scale	1		%read{1,1} %write{2147483647,-1}
+param	vector	Vector	0 0 0		%read{1,1} %write{0,0} %initexpr
+oparam	color	ColorOut	0.80000001 0.80000001 0.80000001		%read{2147483647,-1} %write{224,224}
+global	point	P	%read{0,0} %write{2147483647,-1}
+local	point	___324_pos	%read{59,199} %write{58,184}
+local	point	___324_x	%read{74,213} %write{73,198}
+local	point	___324_i	%read{75,203} %write{74,199}
+local	point	___324_c	%read{95,220} %write{83,208}
+local	vector	pos	%read{3,183} %write{1,1}
+local	float	r	%read{3,181} %write{2,2}
+local	point	x	%read{19,49} %write{17,17}
+local	point	i	%read{2147483647,-1} %write{19,19}
+local	float	w	%read{25,52} %write{20,20}
+local	float	l	%read{37,223} %write{28,56}
+local	point	tc	%read{138,223} %write{95,222}
+const	float	$const1	20		%read{2,2} %write{2147483647,-1}
+temp	vector	$tmp1	%read{5,13} %write{3,3}
+const	string	$const2	"fract"		%read{4,195} %write{2147483647,-1}
+temp	float	$tmp2	%read{17,17} %write{8,8}
+const	int	$const3	0		%read{5,212} %write{2147483647,-1}
+temp	float	$tmp3	%read{7,8} %write{5,5}
+temp	float	$tmp4	%read{8,8} %write{7,7}
+temp	float	$tmp5	%read{17,17} %write{12,12}
+const	int	$const4	1		%read{9,213} %write{2147483647,-1}
+temp	float	$tmp6	%read{11,12} %write{9,9}
+temp	float	$tmp7	%read{12,12} %write{11,11}
+temp	float	$tmp8	%read{17,17} %write{16,16}
+const	int	$const5	2		%read{13,194} %write{2147483647,-1}
+temp	float	$tmp9	%read{15,16} %write{13,13}
+temp	float	$tmp10	%read{16,16} %write{15,15}
+temp	vector	$tmp11	%read{19,19} %write{18,18}
+const	float	$const6	50		%read{20,20} %write{2147483647,-1}
+const	float	$const7	0		%read{27,219} %write{2147483647,-1}
+const	float	$const8	1		%read{28,218} %write{2147483647,-1}
+const	float	$const9	0.5		%read{22,97} %write{2147483647,-1}
+temp	float	$tmp12	%read{24,24} %write{23,23}
+temp	float	$tmp13	%read{22,22} %write{21,21}
+temp	float	$tmp14	%read{23,23} %write{22,22}
+temp	float	$tmp15	%read{25,25} %write{24,24}
+temp	float	$tmp16	%read{27,27} %write{25,25}
+const	string	$const10	"clamp"		%read{26,53} %write{2147483647,-1}
+temp	float	$tmp17	%read{28,28} %write{27,27}
+temp	float	$tmp18	%read{37,37} %write{36,36}
+temp	float	$tmp19	%read{32,32} %write{31,31}
+temp	float	$tmp20	%read{30,30} %write{29,29}
+temp	float	$tmp21	%read{31,31} %write{30,30}
+temp	float	$tmp22	%read{33,33} %write{32,32}
+temp	float	$tmp23	%read{35,35} %write{33,33}
+temp	float	$tmp24	%read{36,36} %write{35,35}
+temp	float	$tmp25	%read{46,46} %write{45,45}
+temp	float	$tmp26	%read{42,42} %write{41,41}
+temp	float	$tmp27	%read{40,40} %write{38,38}
+temp	float	$tmp28	%read{40,40} %write{39,39}
+temp	float	$tmp29	%read{41,41} %write{40,40}
+temp	float	$tmp30	%read{44,44} %write{42,42}
+temp	float	$tmp31	%read{45,45} %write{44,44}
+temp	float	$tmp32	%read{56,56} %write{55,55}
+temp	float	$tmp33	%read{52,52} %write{51,51}
+temp	float	$tmp34	%read{48,48} %write{47,47}
+temp	float	$tmp35	%read{50,50} %write{48,48}
+temp	float	$tmp36	%read{50,50} %write{49,49}
+temp	float	$tmp37	%read{51,51} %write{50,50}
+temp	float	$tmp38	%read{54,54} %write{52,52}
+temp	float	$tmp39	%read{55,55} %write{54,54}
+const	string	$const11	"tri"		%read{57,182} %write{2147483647,-1}
+temp	float	$tmp40	%read{73,73} %write{64,64}
+temp	float	$tmp41	%read{63,64} %write{61,61}
+temp	float	$tmp42	%read{64,64} %write{63,63}
+temp	float	$tmp43	%read{73,73} %write{68,68}
+temp	float	$tmp44	%read{67,68} %write{65,65}
+temp	float	$tmp45	%read{68,68} %write{67,67}
+temp	float	$tmp46	%read{73,73} %write{72,72}
+temp	float	$tmp47	%read{71,72} %write{69,69}
+temp	float	$tmp48	%read{72,72} %write{71,71}
+temp	point	$tmp49	%read{82,82} %write{81,81}
+temp	float	$tmp50	%read{81,81} %write{77,77}
+temp	float	$tmp51	%read{76,76} %write{75,75}
+const	float	$const12	2		%read{76,204} %write{2147483647,-1}
+temp	float	$tmp52	%read{77,77} %write{76,76}
+temp	float	$tmp53	%read{81,81} %write{80,80}
+temp	float	$tmp54	%read{79,79} %write{78,78}
+temp	float	$tmp55	%read{80,80} %write{79,79}
+const	float	$const13	0.2		%read{82,208} %write{2147483647,-1}
+temp	point	$tmp56	%read{83,83} %write{82,82}
+temp	float	$tmp57	%read{95,95} %write{93,94}
+temp	float	$tmp58	%read{86,86} %write{84,84}
+temp	float	$tmp59	%read{86,86} %write{85,85}
+temp	int	$tmp60	%read{91,91} %write{86,86}
+temp	float	$tmp61	%read{90,90} %write{87,87}
+temp	float	$tmp62	%read{89,89} %write{88,88}
+temp	float	$tmp63	%read{90,90} %write{89,89}
+temp	int	$tmp64	%read{91,91} %write{90,90}
+temp	int	$tmp65	%read{92,92} %write{91,91}
+temp	point	$tmp66	%read{138,138} %write{136,136}
+temp	float	$tmp67	%read{100,100} %write{97,97}
+temp	float	$tmp68	%read{114,114} %write{105,105}
+temp	float	$tmp69	%read{104,105} %write{102,102}
+temp	float	$tmp70	%read{105,105} %write{104,104}
+temp	float	$tmp71	%read{114,114} %write{109,109}
+temp	float	$tmp72	%read{108,109} %write{106,106}
+temp	float	$tmp73	%read{109,109} %write{108,108}
+temp	float	$tmp74	%read{114,114} %write{113,113}
+temp	float	$tmp75	%read{112,113} %write{110,110}
+temp	float	$tmp76	%read{113,113} %write{112,112}
+temp	point	$tmp77	%read{123,123} %write{122,122}
+temp	float	$tmp78	%read{122,122} %write{118,118}
+temp	float	$tmp79	%read{117,117} %write{116,116}
+temp	float	$tmp80	%read{118,118} %write{117,117}
+temp	float	$tmp81	%read{122,122} %write{121,121}
+temp	float	$tmp82	%read{120,120} %write{119,119}
+temp	float	$tmp83	%read{121,121} %write{120,120}
+temp	point	$tmp84	%read{124,124} %write{123,123}
+temp	float	$tmp85	%read{136,136} %write{134,135}
+temp	float	$tmp86	%read{127,127} %write{125,125}
+temp	float	$tmp87	%read{127,127} %write{126,126}
+temp	int	$tmp88	%read{132,132} %write{127,127}
+temp	float	$tmp89	%read{131,131} %write{128,128}
+temp	float	$tmp90	%read{130,130} %write{129,129}
+temp	float	$tmp91	%read{131,131} %write{130,130}
+temp	int	$tmp92	%read{132,132} %write{131,131}
+temp	int	$tmp93	%read{133,133} %write{132,132}
+temp	point	$tmp94	%read{180,180} %write{178,178}
+const	float	$const14	0.25		%read{139,139} %write{2147483647,-1}
+temp	float	$tmp95	%read{142,142} %write{139,139}
+temp	float	$tmp96	%read{156,156} %write{147,147}
+temp	float	$tmp97	%read{146,147} %write{144,144}
+temp	float	$tmp98	%read{147,147} %write{146,146}
+temp	float	$tmp99	%read{156,156} %write{151,151}
+temp	float	$tmp100	%read{150,151} %write{148,148}
+temp	float	$tmp101	%read{151,151} %write{150,150}
+temp	float	$tmp102	%read{156,156} %write{155,155}
+temp	float	$tmp103	%read{154,155} %write{152,152}
+temp	float	$tmp104	%read{155,155} %write{154,154}
+temp	point	$tmp105	%read{165,165} %write{164,164}
+temp	float	$tmp106	%read{164,164} %write{160,160}
+temp	float	$tmp107	%read{159,159} %write{158,158}
+temp	float	$tmp108	%read{160,160} %write{159,159}
+temp	float	$tmp109	%read{164,164} %write{163,163}
+temp	float	$tmp110	%read{162,162} %write{161,161}
+temp	float	$tmp111	%read{163,163} %write{162,162}
+temp	point	$tmp112	%read{166,166} %write{165,165}
+temp	float	$tmp113	%read{178,178} %write{176,177}
+temp	float	$tmp114	%read{169,169} %write{167,167}
+temp	float	$tmp115	%read{169,169} %write{168,168}
+temp	int	$tmp116	%read{174,174} %write{169,169}
+temp	float	$tmp117	%read{173,173} %write{170,170}
+temp	float	$tmp118	%read{172,172} %write{171,171}
+temp	float	$tmp119	%read{173,173} %write{172,172}
+temp	int	$tmp120	%read{174,174} %write{173,173}
+temp	int	$tmp121	%read{175,175} %write{174,174}
+temp	point	$tmp122	%read{222,222} %write{220,220}
+const	float	$const15	0.125		%read{181,181} %write{2147483647,-1}
+temp	float	$tmp123	%read{184,184} %write{181,181}
+temp	float	$tmp124	%read{198,198} %write{189,189}
+temp	float	$tmp125	%read{188,189} %write{186,186}
+temp	float	$tmp126	%read{189,189} %write{188,188}
+temp	float	$tmp127	%read{198,198} %write{193,193}
+temp	float	$tmp128	%read{192,193} %write{190,190}
+temp	float	$tmp129	%read{193,193} %write{192,192}
+temp	float	$tmp130	%read{198,198} %write{197,197}
+temp	float	$tmp131	%read{196,197} %write{194,194}
+temp	float	$tmp132	%read{197,197} %write{196,196}
+temp	point	$tmp133	%read{207,207} %write{206,206}
+temp	float	$tmp134	%read{206,206} %write{202,202}
+temp	float	$tmp135	%read{201,201} %write{200,200}
+temp	float	$tmp136	%read{202,202} %write{201,201}
+temp	float	$tmp137	%read{206,206} %write{205,205}
+temp	float	$tmp138	%read{204,204} %write{203,203}
+temp	float	$tmp139	%read{205,205} %write{204,204}
+temp	point	$tmp140	%read{208,208} %write{207,207}
+temp	float	$tmp141	%read{220,220} %write{218,219}
+temp	float	$tmp142	%read{211,211} %write{209,209}
+temp	float	$tmp143	%read{211,211} %write{210,210}
+temp	int	$tmp144	%read{216,216} %write{211,211}
+temp	float	$tmp145	%read{215,215} %write{212,212}
+temp	float	$tmp146	%read{214,214} %write{213,213}
+temp	float	$tmp147	%read{215,215} %write{214,214}
+temp	int	$tmp148	%read{216,216} %write{215,215}
+temp	int	$tmp149	%read{217,217} %write{216,216}
+temp	point	$tmp150	%read{224,224} %write{223,223}
+code Vector
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:42
+#     output color ColorOut = 0.8)
+	assign		Vector P 	%filename{"source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl"} %line{42} %argrw{"wr"}
+code ___main___
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:45
+# 
+	mul		pos Vector Scale 	%filename{"source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl"} %line{45} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:47
+#     point x = fract(pos*r);
+	assign		r $const1 	%line{47} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:48
+#     point i = pos*r - x;
+	mul		$tmp1 pos r 	%line{48} %argrw{"wrr"}
+	functioncall	$const2 18 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:25
+# }
+	compref		$tmp3 $tmp1 $const3 	%line{25} %argrw{"wrr"}
+	functioncall	$const2 9 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:19
+# }
+	floor		$tmp4 $tmp3 	%line{19} %argrw{"wr"}
+	sub		$tmp2 $tmp3 $tmp4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:25
+# }
+	compref		$tmp6 $tmp1 $const4 	%line{25} %argrw{"wrr"}
+	functioncall	$const2 13 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:19
+# }
+	floor		$tmp7 $tmp6 	%line{19} %argrw{"wr"}
+	sub		$tmp5 $tmp6 $tmp7 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:25
+# }
+	compref		$tmp9 $tmp1 $const5 	%line{25} %argrw{"wrr"}
+	functioncall	$const2 17 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:19
+# }
+	floor		$tmp10 $tmp9 	%line{19} %argrw{"wr"}
+	sub		$tmp8 $tmp9 $tmp10 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:25
+# }
+	point		x $tmp2 $tmp5 $tmp8 	%line{25} %argrw{"wrrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:49
+# 
+	mul		$tmp11 pos r 	%line{49} %argrw{"wrr"}
+	sub		i $tmp11 x 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:51
+#     float l = clamp(0.0, 1.0, (0.5 - abs(x[0]-0.5))*w);
+	assign		w $const6 	%line{51} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:52
+#     l *= clamp(0.0, 1.0, (0.5 - abs(x[1]-0.5))*w);
+	compref		$tmp13 x $const3 	%line{52} %argrw{"wrr"}
+	sub		$tmp14 $tmp13 $const9 	%argrw{"wrr"}
+	abs		$tmp12 $tmp14 	%argrw{"wr"}
+	sub		$tmp15 $const9 $tmp12 	%argrw{"wrr"}
+	mul		$tmp16 $tmp15 w 	%argrw{"wrr"}
+	functioncall	$const10 29 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:145
+# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
+	min		$tmp17 $const7 $tmp16 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{145} %argrw{"wrr"}
+	max		l $tmp17 $const8 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:53
+#     l *= clamp(0.0, 1.0, abs(x[0] - x[1])*w);
+	compref		$tmp20 x $const4 	%filename{"source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl"} %line{53} %argrw{"wrr"}
+	sub		$tmp21 $tmp20 $const9 	%argrw{"wrr"}
+	abs		$tmp19 $tmp21 	%argrw{"wr"}
+	sub		$tmp22 $const9 $tmp19 	%argrw{"wrr"}
+	mul		$tmp23 $tmp22 w 	%argrw{"wrr"}
+	functioncall	$const10 37 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:145
+# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
+	min		$tmp24 $const7 $tmp23 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{145} %argrw{"wrr"}
+	max		$tmp18 $tmp24 $const8 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:53
+#     l *= clamp(0.0, 1.0, abs(x[0] - x[1])*w);
+	mul		l l $tmp18 	%filename{"source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl"} %line{53} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:54
+#     l *= clamp(0.0, 1.0, abs(1.0 - x[0] - x[1])*w);
+	compref		$tmp27 x $const3 	%line{54} %argrw{"wrr"}
+	compref		$tmp28 x $const4 	%argrw{"wrr"}
+	sub		$tmp29 $tmp27 $tmp28 	%argrw{"wrr"}
+	abs		$tmp26 $tmp29 	%argrw{"wr"}
+	mul		$tmp30 $tmp26 w 	%argrw{"wrr"}
+	functioncall	$const10 46 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:145
+# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
+	min		$tmp31 $const7 $tmp30 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{145} %argrw{"wrr"}
+	max		$tmp25 $tmp31 $const8 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:54
+#     l *= clamp(0.0, 1.0, abs(1.0 - x[0] - x[1])*w);
+	mul		l l $tmp25 	%filename{"source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl"} %line{54} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:55
+# 
+	compref		$tmp34 x $const3 	%line{55} %argrw{"wrr"}
+	sub		$tmp35 $const8 $tmp34 	%argrw{"wrr"}
+	compref		$tmp36 x $const4 	%argrw{"wrr"}
+	sub		$tmp37 $tmp35 $tmp36 	%argrw{"wrr"}
+	abs		$tmp33 $tmp37 	%argrw{"wr"}
+	mul		$tmp38 $tmp33 w 	%argrw{"wrr"}
+	functioncall	$const10 56 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:145
+# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
+	min		$tmp39 $const7 $tmp38 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{145} %argrw{"wrr"}
+	max		$tmp32 $tmp39 $const8 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:55
+# 
+	mul		l l $tmp32 	%filename{"source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl"} %line{55} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:57
+#     tc += tri(pos, r*0.5);
+	functioncall	$const11 97 	%line{57} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:30
+# 
+	assign		___324_pos pos 	%line{30} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:32
+#     point x = fract(pos);
+	mul		___324_pos ___324_pos r 	%line{32} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:33
+#     point i = pos - x;
+	functioncall	$const2 74 	%line{33} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:25
+# }
+	compref		$tmp41 ___324_pos $const3 	%line{25} %argrw{"wrr"}
+	functioncall	$const2 65 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:19
+# }
+	floor		$tmp42 $tmp41 	%line{19} %argrw{"wr"}
+	sub		$tmp40 $tmp41 $tmp42 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:25
+# }
+	compref		$tmp44 ___324_pos $const4 	%line{25} %argrw{"wrr"}
+	functioncall	$const2 69 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:19
+# }
+	floor		$tmp45 $tmp44 	%line{19} %argrw{"wr"}
+	sub		$tmp43 $tmp44 $tmp45 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:25
+# }
+	compref		$tmp47 ___324_pos $const5 	%line{25} %argrw{"wrr"}
+	functioncall	$const2 73 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:19
+# }
+	floor		$tmp48 $tmp47 	%line{19} %argrw{"wr"}
+	sub		$tmp46 $tmp47 $tmp48 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:25
+# }
+	point		___324_x $tmp40 $tmp43 $tmp46 	%line{25} %argrw{"wrrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:34
+#     point c = point(sin(i[0]*2.0), sin(i[1]*2.0), 0.0)*0.2+0.2;
+	sub		___324_i ___324_pos ___324_x 	%line{34} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:35
+# 
+	compref		$tmp51 ___324_i $const3 	%line{35} %argrw{"wrr"}
+	mul		$tmp52 $tmp51 $const12 	%argrw{"wrr"}
+	sin		$tmp50 $tmp52 	%argrw{"wr"}
+	compref		$tmp54 ___324_i $const4 	%argrw{"wrr"}
+	mul		$tmp55 $tmp54 $const12 	%argrw{"wrr"}
+	sin		$tmp53 $tmp55 	%argrw{"wr"}
+	point		$tmp49 $tmp50 $tmp53 $const7 	%argrw{"wrrr"}
+	mul		$tmp56 $tmp49 $const13 	%argrw{"wrr"}
+	add		___324_c $tmp56 $const13 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:37
+# }
+	compref		$tmp58 ___324_x $const3 	%line{37} %argrw{"wrr"}
+	compref		$tmp59 ___324_x $const4 	%argrw{"wrr"}
+	lt		$tmp60 $tmp58 $tmp59 	%argrw{"wrr"}
+	compref		$tmp61 ___324_x $const3 	%argrw{"wrr"}
+	compref		$tmp62 ___324_x $const4 	%argrw{"wrr"}
+	sub		$tmp63 $const8 $tmp62 	%argrw{"wrr"}
+	lt		$tmp64 $tmp61 $tmp63 	%argrw{"wrr"}
+	eq		$tmp65 $tmp60 $tmp64 	%argrw{"wrr"}
+	if		$tmp65 94 95 	%argrw{"r"}
+	assign		$tmp57 $const8 	%argrw{"wr"}
+	assign		$tmp57 $const7 	%argrw{"wr"}
+	mul		tc $tmp57 ___324_c 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:58
+#     tc += tri(pos, r*0.25);
+	mul		$tmp67 r $const9 	%line{58} %argrw{"wrr"}
+	functioncall	$const11 138 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:30
+# 
+	assign		___324_pos pos 	%line{30} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:32
+#     point x = fract(pos);
+	mul		___324_pos ___324_pos $tmp67 	%line{32} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:33
+#     point i = pos - x;
+	functioncall	$const2 115 	%line{33} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:25
+# }
+	compref		$tmp69 ___324_pos $const3 	%line{25} %argrw{"wrr"}
+	functioncall	$const2 106 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:19
+# }
+	floor		$tmp70 $tmp69 	%line{19} %argrw{"wr"}
+	sub		$tmp68 $tmp69 $tmp70 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:25
+# }
+	compref		$tmp72 ___324_pos $const4 	%line{25} %argrw{"wrr"}
+	functioncall	$const2 110 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:19
+# }
+	floor		$tmp73 $tmp72 	%line{19} %argrw{"wr"}
+	sub		$tmp71 $tmp72 $tmp73 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:25
+# }
+	compref		$tmp75 ___324_pos $const5 	%line{25} %argrw{"wrr"}
+	functioncall	$const2 114 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:19
+# }
+	floor		$tmp76 $tmp75 	%line{19} %argrw{"wr"}
+	sub		$tmp74 $tmp75 $tmp76 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:25
+# }
+	point		___324_x $tmp68 $tmp71 $tmp74 	%line{25} %argrw{"wrrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:34
+#     point c = point(sin(i[0]*2.0), sin(i[1]*2.0), 0.0)*0.2+0.2;
+	sub		___324_i ___324_pos ___324_x 	%line{34} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:35
+# 
+	compref		$tmp79 ___324_i $const3 	%line{35} %argrw{"wrr"}
+	mul		$tmp80 $tmp79 $const12 	%argrw{"wrr"}
+	sin		$tmp78 $tmp80 	%argrw{"wr"}
+	compref		$tmp82 ___324_i $const4 	%argrw{"wrr"}
+	mul		$tmp83 $tmp82 $const12 	%argrw{"wrr"}
+	sin		$tmp81 $tmp83 	%argrw{"wr"}
+	point		$tmp77 $tmp78 $tmp81 $const7 	%argrw{"wrrr"}
+	mul		$tmp84 $tmp77 $const13 	%argrw{"wrr"}
+	add		___324_c $tmp84 $const13 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:37
+# }
+	compref		$tmp86 ___324_x $const3 	%line{37} %argrw{"wrr"}
+	compref		$tmp87 ___324_x $const4 	%argrw{"wrr"}
+	lt		$tmp88 $tmp86 $tmp87 	%argrw{"wrr"}
+	compref		$tmp89 ___324_x $const3 	%argrw{"wrr"}
+	compref		$tmp90 ___324_x $const4 	%argrw{"wrr"}
+	sub		$tmp91 $const8 $tmp90 	%argrw{"wrr"}
+	lt		$tmp92 $tmp89 $tmp91 	%argrw{"wrr"}
+	eq		$tmp93 $tmp88 $tmp92 	%argrw{"wrr"}
+	if		$tmp93 135 136 	%argrw{"r"}
+	assign		$tmp85 $const8 	%argrw{"wr"}
+	assign		$tmp85 $const7 	%argrw{"wr"}
+	mul		$tmp66 $tmp85 ___324_c 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:58
+#     tc += tri(pos, r*0.25);
+	add		tc tc $tmp66 	%line{58} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:59
+#     tc += tri(pos, r*0.125);
+	mul		$tmp95 r $const14 	%line{59} %argrw{"wrr"}
+	functioncall	$const11 180 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:30
+# 
+	assign		___324_pos pos 	%line{30} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:32
+#     point x = fract(pos);
+	mul		___324_pos ___324_pos $tmp95 	%line{32} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:33
+#     point i = pos - x;
+	functioncall	$const2 157 	%line{33} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:25
+# }
+	compref		$tmp97 ___324_pos $const3 	%line{25} %argrw{"wrr"}
+	functioncall	$const2 148 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:19
+# }
+	floor		$tmp98 $tmp97 	%line{19} %argrw{"wr"}
+	sub		$tmp96 $tmp97 $tmp98 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:25
+# }
+	compref		$tmp100 ___324_pos $const4 	%line{25} %argrw{"wrr"}
+	functioncall	$const2 152 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:19
+# }
+	floor		$tmp101 $tmp100 	%line{19} %argrw{"wr"}
+	sub		$tmp99 $tmp100 $tmp101 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:25
+# }
+	compref		$tmp103 ___324_pos $const5 	%line{25} %argrw{"wrr"}
+	functioncall	$const2 156 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:19
+# }
+	floor		$tmp104 $tmp103 	%line{19} %argrw{"wr"}
+	sub		$tmp102 $tmp103 $tmp104 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:25
+# }
+	point		___324_x $tmp96 $tmp99 $tmp102 	%line{25} %argrw{"wrrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:34
+#     point c = point(sin(i[0]*2.0), sin(i[1]*2.0), 0.0)*0.2+0.2;
+	sub		___324_i ___324_pos ___324_x 	%line{34} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:35
+# 
+	compref		$tmp107 ___324_i $const3 	%line{35} %argrw{"wrr"}
+	mul		$tmp108 $tmp107 $const12 	%argrw{"wrr"}
+	sin		$tmp106 $tmp108 	%argrw{"wr"}
+	compref		$tmp110 ___324_i $const4 	%argrw{"wrr"}
+	mul		$tmp111 $tmp110 $const12 	%argrw{"wrr"}
+	sin		$tmp109 $tmp111 	%argrw{"wr"}
+	point		$tmp105 $tmp106 $tmp109 $const7 	%argrw{"wrrr"}
+	mul		$tmp112 $tmp105 $const13 	%argrw{"wrr"}
+	add		___324_c $tmp112 $const13 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:37
+# }
+	compref		$tmp114 ___324_x $const3 	%line{37} %argrw{"wrr"}
+	compref		$tmp115 ___324_x $const4 	%argrw{"wrr"}
+	lt		$tmp116 $tmp114 $tmp115 	%argrw{"wrr"}
+	compref		$tmp117 ___324_x $const3 	%argrw{"wrr"}
+	compref		$tmp118 ___324_x $const4 	%argrw{"wrr"}
+	sub		$tmp119 $const8 $tmp118 	%argrw{"wrr"}
+	lt		$tmp120 $tmp117 $tmp119 	%argrw{"wrr"}
+	eq		$tmp121 $tmp116 $tmp120 	%argrw{"wrr"}
+	if		$tmp121 177 178 	%argrw{"r"}
+	assign		$tmp113 $const8 	%argrw{"wr"}
+	assign		$tmp113 $const7 	%argrw{"wr"}
+	mul		$tmp94 $tmp113 ___324_c 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:59
+#     tc += tri(pos, r*0.125);
+	add		tc tc $tmp94 	%line{59} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:60
+# 
+	mul		$tmp123 r $const15 	%line{60} %argrw{"wrr"}
+	functioncall	$const11 222 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:30
+# 
+	assign		___324_pos pos 	%line{30} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:32
+#     point x = fract(pos);
+	mul		___324_pos ___324_pos $tmp123 	%line{32} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:33
+#     point i = pos - x;
+	functioncall	$const2 199 	%line{33} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:25
+# }
+	compref		$tmp125 ___324_pos $const3 	%line{25} %argrw{"wrr"}
+	functioncall	$const2 190 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:19
+# }
+	floor		$tmp126 $tmp125 	%line{19} %argrw{"wr"}
+	sub		$tmp124 $tmp125 $tmp126 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:25
+# }
+	compref		$tmp128 ___324_pos $const4 	%line{25} %argrw{"wrr"}
+	functioncall	$const2 194 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:19
+# }
+	floor		$tmp129 $tmp128 	%line{19} %argrw{"wr"}
+	sub		$tmp127 $tmp128 $tmp129 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:25
+# }
+	compref		$tmp131 ___324_pos $const5 	%line{25} %argrw{"wrr"}
+	functioncall	$const2 198 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:19
+# }
+	floor		$tmp132 $tmp131 	%line{19} %argrw{"wr"}
+	sub		$tmp130 $tmp131 $tmp132 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:25
+# }
+	point		___324_x $tmp124 $tmp127 $tmp130 	%line{25} %argrw{"wrrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:34
+#     point c = point(sin(i[0]*2.0), sin(i[1]*2.0), 0.0)*0.2+0.2;
+	sub		___324_i ___324_pos ___324_x 	%line{34} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:35
+# 
+	compref		$tmp135 ___324_i $const3 	%line{35} %argrw{"wrr"}
+	mul		$tmp136 $tmp135 $const12 	%argrw{"wrr"}
+	sin		$tmp134 $tmp136 	%argrw{"wr"}
+	compref		$tmp138 ___324_i $const4 	%argrw{"wrr"}
+	mul		$tmp139 $tmp138 $const12 	%argrw{"wrr"}
+	sin		$tmp137 $tmp139 	%argrw{"wr"}
+	point		$tmp133 $tmp134 $tmp137 $const7 	%argrw{"wrrr"}
+	mul		$tmp140 $tmp133 $const13 	%argrw{"wrr"}
+	add		___324_c $tmp140 $const13 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:37
+# }
+	compref		$tmp142 ___324_x $const3 	%line{37} %argrw{"wrr"}
+	compref		$tmp143 ___324_x $const4 	%argrw{"wrr"}
+	lt		$tmp144 $tmp142 $tmp143 	%argrw{"wrr"}
+	compref		$tmp145 ___324_x $const3 	%argrw{"wrr"}
+	compref		$tmp146 ___324_x $const4 	%argrw{"wrr"}
+	sub		$tmp147 $const8 $tmp146 	%argrw{"wrr"}
+	lt		$tmp148 $tmp145 $tmp147 	%argrw{"wrr"}
+	eq		$tmp149 $tmp144 $tmp148 	%argrw{"wrr"}
+	if		$tmp149 219 220 	%argrw{"r"}
+	assign		$tmp141 $const8 	%argrw{"wr"}
+	assign		$tmp141 $const7 	%argrw{"wr"}
+	mul		$tmp122 $tmp141 ___324_c 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:60
+# 
+	add		tc tc $tmp122 	%line{60} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ElColourSquares/ElColourSquares.osl:63
+# }
+	mul		$tmp150 tc l 	%line{63} %argrw{"wrr"}
+	assign		ColorOut $tmp150 	%argrw{"wr"}
+	end

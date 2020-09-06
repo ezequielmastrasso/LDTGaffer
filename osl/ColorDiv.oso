@@ -1,0 +1,32 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader ColorDiv	%meta{string,help,"Divides two colors"} %meta{string,label,"Divide (color)"} %meta{string,category,"Math Color"} 
+param	color	A	0.5 0.5 0.5		%read{0,0} %write{2147483647,-1}
+param	color	B	0.5 0.5 0.5		%read{0,0} %write{2147483647,-1}
+param	int	Clamp	0		%meta{string,widget,"checkBox"} %meta{string,label,"Clamp Result"}  %read{1,1} %write{2147483647,-1}
+oparam	color	Out	0 0 0		%read{5,5} %write{0,0}
+temp	color	$tmp1	%read{2147483647,-1} %write{6,6}
+const	float	$const1	0		%read{2,2} %write{2147483647,-1}
+temp	color	$tmp2	%read{6,6} %write{2,2}
+const	float	$const2	1		%read{3,3} %write{2147483647,-1}
+temp	color	$tmp3	%read{5,5} %write{3,3}
+const	string	$const3	"clamp"		%read{4,4} %write{2147483647,-1}
+temp	color	$tmp4	%read{6,6} %write{5,5}
+code ___main___
+# source/3dsMax-OSL-Shaders/ColorDiv.osl:21
+# 	if (Clamp)
+	div		Out A B 	%filename{"source/3dsMax-OSL-Shaders/ColorDiv.osl"} %line{21} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorDiv.osl:22
+# 		clamp(Out, 0.0, 1.0);
+	if		Clamp 7 7 	%line{22} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorDiv.osl:23
+# }
+	assign		$tmp2 $const1 	%line{23} %argrw{"wr"}
+	assign		$tmp3 $const2 	%argrw{"wr"}
+	functioncall	$const3 7 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:144
+# color  clamp (color x, color minval, color maxval) { return max(min(x,maxval),minval); }
+	min		$tmp4 Out $tmp3 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{144} %argrw{"wrr"}
+	max		$tmp1 $tmp4 $tmp2 	%argrw{"wrr"}
+	end

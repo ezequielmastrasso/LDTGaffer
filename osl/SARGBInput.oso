@@ -1,0 +1,13 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader SARGBInput
+param	float	R	0		%read{0,0} %write{2147483647,-1}
+param	float	G	0		%read{0,0} %write{2147483647,-1}
+param	float	B	0		%read{0,0} %write{2147483647,-1}
+oparam	color	Color	0 0 0		%read{2147483647,-1} %write{0,0}
+code ___main___
+# source/sambler-osl-shaders/lib/SAInputRGB.osl:20
+# }
+	color		Color R G B 	%filename{"source/sambler-osl-shaders/lib/SAInputRGB.osl"} %line{20} %argrw{"wrrr"}
+	end

@@ -1,0 +1,12 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader node_holdout
+oparam	closure color	Holdout			%read{2147483647,-1} %write{0,0} %initexpr
+const	string	$const1	"holdout"		%read{0,0} %write{2147483647,-1}
+code Holdout
+# include/node_holdout.osl:21
+# {
+	closure		Holdout $const1 	%filename{"include/node_holdout.osl"} %line{21} %argrw{"wr"}
+code ___main___
+	end

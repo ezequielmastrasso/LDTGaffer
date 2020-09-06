@@ -1,0 +1,65 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader stripes
+param	point	Vector	0 0 0		%read{1,1} %write{0,0} %initexpr
+param	int	Number	4		%read{9,11} %write{2147483647,-1}
+oparam	float	Fac	0		%read{2147483647,-1} %write{9,19}
+global	point	P	%read{0,0} %write{2147483647,-1}
+local	float	x	%read{9,19} %write{6,6}
+local	int	i	%read{9,19} %write{8,19}
+const	int	$const1	0		%read{1,1} %write{2147483647,-1}
+temp	float	$tmp1	%read{3,6} %write{1,1}
+const	int	$const2	1		%read{8,19} %write{2147483647,-1}
+const	float	$const3	1		%read{3,5} %write{2147483647,-1}
+const	string	$const4	"mod"		%read{2,2} %write{2147483647,-1}
+temp	float	$tmp2	%read{5,5} %write{4,4}
+temp	float	$tmp3	%read{4,4} %write{3,3}
+temp	float	$tmp4	%read{6,6} %write{5,5}
+temp	int	$tmp5	%read{7,19} %write{8,19}
+temp	float	$tmp6	%read{9,19} %write{9,19}
+temp	float	$tmp7	%read{9,19} %write{9,19}
+temp	float	$tmp8	%read{9,19} %write{9,19}
+temp	int	$tmp9	%read{9,19} %write{9,19}
+const	int	$const5	2		%read{15,15} %write{2147483647,-1}
+temp	int	$tmp10	%read{9,19} %write{9,19}
+temp	int	$tmp11	%read{2147483647,-1} %write{9,19}
+code Vector
+# source/sambler-osl-shaders/MJABook/02MABStripes/MABStripes.osl:15
+#     int Number = 4,
+	assign		Vector P 	%filename{"source/sambler-osl-shaders/MJABook/02MABStripes/MABStripes.osl"} %line{15} %argrw{"wr"}
+code ___main___
+# source/sambler-osl-shaders/MJABook/02MABStripes/MABStripes.osl:20
+# 
+	compref		$tmp1 Vector $const1 	%filename{"source/sambler-osl-shaders/MJABook/02MABStripes/MABStripes.osl"} %line{20} %argrw{"wrr"}
+	functioncall	$const4 7 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:136
+# float  mod (float  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp3 $tmp1 $const3 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{136} %argrw{"wrr"}
+	floor		$tmp2 $tmp3 	%argrw{"wr"}
+	mul		$tmp4 $const3 $tmp2 	%argrw{"wrr"}
+	sub		x $tmp1 $tmp4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/02MABStripes/MABStripes.osl:23
+#         if( x < (float)i/Number ){
+	for		$tmp5 9 10 18 20 	%filename{"source/sambler-osl-shaders/MJABook/02MABStripes/MABStripes.osl"} %line{23} %argrw{"r"}
+	assign		i $const2 	%argrw{"wr"}
+	le		$tmp5 i Number 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/02MABStripes/MABStripes.osl:24
+#             Fac = i % 2;
+	assign		$tmp6 i 	%line{24} %argrw{"wr"}
+	assign		$tmp8 Number 	%argrw{"wr"}
+	div		$tmp7 $tmp6 $tmp8 	%argrw{"wrr"}
+	lt		$tmp9 x $tmp7 	%argrw{"wrr"}
+	if		$tmp9 18 18 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/02MABStripes/MABStripes.osl:25
+#             break;
+	mod		$tmp10 i $const5 	%line{25} %argrw{"wrr"}
+	assign		Fac $tmp10 	%argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/02MABStripes/MABStripes.osl:26
+#         }
+	break	%line{26}
+# source/sambler-osl-shaders/MJABook/02MABStripes/MABStripes.osl:23
+#         if( x < (float)i/Number ){
+	assign		$tmp11 i 	%line{23} %argrw{"wr"}
+	add		i i $const2 	%argrw{"wrr"}
+	end

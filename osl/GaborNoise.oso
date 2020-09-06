@@ -1,0 +1,58 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader GaborNoise	%meta{string,help,"A shader for generating Gabor noise and exposing its specific options. "} %meta{string,label,"Noise (Gabor)"} 
+param	point	UVW	0 0 0		%meta{string,help,"The UVW coordinate to use. When not connected, defaults to Object space"}  %read{1,1} %write{0,0} %derivs %initexpr
+param	float	Scale	1		%read{1,1} %write{2147483647,-1} %derivs
+param	float	Bandwidth	1		%read{2,2} %write{2147483647,-1}
+param	float	Impulses	16		%read{2,2} %write{2147483647,-1}
+param	int	Unsigned	1		%meta{string,widget,"checkBox"}  %read{3,3} %write{2147483647,-1}
+param	int	Filter	1		%meta{string,widget,"checkBox"}  %read{2,2} %write{2147483647,-1}
+param	int	Anisotropic	0		%meta{string,widget,"mapper"} %meta{string,options,"Isotropic:0|Anisotropic along:1|Anisotropic Radial:2"}  %read{2,2} %write{2147483647,-1}
+param	vector	Direction	1 0 0		%read{2,2} %write{2147483647,-1}
+oparam	color	Col	0.5 0.5 0.5		%meta{string,label,"Col (RGB)"}  %read{4,8} %write{2,5}
+oparam	float	R	0.5		%read{2147483647,-1} %write{6,6}
+oparam	float	G	0.5		%read{2147483647,-1} %write{7,7}
+oparam	float	B	0.5		%read{2147483647,-1} %write{8,8}
+global	point	P	%read{0,0} %write{2147483647,-1} %derivs
+local	point	pnt	%read{2,2} %write{1,1} %derivs
+const	string	$const1	"gabor"		%read{2,2} %write{2147483647,-1}
+const	string	$const2	"anisotropic"		%read{2,2} %write{2147483647,-1}
+const	string	$const3	"direction"		%read{2,2} %write{2147483647,-1}
+const	string	$const4	"bandwidth"		%read{2,2} %write{2147483647,-1}
+const	string	$const5	"impulses"		%read{2,2} %write{2147483647,-1}
+const	string	$const6	"do_filter"		%read{2,2} %write{2147483647,-1}
+const	float	$const7	1		%read{4,4} %write{2147483647,-1}
+temp	color	$tmp1	%read{5,5} %write{4,4}
+const	float	$const8	2		%read{5,5} %write{2147483647,-1}
+const	int	$const9	0		%read{6,6} %write{2147483647,-1}
+const	int	$const10	1		%read{7,7} %write{2147483647,-1}
+const	int	$const11	2		%read{8,8} %write{2147483647,-1}
+code UVW
+# source/3dsMax-OSL-Shaders/GaborNoise.osl:13
+# 	float  Scale  = 1.0,
+	assign		UVW P 	%filename{"source/3dsMax-OSL-Shaders/GaborNoise.osl"} %line{13} %argrw{"wr"}
+code ___main___
+# source/3dsMax-OSL-Shaders/GaborNoise.osl:29
+# 	Col = noise("gabor", pnt, "anisotropic", Anisotropic, "direction", Direction,
+	div		pnt UVW Scale 	%filename{"source/3dsMax-OSL-Shaders/GaborNoise.osl"} %line{29} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/GaborNoise.osl:31
+# 	
+	noise		Col $const1 pnt $const2 Anisotropic $const3 Direction $const4 Bandwidth $const5 Impulses $const6 Filter 	%line{31} %argrw{"wrrrrrrrrrrrr"} %argderivs{2}
+# source/3dsMax-OSL-Shaders/GaborNoise.osl:33
+# 		Col = (Col + 1.0) / 2.0;
+	if		Unsigned 6 6 	%line{33} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/GaborNoise.osl:34
+# 	
+	add		$tmp1 Col $const7 	%line{34} %argrw{"wrr"}
+	div		Col $tmp1 $const8 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/GaborNoise.osl:36
+# 	G = Col[1];
+	compref		R Col $const9 	%line{36} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/GaborNoise.osl:37
+# 	B = Col[2];		
+	compref		G Col $const10 	%line{37} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/GaborNoise.osl:38
+# }
+	compref		B Col $const11 	%line{38} %argrw{"wrr"}
+	end

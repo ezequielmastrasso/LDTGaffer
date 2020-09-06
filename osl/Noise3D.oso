@@ -1,0 +1,148 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader Noise3D	%meta{string,help,"A shader for generating more advanced noise in 3D<br/>(for color, vector or individual component output)"} %meta{string,label,"Noise (3D)"} 
+param	point	UVW	0 0 0		%meta{string,help,"The UVW coordinate to use. When not connected, defaults to Object space"}  %read{2,2} %write{1,1} %derivs %initexpr
+param	float	Scale	25		%read{2,2} %write{2147483647,-1} %derivs
+param	string	Type	"uperlin"		%meta{string,widget,"popup"} %meta{string,help,"Use perlin, uperlin, cell, hash, simplex or gabor"} %meta{string,options,"perlin|uperlin|cell|hash|simplex|gabor"}  %read{12,12} %write{2147483647,-1}
+param	int	Octaves	4		%meta{string,help,"Hos many layers of noise are mixed together"}  %read{8,8} %write{2147483647,-1}
+param	float	Lacunarity	2		%meta{string,help,"How much the 'frequency' of the noise changes per layer"}  %read{33,33} %write{2147483647,-1} %derivs
+param	float	Gain	0.5		%meta{string,help,"How much the amplitude of the noise changes per layer. Higher numbers means higher noise frequencies have more effect."}  %read{34,34} %write{2147483647,-1}
+param	int	StepFunction	1		%meta{string,widget,"checkBox"} %meta{string,label,"Step Function"} %meta{string,help,"Enables a per-layer smoothstep curve in the noise, allowing you to increase the 'contrast' of the noise"}  %read{13,13} %write{2147483647,-1}
+param	float	LowStep	0.5		%meta{string,help,"Low threshold of the smoothstep function."} %meta{string,label,"Low Step"} %meta{float,min,-1} %meta{float,max,1}  %read{14,14} %write{2147483647,-1}
+param	float	HiStep	0.80000001		%meta{string,help,"High threshold of the smoothstep function."} %meta{string,label,"High Step"} %meta{float,min,-1} %meta{float,max,1}  %read{15,15} %write{2147483647,-1}
+param	int	Normalize	1		%meta{string,widget,"checkBox"} %meta{string,help,"If the noise is auto-normalized to Amplitude or not."}  %read{37,37} %write{2147483647,-1}
+param	float	Amplitude	1		%meta{string,help,"The amplitude of the noise."}  %read{5,38} %write{2147483647,-1}
+param	float	Phase	0		%meta{string,help,"The 'Phase' is just a 4th coordinate of the noise, can be used to allow it to evolve over time, for example."}  %read{11,11} %write{2147483647,-1} %derivs
+oparam	vector	Out	0 0 0		%read{8,42} %write{8,39}
+oparam	float	X	0		%read{2147483647,-1} %write{40,40}
+oparam	float	Y	0		%read{2147483647,-1} %write{41,41}
+oparam	float	Z	0		%read{2147483647,-1} %write{42,42}
+global	point	P	%read{1,1} %write{2147483647,-1} %derivs
+local	point	pnt	%read{8,36} %write{2,2} %derivs
+local	color	sum	%read{8,38} %write{3,36}
+local	float	curFreq	%read{8,36} %write{4,36} %derivs
+local	float	curAmp	%read{8,36} %write{5,36}
+local	int	___322_i	%read{8,36} %write{7,36} %derivs
+local	color	___323_ns	%read{8,36} %write{8,36}
+const	string	$const1	"object"		%read{1,1} %write{2147483647,-1}
+const	string	$const2	"transform"		%read{0,0} %write{2147483647,-1}
+const	string	$const3	"common"		%read{1,1} %write{2147483647,-1}
+const	int	$const4	0		%read{3,40} %write{2147483647,-1}
+const	float	$const5	1		%read{4,4} %write{2147483647,-1}
+temp	int	$tmp1	%read{6,36} %write{7,36}
+temp	point	$tmp2	%read{8,36} %write{8,36} %derivs
+temp	float	$tmp3	%read{8,36} %write{8,36} %derivs
+temp	float	$tmp4	%read{8,36} %write{8,36} %derivs
+temp	color	$tmp5	%read{8,36} %write{8,36}
+temp	color	$tmp6	%read{8,36} %write{8,36}
+const	string	$const6	"smoothstep"		%read{16,16} %write{2147483647,-1}
+temp	float	$tmp7	%read{8,36} %write{8,36}
+temp	float	$tmp8	%read{8,36} %write{8,36}
+temp	float	$tmp9	%read{8,36} %write{8,36}
+temp	float	$tmp10	%read{8,36} %write{8,36}
+temp	float	$tmp11	%read{8,36} %write{8,36}
+const	int	$const7	1		%read{21,41} %write{2147483647,-1}
+temp	float	$tmp12	%read{8,36} %write{8,36}
+temp	float	$tmp13	%read{8,36} %write{8,36}
+temp	float	$tmp14	%read{8,36} %write{8,36}
+temp	float	$tmp15	%read{8,36} %write{8,36}
+const	int	$const8	2		%read{25,42} %write{2147483647,-1}
+temp	float	$tmp16	%read{8,36} %write{8,36}
+temp	float	$tmp17	%read{8,36} %write{8,36}
+temp	float	$tmp18	%read{8,36} %write{8,36}
+temp	color	$tmp19	%read{8,36} %write{8,36}
+temp	int	$tmp20	%read{2147483647,-1} %write{8,36}
+temp	color	$tmp21	%read{39,39} %write{38,38}
+code UVW
+# source/3dsMax-OSL-Shaders/Noise3D.osl:12
+# 		[[ string help = "The UVW coordinate to use. When not connected, defaults to Object space" ]],	
+	functioncall	$const2 2 	%filename{"source/3dsMax-OSL-Shaders/Noise3D.osl"} %line{12} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:267
+# point  transform (string to, point p)  { return transform("common",to,p); }
+	transform	UVW $const3 $const1 P 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{267} %argrw{"wrrr"}
+code ___main___
+# source/3dsMax-OSL-Shaders/Noise3D.osl:52
+# 	
+	div		pnt UVW Scale 	%filename{"source/3dsMax-OSL-Shaders/Noise3D.osl"} %line{52} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Noise3D.osl:54
+# 	float curFreq = 1.0;
+	assign		sum $const4 	%line{54} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Noise3D.osl:55
+# 	float curAmp = Amplitude;
+	assign		curFreq $const5 	%line{55} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Noise3D.osl:56
+# 	
+	assign		curAmp Amplitude 	%line{56} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Noise3D.osl:59
+# 	{			
+	for		$tmp1 8 9 35 37 	%line{59} %argrw{"r"}
+	assign		___322_i $const4 	%argrw{"wr"}
+	lt		$tmp1 ___322_i Octaves 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Noise3D.osl:62
+# 		
+	mul		$tmp2 pnt curFreq 	%line{62} %argrw{"wrr"}
+	assign		$tmp4 ___322_i 	%argrw{"wr"}
+	add		$tmp3 Phase $tmp4 	%argrw{"wrr"}
+	noise		___323_ns Type $tmp2 $tmp3 	%argrw{"wrrr"} %argderivs{2,3}
+# source/3dsMax-OSL-Shaders/Noise3D.osl:64
+# 			ns = smoothstep(LowStep, HiStep, ns);
+	if		StepFunction 30 30 	%line{64} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/Noise3D.osl:65
+# 
+	assign		$tmp5 LowStep 	%line{65} %argrw{"wr"}
+	assign		$tmp6 HiStep 	%argrw{"wr"}
+	functioncall	$const6 30 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:325
+#     return color (smoothstep(edge0[0], edge1[0], in[0]),
+	compref		$tmp8 $tmp5 $const4 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{325} %argrw{"wrr"}
+	compref		$tmp9 $tmp6 $const4 	%argrw{"wrr"}
+	compref		$tmp10 ___323_ns $const4 	%argrw{"wrr"}
+	smoothstep	$tmp7 $tmp8 $tmp9 $tmp10 	%argrw{"wrrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:326
+#                   smoothstep(edge0[1], edge1[1], in[1]),
+	compref		$tmp12 $tmp5 $const7 	%line{326} %argrw{"wrr"}
+	compref		$tmp13 $tmp6 $const7 	%argrw{"wrr"}
+	compref		$tmp14 ___323_ns $const7 	%argrw{"wrr"}
+	smoothstep	$tmp11 $tmp12 $tmp13 $tmp14 	%argrw{"wrrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:327
+#                   smoothstep(edge0[2], edge1[2], in[2]));
+	compref		$tmp16 $tmp5 $const8 	%line{327} %argrw{"wrr"}
+	compref		$tmp17 $tmp6 $const8 	%argrw{"wrr"}
+	compref		$tmp18 ___323_ns $const8 	%argrw{"wrr"}
+	smoothstep	$tmp15 $tmp16 $tmp17 $tmp18 	%argrw{"wrrr"}
+	color		___323_ns $tmp7 $tmp11 $tmp15 	%argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/Noise3D.osl:68
+# 		// Add the amplitude to the normalizing sum
+	mul		$tmp19 ___323_ns curAmp 	%filename{"source/3dsMax-OSL-Shaders/Noise3D.osl"} %line{68} %argrw{"wrr"}
+	add		Out Out $tmp19 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Noise3D.osl:70
+# 
+	add		sum sum curAmp 	%line{70} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Noise3D.osl:73
+# 		curAmp  *= Gain;		
+	mul		curFreq curFreq Lacunarity 	%line{73} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Noise3D.osl:74
+# 	}
+	mul		curAmp curAmp Gain 	%line{74} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Noise3D.osl:59
+# 	{			
+	assign		$tmp20 ___322_i 	%line{59} %argrw{"wr"}
+	add		___322_i ___322_i $const7 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Noise3D.osl:77
+# 		Out /= sum / Amplitude;
+	if		Normalize 40 40 	%line{77} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/Noise3D.osl:78
+# 		
+	div		$tmp21 sum Amplitude 	%line{78} %argrw{"wrr"}
+	div		Out Out $tmp21 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Noise3D.osl:80
+# 	Y = Out[1];
+	compref		X Out $const4 	%line{80} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Noise3D.osl:81
+# 	Z = Out[2];
+	compref		Y Out $const7 	%line{81} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Noise3D.osl:82
+# }
+	compref		Z Out $const8 	%line{82} %argrw{"wrr"}
+	end

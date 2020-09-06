@@ -1,0 +1,357 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader ObjectProjector	%meta{string,label,"Object Projection"} %meta{string,help,"<h3>Object Projection</h3> Simple object based projector. Click the pick button and select an object (for example a point helper). The texture will be projected in the space of that object. "} %meta{string,category,"Projection"} %meta{string,version,"1.0"} 
+param	string	INode	"<Pick Object>"		%meta{string,widget,"max:actionButton"} %meta{string,label,"Object to Project"} %meta{string,actionID,"selectObject('Pick some Object')"} %meta{int,connectable,0}  %read{2147483647,-1} %write{2147483647,-1}
+param	vector	XAxis	1 0 0		%meta{int,connectable,0} %meta{string,widget,"null"}  %read{5,47} %write{2147483647,-1} %derivs
+param	vector	YAxis	0 1 0		%meta{int,connectable,0} %meta{string,widget,"null"}  %read{7,53} %write{2147483647,-1} %derivs
+param	vector	ZAxis	0 0 1		%meta{int,connectable,0} %meta{string,widget,"null"}  %read{9,44} %write{2147483647,-1} %derivs
+param	point	Position	0 0 0		%meta{int,connectable,0} %meta{string,widget,"null"}  %read{2,2} %write{2147483647,-1} %derivs
+param	vector	Scale	1 1 1		%meta{int,connectable,0} %meta{string,label,"UVW Scale"}  %read{64,64} %write{2147483647,-1} %derivs
+param	string	Projection	"XY"		%meta{string,widget,"popup"} %meta{string,options,"XY|YZ|ZX"} %meta{string,help,"In what space (with respect to the object's space) the texture is projected: (XY, YZ or ZX)."} %meta{string,label,"Options"} %meta{int,connectable,0}  %read{12,42} %write{2147483647,-1}
+param	int	Centered	1		%meta{string,widget,"checkBox"} %meta{string,packName,"Options"} %meta{int,connectable,0}  %read{65,65} %write{2147483647,-1}
+param	int	Backface	0		%meta{string,widget,"checkBox"} %meta{string,label,"Project on Back"} %meta{string,packName,"Options"} %meta{int,connectable,0}  %read{57,57} %write{2147483647,-1}
+param	string	Filename	"uv-grid.png"		%meta{string,widget,"filename"} %meta{int,autopop,0}  %read{92,126} %write{2147483647,-1}
+param	int	AutoGamma	1		%meta{string,widget,"checkBox"}  %read{97,97} %write{2147483647,-1}
+param	float	ManualGamma	1		%meta{string,label,"Manual Gamma"}  %read{132,134} %write{2147483647,-1}
+oparam	point	UV	0 0 0		%read{64,90} %write{16,66} %derivs
+oparam	color	Col	0 0 0		%meta{string,label,"Col (RGB)"}  %read{131,134} %write{92,134}
+oparam	float	Alpha	0		%read{2147483647,-1} %write{88,96}
+global	point	P	%read{1,1} %write{2147483647,-1} %derivs
+global	normal	N	%read{4,4} %write{2147483647,-1}
+local	point	pnt	%read{14,50} %write{2,2} %derivs
+local	normal	nrm	%read{23,53} %write{4,4}
+local	float	xScale	%read{6,48} %write{5,6} %derivs
+local	float	yScale	%read{8,51} %write{7,8} %derivs
+local	float	zScale	%read{10,45} %write{9,10} %derivs
+local	int	front	%read{60,60} %write{11,56}
+local	int	___326_channels	%read{94,94} %write{93,93}
+temp	point	$tmp1	%read{2,2} %write{1,1} %derivs
+const	string	$const1	"world"		%read{1,4} %write{2147483647,-1}
+const	string	$const2	"transform"		%read{0,3} %write{2147483647,-1}
+const	string	$const3	"common"		%read{1,4} %write{2147483647,-1}
+const	int	$const4	1		%read{11,90} %write{2147483647,-1}
+const	string	$const5	"XY"		%read{12,12} %write{2147483647,-1}
+temp	int	$tmp2	%read{13,13} %write{12,12}
+temp	float	$tmp3	%read{15,15} %write{14,14} %derivs
+temp	float	$tmp4	%read{16,16} %write{15,15} %derivs
+const	int	$const6	0		%read{16,128} %write{2147483647,-1}
+temp	float	$tmp5	%read{18,18} %write{17,17} %derivs
+temp	float	$tmp6	%read{19,19} %write{18,18} %derivs
+temp	float	$tmp7	%read{21,21} %write{20,20} %derivs
+temp	float	$tmp8	%read{22,22} %write{21,21} %derivs
+const	int	$const7	2		%read{22,52} %write{2147483647,-1}
+temp	float	$tmp9	%read{24,24} %write{23,23}
+temp	int	$tmp10	%read{25,25} %write{24,24}
+const	string	$const8	"YZ"		%read{27,27} %write{2147483647,-1}
+temp	int	$tmp11	%read{28,28} %write{27,27}
+temp	float	$tmp12	%read{30,30} %write{29,29} %derivs
+temp	float	$tmp13	%read{31,31} %write{30,30} %derivs
+temp	float	$tmp14	%read{33,33} %write{32,32} %derivs
+temp	float	$tmp15	%read{34,34} %write{33,33} %derivs
+temp	float	$tmp16	%read{36,36} %write{35,35} %derivs
+temp	float	$tmp17	%read{37,37} %write{36,36} %derivs
+temp	float	$tmp18	%read{39,39} %write{38,38}
+temp	int	$tmp19	%read{40,40} %write{39,39}
+const	string	$const9	"ZX"		%read{42,42} %write{2147483647,-1}
+temp	int	$tmp20	%read{43,43} %write{42,42}
+temp	float	$tmp21	%read{45,45} %write{44,44} %derivs
+temp	float	$tmp22	%read{46,46} %write{45,45} %derivs
+temp	float	$tmp23	%read{48,48} %write{47,47} %derivs
+temp	float	$tmp24	%read{49,49} %write{48,48} %derivs
+temp	float	$tmp25	%read{51,51} %write{50,50} %derivs
+temp	float	$tmp26	%read{52,52} %write{51,51} %derivs
+temp	float	$tmp27	%read{54,54} %write{53,53}
+temp	int	$tmp28	%read{55,55} %write{54,54}
+temp	int	$tmp29	%read{58,58} %write{57,57}
+temp	int	$tmp30	%read{59,63} %write{58,62}
+temp	int	$tmp31	%read{61,61} %write{60,60}
+temp	int	$tmp32	%read{62,62} %write{61,61}
+const	vector	$const10	0.5 0.5 0		%read{66,66} %write{2147483647,-1}
+temp	float	$tmp34	%read{68,68} %write{67,67}
+const	float	$const11	1		%read{68,132} %write{2147483647,-1}
+temp	int	$tmp35	%read{69,69} %write{68,68}
+temp	int	$tmp36	%read{70,75} %write{69,74}
+temp	float	$tmp37	%read{72,72} %write{71,71}
+temp	int	$tmp38	%read{73,73} %write{72,72}
+temp	int	$tmp39	%read{74,74} %write{73,73}
+temp	int	$tmp40	%read{76,81} %write{75,80}
+temp	float	$tmp41	%read{78,78} %write{77,77}
+const	float	$const12	0		%read{78,84} %write{2147483647,-1}
+temp	int	$tmp42	%read{79,79} %write{78,78}
+temp	int	$tmp43	%read{80,80} %write{79,79}
+temp	int	$tmp44	%read{82,87} %write{81,86}
+temp	float	$tmp45	%read{84,84} %write{83,83}
+temp	int	$tmp46	%read{85,85} %write{84,84}
+temp	int	$tmp47	%read{86,86} %write{85,85}
+temp	float	$tmp48	%read{92,92} %write{89,89} %derivs
+temp	float	$tmp49	%read{91,91} %write{90,90} %derivs
+temp	float	$tmp50	%read{92,92} %write{91,91} %derivs
+const	string	$const13	"alpha"		%read{92,92} %write{2147483647,-1}
+temp	int	$tmp51	%read{2147483647,-1} %write{93,93}
+const	string	$const14	"channels"		%read{93,93} %write{2147483647,-1}
+const	int	$const15	4		%read{94,94} %write{2147483647,-1}
+temp	int	$tmp52	%read{95,95} %write{94,94}
+temp	int	$tmp53	%read{99,99} %write{98,98}
+const	string	$const16	".exr"		%read{98,98} %write{2147483647,-1}
+temp	int	$tmp54	%read{100,100} %write{99,99}
+temp	int	$tmp55	%read{101,106} %write{100,105}
+temp	int	$tmp56	%read{103,103} %write{102,102}
+const	string	$const17	".EXR"		%read{102,102} %write{2147483647,-1}
+temp	int	$tmp57	%read{104,104} %write{103,103}
+temp	int	$tmp58	%read{105,105} %write{104,104}
+temp	int	$tmp59	%read{107,112} %write{106,111}
+temp	int	$tmp60	%read{109,109} %write{108,108}
+const	string	$const18	".hdr"		%read{108,108} %write{2147483647,-1}
+temp	int	$tmp61	%read{110,110} %write{109,109}
+temp	int	$tmp62	%read{111,111} %write{110,110}
+temp	int	$tmp63	%read{113,118} %write{112,117}
+temp	int	$tmp64	%read{115,115} %write{114,114}
+const	string	$const19	".HDR"		%read{114,114} %write{2147483647,-1}
+temp	int	$tmp65	%read{116,116} %write{115,115}
+temp	int	$tmp66	%read{117,117} %write{116,116}
+temp	int	$tmp67	%read{119,124} %write{118,123}
+temp	int	$tmp68	%read{121,121} %write{120,120}
+const	string	$const20	".tx"		%read{120,120} %write{2147483647,-1}
+temp	int	$tmp69	%read{122,122} %write{121,121}
+temp	int	$tmp70	%read{123,123} %write{122,122}
+temp	int	$tmp71	%read{125,130} %write{124,129}
+temp	int	$tmp72	%read{127,127} %write{126,126}
+const	string	$const21	".TX"		%read{126,126} %write{2147483647,-1}
+temp	int	$tmp73	%read{128,128} %write{127,127}
+temp	int	$tmp74	%read{129,129} %write{128,128}
+const	float	$const22	2.2		%read{131,131} %write{2147483647,-1}
+temp	int	$tmp75	%read{133,133} %write{132,132}
+code ___main___
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:62
+# 	normal nrm = transform("world", N);
+	functioncall	$const2 2 	%filename{"source/3dsMax-OSL-Shaders/ObjectProjector.osl"} %line{62} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:267
+# point  transform (string to, point p)  { return transform("common",to,p); }
+	transform	$tmp1 $const3 $const1 P 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{267} %argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:62
+# 	normal nrm = transform("world", N);
+	sub		pnt $tmp1 Position 	%filename{"source/3dsMax-OSL-Shaders/ObjectProjector.osl"} %line{62} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:63
+# 	
+	functioncall	$const2 5 	%line{63} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:265
+# normal transform (string to, normal p) { return transform("common",to,p); }
+	transformn	nrm $const3 $const1 N 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{265} %argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:65
+# 	float yScale = length(YAxis); yScale *= yScale;
+	length		xScale XAxis 	%filename{"source/3dsMax-OSL-Shaders/ObjectProjector.osl"} %line{65} %argrw{"wr"}
+	mul		xScale xScale xScale 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:66
+# 	float zScale = length(ZAxis); zScale *= zScale;
+	length		yScale YAxis 	%line{66} %argrw{"wr"}
+	mul		yScale yScale yScale 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:67
+# 
+	length		zScale ZAxis 	%line{67} %argrw{"wr"}
+	mul		zScale zScale zScale 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:69
+# 	
+	assign		front $const4 	%line{69} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:71
+# 	{
+	eq		$tmp2 Projection $const5 	%line{71} %argrw{"wrr"}
+	if		$tmp2 27 57 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:73
+# 		UV[1] = dot(pnt, YAxis) / yScale;
+	dot		$tmp3 pnt XAxis 	%line{73} %argrw{"wrr"}
+	div		$tmp4 $tmp3 xScale 	%argrw{"wrr"}
+	compassign	UV $const6 $tmp4 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:74
+# 		UV[2] = dot(pnt, ZAxis) / zScale;
+	dot		$tmp5 pnt YAxis 	%line{74} %argrw{"wrr"}
+	div		$tmp6 $tmp5 yScale 	%argrw{"wrr"}
+	compassign	UV $const4 $tmp6 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:75
+# 		
+	dot		$tmp7 pnt ZAxis 	%line{75} %argrw{"wrr"}
+	div		$tmp8 $tmp7 zScale 	%argrw{"wrr"}
+	compassign	UV $const7 $tmp8 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:77
+# 			front = 0;
+	dot		$tmp9 ZAxis nrm 	%line{77} %argrw{"wrr"}
+	lt		$tmp10 $tmp9 $const6 	%argrw{"wrr"}
+	if		$tmp10 27 27 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:78
+# 	}
+	assign		front $const6 	%line{78} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:80
+# 	{
+	eq		$tmp11 Projection $const8 	%line{80} %argrw{"wrr"}
+	if		$tmp11 42 57 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:82
+# 		UV[1] = dot(pnt, ZAxis) / zScale;
+	dot		$tmp12 pnt YAxis 	%line{82} %argrw{"wrr"}
+	div		$tmp13 $tmp12 yScale 	%argrw{"wrr"}
+	compassign	UV $const6 $tmp13 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:83
+# 		UV[2] = dot(pnt, XAxis) / xScale;
+	dot		$tmp14 pnt ZAxis 	%line{83} %argrw{"wrr"}
+	div		$tmp15 $tmp14 zScale 	%argrw{"wrr"}
+	compassign	UV $const4 $tmp15 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:84
+# 		
+	dot		$tmp16 pnt XAxis 	%line{84} %argrw{"wrr"}
+	div		$tmp17 $tmp16 xScale 	%argrw{"wrr"}
+	compassign	UV $const7 $tmp17 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:86
+# 			front = 0;
+	dot		$tmp18 XAxis nrm 	%line{86} %argrw{"wrr"}
+	lt		$tmp19 $tmp18 $const6 	%argrw{"wrr"}
+	if		$tmp19 42 42 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:87
+# 	}
+	assign		front $const6 	%line{87} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:89
+# 	{
+	eq		$tmp20 Projection $const9 	%line{89} %argrw{"wrr"}
+	if		$tmp20 57 57 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:91
+# 		UV[1] = dot(pnt, XAxis) / xScale;
+	dot		$tmp21 pnt ZAxis 	%line{91} %argrw{"wrr"}
+	div		$tmp22 $tmp21 zScale 	%argrw{"wrr"}
+	compassign	UV $const6 $tmp22 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:92
+# 		UV[2] = dot(pnt, YAxis) / yScale;
+	dot		$tmp23 pnt XAxis 	%line{92} %argrw{"wrr"}
+	div		$tmp24 $tmp23 xScale 	%argrw{"wrr"}
+	compassign	UV $const4 $tmp24 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:93
+# 		
+	dot		$tmp25 pnt YAxis 	%line{93} %argrw{"wrr"}
+	div		$tmp26 $tmp25 yScale 	%argrw{"wrr"}
+	compassign	UV $const7 $tmp26 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:95
+# 			front = 0;
+	dot		$tmp27 YAxis nrm 	%line{95} %argrw{"wrr"}
+	lt		$tmp28 $tmp27 $const6 	%argrw{"wrr"}
+	if		$tmp28 57 57 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:96
+# 	}
+	assign		front $const6 	%line{96} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:100
+# 	{	
+	eq		$tmp29 Backface $const4 	%line{100} %argrw{"wrr"}
+	neq		$tmp30 $tmp29 $const6 	%argrw{"wrr"}
+	if		$tmp30 60 63 	%argrw{"r"}
+	eq		$tmp31 front $const4 	%argrw{"wrr"}
+	neq		$tmp32 $tmp31 $const6 	%argrw{"wrr"}
+	assign		$tmp30 $tmp32 	%argrw{"wr"}
+	if		$tmp30 135 135 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:102
+# 		
+	div		UV UV Scale 	%line{102} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:104
+# 			UV += vector(0.5, 0.5, 0.0);	
+	if		Centered 67 67 	%line{104} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:105
+# 		
+	add		UV UV $const10 	%line{105} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:107
+# 		{
+	compref		$tmp34 UV $const6 	%line{107} %argrw{"wrr"}
+	le		$tmp35 $tmp34 $const11 	%argrw{"wrr"}
+	neq		$tmp36 $tmp35 $const6 	%argrw{"wrr"}
+	if		$tmp36 75 75 	%argrw{"r"}
+	compref		$tmp37 UV $const4 	%argrw{"wrr"}
+	le		$tmp38 $tmp37 $const11 	%argrw{"wrr"}
+	neq		$tmp39 $tmp38 $const6 	%argrw{"wrr"}
+	assign		$tmp36 $tmp39 	%argrw{"wr"}
+	neq		$tmp40 $tmp36 $const6 	%argrw{"wrr"}
+	if		$tmp40 81 81 	%argrw{"r"}
+	compref		$tmp41 UV $const6 	%argrw{"wrr"}
+	ge		$tmp42 $tmp41 $const12 	%argrw{"wrr"}
+	neq		$tmp43 $tmp42 $const6 	%argrw{"wrr"}
+	assign		$tmp40 $tmp43 	%argrw{"wr"}
+	neq		$tmp44 $tmp40 $const6 	%argrw{"wrr"}
+	if		$tmp44 87 87 	%argrw{"r"}
+	compref		$tmp45 UV $const4 	%argrw{"wrr"}
+	ge		$tmp46 $tmp45 $const12 	%argrw{"wrr"}
+	neq		$tmp47 $tmp46 $const6 	%argrw{"wrr"}
+	assign		$tmp44 $tmp47 	%argrw{"wr"}
+	if		$tmp44 135 135 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:109
+# 			Col = texture(Filename, UV[0], 1.0-UV[1], "alpha", Alpha);
+	assign		Alpha $const11 	%line{109} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:110
+# 			
+	compref		$tmp48 UV $const6 	%line{110} %argrw{"wrr"}
+	compref		$tmp49 UV $const4 	%argrw{"wrr"}
+	sub		$tmp50 $const11 $tmp49 	%argrw{"wrr"}
+	texture		Col Filename $tmp48 $tmp50 $const13 Alpha 	%argrw{"wrrrrw"} %argderivs{2,3}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:113
+# 			if (channels < 4) // No alpha? Set it to opaque
+	gettextureinfo	$tmp51 Filename $const14 ___326_channels 	%line{113} %argrw{"wrrw"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:114
+# 			{
+	lt		$tmp52 ___326_channels $const15 	%line{114} %argrw{"wrr"}
+	if		$tmp52 97 97 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:116
+# 			}		
+	assign		Alpha $const11 	%line{116} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:120
+# 			{
+	if		AutoGamma 132 135 	%line{120} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:122
+# 					!endswith(Filename, ".EXR") &&
+	endswith	$tmp53 Filename $const16 	%line{122} %argrw{"wrr"}
+	eq		$tmp54 $tmp53 $const6 	%argrw{"wrr"}
+	neq		$tmp55 $tmp54 $const6 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:123
+# 					!endswith(Filename, ".hdr") &&
+	if		$tmp55 106 106 	%line{123} %argrw{"r"}
+	endswith	$tmp56 Filename $const17 	%argrw{"wrr"}
+	eq		$tmp57 $tmp56 $const6 	%argrw{"wrr"}
+	neq		$tmp58 $tmp57 $const6 	%argrw{"wrr"}
+	assign		$tmp55 $tmp58 	%argrw{"wr"}
+	neq		$tmp59 $tmp55 $const6 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:124
+# 					!endswith(Filename, ".HDR") &&
+	if		$tmp59 112 112 	%line{124} %argrw{"r"}
+	endswith	$tmp60 Filename $const18 	%argrw{"wrr"}
+	eq		$tmp61 $tmp60 $const6 	%argrw{"wrr"}
+	neq		$tmp62 $tmp61 $const6 	%argrw{"wrr"}
+	assign		$tmp59 $tmp62 	%argrw{"wr"}
+	neq		$tmp63 $tmp59 $const6 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:125
+# 					!endswith(Filename, ".tx")  &&
+	if		$tmp63 118 118 	%line{125} %argrw{"r"}
+	endswith	$tmp64 Filename $const19 	%argrw{"wrr"}
+	eq		$tmp65 $tmp64 $const6 	%argrw{"wrr"}
+	neq		$tmp66 $tmp65 $const6 	%argrw{"wrr"}
+	assign		$tmp63 $tmp66 	%argrw{"wr"}
+	neq		$tmp67 $tmp63 $const6 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:126
+# 					!endswith(Filename, ".TX"))
+	if		$tmp67 124 124 	%line{126} %argrw{"r"}
+	endswith	$tmp68 Filename $const20 	%argrw{"wrr"}
+	eq		$tmp69 $tmp68 $const6 	%argrw{"wrr"}
+	neq		$tmp70 $tmp69 $const6 	%argrw{"wrr"}
+	assign		$tmp67 $tmp70 	%argrw{"wr"}
+	neq		$tmp71 $tmp67 $const6 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:127
+# 				{
+	if		$tmp71 130 130 	%line{127} %argrw{"r"}
+	endswith	$tmp72 Filename $const21 	%argrw{"wrr"}
+	eq		$tmp73 $tmp72 $const6 	%argrw{"wrr"}
+	neq		$tmp74 $tmp73 $const6 	%argrw{"wrr"}
+	assign		$tmp71 $tmp74 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:122
+# 					!endswith(Filename, ".EXR") &&
+	if		$tmp71 132 132 	%line{122} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:130
+# 				}
+	pow		Col Col $const22 	%line{130} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:135
+# 					Col = pow(Col, ManualGamma);
+	neq		$tmp75 ManualGamma $const11 	%line{135} %argrw{"wrr"}
+	if		$tmp75 135 135 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/ObjectProjector.osl:136
+# 			}
+	pow		Col Col ManualGamma 	%line{136} %argrw{"wrr"}
+	end

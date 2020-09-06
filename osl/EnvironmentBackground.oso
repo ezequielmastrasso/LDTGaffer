@@ -1,0 +1,55 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader EnvironmentBackground	%meta{string,help,"<h3>Environment/Background Switcher</h3> When applied as an environment shader, allows returning different results for the <b>Environment</b> (for reflections and lighting) and the <b>Background</b> (camera rays hitting nothing)"} %meta{string,label,"Environment/Background Switcher"} %meta{string,category,"Environment"} 
+param	color	Background	1 0 0		%read{8,11} %write{2147483647,-1}
+param	color	Environment	0 1 0		%read{7,12} %write{2147483647,-1}
+oparam	color	Out	0 0 0		%read{2147483647,-1} %write{7,12}
+local	string	renderer	%read{1,1} %write{0,0}
+local	vector	___322_CP	%read{5,5} %write{4,4}
+temp	int	$tmp1	%read{2147483647,-1} %write{0,0}
+const	string	$const1	"renderer:name"		%read{0,0} %write{2147483647,-1}
+const	string	$const2	"3dsmax:hlsl"		%read{1,1} %write{2147483647,-1}
+temp	int	$tmp2	%read{2,2} %write{1,1}
+const	string	$const3	"camera"		%read{4,9} %write{2147483647,-1}
+const	point	$const4	0 0 0		%read{4,4} %write{2147483647,-1}
+const	string	$const5	"transform"		%read{3,3} %write{2147483647,-1}
+const	string	$const6	"common"		%read{4,4} %write{2147483647,-1}
+const	float	$const7	0		%read{5,5} %write{2147483647,-1}
+temp	int	$tmp4	%read{6,6} %write{5,5}
+temp	int	$tmp5	%read{10,10} %write{9,9}
+code ___main___
+# source/3dsMax-OSL-Shaders/EnvBGSwitch.osl:24
+# 	
+	getattribute	$tmp1 $const1 renderer 	%filename{"source/3dsMax-OSL-Shaders/EnvBGSwitch.osl"} %line{24} %argrw{"wrw"}
+# source/3dsMax-OSL-Shaders/EnvBGSwitch.osl:26
+# 	{
+	eq		$tmp2 renderer $const2 	%line{26} %argrw{"wrr"}
+	if		$tmp2 9 13 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/EnvBGSwitch.osl:30
+# 		if (CP == 0.0)
+	functioncall	$const5 5 	%line{30} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:267
+# point  transform (string to, point p)  { return transform("common",to,p); }
+	transform	___322_CP $const6 $const3 $const4 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{267} %argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/EnvBGSwitch.osl:31
+# 			Out = Environment;
+	eq		$tmp4 ___322_CP $const7 	%filename{"source/3dsMax-OSL-Shaders/EnvBGSwitch.osl"} %line{31} %argrw{"wrr"}
+	if		$tmp4 8 9 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/EnvBGSwitch.osl:32
+# 		else
+	assign		Out Environment 	%line{32} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/EnvBGSwitch.osl:34
+# 	}
+	assign		Out Background 	%line{34} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/EnvBGSwitch.osl:38
+# 			Out= Background;
+	raytype		$tmp5 $const3 	%line{38} %argrw{"wr"}
+	if		$tmp5 12 13 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/EnvBGSwitch.osl:39
+# 		else
+	assign		Out Background 	%line{39} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/EnvBGSwitch.osl:41
+# 	}	
+	assign		Out Environment 	%line{41} %argrw{"wr"}
+	end

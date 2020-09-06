@@ -1,0 +1,233 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader MABMatrixDisplay
+param	point	Vector	0 0 0		%read{1,62} %write{0,0} %initexpr
+param	int	Offset	0		%read{2,2} %write{2147483647,-1}
+param	string	Text	"Blender"		%read{10,15} %write{2147483647,-1}
+param	string	Font	"MJABook/24MABMatrixDisplay/font5x7.xml"		%read{17,17} %write{2147483647,-1}
+oparam	float	Fac	0		%read{2147483647,-1} %write{83,83}
+global	point	P	%read{0,0} %write{2147483647,-1}
+local	float	x	%read{5,55} %write{4,4}
+local	int	nchar	%read{7,15} %write{6,6}
+local	string	___322_xpath	%read{17,17} %write{16,16}
+local	int	___322_nodeid	%read{18,20} %write{17,17}
+local	string	___323_pattern	%read{46,46} %write{20,20}
+local	int	___323_row	%read{34,48} %write{25,25}
+local	int	___323_col	%read{42,47} %write{33,33}
+local	string[5]	___324_bits	%read{47,47} %write{46,46}
+local	float	___325_xcell	%read{74,74} %write{61,61}
+local	float	___325_ycell	%read{75,75} %write{73,73}
+const	int	$const1	0		%read{1,43} %write{2147483647,-1}
+temp	float	$tmp1	%read{4,4} %write{1,1}
+const	float	$const2	5		%read{3,56} %write{2147483647,-1}
+temp	float	$tmp2	%read{4,4} %write{3,3}
+temp	float	$tmp3	%read{3,3} %write{2,2}
+temp	float	$tmp4	%read{6,6} %write{5,5}
+temp	int	$tmp5	%read{8,8} %write{7,7}
+temp	int	$tmp6	%read{9,14} %write{8,13}
+temp	int	$tmp7	%read{11,11} %write{10,10}
+temp	int	$tmp8	%read{12,12} %write{11,11}
+temp	int	$tmp9	%read{13,13} %write{12,12}
+const	string	$const3	"//char[@name='%s']"		%read{16,16} %write{2147483647,-1}
+temp	string	$tmp10	%read{16,16} %write{15,15}
+const	int	$const4	1		%read{15,62} %write{2147483647,-1}
+temp	int	$tmp11	%read{19,19} %write{18,18}
+temp	int	$tmp12	%read{2147483647,-1} %write{20,20}
+const	string	$const5	"pattern"		%read{20,20} %write{2147483647,-1}
+const	int	$const6	6		%read{25,25} %write{2147483647,-1}
+temp	float	$tmp13	%read{24,24} %write{23,23}
+temp	float	$tmp14	%read{22,22} %write{21,21}
+const	int	$const7	7		%read{37,37} %write{2147483647,-1}
+temp	float	$tmp15	%read{23,23} %write{22,22}
+const	float	$const8	7		%read{22,68} %write{2147483647,-1}
+temp	int	$tmp16	%read{25,25} %write{24,24}
+temp	float	$tmp17	%read{33,33} %write{32,32}
+temp	float	$tmp18	%read{31,31} %write{30,30}
+const	float	$const9	1		%read{27,72} %write{2147483647,-1}
+const	string	$const10	"mod"		%read{26,69} %write{2147483647,-1}
+temp	float	$tmp19	%read{29,29} %write{28,28}
+temp	float	$tmp20	%read{28,28} %write{27,27}
+temp	float	$tmp21	%read{30,30} %write{29,29}
+const	int	$const11	5		%read{42,42} %write{2147483647,-1}
+temp	float	$tmp22	%read{32,32} %write{31,31}
+temp	int	$tmp23	%read{35,35} %write{34,34}
+temp	int	$tmp24	%read{36,40} %write{35,39}
+temp	int	$tmp25	%read{38,38} %write{37,37}
+temp	int	$tmp26	%read{39,39} %write{38,38}
+temp	int	$tmp27	%read{41,45} %write{40,44}
+temp	int	$tmp28	%read{43,43} %write{42,42}
+temp	int	$tmp29	%read{44,44} %write{43,43}
+temp	int	$tmp30	%read{2147483647,-1} %write{46,46}
+temp	string	$tmp31	%read{49,49} %write{48,48}
+temp	string	$tmp32	%read{48,48} %write{47,47}
+const	string	$const12	"1"		%read{49,49} %write{2147483647,-1}
+temp	int	$tmp33	%read{50,50} %write{49,49}
+temp	float	$tmp34	%read{56,56} %write{55,55}
+temp	float	$tmp35	%read{54,54} %write{53,53}
+temp	float	$tmp36	%read{53,53} %write{52,52}
+temp	float	$tmp37	%read{55,55} %write{54,54}
+temp	float	$tmp38	%read{58,61} %write{56,56}
+temp	float	$tmp39	%read{60,60} %write{59,59}
+temp	float	$tmp40	%read{59,59} %write{58,58}
+temp	float	$tmp41	%read{61,61} %write{60,60}
+temp	float	$tmp42	%read{68,68} %write{67,67}
+temp	float	$tmp43	%read{64,67} %write{62,62}
+temp	float	$tmp44	%read{66,66} %write{65,65}
+temp	float	$tmp45	%read{65,65} %write{64,64}
+temp	float	$tmp46	%read{67,67} %write{66,66}
+temp	float	$tmp47	%read{70,73} %write{68,68}
+temp	float	$tmp48	%read{72,72} %write{71,71}
+temp	float	$tmp49	%read{71,71} %write{70,70}
+temp	float	$tmp50	%read{73,73} %write{72,72}
+const	float	$const13	0.40000001		%read{81,82} %write{2147483647,-1}
+temp	float	$tmp51	%read{81,81} %write{80,80}
+const	float	$const14	0.5		%read{74,75} %write{2147483647,-1}
+temp	float	$tmp52	%read{77,77} %write{74,74}
+temp	float	$tmp53	%read{78,78} %write{75,75}
+const	string	$const15	"hypot"		%read{76,76} %write{2147483647,-1}
+temp	float	$tmp54	%read{79,79} %write{77,77}
+temp	float	$tmp55	%read{79,79} %write{78,78}
+temp	float	$tmp56	%read{80,80} %write{79,79}
+temp	float	$tmp57	%read{82,82} %write{81,81}
+temp	float	$tmp58	%read{83,83} %write{82,82}
+const	float	$const16	0		%read{83,83} %write{2147483647,-1}
+code Vector
+# source/sambler-osl-shaders/MJABook/24MABMatrixDisplay/MABMatrixDisplay.osl:15
+#         int Offset = 0,
+	assign		Vector P 	%filename{"source/sambler-osl-shaders/MJABook/24MABMatrixDisplay/MABMatrixDisplay.osl"} %line{15} %argrw{"wr"}
+code ___main___
+# source/sambler-osl-shaders/MJABook/24MABMatrixDisplay/MABMatrixDisplay.osl:22
+#     int nchar = (int)floor(x);
+	compref		$tmp1 Vector $const1 	%filename{"source/sambler-osl-shaders/MJABook/24MABMatrixDisplay/MABMatrixDisplay.osl"} %line{22} %argrw{"wrr"}
+	assign		$tmp3 Offset 	%argrw{"wr"}
+	div		$tmp2 $tmp3 $const2 	%argrw{"wrr"}
+	sub		x $tmp1 $tmp2 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/24MABMatrixDisplay/MABMatrixDisplay.osl:23
+#     if(nchar >= 0 && nchar < strlen(Text)) {
+	floor		$tmp4 x 	%line{23} %argrw{"wr"}
+	assign		nchar $tmp4 	%argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/24MABMatrixDisplay/MABMatrixDisplay.osl:24
+#         string xpath = format("//char[@name='%s']", substr(Text,nchar,1));
+	ge		$tmp5 nchar $const1 	%line{24} %argrw{"wrr"}
+	neq		$tmp6 $tmp5 $const1 	%argrw{"wrr"}
+	if		$tmp6 14 14 	%argrw{"r"}
+	strlen		$tmp7 Text 	%argrw{"wr"}
+	lt		$tmp8 nchar $tmp7 	%argrw{"wrr"}
+	neq		$tmp9 $tmp8 $const1 	%argrw{"wrr"}
+	assign		$tmp6 $tmp9 	%argrw{"wr"}
+	if		$tmp6 84 84 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/24MABMatrixDisplay/MABMatrixDisplay.osl:25
+#         int nodeid = dict_find(Font, xpath);
+	substr		$tmp10 Text nchar $const4 	%line{25} %argrw{"wrrr"}
+	format		___322_xpath $const3 $tmp10 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/24MABMatrixDisplay/MABMatrixDisplay.osl:26
+#         if( nodeid > 0 ) {
+	dict_find	___322_nodeid Font ___322_xpath 	%line{26} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/24MABMatrixDisplay/MABMatrixDisplay.osl:27
+#             string pattern;
+	gt		$tmp11 ___322_nodeid $const1 	%line{27} %argrw{"wrr"}
+	if		$tmp11 84 84 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/24MABMatrixDisplay/MABMatrixDisplay.osl:29
+#             int row= 6 - (int)floor(Vector[1] * 7);
+	dict_value	$tmp12 ___322_nodeid $const5 ___323_pattern 	%line{29} %argrw{"wrrw"}
+# source/sambler-osl-shaders/MJABook/24MABMatrixDisplay/MABMatrixDisplay.osl:30
+#             int col= (int)floor(mod(x,1) * 5);
+	compref		$tmp14 Vector $const4 	%line{30} %argrw{"wrr"}
+	mul		$tmp15 $tmp14 $const8 	%argrw{"wrr"}
+	floor		$tmp13 $tmp15 	%argrw{"wr"}
+	assign		$tmp16 $tmp13 	%argrw{"wr"}
+	sub		___323_row $const6 $tmp16 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/24MABMatrixDisplay/MABMatrixDisplay.osl:31
+#             if(row >= 0 && row < 7 && col < 5) {
+	functioncall	$const10 31 	%line{31} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:136
+# float  mod (float  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp20 x $const9 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{136} %argrw{"wrr"}
+	floor		$tmp19 $tmp20 	%argrw{"wr"}
+	mul		$tmp21 $const9 $tmp19 	%argrw{"wrr"}
+	sub		$tmp18 x $tmp21 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/24MABMatrixDisplay/MABMatrixDisplay.osl:31
+#             if(row >= 0 && row < 7 && col < 5) {
+	mul		$tmp22 $tmp18 $const2 	%filename{"source/sambler-osl-shaders/MJABook/24MABMatrixDisplay/MABMatrixDisplay.osl"} %line{31} %argrw{"wrr"}
+	floor		$tmp17 $tmp22 	%argrw{"wr"}
+	assign		___323_col $tmp17 	%argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/24MABMatrixDisplay/MABMatrixDisplay.osl:32
+#                 string bits[5];
+	ge		$tmp23 ___323_row $const1 	%line{32} %argrw{"wrr"}
+	neq		$tmp24 $tmp23 $const1 	%argrw{"wrr"}
+	if		$tmp24 40 40 	%argrw{"r"}
+	lt		$tmp25 ___323_row $const7 	%argrw{"wrr"}
+	neq		$tmp26 $tmp25 $const1 	%argrw{"wrr"}
+	assign		$tmp24 $tmp26 	%argrw{"wr"}
+	neq		$tmp27 $tmp24 $const1 	%argrw{"wrr"}
+	if		$tmp27 45 45 	%argrw{"r"}
+	lt		$tmp28 ___323_col $const11 	%argrw{"wrr"}
+	neq		$tmp29 $tmp28 $const1 	%argrw{"wrr"}
+	assign		$tmp27 $tmp29 	%argrw{"wr"}
+	if		$tmp27 84 84 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/24MABMatrixDisplay/MABMatrixDisplay.osl:34
+#                 if(substr(bits[col], row, 1) == "1") {
+	split		$tmp30 ___323_pattern ___324_bits 	%line{34} %argrw{"wrw"}
+# source/sambler-osl-shaders/MJABook/24MABMatrixDisplay/MABMatrixDisplay.osl:35
+#                     float xcell = mod(mod(x, 1.0) * 5, 1.0);
+	aref		$tmp32 ___324_bits ___323_col 	%line{35} %argrw{"wrr"}
+	substr		$tmp31 $tmp32 ___323_row $const4 	%argrw{"wrrr"}
+	eq		$tmp33 $tmp31 $const12 	%argrw{"wrr"}
+	if		$tmp33 84 84 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/24MABMatrixDisplay/MABMatrixDisplay.osl:36
+#                     float ycell = mod(mod(Vector[1], 1.0) * 7, 1.0);
+	functioncall	$const10 56 	%line{36} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:136
+# float  mod (float  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp36 x $const9 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{136} %argrw{"wrr"}
+	floor		$tmp35 $tmp36 	%argrw{"wr"}
+	mul		$tmp37 $const9 $tmp35 	%argrw{"wrr"}
+	sub		$tmp34 x $tmp37 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/24MABMatrixDisplay/MABMatrixDisplay.osl:36
+#                     float ycell = mod(mod(Vector[1], 1.0) * 7, 1.0);
+	mul		$tmp38 $tmp34 $const2 	%filename{"source/sambler-osl-shaders/MJABook/24MABMatrixDisplay/MABMatrixDisplay.osl"} %line{36} %argrw{"wrr"}
+	functioncall	$const10 62 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:136
+# float  mod (float  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp40 $tmp38 $const9 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{136} %argrw{"wrr"}
+	floor		$tmp39 $tmp40 	%argrw{"wr"}
+	mul		$tmp41 $const9 $tmp39 	%argrw{"wrr"}
+	sub		___325_xcell $tmp38 $tmp41 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/24MABMatrixDisplay/MABMatrixDisplay.osl:37
+#                     Fac = max((0.4 - hypot(xcell - 0.5, ycell - 0.5)) / 0.4, 0.0);
+	compref		$tmp43 Vector $const4 	%filename{"source/sambler-osl-shaders/MJABook/24MABMatrixDisplay/MABMatrixDisplay.osl"} %line{37} %argrw{"wrr"}
+	functioncall	$const10 68 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:136
+# float  mod (float  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp45 $tmp43 $const9 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{136} %argrw{"wrr"}
+	floor		$tmp44 $tmp45 	%argrw{"wr"}
+	mul		$tmp46 $const9 $tmp44 	%argrw{"wrr"}
+	sub		$tmp42 $tmp43 $tmp46 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/24MABMatrixDisplay/MABMatrixDisplay.osl:37
+#                     Fac = max((0.4 - hypot(xcell - 0.5, ycell - 0.5)) / 0.4, 0.0);
+	mul		$tmp47 $tmp42 $const8 	%filename{"source/sambler-osl-shaders/MJABook/24MABMatrixDisplay/MABMatrixDisplay.osl"} %line{37} %argrw{"wrr"}
+	functioncall	$const10 74 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:136
+# float  mod (float  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp49 $tmp47 $const9 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{136} %argrw{"wrr"}
+	floor		$tmp48 $tmp49 	%argrw{"wr"}
+	mul		$tmp50 $const9 $tmp48 	%argrw{"wrr"}
+	sub		___325_ycell $tmp47 $tmp50 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/24MABMatrixDisplay/MABMatrixDisplay.osl:38
+#                 }
+	sub		$tmp52 ___325_xcell $const14 	%filename{"source/sambler-osl-shaders/MJABook/24MABMatrixDisplay/MABMatrixDisplay.osl"} %line{38} %argrw{"wrr"}
+	sub		$tmp53 ___325_ycell $const14 	%argrw{"wrr"}
+	functioncall	$const15 81 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:114
+# float hypot (float a, float b) { return sqrt (a*a + b*b); }
+	mul		$tmp54 $tmp52 $tmp52 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{114} %argrw{"wrr"}
+	mul		$tmp55 $tmp53 $tmp53 	%argrw{"wrr"}
+	add		$tmp56 $tmp54 $tmp55 	%argrw{"wrr"}
+	sqrt		$tmp51 $tmp56 	%argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/24MABMatrixDisplay/MABMatrixDisplay.osl:38
+#                 }
+	sub		$tmp57 $const13 $tmp51 	%filename{"source/sambler-osl-shaders/MJABook/24MABMatrixDisplay/MABMatrixDisplay.osl"} %line{38} %argrw{"wrr"}
+	div		$tmp58 $tmp57 $const13 	%argrw{"wrr"}
+	max		Fac $tmp58 $const16 	%argrw{"wrr"}
+	end

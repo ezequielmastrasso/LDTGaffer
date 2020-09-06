@@ -1,0 +1,362 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader MAAbstractSquares
+param	vector	Vector	0 0 0		%read{1,1} %write{0,0} %initexpr
+param	float	Scale	1		%read{1,1} %write{2147483647,-1}
+param	float	LineWidth	0.1		%read{2,2} %write{2147483647,-1}
+param	float	Offset	2		%read{28,35} %write{2147483647,-1}
+oparam	float	Fac	0		%read{2147483647,-1} %write{143,150}
+global	point	P	%read{0,0} %write{2147483647,-1}
+local	point	Pos	%read{3,144} %write{1,37}
+local	float	width	%read{58,138} %write{2,2}
+local	float	bot	%read{83,109} %write{9,9}
+local	float	lev	%read{23,122} %write{14,14}
+local	float	top	%read{100,123} %write{21,21}
+local	float	left	%read{58,108} %write{44,44}
+local	float	mid	%read{63,116} %write{49,49}
+local	float	right	%read{75,117} %write{56,56}
+local	int	___325_stoneindex	%read{115,121} %write{107,121}
+local	float	___325_seeda	%read{124,149} %write{108,116}
+local	float	___325_seedb	%read{124,149} %write{109,122}
+local	float	___325_bounda	%read{2147483647,-1} %write{110,117}
+local	float	___325_boundb	%read{130,130} %write{111,123}
+local	int	___325_pattern	%read{128,128} %write{127,127}
+local	float	___328_nlev	%read{133,145} %write{131,131}
+const	float	$const1	0.1		%read{2,2} %write{2147483647,-1}
+temp	float	$tmp1	%read{9,9} %write{5,5}
+const	int	$const2	1		%read{3,144} %write{2147483647,-1}
+temp	float	$tmp2	%read{4,4} %write{3,3}
+temp	float	$tmp3	%read{5,5} %write{4,4}
+const	float	$const3	1		%read{4,54} %write{2147483647,-1}
+temp	float	$tmp4	%read{9,9} %write{8,8}
+temp	float	$tmp5	%read{7,7} %write{6,6}
+temp	float	$tmp6	%read{8,8} %write{7,7}
+temp	float	$tmp7	%read{14,14} %write{11,11}
+temp	float	$tmp8	%read{11,11} %write{10,10}
+temp	float	$tmp9	%read{14,14} %write{13,13}
+temp	float	$tmp10	%read{13,13} %write{12,12}
+temp	float	$tmp11	%read{21,21} %write{17,17}
+temp	float	$tmp12	%read{16,16} %write{15,15}
+temp	float	$tmp13	%read{17,17} %write{16,16}
+temp	float	$tmp14	%read{21,21} %write{20,20}
+temp	float	$tmp15	%read{19,19} %write{18,18}
+temp	float	$tmp16	%read{20,20} %write{19,19}
+temp	float	$tmp17	%read{23,23} %write{22,22}
+temp	int	$tmp18	%read{24,24} %write{23,23}
+const	int	$const4	0		%read{25,143} %write{2147483647,-1}
+temp	float	$tmp19	%read{29,29} %write{25,25}
+temp	float	$tmp20	%read{28,28} %write{27,27}
+temp	float	$tmp21	%read{27,27} %write{26,26}
+temp	float	$tmp22	%read{29,29} %write{28,28}
+temp	float	$tmp23	%read{30,30} %write{29,29}
+temp	float	$tmp24	%read{36,36} %write{31,31}
+temp	float	$tmp25	%read{35,35} %write{34,34}
+temp	float	$tmp26	%read{33,33} %write{32,32}
+temp	float	$tmp27	%read{34,34} %write{33,33}
+temp	float	$tmp28	%read{36,36} %write{35,35}
+temp	float	$tmp29	%read{37,37} %write{36,36}
+temp	float	$tmp30	%read{44,44} %write{40,40}
+temp	float	$tmp31	%read{39,39} %write{38,38}
+temp	float	$tmp32	%read{40,40} %write{39,39}
+temp	float	$tmp33	%read{44,44} %write{43,43}
+temp	float	$tmp34	%read{42,42} %write{41,41}
+temp	float	$tmp35	%read{43,43} %write{42,42}
+temp	float	$tmp36	%read{49,49} %write{46,46}
+temp	float	$tmp37	%read{46,46} %write{45,45}
+temp	float	$tmp38	%read{49,49} %write{48,48}
+temp	float	$tmp39	%read{48,48} %write{47,47}
+temp	float	$tmp40	%read{56,56} %write{52,52}
+temp	float	$tmp41	%read{51,51} %write{50,50}
+temp	float	$tmp42	%read{52,52} %write{51,51}
+temp	float	$tmp43	%read{56,56} %write{55,55}
+temp	float	$tmp44	%read{54,54} %write{53,53}
+temp	float	$tmp45	%read{55,55} %write{54,54}
+temp	float	$tmp46	%read{59,59} %write{57,57}
+temp	float	$tmp47	%read{59,59} %write{58,58}
+temp	int	$tmp48	%read{60,60} %write{59,59}
+temp	int	$tmp49	%read{61,67} %write{60,66}
+temp	float	$tmp50	%read{64,64} %write{62,62}
+temp	float	$tmp51	%read{64,64} %write{63,63}
+temp	int	$tmp52	%read{65,65} %write{64,64}
+temp	int	$tmp53	%read{66,66} %write{65,65}
+temp	int	$tmp54	%read{68,81} %write{67,80}
+temp	float	$tmp55	%read{71,71} %write{69,69}
+temp	float	$tmp56	%read{71,71} %write{70,70}
+temp	int	$tmp57	%read{72,72} %write{71,71}
+temp	int	$tmp58	%read{73,79} %write{72,78}
+temp	float	$tmp59	%read{76,76} %write{74,74}
+temp	float	$tmp60	%read{76,76} %write{75,75}
+temp	int	$tmp61	%read{77,77} %write{76,76}
+temp	int	$tmp62	%read{78,78} %write{77,77}
+temp	int	$tmp63	%read{80,80} %write{79,79}
+temp	float	$tmp64	%read{84,84} %write{82,82}
+temp	float	$tmp65	%read{84,84} %write{83,83}
+temp	int	$tmp66	%read{85,85} %write{84,84}
+temp	int	$tmp67	%read{86,92} %write{85,91}
+temp	float	$tmp68	%read{89,89} %write{87,87}
+temp	float	$tmp69	%read{89,89} %write{88,88}
+temp	int	$tmp70	%read{90,90} %write{89,89}
+temp	int	$tmp71	%read{91,91} %write{90,90}
+temp	int	$tmp72	%read{93,106} %write{92,105}
+temp	float	$tmp73	%read{96,96} %write{94,94}
+temp	float	$tmp74	%read{96,96} %write{95,95}
+temp	int	$tmp75	%read{97,97} %write{96,96}
+temp	int	$tmp76	%read{98,104} %write{97,103}
+temp	float	$tmp77	%read{101,101} %write{99,99}
+temp	float	$tmp78	%read{101,101} %write{100,100}
+temp	int	$tmp79	%read{102,102} %write{101,101}
+temp	int	$tmp80	%read{103,103} %write{102,102}
+temp	int	$tmp81	%read{105,105} %write{104,104}
+temp	float	$tmp82	%read{113,113} %write{112,112}
+temp	int	$tmp83	%read{114,114} %write{113,113}
+const	int	$const5	2		%read{115,115} %write{2147483647,-1}
+temp	float	$tmp84	%read{119,119} %write{118,118}
+temp	int	$tmp85	%read{120,120} %write{119,119}
+temp	float	$tmp86	%read{127,127} %write{126,126}
+temp	float	$tmp87	%read{125,125} %write{124,124}
+temp	float	$tmp88	%read{126,126} %write{125,125}
+const	float	$const7	4		%read{125,125} %write{2147483647,-1}
+temp	int	$tmp89	%read{129,129} %write{128,128}
+temp	float	$tmp90	%read{131,131} %write{130,130}
+const	float	$const8	2		%read{131,131} %write{2147483647,-1}
+temp	float	$tmp91	%read{134,134} %write{132,132}
+temp	float	$tmp92	%read{134,134} %write{133,133}
+temp	int	$tmp93	%read{135,135} %write{134,134}
+temp	int	$tmp94	%read{136,142} %write{135,141}
+temp	float	$tmp95	%read{139,139} %write{137,137}
+temp	float	$tmp96	%read{139,139} %write{138,138}
+temp	int	$tmp97	%read{140,140} %write{139,139}
+temp	int	$tmp98	%read{141,141} %write{140,140}
+temp	vector	$tmp99	%read{148,148} %write{147,147}
+temp	float	$tmp100	%read{145,145} %write{144,144}
+temp	int	$tmp101	%read{146,146} %write{145,145}
+temp	float	$tmp102	%read{147,147} %write{146,146}
+temp	vector	$tmp103	%read{150,150} %write{149,149}
+const	float	$const10	-1		%read{149,149} %write{2147483647,-1}
+code Vector
+# source/sambler-osl-shaders/patterns/MAAbstractSquares/MAAbstractSquares.osl:17
+#     float Scale = 1.0,
+	assign		Vector P 	%filename{"source/sambler-osl-shaders/patterns/MAAbstractSquares/MAAbstractSquares.osl"} %line{17} %argrw{"wr"}
+code ___main___
+# source/sambler-osl-shaders/patterns/MAAbstractSquares/MAAbstractSquares.osl:24
+#     float width = LineWidth * 0.1; // scale down so input values are easier to adjust
+	mul		Pos Vector Scale 	%filename{"source/sambler-osl-shaders/patterns/MAAbstractSquares/MAAbstractSquares.osl"} %line{24} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAAbstractSquares/MAAbstractSquares.osl:25
+# 
+	mul		width LineWidth $const1 	%line{25} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAAbstractSquares/MAAbstractSquares.osl:27
+#     float lev = floor(Pos[1])+cellnoise(Pos[1]);
+	compref		$tmp2 Pos $const2 	%line{27} %argrw{"wrr"}
+	sub		$tmp3 $tmp2 $const3 	%argrw{"wrr"}
+	floor		$tmp1 $tmp3 	%argrw{"wr"}
+	compref		$tmp5 Pos $const2 	%argrw{"wrr"}
+	sub		$tmp6 $tmp5 $const3 	%argrw{"wrr"}
+	cellnoise	$tmp4 $tmp6 	%argrw{"wr"}
+	add		bot $tmp1 $tmp4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAAbstractSquares/MAAbstractSquares.osl:28
+#     float top = floor(Pos[1]+1)+cellnoise(Pos[1]+1);
+	compref		$tmp8 Pos $const2 	%line{28} %argrw{"wrr"}
+	floor		$tmp7 $tmp8 	%argrw{"wr"}
+	compref		$tmp10 Pos $const2 	%argrw{"wrr"}
+	cellnoise	$tmp9 $tmp10 	%argrw{"wr"}
+	add		lev $tmp7 $tmp9 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAAbstractSquares/MAAbstractSquares.osl:29
+# 
+	compref		$tmp12 Pos $const2 	%line{29} %argrw{"wrr"}
+	add		$tmp13 $tmp12 $const3 	%argrw{"wrr"}
+	floor		$tmp11 $tmp13 	%argrw{"wr"}
+	compref		$tmp15 Pos $const2 	%argrw{"wrr"}
+	add		$tmp16 $tmp15 $const3 	%argrw{"wrr"}
+	cellnoise	$tmp14 $tmp16 	%argrw{"wr"}
+	add		top $tmp11 $tmp14 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAAbstractSquares/MAAbstractSquares.osl:31
+#         Pos[0] += Offset * cellnoise(Pos[1]);
+	compref		$tmp17 Pos $const2 	%line{31} %argrw{"wrr"}
+	lt		$tmp18 $tmp17 lev 	%argrw{"wrr"}
+	if		$tmp18 31 38 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAAbstractSquares/MAAbstractSquares.osl:32
+#     }else{
+	compref		$tmp19 Pos $const4 	%line{32} %argrw{"wrr"}
+	compref		$tmp21 Pos $const2 	%argrw{"wrr"}
+	cellnoise	$tmp20 $tmp21 	%argrw{"wr"}
+	mul		$tmp22 Offset $tmp20 	%argrw{"wrr"}
+	add		$tmp23 $tmp19 $tmp22 	%argrw{"wrr"}
+	compassign	Pos $const4 $tmp23 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAAbstractSquares/MAAbstractSquares.osl:34
+#     }
+	compref		$tmp24 Pos $const4 	%line{34} %argrw{"wrr"}
+	compref		$tmp26 Pos $const2 	%argrw{"wrr"}
+	add		$tmp27 $tmp26 $const3 	%argrw{"wrr"}
+	cellnoise	$tmp25 $tmp27 	%argrw{"wr"}
+	mul		$tmp28 Offset $tmp25 	%argrw{"wrr"}
+	add		$tmp29 $tmp24 $tmp28 	%argrw{"wrr"}
+	compassign	Pos $const4 $tmp29 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAAbstractSquares/MAAbstractSquares.osl:36
+#     float mid = floor(Pos[0])+cellnoise(Pos[0]);
+	compref		$tmp31 Pos $const4 	%line{36} %argrw{"wrr"}
+	sub		$tmp32 $tmp31 $const3 	%argrw{"wrr"}
+	floor		$tmp30 $tmp32 	%argrw{"wr"}
+	compref		$tmp34 Pos $const4 	%argrw{"wrr"}
+	sub		$tmp35 $tmp34 $const3 	%argrw{"wrr"}
+	cellnoise	$tmp33 $tmp35 	%argrw{"wr"}
+	add		left $tmp30 $tmp33 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAAbstractSquares/MAAbstractSquares.osl:37
+#     float right = floor(Pos[0]+1)+cellnoise(Pos[0]+1);
+	compref		$tmp37 Pos $const4 	%line{37} %argrw{"wrr"}
+	floor		$tmp36 $tmp37 	%argrw{"wr"}
+	compref		$tmp39 Pos $const4 	%argrw{"wrr"}
+	cellnoise	$tmp38 $tmp39 	%argrw{"wr"}
+	add		mid $tmp36 $tmp38 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAAbstractSquares/MAAbstractSquares.osl:38
+#     if(
+	compref		$tmp41 Pos $const4 	%line{38} %argrw{"wrr"}
+	add		$tmp42 $tmp41 $const3 	%argrw{"wrr"}
+	floor		$tmp40 $tmp42 	%argrw{"wr"}
+	compref		$tmp44 Pos $const4 	%argrw{"wrr"}
+	add		$tmp45 $tmp44 $const3 	%argrw{"wrr"}
+	cellnoise	$tmp43 $tmp45 	%argrw{"wr"}
+	add		right $tmp40 $tmp43 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAAbstractSquares/MAAbstractSquares.osl:40
+#       ||
+	compref		$tmp46 Pos $const4 	%line{40} %argrw{"wrr"}
+	add		$tmp47 left width 	%argrw{"wrr"}
+	gt		$tmp48 $tmp46 $tmp47 	%argrw{"wrr"}
+	neq		$tmp49 $tmp48 $const4 	%argrw{"wrr"}
+	if		$tmp49 67 67 	%argrw{"r"}
+	compref		$tmp50 Pos $const4 	%argrw{"wrr"}
+	sub		$tmp51 mid width 	%argrw{"wrr"}
+	lt		$tmp52 $tmp50 $tmp51 	%argrw{"wrr"}
+	neq		$tmp53 $tmp52 $const4 	%argrw{"wrr"}
+	assign		$tmp49 $tmp53 	%argrw{"wr"}
+	neq		$tmp54 $tmp49 $const4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAAbstractSquares/MAAbstractSquares.osl:43
+#         if(
+	if		$tmp54 69 81 	%line{43} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAAbstractSquares/MAAbstractSquares.osl:42
+#       ){
+	compref		$tmp55 Pos $const4 	%line{42} %argrw{"wrr"}
+	add		$tmp56 mid width 	%argrw{"wrr"}
+	gt		$tmp57 $tmp55 $tmp56 	%argrw{"wrr"}
+	neq		$tmp58 $tmp57 $const4 	%argrw{"wrr"}
+	if		$tmp58 79 79 	%argrw{"r"}
+	compref		$tmp59 Pos $const4 	%argrw{"wrr"}
+	sub		$tmp60 right width 	%argrw{"wrr"}
+	lt		$tmp61 $tmp59 $tmp60 	%argrw{"wrr"}
+	neq		$tmp62 $tmp61 $const4 	%argrw{"wrr"}
+	assign		$tmp58 $tmp62 	%argrw{"wr"}
+	neq		$tmp63 $tmp58 $const4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAAbstractSquares/MAAbstractSquares.osl:43
+#         if(
+	assign		$tmp54 $tmp63 	%line{43} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAAbstractSquares/MAAbstractSquares.osl:39
+#       ((Pos[0] > left + width) && ( Pos[0] < mid - width ))
+	if		$tmp54 151 151 	%line{39} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAAbstractSquares/MAAbstractSquares.osl:45
+#           ||
+	compref		$tmp64 Pos $const2 	%line{45} %argrw{"wrr"}
+	add		$tmp65 bot width 	%argrw{"wrr"}
+	gt		$tmp66 $tmp64 $tmp65 	%argrw{"wrr"}
+	neq		$tmp67 $tmp66 $const4 	%argrw{"wrr"}
+	if		$tmp67 92 92 	%argrw{"r"}
+	compref		$tmp68 Pos $const2 	%argrw{"wrr"}
+	sub		$tmp69 lev width 	%argrw{"wrr"}
+	lt		$tmp70 $tmp68 $tmp69 	%argrw{"wrr"}
+	neq		$tmp71 $tmp70 $const4 	%argrw{"wrr"}
+	assign		$tmp67 $tmp71 	%argrw{"wr"}
+	neq		$tmp72 $tmp67 $const4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAAbstractSquares/MAAbstractSquares.osl:48
+#             int stoneindex=0;
+	if		$tmp72 94 106 	%line{48} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAAbstractSquares/MAAbstractSquares.osl:47
+#           ){
+	compref		$tmp73 Pos $const2 	%line{47} %argrw{"wrr"}
+	add		$tmp74 lev width 	%argrw{"wrr"}
+	gt		$tmp75 $tmp73 $tmp74 	%argrw{"wrr"}
+	neq		$tmp76 $tmp75 $const4 	%argrw{"wrr"}
+	if		$tmp76 104 104 	%argrw{"r"}
+	compref		$tmp77 Pos $const2 	%argrw{"wrr"}
+	sub		$tmp78 top width 	%argrw{"wrr"}
+	lt		$tmp79 $tmp77 $tmp78 	%argrw{"wrr"}
+	neq		$tmp80 $tmp79 $const4 	%argrw{"wrr"}
+	assign		$tmp76 $tmp80 	%argrw{"wr"}
+	neq		$tmp81 $tmp76 $const4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAAbstractSquares/MAAbstractSquares.osl:48
+#             int stoneindex=0;
+	assign		$tmp72 $tmp81 	%line{48} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAAbstractSquares/MAAbstractSquares.osl:44
+#           ((Pos[1] > bot + width) && ( Pos[1] < lev - width ))
+	if		$tmp72 151 151 	%line{44} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAAbstractSquares/MAAbstractSquares.osl:49
+#             float seeda = left;
+	assign		___325_stoneindex $const4 	%line{49} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAAbstractSquares/MAAbstractSquares.osl:50
+#             float seedb = bot;
+	assign		___325_seeda left 	%line{50} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAAbstractSquares/MAAbstractSquares.osl:51
+#             float bounda = mid;
+	assign		___325_seedb bot 	%line{51} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAAbstractSquares/MAAbstractSquares.osl:52
+#             float boundb = lev;
+	assign		___325_bounda mid 	%line{52} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAAbstractSquares/MAAbstractSquares.osl:53
+# 
+	assign		___325_boundb lev 	%line{53} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAAbstractSquares/MAAbstractSquares.osl:55
+#             if( Pos[1] > lev ){ stoneindex += 1; seedb = lev; boundb = top; }
+	compref		$tmp82 Pos $const4 	%line{55} %argrw{"wrr"}
+	gt		$tmp83 $tmp82 mid 	%argrw{"wrr"}
+	if		$tmp83 118 118 	%argrw{"r"}
+	add		___325_stoneindex ___325_stoneindex $const5 	%argrw{"wrr"}
+	assign		___325_seeda mid 	%argrw{"wr"}
+	assign		___325_bounda right 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAAbstractSquares/MAAbstractSquares.osl:56
+#             int pattern = (int)floor(cellnoise(seeda,seedb)*4);
+	compref		$tmp84 Pos $const2 	%line{56} %argrw{"wrr"}
+	gt		$tmp85 $tmp84 lev 	%argrw{"wrr"}
+	if		$tmp85 124 124 	%argrw{"r"}
+	add		___325_stoneindex ___325_stoneindex $const2 	%argrw{"wrr"}
+	assign		___325_seedb lev 	%argrw{"wr"}
+	assign		___325_boundb top 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAAbstractSquares/MAAbstractSquares.osl:57
+#             if( pattern == 0 ){
+	cellnoise	$tmp87 ___325_seeda ___325_seedb 	%line{57} %argrw{"wrr"}
+	mul		$tmp88 $tmp87 $const7 	%argrw{"wrr"}
+	floor		$tmp86 $tmp88 	%argrw{"wr"}
+	assign		___325_pattern $tmp86 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAAbstractSquares/MAAbstractSquares.osl:58
+#                 // horizontally halved
+	eq		$tmp89 ___325_pattern $const4 	%line{58} %argrw{"wrr"}
+	if		$tmp89 149 151 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAAbstractSquares/MAAbstractSquares.osl:60
+#                 if( (Pos[1] > nlev - width) &&  (Pos[1] < nlev + width) ){
+	add		$tmp90 ___325_seedb ___325_boundb 	%line{60} %argrw{"wrr"}
+	div		___328_nlev $tmp90 $const8 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAAbstractSquares/MAAbstractSquares.osl:61
+#                     Fac = 0;
+	compref		$tmp91 Pos $const2 	%line{61} %argrw{"wrr"}
+	sub		$tmp92 ___328_nlev width 	%argrw{"wrr"}
+	gt		$tmp93 $tmp91 $tmp92 	%argrw{"wrr"}
+	neq		$tmp94 $tmp93 $const4 	%argrw{"wrr"}
+	if		$tmp94 142 142 	%argrw{"r"}
+	compref		$tmp95 Pos $const2 	%argrw{"wrr"}
+	add		$tmp96 ___328_nlev width 	%argrw{"wrr"}
+	lt		$tmp97 $tmp95 $tmp96 	%argrw{"wrr"}
+	neq		$tmp98 $tmp97 $const4 	%argrw{"wrr"}
+	assign		$tmp94 $tmp98 	%argrw{"wr"}
+	if		$tmp94 144 149 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAAbstractSquares/MAAbstractSquares.osl:62
+#                 } else {
+	assign		Fac $const4 	%line{62} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAAbstractSquares/MAAbstractSquares.osl:64
+#                 }
+	compref		$tmp100 Pos $const2 	%line{64} %argrw{"wrr"}
+	gt		$tmp101 $tmp100 ___328_nlev 	%argrw{"wrr"}
+	assign		$tmp102 $tmp101 	%argrw{"wr"}
+	vector		$tmp99 ___325_seeda ___325_seedb $tmp102 	%argrw{"wrrr"}
+	cellnoise	Fac $tmp99 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAAbstractSquares/MAAbstractSquares.osl:67
+#             }
+	vector		$tmp103 ___325_seeda ___325_seedb $const10 	%line{67} %argrw{"wrrr"}
+	cellnoise	Fac $tmp103 	%argrw{"wr"}
+	end

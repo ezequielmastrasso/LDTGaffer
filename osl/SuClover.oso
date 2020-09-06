@@ -1,0 +1,420 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader SuClover
+param	vector	Vector	0 0 0		%read{16,137} %write{0,0} %initexpr
+param	int	Rows	3		%read{32,36} %write{2147483647,-1}
+param	int	Level	1		%read{16,19} %write{2147483647,-1}
+param	float	Fill	0.5		%read{53,53} %write{2147483647,-1}
+param	float	SpanTopLeaf	0.2		%read{66,110} %write{2147483647,-1}
+param	float	SpanShadow	0.1		%read{66,98} %write{2147483647,-1}
+param	color	ColorTopLeaf	0.30000001 0.5 0		%read{115,115} %write{2147483647,-1}
+param	color	ColorLeaf	0 1 0		%read{115,121} %write{2147483647,-1}
+param	color	ColorEndLeaf	0.0099999998 0.0099999998 0		%read{121,121} %write{2147483647,-1}
+param	color	ColorShadow	0 0 0		%read{101,101} %write{2147483647,-1}
+param	color	ColorGround	0.0099999998 0.0099999998 0.0099999998		%read{1,89} %write{2147483647,-1}
+oparam	color	Color	0.5 0.5 0.5		%read{2147483647,-1} %write{138,138}
+oparam	float	Alpha	0		%read{2147483647,-1} %write{139,139}
+oparam	float	Mask	0		%read{2147483647,-1} %write{140,140}
+oparam	float	Height	0		%read{138,138} %write{13,13}
+oparam	float	Disp	0		%read{2147483647,-1} %write{141,141}
+global	point	P	%read{0,5} %write{2147483647,-1}
+local	float	___322_d	%read{16,137} %write{16,137}
+local	float	___322_r	%read{16,137} %write{16,137}
+local	float	___322_a	%read{16,137} %write{16,137}
+local	float	___322_s	%read{16,137} %write{16,137}
+local	float	___322_t	%read{16,137} %write{16,137}
+local	float	___322_h	%read{16,137} %write{16,137}
+local	float	___324_f	%read{16,137} %write{16,137}
+local	float	___322_f	%read{16,137} %write{16,137}
+local	color	sColor	%read{16,138} %write{1,137}
+local	float	sAlpha	%read{16,139} %write{2,137}
+local	float	sMask	%read{140,140} %write{3,137}
+local	float	sDisp	%read{141,141} %write{4,137}
+local	int	___325_i	%read{16,137} %write{15,137}
+local	float	___326_ls	%read{16,137} %write{16,137}
+local	float	___326_ps	%read{16,137} %write{16,137}
+local	float	___326_qs	%read{16,137} %write{16,137}
+local	float	___326_as	%read{16,137} %write{16,137}
+local	float	___326_xs	%read{16,137} %write{16,137}
+local	float	___326_ys	%read{16,137} %write{16,137}
+local	float	___326_xc	%read{16,137} %write{16,137}
+local	float	___326_yc	%read{16,137} %write{16,137}
+local	float	___326_n	%read{16,137} %write{16,137}
+local	float	___327_x	%read{16,137} %write{16,137}
+local	float	___327_y	%read{16,137} %write{16,137}
+local	color	___327_tColor	%read{16,137} %write{16,137}
+local	float	___327_tAlpha	%read{16,137} %write{16,137}
+local	float	___327_tMask	%read{16,137} %write{16,137}
+local	float	___327_tDisp	%read{16,137} %write{16,137}
+const	float	$const1	0		%read{2,92} %write{2147483647,-1}
+temp	float	$tmp1	%read{12,12} %write{11,11}
+temp	float	$tmp2	%read{10,10} %write{8,8}
+const	float	$const2	0.25		%read{7,7} %write{2147483647,-1}
+const	float	$const3	0.75		%read{6,6} %write{2147483647,-1}
+const	int	$const4	2		%read{5,5} %write{2147483647,-1}
+temp	float	$tmp3	%read{6,6} %write{5,5}
+temp	float	$tmp4	%read{7,7} %write{6,6}
+temp	float	$tmp5	%read{8,8} %write{7,7}
+const	float	$const5	0.5		%read{8,112} %write{2147483647,-1}
+const	int	$const6	0		%read{15,124} %write{2147483647,-1}
+const	int	$const7	1		%read{17,137} %write{2147483647,-1}
+const	float	$const8	1		%read{10,123} %write{2147483647,-1}
+const	string	$const9	"clamp"		%read{9,9} %write{2147483647,-1}
+temp	float	$tmp6	%read{11,11} %write{10,10}
+const	float	$const10	0.89999998		%read{12,12} %write{2147483647,-1}
+temp	float	$tmp7	%read{13,13} %write{12,12}
+const	float	$const11	0.1		%read{13,86} %write{2147483647,-1}
+temp	int	$tmp8	%read{14,137} %write{15,137}
+temp	int	$tmp9	%read{16,137} %write{16,137}
+temp	float	$tmp10	%read{16,137} %write{16,137}
+temp	float	$tmp11	%read{16,137} %write{16,137}
+const	string	$const12	"cell"		%read{23,51} %write{2147483647,-1}
+temp	point	$tmp12	%read{16,137} %write{16,137}
+temp	float	$tmp13	%read{16,137} %write{16,137}
+temp	point	$tmp14	%read{16,137} %write{16,137}
+temp	float	$tmp15	%read{16,137} %write{16,137}
+temp	float	$tmp16	%read{16,137} %write{16,137}
+temp	float	$tmp17	%read{16,137} %write{16,137}
+const	float	$const13	3.1415927		%read{29,29} %write{2147483647,-1}
+temp	float	$tmp18	%read{16,137} %write{16,137}
+temp	float	$tmp19	%read{16,137} %write{16,137}
+temp	float	$tmp20	%read{16,137} %write{16,137}
+temp	float	$tmp21	%read{16,137} %write{16,137}
+temp	float	$tmp22	%read{16,137} %write{16,137}
+temp	float	$tmp23	%read{16,137} %write{16,137}
+temp	float	$tmp24	%read{16,137} %write{16,137}
+temp	float	$tmp25	%read{16,137} %write{16,137}
+temp	float	$tmp26	%read{16,137} %write{16,137}
+temp	float	$tmp27	%read{16,137} %write{16,137}
+temp	float	$tmp28	%read{16,137} %write{16,137}
+temp	float	$tmp29	%read{16,137} %write{16,137}
+temp	float	$tmp30	%read{16,137} %write{16,137}
+temp	float	$tmp31	%read{16,137} %write{16,137}
+temp	float	$tmp32	%read{16,137} %write{16,137}
+temp	point	$tmp33	%read{16,137} %write{16,137}
+temp	int	$tmp34	%read{16,137} %write{16,137}
+temp	float	$tmp35	%read{16,137} %write{16,137}
+temp	float	$tmp36	%read{16,137} %write{16,137}
+const	float	$const14	1.3		%read{57,60} %write{2147483647,-1}
+temp	float	$tmp37	%read{16,137} %write{16,137}
+temp	float	$tmp38	%read{16,137} %write{16,137}
+temp	float	$tmp39	%read{2147483647,-1} %write{16,137}
+const	string	$const15	"clover"		%read{65,65} %write{2147483647,-1}
+temp	float	$tmp40	%read{16,137} %write{16,137}
+temp	float	$tmp41	%read{16,137} %write{16,137}
+temp	float	$tmp42	%read{16,137} %write{16,137}
+temp	float	$tmp43	%read{16,137} %write{16,137}
+const	float	$const16	6.2831855		%read{72,72} %write{2147483647,-1}
+temp	float	$tmp44	%read{16,137} %write{16,137}
+temp	float	$tmp45	%read{16,137} %write{16,137}
+temp	float	$tmp46	%read{16,137} %write{16,137}
+const	float	$const18	3		%read{74,74} %write{2147483647,-1}
+temp	float	$tmp47	%read{16,137} %write{16,137}
+const	float	$const19	0.15000001		%read{80,80} %write{2147483647,-1}
+const	float	$const20	0.34999999		%read{79,79} %write{2147483647,-1}
+temp	float	$tmp48	%read{16,137} %write{16,137}
+const	float	$const21	0.30000001		%read{78,78} %write{2147483647,-1}
+temp	float	$tmp49	%read{16,137} %write{16,137}
+temp	float	$tmp50	%read{16,137} %write{16,137}
+temp	float	$tmp51	%read{16,137} %write{16,137}
+temp	float	$tmp52	%read{16,137} %write{16,137}
+const	float	$const23	6		%read{81,81} %write{2147483647,-1}
+temp	float	$tmp53	%read{16,137} %write{16,137}
+temp	float	$tmp54	%read{16,137} %write{16,137}
+temp	float	$tmp55	%read{16,137} %write{16,137}
+temp	int	$tmp56	%read{16,137} %write{16,137}
+temp	float	$tmp57	%read{16,137} %write{16,137}
+temp	int	$tmp58	%read{16,137} %write{16,137}
+temp	float	$tmp59	%read{16,137} %write{16,137}
+temp	int	$tmp60	%read{16,137} %write{16,137}
+temp	float	$tmp61	%read{16,137} %write{16,137}
+temp	float	$tmp62	%read{16,137} %write{16,137}
+temp	float	$tmp63	%read{16,137} %write{16,137}
+temp	float	$tmp64	%read{16,137} %write{16,137}
+temp	float	$tmp65	%read{16,137} %write{16,137}
+temp	float	$tmp66	%read{16,137} %write{16,137}
+const	float	$const24	2		%read{120,120} %write{2147483647,-1}
+temp	int	$tmp67	%read{16,137} %write{16,137}
+temp	int	$tmp68	%read{16,137} %write{16,137}
+temp	int	$tmp69	%read{16,137} %write{16,137}
+temp	int	$tmp70	%read{2147483647,-1} %write{16,137}
+code Vector
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:62
+#         int Rows = 3,
+	assign		Vector P 	%filename{"source/sambler-osl-shaders/patterns/SuClover/SuClover.osl"} %line{62} %argrw{"wr"}
+code ___main___
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:81
+#     float sAlpha = 0.0;
+	assign		sColor ColorGround 	%filename{"source/sambler-osl-shaders/patterns/SuClover/SuClover.osl"} %line{81} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:82
+#     float sMask = 0.0;
+	assign		sAlpha $const1 	%line{82} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:83
+#     float sDisp = 0.0;
+	assign		sMask $const1 	%line{83} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:84
+#     Height = clamp(pow((0.25+0.75*P[2]),0.5),0,1)*0.9+0.1;
+	assign		sDisp $const1 	%line{84} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:85
+# 
+	compref		$tmp3 P $const4 	%line{85} %argrw{"wrr"}
+	mul		$tmp4 $const3 $tmp3 	%argrw{"wrr"}
+	add		$tmp5 $const2 $tmp4 	%argrw{"wrr"}
+	pow		$tmp2 $tmp5 $const5 	%argrw{"wrr"}
+	functioncall	$const9 12 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:145
+# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
+	min		$tmp6 $tmp2 $const8 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{145} %argrw{"wrr"}
+	max		$tmp1 $tmp6 $const1 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:85
+# 
+	mul		$tmp7 $tmp1 $const10 	%filename{"source/sambler-osl-shaders/patterns/SuClover/SuClover.osl"} %line{85} %argrw{"wrr"}
+	add		Height $tmp7 $const11 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:87
+#         float ls = (float)(i+1)/(Level);
+	for		$tmp8 16 17 136 138 	%line{87} %argrw{"r"}
+	assign		___325_i $const6 	%argrw{"wr"}
+	lt		$tmp8 ___325_i Level 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:88
+#         float ps = noise("cell",point(ls,0,i));
+	add		$tmp9 ___325_i $const7 	%line{88} %argrw{"wrr"}
+	assign		$tmp10 $tmp9 	%argrw{"wr"}
+	assign		$tmp11 Level 	%argrw{"wr"}
+	div		___326_ls $tmp10 $tmp11 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:89
+#         float qs = noise("cell",point(0,i,ls));
+	assign		$tmp13 ___325_i 	%line{89} %argrw{"wr"}
+	point		$tmp12 ___326_ls $const1 $tmp13 	%argrw{"wrrr"}
+	noise		___326_ps $const12 $tmp12 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:90
+#         float as = atan2(ps,qs)*ls*M_PI;
+	assign		$tmp15 ___325_i 	%line{90} %argrw{"wr"}
+	point		$tmp14 $const1 $tmp15 ___326_ls 	%argrw{"wrrr"}
+	noise		___326_qs $const12 $tmp14 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:91
+#         ps = (Vector[0] + ps) * Rows;
+	atan2		$tmp16 ___326_ps ___326_qs 	%line{91} %argrw{"wrr"}
+	mul		$tmp17 $tmp16 ___326_ls 	%argrw{"wrr"}
+	mul		___326_as $tmp17 $const13 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:92
+#         qs = (Vector[1] + qs) * Rows;
+	compref		$tmp18 Vector $const6 	%line{92} %argrw{"wrr"}
+	add		$tmp19 $tmp18 ___326_ps 	%argrw{"wrr"}
+	assign		$tmp20 Rows 	%argrw{"wr"}
+	mul		___326_ps $tmp19 $tmp20 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:93
+# 
+	compref		$tmp21 Vector $const7 	%line{93} %argrw{"wrr"}
+	add		$tmp22 $tmp21 ___326_qs 	%argrw{"wrr"}
+	assign		$tmp23 Rows 	%argrw{"wr"}
+	mul		___326_qs $tmp22 $tmp23 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:95
+#         float ys = ps*cos(as) + qs*sin(as);
+	sin		$tmp24 ___326_as 	%line{95} %argrw{"wr"}
+	mul		$tmp25 ___326_ps $tmp24 	%argrw{"wrr"}
+	cos		$tmp26 ___326_as 	%argrw{"wr"}
+	mul		$tmp27 ___326_qs $tmp26 	%argrw{"wrr"}
+	sub		___326_xs $tmp25 $tmp27 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:96
+# 
+	cos		$tmp28 ___326_as 	%line{96} %argrw{"wr"}
+	mul		$tmp29 ___326_ps $tmp28 	%argrw{"wrr"}
+	sin		$tmp30 ___326_as 	%argrw{"wr"}
+	mul		$tmp31 ___326_qs $tmp30 	%argrw{"wrr"}
+	add		___326_ys $tmp29 $tmp31 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:98
+#         float yc = floor(ys);
+	floor		___326_xc ___326_xs 	%line{98} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:99
+# 
+	floor		___326_yc ___326_ys 	%line{99} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:101
+# 
+	point		$tmp33 ___326_xc ___326_yc $const1 	%line{101} %argrw{"wrrr"}
+	noise		$tmp32 $const12 $tmp33 	%argrw{"wrr"}
+	mul		___326_n $tmp32 ___326_ls 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:103
+#             float x = (xs - xc - 0.5) * 1.3;
+	lt		$tmp34 ___326_n Fill 	%line{103} %argrw{"wrr"}
+	if		$tmp34 136 136 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:104
+#             float y = (ys - yc - 0.5) * 1.3;
+	sub		$tmp35 ___326_xs ___326_xc 	%line{104} %argrw{"wrr"}
+	sub		$tmp36 $tmp35 $const5 	%argrw{"wrr"}
+	mul		___327_x $tmp36 $const14 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:105
+# 
+	sub		$tmp37 ___326_ys ___326_yc 	%line{105} %argrw{"wrr"}
+	sub		$tmp38 $tmp37 $const5 	%argrw{"wrr"}
+	mul		___327_y $tmp38 $const14 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:107
+#             float tAlpha = 0.0;
+	assign		___327_tColor $const1 	%line{107} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:108
+#             float tMask = 0.0;
+	assign		___327_tAlpha $const1 	%line{108} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:109
+#             float tDisp = 0.0;
+	assign		___327_tMask $const1 	%line{109} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:110
+# 
+	assign		___327_tDisp $const1 	%line{110} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:112
+#             tColor = tColor * ls;
+	functioncall	$const15 125 	%line{112} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:27
+#     float r = sqrt(x*x+y*y);
+	add		___322_d SpanShadow SpanTopLeaf 	%line{27} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:28
+#     float a = atan2(y,x)+fa*M_2PI;
+	mul		$tmp40 ___327_x ___327_x 	%line{28} %argrw{"wrr"}
+	mul		$tmp41 ___327_y ___327_y 	%argrw{"wrr"}
+	add		$tmp42 $tmp40 $tmp41 	%argrw{"wrr"}
+	sqrt		___322_r $tmp42 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:29
+#     float s = 0.5 + 0.5*sin(3*a);
+	atan2		$tmp43 ___327_y ___327_x 	%line{29} %argrw{"wrr"}
+	mul		$tmp44 ___326_n $const16 	%argrw{"wrr"}
+	add		___322_a $tmp43 $tmp44 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:30
+#     float t = 0.15 + 0.35*pow(s,0.3);
+	mul		$tmp46 $const18 ___322_a 	%line{30} %argrw{"wrr"}
+	sin		$tmp45 $tmp46 	%argrw{"wr"}
+	mul		$tmp47 $const5 $tmp45 	%argrw{"wrr"}
+	add		___322_s $const5 $tmp47 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:31
+#     t += 0.1*pow(0.5+0.5*cos(6*a),0.5);
+	pow		$tmp48 ___322_s $const21 	%line{31} %argrw{"wrr"}
+	mul		$tmp49 $const20 $tmp48 	%argrw{"wrr"}
+	add		___322_t $const19 $tmp49 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:32
+#     float h = r/t;
+	mul		$tmp52 $const23 ___322_a 	%line{32} %argrw{"wrr"}
+	cos		$tmp51 $tmp52 	%argrw{"wr"}
+	mul		$tmp53 $const5 $tmp51 	%argrw{"wrr"}
+	add		$tmp54 $const5 $tmp53 	%argrw{"wrr"}
+	pow		$tmp50 $tmp54 $const5 	%argrw{"wrr"}
+	mul		$tmp55 $const11 $tmp50 	%argrw{"wrr"}
+	add		___322_t ___322_t $tmp55 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:33
+# 
+	div		___322_h ___322_r ___322_t 	%line{33} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:35
+#     Alpha = 0.0;
+	assign		___327_tColor ColorGround 	%line{35} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:36
+#     Mask = 0.0;
+	assign		___327_tAlpha $const1 	%line{36} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:37
+#     Disp = 0.0;
+	assign		___327_tMask $const1 	%line{37} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:38
+# 
+	assign		___327_tDisp $const1 	%line{38} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:40
+#     Mask = 1.0;
+	gt		$tmp56 ___322_h $const7 	%line{40} %argrw{"wrr"}
+	if		$tmp56 97 97 	%argrw{"r"}
+	assign		$tmp39 $const6 	%argrw{"wr"}
+	return
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:41
+#     if(h>1-dws){
+	assign		___327_tMask $const8 	%line{41} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:42
+#         Color = shadow;
+	sub		$tmp57 $const8 SpanShadow 	%line{42} %argrw{"wrr"}
+	gt		$tmp58 ___322_h $tmp57 	%argrw{"wrr"}
+	if		$tmp58 105 105 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:43
+#         Alpha = 0.5;
+	assign		___327_tColor ColorShadow 	%line{43} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:44
+#         return 0;
+	assign		___327_tAlpha $const5 	%line{44} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:45
+#     }
+	assign		$tmp39 $const6 	%line{45} %argrw{"wr"}
+	return
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:47
+#         float f = pow((1-(h+d-1)/dwl),0.5);
+	sub		$tmp59 $const8 ___322_d 	%line{47} %argrw{"wrr"}
+	gt		$tmp60 ___322_h $tmp59 	%argrw{"wrr"}
+	if		$tmp60 118 118 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:48
+#         Alpha = 1.0;
+	add		$tmp61 ___322_h ___322_d 	%line{48} %argrw{"wrr"}
+	sub		$tmp62 $tmp61 $const8 	%argrw{"wrr"}
+	div		$tmp63 $tmp62 SpanTopLeaf 	%argrw{"wrr"}
+	sub		$tmp64 $const8 $tmp63 	%argrw{"wrr"}
+	pow		___324_f $tmp64 $const5 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:49
+#         Disp = f;
+	assign		___327_tAlpha $const8 	%line{49} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:50
+#         Color = mix(topleaf,leaf,f);
+	assign		___327_tDisp ___324_f 	%line{50} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:51
+#         return 0;
+	mix		___327_tColor ColorTopLeaf ColorLeaf ___324_f 	%line{51} %argrw{"wrrr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:52
+#     }
+	assign		$tmp39 $const6 	%line{52} %argrw{"wr"}
+	return
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:54
+#     Color = mix(endleaf,leaf,f);
+	sub		$tmp65 $const8 ___322_d 	%line{54} %argrw{"wrr"}
+	div		$tmp66 ___322_h $tmp65 	%argrw{"wrr"}
+	pow		___322_f $tmp66 $const24 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:55
+#     Disp = f;
+	mix		___327_tColor ColorEndLeaf ColorLeaf ___322_f 	%line{55} %argrw{"wrrr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:56
+#     Alpha = 1.0;
+	assign		___327_tDisp ___322_f 	%line{56} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:57
+#     return 0;
+	assign		___327_tAlpha $const8 	%line{57} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:58
+# }
+	assign		$tmp39 $const6 	%line{58} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:113
+#             if(tMask==1){
+	mul		___327_tColor ___327_tColor ___326_ls 	%line{113} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:114
+#                 sColor = mix(sColor,tColor,tAlpha);
+	eq		$tmp67 ___327_tMask $const7 	%line{114} %argrw{"wrr"}
+	if		$tmp67 136 136 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:115
+#                 if(sAlpha<tAlpha) sAlpha = tAlpha;
+	mix		sColor sColor ___327_tColor ___327_tAlpha 	%line{115} %argrw{"wrrr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:116
+#                 sMask = tMask;
+	lt		$tmp68 sAlpha ___327_tAlpha 	%line{116} %argrw{"wrr"}
+	if		$tmp68 132 132 	%argrw{"r"}
+	assign		sAlpha ___327_tAlpha 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:117
+#                 if(tAlpha==1) sDisp = tDisp;
+	assign		sMask ___327_tMask 	%line{117} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:118
+#             }
+	eq		$tmp69 ___327_tAlpha $const7 	%line{118} %argrw{"wrr"}
+	if		$tmp69 136 136 	%argrw{"r"}
+	assign		sDisp ___327_tDisp 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:87
+#         float ls = (float)(i+1)/(Level);
+	assign		$tmp70 ___325_i 	%line{87} %argrw{"wr"}
+	add		___325_i ___325_i $const7 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:122
+#     Alpha = sAlpha;
+	mul		Color sColor Height 	%line{122} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:123
+#     Mask = sMask;
+	assign		Alpha sAlpha 	%line{123} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:124
+#     Disp = sDisp;
+	assign		Mask sMask 	%line{124} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/SuClover/SuClover.osl:125
+# }
+	assign		Disp sDisp 	%line{125} %argrw{"wr"}
+	end

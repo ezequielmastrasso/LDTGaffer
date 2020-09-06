@@ -1,0 +1,775 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader Composite	%meta{string,help,"Alpha-composits one color over another"} %meta{string,category,"Compositing"} %meta{string,label,"Composite"} 
+param	color	TopRGB	0.5 0.5 0.5		%meta{string,label,"Top layer RGB"}  %read{7,286} %write{2147483647,-1}
+param	float	TopA	1		%meta{string,label,"Top layer Alpha"}  %read{0,296} %write{2147483647,-1}
+param	color	BottomRGB	0.5 0.5 0.5		%meta{string,label,"Bottom layer RGB"}  %read{1,284} %write{2147483647,-1}
+param	float	BottomA	1		%meta{string,label,"Bottom layer Alpha"}  %read{3,3} %write{2147483647,-1}
+param	string	BlendMode	"Normal"		%meta{string,widget,"popup"} %meta{string,help,"Normal, Average, Darken, Multiply, Color Burn, Linear Burn, Lighten, Screen, Color Dodge, Linear Dodge, Spotlight, Spotlight Blend, Overlay, Hard Light, Soft Light, Pin Light, Hard Mix, Difference, Exclusion, Subtract, Divide, Hue, Saturation, Color, Value"} %meta{string,options,"Normal|Average|Darken|Multiply|Color Burn|Linear Burn|Lighten|Screen|Color Dodge|Linear Dodge|Spotlight|Spotlight Blend|Overlay|Hard Light|Soft Light|Pin Light|Hard Mix|Difference|Exclusion|Subtract|Divide|Hue|Saturation|Color|Value"} %meta{string,label,"Blend Mode"} %meta{int,editable,0}  %read{5,281} %write{2147483647,-1}
+param	int	Premult	0		%meta{string,widget,"checkBox"} %meta{string,label,"Premultiplied Alpha"} %meta{string,help,"Assume top layer has premultiplied Alpha"}  %read{291,291} %write{2147483647,-1}
+param	int	Clamp	0		%meta{string,widget,"checkBox"} %meta{string,label,"Clamp Result"}  %read{297,297} %write{2147483647,-1}
+oparam	color	Out	0 0 0		%read{295,301} %write{1,302}
+oparam	float	Alpha	1		%read{296,296} %write{3,296}
+local	color	blended	%read{294,294} %write{4,290}
+local	float	___324_BottomRGBl	%read{68,68} %write{67,67}
+local	float	___325_TopRGBl	%read{80,80} %write{79,79}
+local	float	___326_TopRGBl	%read{96,96} %write{95,95}
+local	vector	___336_hsvBottomRGB	%read{258,259} %write{254,254}
+local	vector	___336_hsvTopRGB	%read{257,257} %write{256,256}
+local	vector	___337_hsvBottomRGB	%read{267,269} %write{264,264}
+local	vector	___337_hsvTopRGB	%read{268,268} %write{266,266}
+local	vector	___338_hsvBottomRGB	%read{279,279} %write{274,274}
+local	vector	___338_hsvTopRGB	%read{277,278} %write{276,276}
+local	vector	___339_hsvBottomRGB	%read{287,288} %write{284,284}
+local	vector	___339_hsvTopRGB	%read{289,289} %write{286,286}
+local	float	topmul	%read{294,294} %write{292,293}
+const	float	$const1	1		%read{0,299} %write{2147483647,-1}
+temp	float	$tmp1	%read{1,1} %write{0,0}
+temp	float	$tmp2	%read{3,3} %write{2,2}
+const	float	$const2	0		%read{4,298} %write{2147483647,-1}
+const	string	$const3	"Normal"		%read{5,5} %write{2147483647,-1}
+temp	int	$tmp3	%read{6,6} %write{5,5}
+const	string	$const4	"Average"		%read{8,8} %write{2147483647,-1}
+temp	int	$tmp4	%read{9,9} %write{8,8}
+temp	color	$tmp5	%read{11,11} %write{10,10}
+const	float	$const5	2		%read{11,240} %write{2147483647,-1}
+const	string	$const6	"Darken"		%read{12,12} %write{2147483647,-1}
+temp	int	$tmp6	%read{13,13} %write{12,12}
+const	string	$const7	"Multiply"		%read{15,15} %write{2147483647,-1}
+temp	int	$tmp7	%read{16,16} %write{15,15}
+const	string	$const8	"Color Burn"		%read{18,18} %write{2147483647,-1}
+temp	int	$tmp8	%read{19,19} %write{18,18}
+temp	int	$tmp9	%read{21,21} %write{20,20}
+temp	color	$tmp10	%read{24,24} %write{23,23}
+temp	color	$tmp11	%read{25,25} %write{24,24}
+temp	color	$tmp12	%read{27,27} %write{25,25}
+temp	color	$tmp13	%read{27,27} %write{26,26}
+const	string	$const9	"Linear Burn"		%read{28,28} %write{2147483647,-1}
+temp	int	$tmp14	%read{29,29} %write{28,28}
+temp	color	$tmp15	%read{31,31} %write{30,30}
+temp	color	$tmp16	%read{32,32} %write{31,31}
+const	color	$const10	0 0 0		%read{32,32} %write{2147483647,-1}
+const	string	$const11	"Lighten"		%read{33,33} %write{2147483647,-1}
+temp	int	$tmp18	%read{34,34} %write{33,33}
+const	string	$const12	"Screen"		%read{36,36} %write{2147483647,-1}
+temp	int	$tmp19	%read{37,37} %write{36,36}
+temp	color	$tmp20	%read{40,40} %write{38,38}
+temp	color	$tmp21	%read{40,40} %write{39,39}
+const	string	$const13	"Color Dodge"		%read{41,41} %write{2147483647,-1}
+temp	int	$tmp22	%read{42,42} %write{41,41}
+const	color	$const14	1 1 1		%read{43,52} %write{2147483647,-1}
+temp	int	$tmp24	%read{44,44} %write{43,43}
+temp	color	$tmp25	%read{47,47} %write{46,46}
+temp	color	$tmp26	%read{48,48} %write{47,47}
+const	string	$const15	"Linear Dodge"		%read{49,49} %write{2147483647,-1}
+temp	int	$tmp28	%read{50,50} %write{49,49}
+temp	color	$tmp29	%read{52,52} %write{51,51}
+const	string	$const16	"Spotlight"		%read{53,53} %write{2147483647,-1}
+temp	int	$tmp31	%read{54,54} %write{53,53}
+temp	color	$tmp32	%read{56,56} %write{55,55}
+temp	color	$tmp33	%read{58,58} %write{56,56}
+temp	color	$tmp34	%read{58,58} %write{57,57}
+const	string	$const17	"Spotlight Blend"		%read{59,59} %write{2147483647,-1}
+temp	int	$tmp35	%read{60,60} %write{59,59}
+temp	color	$tmp36	%read{62,62} %write{61,61}
+temp	color	$tmp37	%read{64,64} %write{62,62}
+temp	color	$tmp38	%read{64,64} %write{63,63}
+const	string	$const18	"Overlay"		%read{65,65} %write{2147483647,-1}
+temp	int	$tmp39	%read{66,66} %write{65,65}
+const	float	$const19	0.5		%read{68,168} %write{2147483647,-1}
+temp	int	$tmp40	%read{69,69} %write{68,68}
+temp	color	$tmp41	%read{71,71} %write{70,70}
+temp	color	$tmp42	%read{73,73} %write{72,72}
+temp	color	$tmp43	%read{75,75} %write{73,73}
+temp	color	$tmp44	%read{75,75} %write{74,74}
+temp	color	$tmp45	%read{76,76} %write{75,75}
+const	string	$const20	"Soft Light"		%read{77,77} %write{2147483647,-1}
+temp	int	$tmp46	%read{78,78} %write{77,77}
+temp	int	$tmp47	%read{81,81} %write{80,80}
+temp	color	$tmp48	%read{84,84} %write{82,82}
+temp	color	$tmp49	%read{84,84} %write{83,83}
+temp	color	$tmp50	%read{85,85} %write{84,84}
+temp	color	$tmp51	%read{86,86} %write{85,85}
+temp	color	$tmp52	%read{88,88} %write{87,87}
+temp	color	$tmp53	%read{91,91} %write{88,88}
+temp	color	$tmp54	%read{90,90} %write{89,89}
+temp	color	$tmp55	%read{91,91} %write{90,90}
+temp	color	$tmp56	%read{92,92} %write{91,91}
+const	string	$const21	"Hard Light"		%read{93,93} %write{2147483647,-1}
+temp	int	$tmp57	%read{94,94} %write{93,93}
+temp	int	$tmp58	%read{97,97} %write{96,96}
+temp	color	$tmp59	%read{99,99} %write{98,98}
+temp	color	$tmp60	%read{101,101} %write{100,100}
+temp	color	$tmp61	%read{103,103} %write{101,101}
+temp	color	$tmp62	%read{103,103} %write{102,102}
+temp	color	$tmp63	%read{104,104} %write{103,103}
+const	string	$const22	"Pin Light"		%read{105,105} %write{2147483647,-1}
+temp	int	$tmp64	%read{106,106} %write{105,105}
+temp	float	$tmp65	%read{131,131} %write{127,129}
+const	int	$const23	0		%read{107,287} %write{2147483647,-1}
+temp	float	$tmp66	%read{113,129} %write{107,107}
+temp	float	$tmp67	%read{110,127} %write{108,108}
+const	string	$const24	"PinLight"		%read{109,159} %write{2147483647,-1}
+temp	int	$tmp68	%read{111,111} %write{110,110}
+temp	int	$tmp69	%read{112,116} %write{111,115}
+temp	int	$tmp70	%read{114,114} %write{113,113}
+temp	int	$tmp71	%read{115,115} %write{114,114}
+temp	int	$tmp72	%read{117,126} %write{116,125}
+temp	int	$tmp73	%read{119,119} %write{118,118}
+temp	int	$tmp74	%read{120,124} %write{119,123}
+temp	int	$tmp75	%read{122,122} %write{121,121}
+temp	int	$tmp76	%read{123,123} %write{122,122}
+temp	int	$tmp77	%read{125,125} %write{124,124}
+temp	float	$tmp78	%read{156,156} %write{152,154}
+const	int	$const25	1		%read{132,288} %write{2147483647,-1}
+temp	float	$tmp79	%read{138,154} %write{132,132}
+temp	float	$tmp80	%read{135,152} %write{133,133}
+temp	int	$tmp81	%read{136,136} %write{135,135}
+temp	int	$tmp82	%read{137,141} %write{136,140}
+temp	int	$tmp83	%read{139,139} %write{138,138}
+temp	int	$tmp84	%read{140,140} %write{139,139}
+temp	int	$tmp85	%read{142,151} %write{141,150}
+temp	int	$tmp86	%read{144,144} %write{143,143}
+temp	int	$tmp87	%read{145,149} %write{144,148}
+temp	int	$tmp88	%read{147,147} %write{146,146}
+temp	int	$tmp89	%read{148,148} %write{147,147}
+temp	int	$tmp90	%read{150,150} %write{149,149}
+temp	float	$tmp91	%read{181,181} %write{177,179}
+const	int	$const26	2		%read{157,289} %write{2147483647,-1}
+temp	float	$tmp92	%read{163,179} %write{157,157}
+temp	float	$tmp93	%read{160,177} %write{158,158}
+temp	int	$tmp94	%read{161,161} %write{160,160}
+temp	int	$tmp95	%read{162,166} %write{161,165}
+temp	int	$tmp96	%read{164,164} %write{163,163}
+temp	int	$tmp97	%read{165,165} %write{164,164}
+temp	int	$tmp98	%read{167,176} %write{166,175}
+temp	int	$tmp99	%read{169,169} %write{168,168}
+temp	int	$tmp100	%read{170,174} %write{169,173}
+temp	int	$tmp101	%read{172,172} %write{171,171}
+temp	int	$tmp102	%read{173,173} %write{172,172}
+temp	int	$tmp103	%read{175,175} %write{174,174}
+const	string	$const27	"Hard Mix"		%read{182,182} %write{2147483647,-1}
+temp	int	$tmp104	%read{183,183} %write{182,182}
+temp	float	$tmp105	%read{194,194} %write{190,192}
+temp	float	$tmp106	%read{187,187} %write{184,184}
+temp	float	$tmp107	%read{187,187} %write{185,185}
+const	string	$const28	"HardMix"		%read{186,208} %write{2147483647,-1}
+temp	float	$tmp108	%read{188,188} %write{187,187}
+temp	int	$tmp109	%read{189,189} %write{188,188}
+temp	float	$tmp110	%read{205,205} %write{201,203}
+temp	float	$tmp111	%read{198,198} %write{195,195}
+temp	float	$tmp112	%read{198,198} %write{196,196}
+temp	float	$tmp113	%read{199,199} %write{198,198}
+temp	int	$tmp114	%read{200,200} %write{199,199}
+temp	float	$tmp115	%read{216,216} %write{212,214}
+temp	float	$tmp116	%read{209,209} %write{206,206}
+temp	float	$tmp117	%read{209,209} %write{207,207}
+temp	float	$tmp118	%read{210,210} %write{209,209}
+temp	int	$tmp119	%read{211,211} %write{210,210}
+const	string	$const29	"Difference"		%read{217,233} %write{2147483647,-1}
+temp	int	$tmp120	%read{218,218} %write{217,217}
+temp	float	$tmp121	%read{224,224} %write{223,223}
+temp	float	$tmp122	%read{222,222} %write{219,219}
+temp	float	$tmp123	%read{222,222} %write{220,220}
+temp	float	$tmp124	%read{223,223} %write{222,222}
+temp	float	$tmp125	%read{230,230} %write{229,229}
+temp	float	$tmp126	%read{228,228} %write{225,225}
+temp	float	$tmp127	%read{228,228} %write{226,226}
+temp	float	$tmp128	%read{229,229} %write{228,228}
+temp	float	$tmp129	%read{236,236} %write{235,235}
+temp	float	$tmp130	%read{234,234} %write{231,231}
+temp	float	$tmp131	%read{234,234} %write{232,232}
+temp	float	$tmp132	%read{235,235} %write{234,234}
+const	string	$const30	"Exclusion"		%read{237,237} %write{2147483647,-1}
+temp	int	$tmp133	%read{238,238} %write{237,237}
+temp	color	$tmp134	%read{242,242} %write{239,239}
+temp	color	$tmp135	%read{241,241} %write{240,240}
+temp	color	$tmp136	%read{242,242} %write{241,241}
+const	string	$const31	"Subtract"		%read{243,243} %write{2147483647,-1}
+temp	int	$tmp137	%read{244,244} %write{243,243}
+temp	color	$tmp138	%read{247,247} %write{245,245}
+temp	color	$tmp139	%read{247,247} %write{246,246}
+const	string	$const32	"Divide"		%read{248,248} %write{2147483647,-1}
+temp	int	$tmp140	%read{249,249} %write{248,248}
+const	string	$const33	"Hue"		%read{251,251} %write{2147483647,-1}
+temp	int	$tmp141	%read{252,252} %write{251,251}
+const	string	$const34	"hsv"		%read{254,290} %write{2147483647,-1}
+const	string	$const35	"transformc"		%read{253,285} %write{2147483647,-1}
+const	string	$const36	"rgb"		%read{254,286} %write{2147483647,-1}
+temp	float	$tmp142	%read{260,260} %write{257,257}
+temp	float	$tmp143	%read{260,260} %write{258,258}
+temp	float	$tmp144	%read{260,260} %write{259,259}
+const	string	$const37	"Saturation"		%read{261,261} %write{2147483647,-1}
+temp	int	$tmp145	%read{262,262} %write{261,261}
+temp	float	$tmp146	%read{270,270} %write{267,267}
+temp	float	$tmp147	%read{270,270} %write{268,268}
+temp	float	$tmp148	%read{270,270} %write{269,269}
+const	string	$const38	"Color"		%read{271,271} %write{2147483647,-1}
+temp	int	$tmp149	%read{272,272} %write{271,271}
+temp	float	$tmp150	%read{280,280} %write{277,277}
+temp	float	$tmp151	%read{280,280} %write{278,278}
+temp	float	$tmp152	%read{280,280} %write{279,279}
+const	string	$const39	"Value"		%read{281,281} %write{2147483647,-1}
+temp	int	$tmp153	%read{282,282} %write{281,281}
+temp	float	$tmp154	%read{290,290} %write{287,287}
+temp	float	$tmp155	%read{290,290} %write{288,288}
+temp	float	$tmp156	%read{290,290} %write{289,289}
+temp	color	$tmp157	%read{295,295} %write{294,294}
+temp	color	$tmp158	%read{302,302} %write{298,298}
+temp	color	$tmp159	%read{301,301} %write{299,299}
+const	string	$const40	"clamp"		%read{300,300} %write{2147483647,-1}
+temp	color	$tmp160	%read{302,302} %write{301,301}
+code ___main___
+# source/3dsMax-OSL-Shaders/Composite.osl:40
+# 	Alpha = BottomA   * (1.0 - TopA);
+	sub		$tmp1 $const1 TopA 	%filename{"source/3dsMax-OSL-Shaders/Composite.osl"} %line{40} %argrw{"wrr"}
+	mul		Out BottomRGB $tmp1 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:41
+# 
+	sub		$tmp2 $const1 TopA 	%line{41} %argrw{"wrr"}
+	mul		Alpha BottomA $tmp2 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:44
+# 	if (BlendMode == "Normal")
+	assign		blended $const2 	%line{44} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:45
+# 		blended = TopRGB;
+	eq		$tmp3 BlendMode $const3 	%line{45} %argrw{"wrr"}
+	if		$tmp3 8 291 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:46
+# 	else if (BlendMode == "Average")
+	assign		blended TopRGB 	%line{46} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:47
+# 		blended = (BottomRGB+TopRGB)/2.0;			
+	eq		$tmp4 BlendMode $const4 	%line{47} %argrw{"wrr"}
+	if		$tmp4 12 291 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:48
+# 	else if (BlendMode == "Darken")
+	add		$tmp5 BottomRGB TopRGB 	%line{48} %argrw{"wrr"}
+	div		blended $tmp5 $const5 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:49
+# 		blended = min(BottomRGB, TopRGB);
+	eq		$tmp6 BlendMode $const6 	%line{49} %argrw{"wrr"}
+	if		$tmp6 15 291 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:50
+# 	else if (BlendMode == "Multiply")
+	min		blended BottomRGB TopRGB 	%line{50} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:51
+# 		blended = (BottomRGB * TopRGB);
+	eq		$tmp7 BlendMode $const7 	%line{51} %argrw{"wrr"}
+	if		$tmp7 18 291 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:52
+# 	else if (BlendMode == "Color Burn"){
+	mul		blended BottomRGB TopRGB 	%line{52} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:53
+# 		if (TopRGB == 0.0)
+	eq		$tmp8 BlendMode $const8 	%line{53} %argrw{"wrr"}
+	if		$tmp8 28 291 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:54
+# 			blended = TopRGB;
+	eq		$tmp9 TopRGB $const2 	%line{54} %argrw{"wrr"}
+	if		$tmp9 23 28 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:55
+# 		else 
+	assign		blended TopRGB 	%line{55} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:57
+# 	}
+	sub		$tmp10 $const1 BottomRGB 	%line{57} %argrw{"wrr"}
+	div		$tmp11 $tmp10 TopRGB 	%argrw{"wrr"}
+	sub		$tmp12 $const1 $tmp11 	%argrw{"wrr"}
+	assign		$tmp13 $const2 	%argrw{"wr"}
+	max		blended $tmp12 $tmp13 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:59
+# 		blended = max((BottomRGB + TopRGB - 1.0), color (0.0));
+	eq		$tmp14 BlendMode $const9 	%line{59} %argrw{"wrr"}
+	if		$tmp14 33 291 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:60
+# 	else if (BlendMode == "Lighten")
+	add		$tmp15 BottomRGB TopRGB 	%line{60} %argrw{"wrr"}
+	sub		$tmp16 $tmp15 $const1 	%argrw{"wrr"}
+	max		blended $tmp16 $const10 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:61
+# 		blended = max(BottomRGB, TopRGB);
+	eq		$tmp18 BlendMode $const11 	%line{61} %argrw{"wrr"}
+	if		$tmp18 36 291 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:62
+# 	else if (BlendMode == "Screen")
+	max		blended BottomRGB TopRGB 	%line{62} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:63
+# 		blended = TopRGB + BottomRGB - TopRGB * BottomRGB;
+	eq		$tmp19 BlendMode $const12 	%line{63} %argrw{"wrr"}
+	if		$tmp19 41 291 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:64
+# 	else if (BlendMode == "Color Dodge"){
+	add		$tmp20 TopRGB BottomRGB 	%line{64} %argrw{"wrr"}
+	mul		$tmp21 TopRGB BottomRGB 	%argrw{"wrr"}
+	sub		blended $tmp20 $tmp21 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:65
+# 		if (TopRGB == color (1.0))
+	eq		$tmp22 BlendMode $const13 	%line{65} %argrw{"wrr"}
+	if		$tmp22 49 291 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:66
+# 			blended = color (1.0);
+	eq		$tmp24 TopRGB $const14 	%line{66} %argrw{"wrr"}
+	if		$tmp24 46 49 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:67
+# 		else 
+	assign		blended $const14 	%line{67} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:69
+# 	}
+	sub		$tmp25 $const1 TopRGB 	%line{69} %argrw{"wrr"}
+	div		$tmp26 BottomRGB $tmp25 	%argrw{"wrr"}
+	min		blended $tmp26 $const14 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:71
+# 		blended = min((BottomRGB + TopRGB), color (1.0));
+	eq		$tmp28 BlendMode $const15 	%line{71} %argrw{"wrr"}
+	if		$tmp28 53 291 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:72
+# 	else if (BlendMode == "Spotlight")		
+	add		$tmp29 BottomRGB TopRGB 	%line{72} %argrw{"wrr"}
+	min		blended $tmp29 $const14 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:73
+# 		blended = min(2.0 * TopRGB * BottomRGB, 1.0);
+	eq		$tmp31 BlendMode $const16 	%line{73} %argrw{"wrr"}
+	if		$tmp31 59 291 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:74
+# 	else if (BlendMode == "Spotlight Blend")		
+	mul		$tmp32 $const5 TopRGB 	%line{74} %argrw{"wrr"}
+	mul		$tmp33 $tmp32 BottomRGB 	%argrw{"wrr"}
+	assign		$tmp34 $const1 	%argrw{"wr"}
+	min		blended $tmp33 $tmp34 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:75
+# 		blended = min(TopRGB * BottomRGB + BottomRGB, 1.0);
+	eq		$tmp35 BlendMode $const17 	%line{75} %argrw{"wrr"}
+	if		$tmp35 65 291 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:76
+# 	else if (BlendMode == "Overlay"){
+	mul		$tmp36 TopRGB BottomRGB 	%line{76} %argrw{"wrr"}
+	add		$tmp37 $tmp36 BottomRGB 	%argrw{"wrr"}
+	assign		$tmp38 $const1 	%argrw{"wr"}
+	min		blended $tmp37 $tmp38 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:77
+# 		float BottomRGBl = luminance (BottomRGB);		
+	eq		$tmp39 BlendMode $const18 	%line{77} %argrw{"wrr"}
+	if		$tmp39 77 291 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:78
+# 		if (BottomRGBl <= 0.5)
+	luminance	___324_BottomRGBl BottomRGB 	%line{78} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:79
+# 			blended = (2.0 * BottomRGB * TopRGB);		
+	le		$tmp40 ___324_BottomRGBl $const19 	%line{79} %argrw{"wrr"}
+	if		$tmp40 72 77 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:80
+# 		else
+	mul		$tmp41 $const5 BottomRGB 	%line{80} %argrw{"wrr"}
+	mul		blended $tmp41 TopRGB 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:82
+# 	}
+	sub		$tmp42 $const1 TopRGB 	%line{82} %argrw{"wrr"}
+	mul		$tmp43 $const5 $tmp42 	%argrw{"wrr"}
+	sub		$tmp44 $const1 BottomRGB 	%argrw{"wrr"}
+	mul		$tmp45 $tmp43 $tmp44 	%argrw{"wrr"}
+	sub		blended $const1 $tmp45 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:84
+# 		float TopRGBl = luminance (TopRGB);		
+	eq		$tmp46 BlendMode $const20 	%line{84} %argrw{"wrr"}
+	if		$tmp46 93 291 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:85
+# 		if (TopRGBl <= 0.5)
+	luminance	___325_TopRGBl TopRGB 	%line{85} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:86
+# 			blended = BottomRGB * (BottomRGB + 2.0 * TopRGB * (1.0 - BottomRGB));
+	le		$tmp47 ___325_TopRGBl $const19 	%line{86} %argrw{"wrr"}
+	if		$tmp47 87 93 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:87
+# 		else 
+	mul		$tmp48 $const5 TopRGB 	%line{87} %argrw{"wrr"}
+	sub		$tmp49 $const1 BottomRGB 	%argrw{"wrr"}
+	mul		$tmp50 $tmp48 $tmp49 	%argrw{"wrr"}
+	add		$tmp51 BottomRGB $tmp50 	%argrw{"wrr"}
+	mul		blended BottomRGB $tmp51 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:89
+# 	}		
+	mul		$tmp52 $const5 TopRGB 	%line{89} %argrw{"wrr"}
+	sub		$tmp53 $tmp52 $const1 	%argrw{"wrr"}
+	sqrt		$tmp54 BottomRGB 	%argrw{"wr"}
+	sub		$tmp55 $tmp54 BottomRGB 	%argrw{"wrr"}
+	mul		$tmp56 $tmp53 $tmp55 	%argrw{"wrr"}
+	add		blended BottomRGB $tmp56 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:91
+# 		float TopRGBl = luminance (TopRGB);		
+	eq		$tmp57 BlendMode $const21 	%line{91} %argrw{"wrr"}
+	if		$tmp57 105 291 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:92
+# 		if (TopRGBl <= 0.5)
+	luminance	___326_TopRGBl TopRGB 	%line{92} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:93
+# 			blended = 2.0 * TopRGB * BottomRGB;
+	le		$tmp58 ___326_TopRGBl $const19 	%line{93} %argrw{"wrr"}
+	if		$tmp58 100 105 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:94
+# 		else 
+	mul		$tmp59 $const5 TopRGB 	%line{94} %argrw{"wrr"}
+	mul		blended $tmp59 BottomRGB 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:96
+# 	}	
+	sub		$tmp60 $const1 TopRGB 	%line{96} %argrw{"wrr"}
+	mul		$tmp61 $const5 $tmp60 	%argrw{"wrr"}
+	sub		$tmp62 $const1 BottomRGB 	%argrw{"wrr"}
+	mul		$tmp63 $tmp61 $tmp62 	%argrw{"wrr"}
+	sub		blended $const1 $tmp63 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:98
+# 		float PinLight (float b, float a){
+	eq		$tmp64 BlendMode $const22 	%line{98} %argrw{"wrr"}
+	if		$tmp64 182 291 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:105
+# 		blended[1] = PinLight (BottomRGB[1], TopRGB[1]);
+	compref		$tmp66 BottomRGB $const23 	%line{105} %argrw{"wrr"}
+	compref		$tmp67 TopRGB $const23 	%argrw{"wrr"}
+	functioncall	$const24 131 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:100
+# 				return a;
+	gt		$tmp68 $tmp67 $const19 	%line{100} %argrw{"wrr"}
+	neq		$tmp69 $tmp68 $const23 	%argrw{"wrr"}
+	if		$tmp69 116 116 	%argrw{"r"}
+	gt		$tmp70 $tmp67 $tmp66 	%argrw{"wrr"}
+	neq		$tmp71 $tmp70 $const23 	%argrw{"wrr"}
+	assign		$tmp69 $tmp71 	%argrw{"wr"}
+	neq		$tmp72 $tmp69 $const23 	%argrw{"wrr"}
+	if		$tmp72 118 126 	%argrw{"r"}
+	lt		$tmp73 $tmp67 $const19 	%argrw{"wrr"}
+	neq		$tmp74 $tmp73 $const23 	%argrw{"wrr"}
+	if		$tmp74 124 124 	%argrw{"r"}
+	lt		$tmp75 $tmp67 $tmp66 	%argrw{"wrr"}
+	neq		$tmp76 $tmp75 $const23 	%argrw{"wrr"}
+	assign		$tmp74 $tmp76 	%argrw{"wr"}
+	neq		$tmp77 $tmp74 $const23 	%argrw{"wrr"}
+	assign		$tmp72 $tmp77 	%argrw{"wr"}
+	if		$tmp72 129 131 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:101
+# 			else
+	assign		$tmp65 $tmp67 	%line{101} %argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/Composite.osl:103
+# 		}
+	assign		$tmp65 $tmp66 	%line{103} %argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/Composite.osl:105
+# 		blended[1] = PinLight (BottomRGB[1], TopRGB[1]);
+	compassign	blended $const23 $tmp65 	%line{105} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:106
+# 		blended[2] = PinLight (BottomRGB[2], TopRGB[2]);				
+	compref		$tmp79 BottomRGB $const25 	%line{106} %argrw{"wrr"}
+	compref		$tmp80 TopRGB $const25 	%argrw{"wrr"}
+	functioncall	$const24 156 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:100
+# 				return a;
+	gt		$tmp81 $tmp80 $const19 	%line{100} %argrw{"wrr"}
+	neq		$tmp82 $tmp81 $const23 	%argrw{"wrr"}
+	if		$tmp82 141 141 	%argrw{"r"}
+	gt		$tmp83 $tmp80 $tmp79 	%argrw{"wrr"}
+	neq		$tmp84 $tmp83 $const23 	%argrw{"wrr"}
+	assign		$tmp82 $tmp84 	%argrw{"wr"}
+	neq		$tmp85 $tmp82 $const23 	%argrw{"wrr"}
+	if		$tmp85 143 151 	%argrw{"r"}
+	lt		$tmp86 $tmp80 $const19 	%argrw{"wrr"}
+	neq		$tmp87 $tmp86 $const23 	%argrw{"wrr"}
+	if		$tmp87 149 149 	%argrw{"r"}
+	lt		$tmp88 $tmp80 $tmp79 	%argrw{"wrr"}
+	neq		$tmp89 $tmp88 $const23 	%argrw{"wrr"}
+	assign		$tmp87 $tmp89 	%argrw{"wr"}
+	neq		$tmp90 $tmp87 $const23 	%argrw{"wrr"}
+	assign		$tmp85 $tmp90 	%argrw{"wr"}
+	if		$tmp85 154 156 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:101
+# 			else
+	assign		$tmp78 $tmp80 	%line{101} %argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/Composite.osl:103
+# 		}
+	assign		$tmp78 $tmp79 	%line{103} %argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/Composite.osl:106
+# 		blended[2] = PinLight (BottomRGB[2], TopRGB[2]);				
+	compassign	blended $const25 $tmp78 	%line{106} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:107
+# 	}		
+	compref		$tmp92 BottomRGB $const26 	%line{107} %argrw{"wrr"}
+	compref		$tmp93 TopRGB $const26 	%argrw{"wrr"}
+	functioncall	$const24 181 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:100
+# 				return a;
+	gt		$tmp94 $tmp93 $const19 	%line{100} %argrw{"wrr"}
+	neq		$tmp95 $tmp94 $const23 	%argrw{"wrr"}
+	if		$tmp95 166 166 	%argrw{"r"}
+	gt		$tmp96 $tmp93 $tmp92 	%argrw{"wrr"}
+	neq		$tmp97 $tmp96 $const23 	%argrw{"wrr"}
+	assign		$tmp95 $tmp97 	%argrw{"wr"}
+	neq		$tmp98 $tmp95 $const23 	%argrw{"wrr"}
+	if		$tmp98 168 176 	%argrw{"r"}
+	lt		$tmp99 $tmp93 $const19 	%argrw{"wrr"}
+	neq		$tmp100 $tmp99 $const23 	%argrw{"wrr"}
+	if		$tmp100 174 174 	%argrw{"r"}
+	lt		$tmp101 $tmp93 $tmp92 	%argrw{"wrr"}
+	neq		$tmp102 $tmp101 $const23 	%argrw{"wrr"}
+	assign		$tmp100 $tmp102 	%argrw{"wr"}
+	neq		$tmp103 $tmp100 $const23 	%argrw{"wrr"}
+	assign		$tmp98 $tmp103 	%argrw{"wr"}
+	if		$tmp98 179 181 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:101
+# 			else
+	assign		$tmp91 $tmp93 	%line{101} %argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/Composite.osl:103
+# 		}
+	assign		$tmp91 $tmp92 	%line{103} %argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/Composite.osl:107
+# 	}		
+	compassign	blended $const26 $tmp91 	%line{107} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:109
+# 		float HardMix (float b, float a){
+	eq		$tmp104 BlendMode $const27 	%line{109} %argrw{"wrr"}
+	if		$tmp104 217 291 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:116
+# 		blended[1] = HardMix (BottomRGB[1], TopRGB[1]);
+	compref		$tmp106 BottomRGB $const23 	%line{116} %argrw{"wrr"}
+	compref		$tmp107 TopRGB $const23 	%argrw{"wrr"}
+	functioncall	$const28 194 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:111
+# 				return 0.0;
+	add		$tmp108 $tmp107 $tmp106 	%line{111} %argrw{"wrr"}
+	le		$tmp109 $tmp108 $const1 	%argrw{"wrr"}
+	if		$tmp109 192 194 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:112
+# 			else
+	assign		$tmp105 $const2 	%line{112} %argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/Composite.osl:114
+# 		}		
+	assign		$tmp105 $const1 	%line{114} %argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/Composite.osl:116
+# 		blended[1] = HardMix (BottomRGB[1], TopRGB[1]);
+	compassign	blended $const23 $tmp105 	%line{116} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:117
+# 		blended[2] = HardMix (BottomRGB[2], TopRGB[2]);		
+	compref		$tmp111 BottomRGB $const25 	%line{117} %argrw{"wrr"}
+	compref		$tmp112 TopRGB $const25 	%argrw{"wrr"}
+	functioncall	$const28 205 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:111
+# 				return 0.0;
+	add		$tmp113 $tmp112 $tmp111 	%line{111} %argrw{"wrr"}
+	le		$tmp114 $tmp113 $const1 	%argrw{"wrr"}
+	if		$tmp114 203 205 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:112
+# 			else
+	assign		$tmp110 $const2 	%line{112} %argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/Composite.osl:114
+# 		}		
+	assign		$tmp110 $const1 	%line{114} %argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/Composite.osl:117
+# 		blended[2] = HardMix (BottomRGB[2], TopRGB[2]);		
+	compassign	blended $const25 $tmp110 	%line{117} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:118
+# 	}		
+	compref		$tmp116 BottomRGB $const26 	%line{118} %argrw{"wrr"}
+	compref		$tmp117 TopRGB $const26 	%argrw{"wrr"}
+	functioncall	$const28 216 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:111
+# 				return 0.0;
+	add		$tmp118 $tmp117 $tmp116 	%line{111} %argrw{"wrr"}
+	le		$tmp119 $tmp118 $const1 	%argrw{"wrr"}
+	if		$tmp119 214 216 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:112
+# 			else
+	assign		$tmp115 $const2 	%line{112} %argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/Composite.osl:114
+# 		}		
+	assign		$tmp115 $const1 	%line{114} %argrw{"wr"}
+	return
+# source/3dsMax-OSL-Shaders/Composite.osl:118
+# 	}		
+	compassign	blended $const26 $tmp115 	%line{118} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:120
+# 		float Difference (float b, float a){
+	eq		$tmp120 BlendMode $const29 	%line{120} %argrw{"wrr"}
+	if		$tmp120 237 291 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:124
+# 		blended[1] = Difference (BottomRGB[1], TopRGB[1]);
+	compref		$tmp122 BottomRGB $const23 	%line{124} %argrw{"wrr"}
+	compref		$tmp123 TopRGB $const23 	%argrw{"wrr"}
+	functioncall	$const29 224 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:122
+# 		}		
+	sub		$tmp124 $tmp123 $tmp122 	%line{122} %argrw{"wrr"}
+	abs		$tmp121 $tmp124 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:124
+# 		blended[1] = Difference (BottomRGB[1], TopRGB[1]);
+	compassign	blended $const23 $tmp121 	%line{124} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:125
+# 		blended[2] = Difference (BottomRGB[2], TopRGB[2]);	
+	compref		$tmp126 BottomRGB $const25 	%line{125} %argrw{"wrr"}
+	compref		$tmp127 TopRGB $const25 	%argrw{"wrr"}
+	functioncall	$const29 230 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:122
+# 		}		
+	sub		$tmp128 $tmp127 $tmp126 	%line{122} %argrw{"wrr"}
+	abs		$tmp125 $tmp128 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:125
+# 		blended[2] = Difference (BottomRGB[2], TopRGB[2]);	
+	compassign	blended $const25 $tmp125 	%line{125} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:126
+# 	}
+	compref		$tmp130 BottomRGB $const26 	%line{126} %argrw{"wrr"}
+	compref		$tmp131 TopRGB $const26 	%argrw{"wrr"}
+	functioncall	$const29 236 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:122
+# 		}		
+	sub		$tmp132 $tmp131 $tmp130 	%line{122} %argrw{"wrr"}
+	abs		$tmp129 $tmp132 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:126
+# 	}
+	compassign	blended $const26 $tmp129 	%line{126} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:128
+# 		blended = TopRGB + BottomRGB - 2.0 * TopRGB * BottomRGB;
+	eq		$tmp133 BlendMode $const30 	%line{128} %argrw{"wrr"}
+	if		$tmp133 243 291 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:129
+# 	}	
+	add		$tmp134 TopRGB BottomRGB 	%line{129} %argrw{"wrr"}
+	mul		$tmp135 $const5 TopRGB 	%argrw{"wrr"}
+	mul		$tmp136 $tmp135 BottomRGB 	%argrw{"wrr"}
+	sub		blended $tmp134 $tmp136 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:131
+# 		blended = max(BottomRGB - TopRGB, 0.0);
+	eq		$tmp137 BlendMode $const31 	%line{131} %argrw{"wrr"}
+	if		$tmp137 248 291 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:132
+# 	}		
+	sub		$tmp138 BottomRGB TopRGB 	%line{132} %argrw{"wrr"}
+	assign		$tmp139 $const2 	%argrw{"wr"}
+	max		blended $tmp138 $tmp139 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:134
+# 		blended = BottomRGB / TopRGB;
+	eq		$tmp140 BlendMode $const32 	%line{134} %argrw{"wrr"}
+	if		$tmp140 251 291 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:135
+# 	}		
+	div		blended BottomRGB TopRGB 	%line{135} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:137
+# 		vector hsvBottomRGB = transformc ("hsv", BottomRGB);
+	eq		$tmp141 BlendMode $const33 	%line{137} %argrw{"wrr"}
+	if		$tmp141 261 291 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:138
+# 		vector hsvTopRGB = transformc ("hsv", TopRGB);		
+	functioncall	$const35 255 	%line{138} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:303
+# color transformc (string to, color c) { return transformc ("rgb", to, c); }
+	transformc	___336_hsvBottomRGB $const36 $const34 BottomRGB 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{303} %argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:139
+# 		blended = color ("hsv", hsvTopRGB[0], hsvBottomRGB[1], hsvBottomRGB[2]);				
+	functioncall	$const35 257 	%filename{"source/3dsMax-OSL-Shaders/Composite.osl"} %line{139} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:303
+# color transformc (string to, color c) { return transformc ("rgb", to, c); }
+	transformc	___336_hsvTopRGB $const36 $const34 TopRGB 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{303} %argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:140
+# 	}	
+	compref		$tmp142 ___336_hsvTopRGB $const23 	%filename{"source/3dsMax-OSL-Shaders/Composite.osl"} %line{140} %argrw{"wrr"}
+	compref		$tmp143 ___336_hsvBottomRGB $const25 	%argrw{"wrr"}
+	compref		$tmp144 ___336_hsvBottomRGB $const26 	%argrw{"wrr"}
+	color		blended $const34 $tmp142 $tmp143 $tmp144 	%argrw{"wrrrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:142
+# 		vector hsvBottomRGB = transformc ("hsv", BottomRGB);
+	eq		$tmp145 BlendMode $const37 	%line{142} %argrw{"wrr"}
+	if		$tmp145 271 291 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:143
+# 		vector hsvTopRGB = transformc ("hsv", TopRGB);		
+	functioncall	$const35 265 	%line{143} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:303
+# color transformc (string to, color c) { return transformc ("rgb", to, c); }
+	transformc	___337_hsvBottomRGB $const36 $const34 BottomRGB 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{303} %argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:144
+# 		blended = color ("hsv", hsvBottomRGB[0], hsvTopRGB[1], hsvBottomRGB[2]);	
+	functioncall	$const35 267 	%filename{"source/3dsMax-OSL-Shaders/Composite.osl"} %line{144} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:303
+# color transformc (string to, color c) { return transformc ("rgb", to, c); }
+	transformc	___337_hsvTopRGB $const36 $const34 TopRGB 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{303} %argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:145
+# 	}			
+	compref		$tmp146 ___337_hsvBottomRGB $const23 	%filename{"source/3dsMax-OSL-Shaders/Composite.osl"} %line{145} %argrw{"wrr"}
+	compref		$tmp147 ___337_hsvTopRGB $const25 	%argrw{"wrr"}
+	compref		$tmp148 ___337_hsvBottomRGB $const26 	%argrw{"wrr"}
+	color		blended $const34 $tmp146 $tmp147 $tmp148 	%argrw{"wrrrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:147
+# 		vector hsvBottomRGB = transformc ("hsv", BottomRGB);
+	eq		$tmp149 BlendMode $const38 	%line{147} %argrw{"wrr"}
+	if		$tmp149 281 291 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:148
+# 		vector hsvTopRGB = transformc ("hsv", TopRGB);		
+	functioncall	$const35 275 	%line{148} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:303
+# color transformc (string to, color c) { return transformc ("rgb", to, c); }
+	transformc	___338_hsvBottomRGB $const36 $const34 BottomRGB 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{303} %argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:149
+# 		blended = color ("hsv", hsvTopRGB[0], hsvTopRGB[1], hsvBottomRGB[2]);	
+	functioncall	$const35 277 	%filename{"source/3dsMax-OSL-Shaders/Composite.osl"} %line{149} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:303
+# color transformc (string to, color c) { return transformc ("rgb", to, c); }
+	transformc	___338_hsvTopRGB $const36 $const34 TopRGB 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{303} %argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:150
+# 	}		
+	compref		$tmp150 ___338_hsvTopRGB $const23 	%filename{"source/3dsMax-OSL-Shaders/Composite.osl"} %line{150} %argrw{"wrr"}
+	compref		$tmp151 ___338_hsvTopRGB $const25 	%argrw{"wrr"}
+	compref		$tmp152 ___338_hsvBottomRGB $const26 	%argrw{"wrr"}
+	color		blended $const34 $tmp150 $tmp151 $tmp152 	%argrw{"wrrrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:152
+# 		vector hsvBottomRGB = transformc ("hsv", BottomRGB);
+	eq		$tmp153 BlendMode $const39 	%line{152} %argrw{"wrr"}
+	if		$tmp153 291 291 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:153
+# 		vector hsvTopRGB = transformc ("hsv", TopRGB);		
+	functioncall	$const35 285 	%line{153} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:303
+# color transformc (string to, color c) { return transformc ("rgb", to, c); }
+	transformc	___339_hsvBottomRGB $const36 $const34 BottomRGB 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{303} %argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:154
+# 		blended = color ("hsv", hsvBottomRGB[0], hsvBottomRGB[1], hsvTopRGB[2]);	
+	functioncall	$const35 287 	%filename{"source/3dsMax-OSL-Shaders/Composite.osl"} %line{154} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:303
+# color transformc (string to, color c) { return transformc ("rgb", to, c); }
+	transformc	___339_hsvTopRGB $const36 $const34 TopRGB 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{303} %argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:155
+# 	}	
+	compref		$tmp154 ___339_hsvBottomRGB $const23 	%filename{"source/3dsMax-OSL-Shaders/Composite.osl"} %line{155} %argrw{"wrr"}
+	compref		$tmp155 ___339_hsvBottomRGB $const25 	%argrw{"wrr"}
+	compref		$tmp156 ___339_hsvTopRGB $const26 	%argrw{"wrr"}
+	color		blended $const34 $tmp154 $tmp155 $tmp156 	%argrw{"wrrrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:160
+# 	
+	if		Premult 293 294 	%line{160} %argrw{"r"}
+	assign		topmul $const1 	%argrw{"wr"}
+	assign		topmul TopA 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:163
+# 	Alpha += TopA;
+	mul		$tmp157 blended topmul 	%line{163} %argrw{"wrr"}
+	add		Out Out $tmp157 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:164
+# 	
+	add		Alpha Alpha TopA 	%line{164} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Composite.osl:167
+# 		Out = clamp(Out, 0.0, 1.0);
+	if		Clamp 303 303 	%line{167} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/Composite.osl:168
+# }
+	assign		$tmp158 $const2 	%line{168} %argrw{"wr"}
+	assign		$tmp159 $const1 	%argrw{"wr"}
+	functioncall	$const40 303 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:144
+# color  clamp (color x, color minval, color maxval) { return max(min(x,maxval),minval); }
+	min		$tmp160 Out $tmp159 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{144} %argrw{"wrr"}
+	max		Out $tmp160 $tmp158 	%argrw{"wrr"}
+	end

@@ -1,0 +1,24 @@
+/*
+ * TDPhong_ramp.osl by Thomas Dinges (c)2012
+ * from https://github.com/sambler/osl-shaders
+ *
+ * original script from -
+ * http://www.openshading.com/osl/example-shaders/
+ *
+ */
+
+#include <stdosl.h>
+
+shader TDphong_ramp_bsdf(
+    vector Normal = N,
+    float Exponent = 2.0,
+    output closure color BSDF = 0)
+{
+    color Color[8];
+    
+    for(int i = 0; i < 8; i++)
+        Color[i] = transformc("hsv", "rgb", color(i/7.0, 1.0, 1.0));
+    
+    BSDF = phong_ramp(N, Exponent, Color);
+}
+

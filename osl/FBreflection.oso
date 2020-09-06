@@ -1,0 +1,31 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader FBreflection
+param	color	Color	0.80000001 0.80000001 0.80000001		%read{4,4} %write{2147483647,-1}
+param	float	Factor	1		%read{4,4} %write{2147483647,-1}
+oparam	closure color	BSDF			%read{2147483647,-1} %write{1,5} %initexpr
+global	normal	N	%read{1,3} %write{2147483647,-1}
+const	string	$const1	"reflection"		%read{0,3} %write{2147483647,-1}
+const	float	$const2	0		%read{1,3} %write{2147483647,-1}
+temp	closure color	$tmp1	%read{5,5} %write{3,3}
+temp	color	$tmp2	%read{5,5} %write{4,4}
+code BSDF
+# source/sambler-osl-shaders/lib/FBreflection.osl:18
+# {
+	functioncall	$const1 2 	%filename{"source/sambler-osl-shaders/lib/FBreflection.osl"} %line{18} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:440
+# closure color reflection(normal N) { return reflection (N, 0.0); }
+	closure		BSDF $const1 N $const2 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{440} %argrw{"wrrr"}
+code ___main___
+# source/sambler-osl-shaders/lib/FBreflection.osl:20
+# }
+	functioncall	$const1 4 	%filename{"source/sambler-osl-shaders/lib/FBreflection.osl"} %line{20} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:440
+# closure color reflection(normal N) { return reflection (N, 0.0); }
+	closure		$tmp1 $const1 N $const2 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{440} %argrw{"wrrr"}
+# source/sambler-osl-shaders/lib/FBreflection.osl:20
+# }
+	mul		$tmp2 Factor Color 	%filename{"source/sambler-osl-shaders/lib/FBreflection.osl"} %line{20} %argrw{"wrr"}
+	mul		BSDF $tmp1 $tmp2 	%argrw{"wrr"}
+	end

@@ -1,0 +1,229 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader node_texture_coordinate
+param	normal	NormalIn	0 0 0		%read{10,34} %write{0,0} %initexpr
+param	int	is_background	0		%read{1,1} %write{2147483647,-1}
+param	int	is_volume	0		%read{15,15} %write{2147483647,-1}
+param	int	from_dupli	0		%read{12,53} %write{2147483647,-1}
+param	string	bump_offset	"center"		%read{37,51} %write{2147483647,-1}
+oparam	point	Generated	0 0 0		%read{20,56} %write{2,56} %derivs
+oparam	point	UV	0 0 0		%read{43,58} %write{3,58} %derivs
+oparam	point	Object	0 0 0		%read{45,60} %write{4,60} %derivs
+oparam	point	Camera	0 0 0		%read{47,62} %write{8,62} %derivs
+oparam	point	Window	0 0 0		%read{49,64} %write{9,65} %derivs
+oparam	normal	Normal	0 0 0		%read{2147483647,-1} %write{10,30}
+oparam	point	Reflection	0 0 0		%read{2147483647,-1} %write{11,36}
+global	point	P	%read{2,29} %write{2147483647,-1} %derivs
+global	vector	I	%read{11,35} %write{2147483647,-1}
+global	normal	N	%read{0,0} %write{2147483647,-1}
+local	point	___631_Pcam	%read{6,6} %write{5,5} %derivs
+local	matrix	___634_tfm	%read{20,20} %write{18,18} %derivs
+const	point	$const1	0 0 0		%read{3,5} %write{2147483647,-1}
+const	string	$const2	"camera"		%read{5,27} %write{2147483647,-1}
+const	string	$const3	"world"		%read{5,30} %write{2147483647,-1}
+temp	point	$tmp2	%read{8,8} %write{6,6} %derivs
+const	string	$const4	"transform"		%read{7,28} %write{2147483647,-1}
+const	string	$const5	"common"		%read{8,29} %write{2147483647,-1}
+temp	int	$tmp3	%read{2147483647,-1} %write{9,9}
+const	string	$const6	"NDC"		%read{9,29} %write{2147483647,-1}
+temp	int	$tmp4	%read{2147483647,-1} %write{13,13}
+const	string	$const7	"geom:dupli_generated"		%read{13,13} %write{2147483647,-1}
+temp	int	$tmp5	%read{2147483647,-1} %write{14,14}
+const	string	$const8	"geom:dupli_uv"		%read{14,14} %write{2147483647,-1}
+const	string	$const9	"object"		%read{17,30} %write{2147483647,-1}
+temp	int	$tmp6	%read{19,19} %write{18,18}
+const	string	$const10	"geom:generated_transform"		%read{18,18} %write{2147483647,-1}
+temp	int	$tmp7	%read{2147483647,-1} %write{21,21}
+const	string	$const11	"geom:uv"		%read{21,23} %write{2147483647,-1}
+temp	int	$tmp8	%read{2147483647,-1} %write{22,22}
+const	string	$const12	"geom:generated"		%read{22,22} %write{2147483647,-1}
+temp	int	$tmp9	%read{2147483647,-1} %write{23,23}
+temp	vector	$tmp10	%read{36,36} %write{35,35}
+const	string	$const13	"reflect"		%read{31,31} %write{2147483647,-1}
+const	int	$const14	2		%read{65,65} %write{2147483647,-1}
+temp	float	$tmp11	%read{33,33} %write{32,32}
+temp	float	$tmp12	%read{34,34} %write{33,33}
+const	float	$const15	2		%read{33,33} %write{2147483647,-1}
+temp	vector	$tmp13	%read{35,35} %write{34,34}
+const	string	$const16	"dx"		%read{37,37} %write{2147483647,-1}
+temp	int	$tmp14	%read{38,38} %write{37,37}
+temp	int	$tmp15	%read{40,40} %write{39,39}
+const	int	$const17	0		%read{39,53} %write{2147483647,-1}
+temp	vector	$tmp16	%read{42,42} %write{41,41} %derivs
+temp	vector	$tmp17	%read{44,44} %write{43,43} %derivs
+temp	vector	$tmp18	%read{46,46} %write{45,45} %derivs
+temp	vector	$tmp19	%read{48,48} %write{47,47} %derivs
+temp	vector	$tmp20	%read{50,50} %write{49,49} %derivs
+const	string	$const18	"dy"		%read{51,51} %write{2147483647,-1}
+temp	int	$tmp21	%read{52,52} %write{51,51}
+temp	int	$tmp22	%read{54,54} %write{53,53}
+temp	vector	$tmp23	%read{56,56} %write{55,55} %derivs
+temp	vector	$tmp24	%read{58,58} %write{57,57} %derivs
+temp	vector	$tmp25	%read{60,60} %write{59,59} %derivs
+temp	vector	$tmp26	%read{62,62} %write{61,61} %derivs
+temp	vector	$tmp27	%read{64,64} %write{63,63} %derivs
+const	float	$const19	0		%read{65,65} %write{2147483647,-1}
+code NormalIn
+# include/node_texture_coordinate.osl:21
+# 	int is_background = 0,
+	assign		NormalIn N 	%filename{"include/node_texture_coordinate.osl"} %line{21} %argrw{"wr"}
+code ___main___
+# include/node_texture_coordinate.osl:35
+# 		Generated = P;
+	if		is_background 12 37 	%filename{"include/node_texture_coordinate.osl"} %line{35} %argrw{"r"}
+# include/node_texture_coordinate.osl:36
+# 		UV = point(0.0, 0.0, 0.0);
+	assign		Generated P 	%line{36} %argrw{"wr"}
+# include/node_texture_coordinate.osl:37
+# 		Object = P;
+	assign		UV $const1 	%line{37} %argrw{"wr"}
+# include/node_texture_coordinate.osl:38
+# 		point Pcam = transform("camera", "world", point(0, 0, 0));
+	assign		Object P 	%line{38} %argrw{"wr"}
+# include/node_texture_coordinate.osl:39
+# 		Camera = transform("camera", P + Pcam);
+	transform	___631_Pcam $const2 $const3 $const1 	%line{39} %argrw{"wrrr"}
+# include/node_texture_coordinate.osl:40
+# 		getattribute("NDC", Window);
+	add		$tmp2 P ___631_Pcam 	%line{40} %argrw{"wrr"}
+	functioncall	$const4 9 	%argrw{"r"}
+# include/stdosl.h:243
+# point  transform (string to, point p)  { return transform("common",to,p); }
+	transform	Camera $const5 $const2 $tmp2 	%filename{"include/stdosl.h"} %line{243} %argrw{"wrrr"}
+# include/node_texture_coordinate.osl:41
+# 		Normal = NormalIn;
+	getattribute	$tmp3 $const6 Window 	%filename{"include/node_texture_coordinate.osl"} %line{41} %argrw{"wrw"}
+# include/node_texture_coordinate.osl:42
+# 		Reflection = I;
+	assign		Normal NormalIn 	%line{42} %argrw{"wr"}
+# include/node_texture_coordinate.osl:43
+# 	}
+	assign		Reflection I 	%line{43} %argrw{"wr"}
+# include/node_texture_coordinate.osl:46
+# 			getattribute("geom:dupli_generated", Generated); 
+	if		from_dupli 15 24 	%line{46} %argrw{"r"}
+# include/node_texture_coordinate.osl:47
+# 			getattribute("geom:dupli_uv", UV);
+	getattribute	$tmp4 $const7 Generated 	%line{47} %argrw{"wrw"}
+# include/node_texture_coordinate.osl:48
+# 		}
+	getattribute	$tmp5 $const8 UV 	%line{48} %argrw{"wrw"}
+# include/node_texture_coordinate.osl:50
+# 			Generated = transform("object", P);
+	if		is_volume 22 24 	%line{50} %argrw{"r"}
+# include/node_texture_coordinate.osl:51
+# 
+	functioncall	$const4 18 	%line{51} %argrw{"r"}
+# include/stdosl.h:243
+# point  transform (string to, point p)  { return transform("common",to,p); }
+	transform	Generated $const5 $const9 P 	%filename{"include/stdosl.h"} %line{243} %argrw{"wrrr"}
+# include/node_texture_coordinate.osl:54
+# 				Generated = transform(tfm, Generated);
+	getattribute	$tmp6 $const10 ___634_tfm 	%filename{"include/node_texture_coordinate.osl"} %line{54} %argrw{"wrw"}
+	if		$tmp6 21 21 	%argrw{"r"}
+# include/node_texture_coordinate.osl:55
+# 
+	transform	Generated ___634_tfm Generated 	%line{55} %argrw{"wrr"}
+# include/node_texture_coordinate.osl:57
+# 		}
+	getattribute	$tmp7 $const11 UV 	%line{57} %argrw{"wrw"}
+# include/node_texture_coordinate.osl:60
+# 			getattribute("geom:uv", UV);
+	getattribute	$tmp8 $const12 Generated 	%line{60} %argrw{"wrw"}
+# include/node_texture_coordinate.osl:61
+# 		}
+	getattribute	$tmp9 $const11 UV 	%line{61} %argrw{"wrw"}
+# include/node_texture_coordinate.osl:64
+# 		Camera = transform("camera", P);
+	functioncall	$const4 26 	%line{64} %argrw{"r"}
+# include/stdosl.h:243
+# point  transform (string to, point p)  { return transform("common",to,p); }
+	transform	Object $const5 $const9 P 	%filename{"include/stdosl.h"} %line{243} %argrw{"wrrr"}
+# include/node_texture_coordinate.osl:65
+# 		Window = transform("NDC", P);
+	functioncall	$const4 28 	%filename{"include/node_texture_coordinate.osl"} %line{65} %argrw{"r"}
+# include/stdosl.h:243
+# point  transform (string to, point p)  { return transform("common",to,p); }
+	transform	Camera $const5 $const2 P 	%filename{"include/stdosl.h"} %line{243} %argrw{"wrrr"}
+# include/node_texture_coordinate.osl:66
+# 		Normal = transform("world", "object", NormalIn);
+	functioncall	$const4 30 	%filename{"include/node_texture_coordinate.osl"} %line{66} %argrw{"r"}
+# include/stdosl.h:243
+# point  transform (string to, point p)  { return transform("common",to,p); }
+	transform	Window $const5 $const6 P 	%filename{"include/stdosl.h"} %line{243} %argrw{"wrrr"}
+# include/node_texture_coordinate.osl:67
+# 		Reflection = -reflect(I, NormalIn);
+	transformn	Normal $const3 $const9 NormalIn 	%filename{"include/node_texture_coordinate.osl"} %line{67} %argrw{"wrrr"}
+# include/node_texture_coordinate.osl:68
+# 	}
+	functioncall	$const13 36 	%line{68} %argrw{"r"}
+# include/stdosl.h:192
+# vector reflect (vector I, vector N) { return I - 2*dot(N,I)*N; }
+	dot		$tmp11 NormalIn I 	%filename{"include/stdosl.h"} %line{192} %argrw{"wrr"}
+	mul		$tmp12 $const15 $tmp11 	%argrw{"wrr"}
+	mul		$tmp13 $tmp12 NormalIn 	%argrw{"wrr"}
+	sub		$tmp10 I $tmp13 	%argrw{"wrr"}
+# include/node_texture_coordinate.osl:68
+# 	}
+	neg		Reflection $tmp10 	%filename{"include/node_texture_coordinate.osl"} %line{68} %argrw{"wr"}
+# include/node_texture_coordinate.osl:71
+# 		if (!from_dupli) {
+	eq		$tmp14 bump_offset $const16 	%line{71} %argrw{"wrr"}
+	if		$tmp14 51 65 	%argrw{"r"}
+# include/node_texture_coordinate.osl:72
+# 			Generated += Dx(Generated);
+	eq		$tmp15 from_dupli $const17 	%line{72} %argrw{"wrr"}
+	if		$tmp15 45 45 	%argrw{"r"}
+# include/node_texture_coordinate.osl:73
+# 			UV += Dx(UV);
+	Dx		$tmp16 Generated 	%line{73} %argrw{"wr"} %argderivs{1}
+	add		Generated Generated $tmp16 	%argrw{"wrr"}
+# include/node_texture_coordinate.osl:74
+# 		}
+	Dx		$tmp17 UV 	%line{74} %argrw{"wr"} %argderivs{1}
+	add		UV UV $tmp17 	%argrw{"wrr"}
+# include/node_texture_coordinate.osl:76
+# 		Camera += Dx(Camera);
+	Dx		$tmp18 Object 	%line{76} %argrw{"wr"} %argderivs{1}
+	add		Object Object $tmp18 	%argrw{"wrr"}
+# include/node_texture_coordinate.osl:77
+# 		Window += Dx(Window);
+	Dx		$tmp19 Camera 	%line{77} %argrw{"wr"} %argderivs{1}
+	add		Camera Camera $tmp19 	%argrw{"wrr"}
+# include/node_texture_coordinate.osl:78
+# 	}
+	Dx		$tmp20 Window 	%line{78} %argrw{"wr"} %argderivs{1}
+	add		Window Window $tmp20 	%argrw{"wrr"}
+# include/node_texture_coordinate.osl:80
+# 		if (!from_dupli) {
+	eq		$tmp21 bump_offset $const18 	%line{80} %argrw{"wrr"}
+	if		$tmp21 65 65 	%argrw{"r"}
+# include/node_texture_coordinate.osl:81
+# 			Generated += Dy(Generated);
+	eq		$tmp22 from_dupli $const17 	%line{81} %argrw{"wrr"}
+	if		$tmp22 59 59 	%argrw{"r"}
+# include/node_texture_coordinate.osl:82
+# 			UV += Dy(UV);
+	Dy		$tmp23 Generated 	%line{82} %argrw{"wr"} %argderivs{1}
+	add		Generated Generated $tmp23 	%argrw{"wrr"}
+# include/node_texture_coordinate.osl:83
+# 		}
+	Dy		$tmp24 UV 	%line{83} %argrw{"wr"} %argderivs{1}
+	add		UV UV $tmp24 	%argrw{"wrr"}
+# include/node_texture_coordinate.osl:85
+# 		Camera += Dy(Camera);
+	Dy		$tmp25 Object 	%line{85} %argrw{"wr"} %argderivs{1}
+	add		Object Object $tmp25 	%argrw{"wrr"}
+# include/node_texture_coordinate.osl:86
+# 		Window += Dy(Window);
+	Dy		$tmp26 Camera 	%line{86} %argrw{"wr"} %argderivs{1}
+	add		Camera Camera $tmp26 	%argrw{"wrr"}
+# include/node_texture_coordinate.osl:87
+# 	}
+	Dy		$tmp27 Window 	%line{87} %argrw{"wr"} %argderivs{1}
+	add		Window Window $tmp27 	%argrw{"wrr"}
+# include/node_texture_coordinate.osl:90
+# }
+	compassign	Window $const14 $const19 	%line{90} %argrw{"wrr"}
+	end

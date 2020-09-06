@@ -1,0 +1,108 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader vectormath
+param	vector	Ain	1 0 0		%read{2,4} %write{2147483647,-1}
+param	vector	Bin	0 1 0		%read{3,5} %write{2147483647,-1}
+param	vector	Ref	0 0 0		%read{6,6} %write{0,0} %initexpr
+param	int	negA	0		%read{7,7} %write{2147483647,-1}
+param	int	negB	0		%read{9,9} %write{2147483647,-1}
+param	int	negC	0		%read{11,11} %write{2147483647,-1}
+param	int	SwapAB	0		%read{1,1} %write{2147483647,-1}
+oparam	vector	Reflect	0.5 0.5 0.5		%read{2147483647,-1} %write{21,21}
+oparam	vector	Cross	0.5 0.5 0.5		%read{2147483647,-1} %write{22,22}
+oparam	vector	Dot	0.5 0.5 0.5		%read{2147483647,-1} %write{24,24}
+oparam	vector	FaceForward	0.5 0.5 0.5		%read{2147483647,-1} %write{29,30}
+oparam	vector	NormalisedA	0.5 0.5 0.5		%read{18,30} %write{14,14}
+oparam	float	LengthA	0.5		%read{2147483647,-1} %write{13,13}
+oparam	vector	NormalisedB	0.5 0.5 0.5		%read{18,20} %write{16,16}
+oparam	float	LengthB	0.5		%read{2147483647,-1} %write{15,15}
+global	point	P	%read{0,0} %write{2147483647,-1}
+local	vector	A	%read{8,23} %write{2,8}
+local	vector	B	%read{10,26} %write{3,10}
+local	vector	C	%read{12,26} %write{6,12}
+const	string	$const1	"reflect"		%read{17,17} %write{2147483647,-1}
+temp	float	$tmp1	%read{19,19} %write{18,18}
+temp	float	$tmp2	%read{20,20} %write{19,19}
+const	float	$const3	2		%read{19,19} %write{2147483647,-1}
+temp	vector	$tmp3	%read{21,21} %write{20,20}
+temp	float	$tmp4	%read{24,24} %write{23,23}
+const	string	$const4	"faceforward"		%read{25,25} %write{2147483647,-1}
+temp	float	$tmp5	%read{27,27} %write{26,26}
+const	int	$const5	0		%read{27,27} %write{2147483647,-1}
+temp	int	$tmp6	%read{28,28} %write{27,27}
+code Ref
+# source/sambler-osl-shaders/lib/ChVectorMath.osl:20
+# 
+	assign		Ref P 	%filename{"source/sambler-osl-shaders/lib/ChVectorMath.osl"} %line{20} %argrw{"wr"}
+code ___main___
+# source/sambler-osl-shaders/lib/ChVectorMath.osl:42
+#        A = Ain;
+	if		SwapAB 4 6 	%filename{"source/sambler-osl-shaders/lib/ChVectorMath.osl"} %line{42} %argrw{"r"}
+# source/sambler-osl-shaders/lib/ChVectorMath.osl:43
+#        B = Bin;
+	assign		A Ain 	%line{43} %argrw{"wr"}
+# source/sambler-osl-shaders/lib/ChVectorMath.osl:44
+#    }
+	assign		B Bin 	%line{44} %argrw{"wr"}
+# source/sambler-osl-shaders/lib/ChVectorMath.osl:47
+#        A = Bin;
+	assign		B Ain 	%line{47} %argrw{"wr"}
+# source/sambler-osl-shaders/lib/ChVectorMath.osl:48
+#     }
+	assign		A Bin 	%line{48} %argrw{"wr"}
+# source/sambler-osl-shaders/lib/ChVectorMath.osl:51
+# 
+	assign		C Ref 	%line{51} %argrw{"wr"}
+# source/sambler-osl-shaders/lib/ChVectorMath.osl:53
+#    B = negB ? -B : B ;
+	if		negA 9 9 	%line{53} %argrw{"r"}
+	neg		A A 	%argrw{"wr"}
+# source/sambler-osl-shaders/lib/ChVectorMath.osl:54
+#    C = negC ? -C : C ;
+	if		negB 11 11 	%line{54} %argrw{"r"}
+	neg		B B 	%argrw{"wr"}
+# source/sambler-osl-shaders/lib/ChVectorMath.osl:55
+# 
+	if		negC 13 13 	%line{55} %argrw{"r"}
+	neg		C C 	%argrw{"wr"}
+# source/sambler-osl-shaders/lib/ChVectorMath.osl:58
+#    NormalisedA = normalize(A);
+	length		LengthA A 	%line{58} %argrw{"wr"}
+# source/sambler-osl-shaders/lib/ChVectorMath.osl:59
+# 
+	normalize	NormalisedA A 	%line{59} %argrw{"wr"}
+# source/sambler-osl-shaders/lib/ChVectorMath.osl:61
+#    NormalisedB = normalize(B);
+	length		LengthB B 	%line{61} %argrw{"wr"}
+# source/sambler-osl-shaders/lib/ChVectorMath.osl:62
+# 
+	normalize	NormalisedB B 	%line{62} %argrw{"wr"}
+# source/sambler-osl-shaders/lib/ChVectorMath.osl:64
+#    Cross = cross(A,B);
+	functioncall	$const1 22 	%line{64} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:216
+# vector reflect (vector I, vector N) { return I - 2*dot(N,I)*N; }
+	dot		$tmp1 NormalisedB NormalisedA 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{216} %argrw{"wrr"}
+	mul		$tmp2 $const3 $tmp1 	%argrw{"wrr"}
+	mul		$tmp3 $tmp2 NormalisedB 	%argrw{"wrr"}
+	sub		Reflect NormalisedA $tmp3 	%argrw{"wrr"}
+# source/sambler-osl-shaders/lib/ChVectorMath.osl:65
+#    Dot = dot(A,B);
+	cross		Cross A B 	%filename{"source/sambler-osl-shaders/lib/ChVectorMath.osl"} %line{65} %argrw{"wrr"}
+# source/sambler-osl-shaders/lib/ChVectorMath.osl:66
+#    FaceForward = faceforward(NormalisedA,B,C);
+	dot		$tmp4 A B 	%line{66} %argrw{"wrr"}
+	assign		Dot $tmp4 	%argrw{"wr"}
+# source/sambler-osl-shaders/lib/ChVectorMath.osl:67
+# 
+	functioncall	$const4 32 	%line{67} %argrw{"r"}
+# source/sambler-osl-shaders/lib/ChVectorMath.osl:14
+# }
+	dot		$tmp5 B C 	%line{14} %argrw{"wrr"}
+	gt		$tmp6 $tmp5 $const5 	%argrw{"wrr"}
+	if		$tmp6 30 31 	%argrw{"r"}
+	neg		FaceForward NormalisedA 	%argrw{"wr"}
+	assign		FaceForward NormalisedA 	%argrw{"wr"}
+	return
+	end

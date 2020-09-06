@@ -1,0 +1,20 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader FloatLogX	%meta{string,help,"Computes log<sub>base</sub> x"} %meta{string,label,"LogX"} %meta{string,category,"Math Float"} 
+param	float	Input	0		%read{1,1} %write{2147483647,-1}
+param	float	Base	10		%read{2,2} %write{2147483647,-1}
+oparam	float	Out	0		%read{2147483647,-1} %write{3,3}
+const	string	$const1	"log"		%read{0,0} %write{2147483647,-1}
+temp	float	$tmp1	%read{3,3} %write{1,1}
+temp	float	$tmp2	%read{3,3} %write{2,2}
+code ___main___
+# source/3dsMax-OSL-Shaders/FloatLogX.osl:18
+# }
+	functioncall	$const1 4 	%filename{"source/3dsMax-OSL-Shaders/FloatLogX.osl"} %line{18} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:108
+# float  log (float a,  float b) { return log(a)/log(b); }
+	log		$tmp1 Input 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{108} %argrw{"wr"}
+	log		$tmp2 Base 	%argrw{"wr"}
+	div		Out $tmp1 $tmp2 	%argrw{"wrr"}
+	end

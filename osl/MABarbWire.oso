@@ -1,0 +1,500 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader MABarbWire
+param	vector	Vector	0 0 0		%read{1,7} %write{0,0} %initexpr
+param	float	Width	0.050000001		%read{17,201} %write{2147483647,-1}
+param	int	Turns	2		%read{19,19} %write{2147483647,-1}
+param	int	Spiketurns	2		%read{28,31} %write{2147483647,-1}
+param	float	Xscale	1		%read{27,27} %write{2147483647,-1}
+oparam	float	Fac	0		%read{2147483647,-1} %write{63,199}
+oparam	float	Displ	0		%read{2147483647,-1} %write{75,207}
+global	point	P	%read{0,0} %write{2147483647,-1}
+local	float	x	%read{13,125} %write{6,15}
+local	float	y	%read{16,200} %write{12,26}
+local	float	w	%read{22,104} %write{17,17}
+local	float	t	%read{21,133} %write{20,20}
+local	float	c	%read{22,24} %write{21,21}
+local	float	h	%read{141,195} %write{23,23}
+local	float	l	%read{138,200} %write{25,25}
+local	float	BWidth	%read{30,126} %write{27,27}
+local	float	Lw	%read{33,33} %write{30,30}
+local	float	Hw	%read{36,76} %write{32,32}
+const	int	$const1	0		%read{1,196} %write{2147483647,-1}
+temp	float	$tmp1	%read{3,6} %write{1,1}
+const	int	$const2	1		%read{7,199} %write{2147483647,-1}
+const	float	$const3	1		%read{3,16} %write{2147483647,-1}
+const	string	$const4	"mod"		%read{2,121} %write{2147483647,-1}
+temp	float	$tmp2	%read{5,5} %write{4,4}
+temp	float	$tmp3	%read{4,4} %write{3,3}
+temp	float	$tmp4	%read{6,6} %write{5,5}
+temp	float	$tmp5	%read{9,12} %write{7,7}
+temp	float	$tmp6	%read{11,11} %write{10,10}
+temp	float	$tmp7	%read{10,10} %write{9,9}
+temp	float	$tmp8	%read{12,12} %write{11,11}
+const	float	$const5	0.5		%read{13,204} %write{2147483647,-1}
+temp	int	$tmp9	%read{14,14} %write{13,13}
+const	int	$const6	2		%read{135,135} %write{2147483647,-1}
+const	float	$const7	2		%read{17,80} %write{2147483647,-1}
+const	float	$const8	6.2831855		%read{18,18} %write{2147483647,-1}
+temp	float	$tmp10	%read{20,20} %write{18,18}
+temp	float	$tmp11	%read{20,20} %write{19,19}
+temp	float	$tmp12	%read{23,23} %write{22,22}
+temp	float	$tmp13	%read{25,25} %write{24,24}
+temp	int	$tmp14	%read{29,29} %write{28,28}
+temp	float	$tmp15	%read{30,30} %write{29,29}
+temp	float	$tmp16	%read{32,32} %write{31,31}
+temp	int	$tmp17	%read{34,34} %write{33,33}
+temp	int	$tmp18	%read{35,39} %write{34,38}
+temp	int	$tmp19	%read{37,37} %write{36,36}
+temp	int	$tmp20	%read{38,38} %write{37,37}
+temp	int	$tmp21	%read{40,45} %write{39,44}
+const	float	$const9	1.5		%read{41,90} %write{2147483647,-1}
+temp	float	$tmp22	%read{42,42} %write{41,41}
+temp	int	$tmp23	%read{43,43} %write{42,42}
+temp	int	$tmp24	%read{44,44} %write{43,43}
+temp	int	$tmp25	%read{46,51} %write{45,50}
+temp	float	$tmp26	%read{48,48} %write{47,47}
+const	float	$const11	4		%read{47,47} %write{2147483647,-1}
+temp	int	$tmp27	%read{49,49} %write{48,48}
+temp	int	$tmp28	%read{50,50} %write{49,49}
+temp	float	$tmp29	%read{53,53} %write{52,52}
+const	float	$const13	3		%read{52,56} %write{2147483647,-1}
+temp	int	$tmp30	%read{54,54} %write{53,53}
+temp	int	$tmp31	%read{55,62} %write{54,61}
+temp	float	$tmp32	%read{57,57} %write{56,56}
+temp	float	$tmp33	%read{59,59} %write{57,57}
+temp	float	$tmp34	%read{59,59} %write{58,58}
+temp	int	$tmp35	%read{60,60} %write{59,59}
+temp	int	$tmp36	%read{61,61} %write{60,60}
+temp	float	$tmp37	%read{69,69} %write{68,68}
+temp	float	$tmp38	%read{67,67} %write{66,66}
+temp	float	$tmp39	%read{66,66} %write{65,65}
+temp	float	$tmp40	%read{68,68} %write{67,67}
+temp	float	$tmp41	%read{71,72} %write{69,69}
+const	string	$const14	"arc"		%read{70,202} %write{2147483647,-1}
+const	float	$const15	0.25		%read{74,206} %write{2147483647,-1}
+temp	float	$tmp42	%read{73,73} %write{71,71}
+temp	float	$tmp43	%read{73,73} %write{72,72}
+temp	float	$tmp44	%read{74,74} %write{73,73}
+temp	float	$tmp45	%read{75,75} %write{74,74}
+temp	int	$tmp46	%read{77,77} %write{76,76}
+temp	int	$tmp47	%read{78,84} %write{77,83}
+temp	float	$tmp48	%read{81,81} %write{79,79}
+temp	float	$tmp49	%read{81,81} %write{80,80}
+temp	int	$tmp50	%read{82,82} %write{81,81}
+temp	int	$tmp51	%read{83,83} %write{82,82}
+temp	float	$tmp52	%read{87,87} %write{85,85}
+temp	float	$tmp53	%read{87,87} %write{86,86}
+temp	int	$tmp54	%read{88,88} %write{87,87}
+temp	float	$tmp55	%read{91,91} %write{89,89}
+temp	float	$tmp56	%read{91,91} %write{90,90}
+temp	float	$tmp57	%read{105,105} %write{91,91}
+temp	float	$tmp58	%read{104,104} %write{103,103}
+temp	float	$tmp59	%read{97,97} %write{96,96}
+temp	float	$tmp60	%read{95,95} %write{94,94}
+temp	float	$tmp61	%read{94,94} %write{93,93}
+temp	float	$tmp62	%read{96,96} %write{95,95}
+temp	float	$tmp63	%read{99,100} %write{97,97}
+temp	float	$tmp64	%read{101,101} %write{99,99}
+temp	float	$tmp65	%read{101,101} %write{100,100}
+temp	float	$tmp66	%read{102,102} %write{101,101}
+temp	float	$tmp67	%read{103,103} %write{102,102}
+temp	float	$tmp68	%read{105,105} %write{104,104}
+temp	int	$tmp69	%read{106,106} %write{105,105}
+temp	float	$tmp70	%read{113,113} %write{112,112}
+temp	float	$tmp71	%read{111,111} %write{110,110}
+temp	float	$tmp72	%read{110,110} %write{109,109}
+temp	float	$tmp73	%read{112,112} %write{111,111}
+temp	float	$tmp74	%read{115,116} %write{113,113}
+temp	float	$tmp75	%read{117,117} %write{115,115}
+temp	float	$tmp76	%read{117,117} %write{116,116}
+temp	float	$tmp77	%read{118,118} %write{117,117}
+temp	float	$tmp78	%read{119,119} %write{118,118}
+temp	float	$tmp79	%read{126,126} %write{125,125}
+temp	float	$tmp80	%read{124,124} %write{123,123}
+temp	float	$tmp81	%read{123,123} %write{122,122}
+temp	float	$tmp82	%read{125,125} %write{124,124}
+temp	float	$tmp83	%read{128,129} %write{126,126}
+temp	float	$tmp84	%read{130,130} %write{128,128}
+temp	float	$tmp85	%read{130,130} %write{129,129}
+temp	float	$tmp86	%read{131,131} %write{130,130}
+temp	float	$tmp87	%read{132,132} %write{131,131}
+const	float	$const16	3.1415927		%read{133,133} %write{2147483647,-1}
+temp	float	$tmp88	%read{134,134} %write{133,133}
+temp	int	$tmp89	%read{135,135} %write{134,134}
+temp	int	$tmp90	%read{136,136} %write{135,135}
+temp	int	$tmp91	%read{137,137} %write{136,136}
+temp	int	$tmp92	%read{139,139} %write{138,138}
+temp	int	$tmp93	%read{140,144} %write{139,143}
+temp	int	$tmp94	%read{142,142} %write{141,141}
+temp	int	$tmp95	%read{143,143} %write{142,142}
+temp	float	$tmp96	%read{147,147} %write{146,146}
+temp	float	$tmp97	%read{149,150} %write{147,147}
+temp	float	$tmp98	%read{151,151} %write{149,149}
+temp	float	$tmp99	%read{151,151} %write{150,150}
+temp	float	$tmp100	%read{152,152} %write{151,151}
+temp	float	$tmp101	%read{153,153} %write{152,152}
+temp	float	$tmp102	%read{155,155} %write{154,154}
+temp	int	$tmp103	%read{156,156} %write{155,155}
+temp	int	$tmp104	%read{157,162} %write{156,161}
+temp	float	$tmp105	%read{159,159} %write{158,158}
+temp	int	$tmp106	%read{160,160} %write{159,159}
+temp	int	$tmp107	%read{161,161} %write{160,160}
+temp	float	$tmp108	%read{165,165} %write{164,164}
+temp	float	$tmp109	%read{166,166} %write{165,165}
+temp	float	$tmp110	%read{168,169} %write{166,166}
+temp	float	$tmp111	%read{170,170} %write{168,168}
+temp	float	$tmp112	%read{170,170} %write{169,169}
+temp	float	$tmp113	%read{171,171} %write{170,170}
+temp	float	$tmp114	%read{172,172} %write{171,171}
+temp	float	$tmp115	%read{174,174} %write{173,173}
+temp	int	$tmp116	%read{175,175} %write{174,174}
+temp	int	$tmp117	%read{176,181} %write{175,180}
+temp	float	$tmp118	%read{178,178} %write{177,177}
+temp	int	$tmp119	%read{179,179} %write{178,178}
+temp	int	$tmp120	%read{180,180} %write{179,179}
+temp	float	$tmp121	%read{184,184} %write{183,183}
+temp	float	$tmp122	%read{185,185} %write{184,184}
+temp	float	$tmp123	%read{187,188} %write{185,185}
+temp	float	$tmp124	%read{189,189} %write{187,187}
+temp	float	$tmp125	%read{189,189} %write{188,188}
+temp	float	$tmp126	%read{190,190} %write{189,189}
+temp	float	$tmp127	%read{191,191} %write{190,190}
+temp	int	$tmp128	%read{193,193} %write{192,192}
+temp	int	$tmp129	%read{194,198} %write{193,197}
+temp	int	$tmp130	%read{196,196} %write{195,195}
+temp	int	$tmp131	%read{197,197} %write{196,196}
+temp	float	$tmp132	%read{201,201} %write{200,200}
+temp	float	$tmp133	%read{203,204} %write{201,201}
+temp	float	$tmp134	%read{205,205} %write{203,203}
+temp	float	$tmp135	%read{205,205} %write{204,204}
+temp	float	$tmp136	%read{206,206} %write{205,205}
+temp	float	$tmp137	%read{207,207} %write{206,206}
+code Vector
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:17
+#         float Width = 0.05,
+	assign		Vector P 	%filename{"source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl"} %line{17} %argrw{"wr"}
+code ___main___
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:25
+#     float y = mod(Vector[1],1);
+	compref		$tmp1 Vector $const1 	%filename{"source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl"} %line{25} %argrw{"wrr"}
+	functioncall	$const4 7 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:136
+# float  mod (float  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp3 $tmp1 $const3 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{136} %argrw{"wrr"}
+	floor		$tmp2 $tmp3 	%argrw{"wr"}
+	mul		$tmp4 $const3 $tmp2 	%argrw{"wrr"}
+	sub		x $tmp1 $tmp4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:26
+# 
+	compref		$tmp5 Vector $const2 	%filename{"source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl"} %line{26} %argrw{"wrr"}
+	functioncall	$const4 13 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:136
+# float  mod (float  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp7 $tmp5 $const3 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{136} %argrw{"wrr"}
+	floor		$tmp6 $tmp7 	%argrw{"wr"}
+	mul		$tmp8 $const3 $tmp6 	%argrw{"wrr"}
+	sub		y $tmp5 $tmp8 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:28
+#         x = 1 - x;
+	gt		$tmp9 x $const5 	%filename{"source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl"} %line{28} %argrw{"wrr"}
+	if		$tmp9 17 17 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:29
+#         y = 1 - y;
+	sub		x $const3 x 	%line{29} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:30
+#     }
+	sub		y $const3 y 	%line{30} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:33
+#     float t = M_2PI*x*Turns;
+	div		w Width $const7 	%line{33} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:34
+# 
+	mul		$tmp10 $const8 x 	%line{34} %argrw{"wrr"}
+	assign		$tmp11 Turns 	%argrw{"wr"}
+	mul		t $tmp10 $tmp11 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:36
+#     float h = c*w+w;
+	cos		c t 	%line{36} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:37
+#     float l = c*w-w;
+	mul		$tmp12 c w 	%line{37} %argrw{"wrr"}
+	add		h $tmp12 w 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:38
+# 
+	mul		$tmp13 c w 	%line{38} %argrw{"wrr"}
+	sub		l $tmp13 w 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:40
+#     // the barb part
+	sub		y y $const5 	%line{40} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:42
+#     float Lw = BWidth*(Spiketurns-1);
+	mul		BWidth Width Xscale 	%line{42} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:43
+#     float Hw = BWidth*Spiketurns;
+	sub		$tmp14 Spiketurns $const2 	%line{43} %argrw{"wrr"}
+	assign		$tmp15 $tmp14 	%argrw{"wr"}
+	mul		Lw BWidth $tmp15 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:44
+#     if ( x > Lw && x < Hw && y > 1.5*Width && y<4*Width ) { // the spikey part
+	assign		$tmp16 Spiketurns 	%line{44} %argrw{"wr"}
+	mul		Hw BWidth $tmp16 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:45
+#         if( y<3*Width || y-3*Width < x-Width){
+	gt		$tmp17 x Lw 	%line{45} %argrw{"wrr"}
+	neq		$tmp18 $tmp17 $const1 	%argrw{"wrr"}
+	if		$tmp18 39 39 	%argrw{"r"}
+	lt		$tmp19 x Hw 	%argrw{"wrr"}
+	neq		$tmp20 $tmp19 $const1 	%argrw{"wrr"}
+	assign		$tmp18 $tmp20 	%argrw{"wr"}
+	neq		$tmp21 $tmp18 $const1 	%argrw{"wrr"}
+	if		$tmp21 45 45 	%argrw{"r"}
+	mul		$tmp22 $const9 Width 	%argrw{"wrr"}
+	gt		$tmp23 y $tmp22 	%argrw{"wrr"}
+	neq		$tmp24 $tmp23 $const1 	%argrw{"wrr"}
+	assign		$tmp21 $tmp24 	%argrw{"wr"}
+	neq		$tmp25 $tmp21 $const1 	%argrw{"wrr"}
+	if		$tmp25 51 51 	%argrw{"r"}
+	mul		$tmp26 $const11 Width 	%argrw{"wrr"}
+	lt		$tmp27 y $tmp26 	%argrw{"wrr"}
+	neq		$tmp28 $tmp27 $const1 	%argrw{"wrr"}
+	assign		$tmp25 $tmp28 	%argrw{"wr"}
+	if		$tmp25 76 208 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:46
+#             Fac = 1;
+	mul		$tmp29 $const13 Width 	%line{46} %argrw{"wrr"}
+	lt		$tmp30 y $tmp29 	%argrw{"wrr"}
+	neq		$tmp31 $tmp30 $const1 	%argrw{"wrr"}
+	if		$tmp31 56 62 	%argrw{"r"}
+	mul		$tmp32 $const13 Width 	%argrw{"wrr"}
+	sub		$tmp33 y $tmp32 	%argrw{"wrr"}
+	sub		$tmp34 x Width 	%argrw{"wrr"}
+	lt		$tmp35 $tmp33 $tmp34 	%argrw{"wrr"}
+	neq		$tmp36 $tmp35 $const1 	%argrw{"wrr"}
+	assign		$tmp31 $tmp36 	%argrw{"wr"}
+	if		$tmp31 76 76 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:47
+#             Displ = arc(mod(x,BWidth)/BWidth);
+	assign		Fac $const2 	%line{47} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:48
+#         }
+	functioncall	$const4 69 	%line{48} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:136
+# float  mod (float  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp39 x BWidth 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{136} %argrw{"wrr"}
+	floor		$tmp38 $tmp39 	%argrw{"wr"}
+	mul		$tmp40 BWidth $tmp38 	%argrw{"wrr"}
+	sub		$tmp37 x $tmp40 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:48
+#         }
+	div		$tmp41 $tmp37 BWidth 	%filename{"source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl"} %line{48} %argrw{"wrr"}
+	functioncall	$const14 76 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:14
+# 
+	sub		$tmp42 $tmp41 $const5 	%line{14} %argrw{"wrr"}
+	sub		$tmp43 $tmp41 $const5 	%argrw{"wrr"}
+	mul		$tmp44 $tmp42 $tmp43 	%argrw{"wrr"}
+	sub		$tmp45 $const15 $tmp44 	%argrw{"wrr"}
+	sqrt		Displ $tmp45 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:50
+#         if ( abs(y) > 1.5*Width) { // the rounded top and bottom parts
+	lt		$tmp46 x Hw 	%line{50} %argrw{"wrr"}
+	neq		$tmp47 $tmp46 $const1 	%argrw{"wrr"}
+	if		$tmp47 84 84 	%argrw{"r"}
+	abs		$tmp48 y 	%argrw{"wr"}
+	mul		$tmp49 $const7 Width 	%argrw{"wrr"}
+	lt		$tmp50 $tmp48 $tmp49 	%argrw{"wrr"}
+	neq		$tmp51 $tmp50 $const1 	%argrw{"wrr"}
+	assign		$tmp47 $tmp51 	%argrw{"wr"}
+	if		$tmp47 133 208 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:51
+#             if ( abs(y) - 1.5*Width < w*arc(mod(x,BWidth)/BWidth) ){
+	abs		$tmp52 y 	%line{51} %argrw{"wr"}
+	mul		$tmp53 $const9 Width 	%argrw{"wrr"}
+	gt		$tmp54 $tmp52 $tmp53 	%argrw{"wrr"}
+	if		$tmp54 120 133 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:52
+#                 Fac = 1;
+	abs		$tmp55 y 	%line{52} %argrw{"wr"}
+	mul		$tmp56 $const9 Width 	%argrw{"wrr"}
+	sub		$tmp57 $tmp55 $tmp56 	%argrw{"wrr"}
+	functioncall	$const4 97 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:136
+# float  mod (float  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp61 x BWidth 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{136} %argrw{"wrr"}
+	floor		$tmp60 $tmp61 	%argrw{"wr"}
+	mul		$tmp62 BWidth $tmp60 	%argrw{"wrr"}
+	sub		$tmp59 x $tmp62 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:52
+#                 Fac = 1;
+	div		$tmp63 $tmp59 BWidth 	%filename{"source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl"} %line{52} %argrw{"wrr"}
+	functioncall	$const14 104 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:14
+# 
+	sub		$tmp64 $tmp63 $const5 	%line{14} %argrw{"wrr"}
+	sub		$tmp65 $tmp63 $const5 	%argrw{"wrr"}
+	mul		$tmp66 $tmp64 $tmp65 	%argrw{"wrr"}
+	sub		$tmp67 $const15 $tmp66 	%argrw{"wrr"}
+	sqrt		$tmp58 $tmp67 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:52
+#                 Fac = 1;
+	mul		$tmp68 w $tmp58 	%line{52} %argrw{"wrr"}
+	lt		$tmp69 $tmp57 $tmp68 	%argrw{"wrr"}
+	if		$tmp69 120 120 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:53
+#                 Displ = arc(mod(x,BWidth)/BWidth);
+	assign		Fac $const2 	%line{53} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:54
+#             }
+	functioncall	$const4 113 	%line{54} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:136
+# float  mod (float  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp72 x BWidth 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{136} %argrw{"wrr"}
+	floor		$tmp71 $tmp72 	%argrw{"wr"}
+	mul		$tmp73 BWidth $tmp71 	%argrw{"wrr"}
+	sub		$tmp70 x $tmp73 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:54
+#             }
+	div		$tmp74 $tmp70 BWidth 	%filename{"source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl"} %line{54} %argrw{"wrr"}
+	functioncall	$const14 120 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:14
+# 
+	sub		$tmp75 $tmp74 $const5 	%line{14} %argrw{"wrr"}
+	sub		$tmp76 $tmp74 $const5 	%argrw{"wrr"}
+	mul		$tmp77 $tmp75 $tmp76 	%argrw{"wrr"}
+	sub		$tmp78 $const15 $tmp77 	%argrw{"wrr"}
+	sqrt		Displ $tmp78 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:57
+#             Displ = arc(mod(x,BWidth)/BWidth);
+	assign		Fac $const2 	%line{57} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:58
+#         }
+	functioncall	$const4 126 	%line{58} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:136
+# float  mod (float  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp81 x BWidth 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{136} %argrw{"wrr"}
+	floor		$tmp80 $tmp81 	%argrw{"wr"}
+	mul		$tmp82 BWidth $tmp80 	%argrw{"wrr"}
+	sub		$tmp79 x $tmp82 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:58
+#         }
+	div		$tmp83 $tmp79 BWidth 	%filename{"source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl"} %line{58} %argrw{"wrr"}
+	functioncall	$const14 133 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:14
+# 
+	sub		$tmp84 $tmp83 $const5 	%line{14} %argrw{"wrr"}
+	sub		$tmp85 $tmp83 $const5 	%argrw{"wrr"}
+	mul		$tmp86 $tmp84 $tmp85 	%argrw{"wrr"}
+	sub		$tmp87 $const15 $tmp86 	%argrw{"wrr"}
+	sqrt		Displ $tmp87 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:64
+# 
+	div		$tmp88 t $const16 	%line{64} %argrw{"wrr"}
+	assign		$tmp89 $tmp88 	%argrw{"wr"}
+	mod		$tmp90 $tmp89 $const6 	%argrw{"wrr"}
+	eq		$tmp91 $tmp90 $const2 	%argrw{"wrr"}
+	if		$tmp91 173 208 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:66
+#                 Fac = 1;
+	gt		$tmp92 y l 	%line{66} %argrw{"wrr"}
+	neq		$tmp93 $tmp92 $const1 	%argrw{"wrr"}
+	if		$tmp93 144 144 	%argrw{"r"}
+	lt		$tmp94 y h 	%argrw{"wrr"}
+	neq		$tmp95 $tmp94 $const1 	%argrw{"wrr"}
+	assign		$tmp93 $tmp95 	%argrw{"wr"}
+	if		$tmp93 154 173 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:67
+#                 Displ = arc((y-l)/Width);
+	assign		Fac $const2 	%line{67} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:68
+#             } else if ( -y > l && -y < h ) {
+	sub		$tmp96 y l 	%line{68} %argrw{"wrr"}
+	div		$tmp97 $tmp96 Width 	%argrw{"wrr"}
+	functioncall	$const14 154 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:14
+# 
+	sub		$tmp98 $tmp97 $const5 	%line{14} %argrw{"wrr"}
+	sub		$tmp99 $tmp97 $const5 	%argrw{"wrr"}
+	mul		$tmp100 $tmp98 $tmp99 	%argrw{"wrr"}
+	sub		$tmp101 $const15 $tmp100 	%argrw{"wrr"}
+	sqrt		Displ $tmp101 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:69
+#                 Fac = 1;
+	neg		$tmp102 y 	%line{69} %argrw{"wr"}
+	gt		$tmp103 $tmp102 l 	%argrw{"wrr"}
+	neq		$tmp104 $tmp103 $const1 	%argrw{"wrr"}
+	if		$tmp104 162 162 	%argrw{"r"}
+	neg		$tmp105 y 	%argrw{"wr"}
+	lt		$tmp106 $tmp105 h 	%argrw{"wrr"}
+	neq		$tmp107 $tmp106 $const1 	%argrw{"wrr"}
+	assign		$tmp104 $tmp107 	%argrw{"wr"}
+	if		$tmp104 173 173 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:70
+#                 Displ = arc((-y-l)/Width);
+	assign		Fac $const2 	%line{70} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:71
+#             }
+	neg		$tmp108 y 	%line{71} %argrw{"wr"}
+	sub		$tmp109 $tmp108 l 	%argrw{"wrr"}
+	div		$tmp110 $tmp109 Width 	%argrw{"wrr"}
+	functioncall	$const14 173 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:14
+# 
+	sub		$tmp111 $tmp110 $const5 	%line{14} %argrw{"wrr"}
+	sub		$tmp112 $tmp110 $const5 	%argrw{"wrr"}
+	mul		$tmp113 $tmp111 $tmp112 	%argrw{"wrr"}
+	sub		$tmp114 $const15 $tmp113 	%argrw{"wrr"}
+	sqrt		Displ $tmp114 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:76
+#                 Fac = 1;
+	neg		$tmp115 y 	%line{76} %argrw{"wr"}
+	gt		$tmp116 $tmp115 l 	%argrw{"wrr"}
+	neq		$tmp117 $tmp116 $const1 	%argrw{"wrr"}
+	if		$tmp117 181 181 	%argrw{"r"}
+	neg		$tmp118 y 	%argrw{"wr"}
+	lt		$tmp119 $tmp118 h 	%argrw{"wrr"}
+	neq		$tmp120 $tmp119 $const1 	%argrw{"wrr"}
+	assign		$tmp117 $tmp120 	%argrw{"wr"}
+	if		$tmp117 192 208 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:77
+#                 Displ = arc((-y-l)/Width);
+	assign		Fac $const2 	%line{77} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:78
+#             } else if ( y > l && y < h ) {
+	neg		$tmp121 y 	%line{78} %argrw{"wr"}
+	sub		$tmp122 $tmp121 l 	%argrw{"wrr"}
+	div		$tmp123 $tmp122 Width 	%argrw{"wrr"}
+	functioncall	$const14 192 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:14
+# 
+	sub		$tmp124 $tmp123 $const5 	%line{14} %argrw{"wrr"}
+	sub		$tmp125 $tmp123 $const5 	%argrw{"wrr"}
+	mul		$tmp126 $tmp124 $tmp125 	%argrw{"wrr"}
+	sub		$tmp127 $const15 $tmp126 	%argrw{"wrr"}
+	sqrt		Displ $tmp127 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:79
+#                 Fac = 1;
+	gt		$tmp128 y l 	%line{79} %argrw{"wrr"}
+	neq		$tmp129 $tmp128 $const1 	%argrw{"wrr"}
+	if		$tmp129 198 198 	%argrw{"r"}
+	lt		$tmp130 y h 	%argrw{"wrr"}
+	neq		$tmp131 $tmp130 $const1 	%argrw{"wrr"}
+	assign		$tmp129 $tmp131 	%argrw{"wr"}
+	if		$tmp129 208 208 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:80
+#                 Displ = arc((y-l)/Width);
+	assign		Fac $const2 	%line{80} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:81
+#             }
+	sub		$tmp132 y l 	%line{81} %argrw{"wrr"}
+	div		$tmp133 $tmp132 Width 	%argrw{"wrr"}
+	functioncall	$const14 208 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MABarbWire/MABarbWire.osl:14
+# 
+	sub		$tmp134 $tmp133 $const5 	%line{14} %argrw{"wrr"}
+	sub		$tmp135 $tmp133 $const5 	%argrw{"wrr"}
+	mul		$tmp136 $tmp134 $tmp135 	%argrw{"wrr"}
+	sub		$tmp137 $const15 $tmp136 	%argrw{"wrr"}
+	sqrt		Displ $tmp137 	%argrw{"wr"}
+	end

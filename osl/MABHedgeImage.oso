@@ -1,0 +1,248 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader MABHedgeImage
+param	vector	Vector	0 0 0		%read{2,2} %write{0,0} %derivs %initexpr
+param	string	LeafImage	""		%read{75,75} %write{2147483647,-1}
+param	float	Scale	1		%read{2,2} %write{2147483647,-1} %derivs
+param	vector	Direction	0 0 1		%read{41,41} %write{2147483647,-1} %derivs
+param	float	Variance	0.1		%read{40,40} %write{2147483647,-1} %derivs
+param	float	Size	0.30000001		%read{53,53} %write{2147483647,-1} %derivs
+param	float	SizeVariance	0.1		%read{52,52} %write{2147483647,-1} %derivs
+param	int	Seed	42		%read{33,49} %write{2147483647,-1} %derivs
+oparam	normal	Normal	0 0 0		%read{2147483647,-1} %write{1,86} %initexpr
+oparam	float	Fac	0		%read{8,24} %write{5,86}
+oparam	color	Color	0 0 0		%read{2147483647,-1} %write{5,86}
+global	point	P	%read{0,0} %write{2147483647,-1} %derivs
+global	vector	I	%read{54,54} %write{2147483647,-1} %derivs
+global	normal	N	%read{1,1} %write{2147483647,-1}
+local	vector	p	%read{5,86} %write{2,2} %derivs
+local	int	___322_xx	%read{5,86} %write{4,86} %derivs
+local	int	___324_yy	%read{5,86} %write{5,86} %derivs
+local	int	___326_zz	%read{5,86} %write{5,86} %derivs
+local	vector	___327_pp	%read{5,86} %write{5,86} %derivs
+local	vector	___327_ip	%read{5,86} %write{5,86} %derivs
+local	vector	___327_leafp	%read{5,86} %write{5,86} %derivs
+local	vector	___327_leafn	%read{5,86} %write{5,86} %derivs
+local	vector	___327_leafk	%read{5,86} %write{5,86} %derivs
+local	vector	___327_leafj	%read{5,86} %write{5,86} %derivs
+local	float	___327_leafs	%read{5,86} %write{5,86} %derivs
+local	vector	___327_in	%read{5,86} %write{5,86} %derivs
+local	float	___327_d	%read{5,86} %write{5,86} %derivs
+local	vector	___327_dp	%read{5,86} %write{5,86} %derivs
+local	float	___327_dpx	%read{5,86} %write{5,86} %derivs
+local	float	___327_dpy	%read{5,86} %write{5,86} %derivs
+local	float	___328_u	%read{5,86} %write{5,86} %derivs
+local	float	___328_v	%read{5,86} %write{5,86} %derivs
+local	float	___328_alpha	%read{5,86} %write{5,86}
+local	color	___328_c	%read{5,86} %write{5,86}
+const	int	$const1	-1		%read{4,20} %write{2147483647,-1}
+const	int	$const2	1		%read{5,86} %write{2147483647,-1}
+temp	int	$tmp1	%read{5,86} %write{5,86}
+temp	int	$tmp2	%read{3,86} %write{4,86}
+const	int	$const3	0		%read{6,74} %write{2147483647,-1}
+temp	int	$tmp3	%read{5,86} %write{5,86}
+temp	int	$tmp4	%read{5,86} %write{5,86}
+temp	int	$tmp5	%read{5,86} %write{5,86}
+temp	int	$tmp6	%read{5,86} %write{5,86}
+temp	int	$tmp7	%read{5,86} %write{5,86}
+temp	int	$tmp8	%read{5,86} %write{5,86}
+temp	int	$tmp9	%read{5,86} %write{5,86}
+temp	int	$tmp10	%read{5,86} %write{5,86}
+temp	int	$tmp11	%read{5,86} %write{5,86}
+temp	int	$tmp12	%read{5,86} %write{5,86}
+temp	vector	$tmp13	%read{5,86} %write{5,86} %derivs
+temp	float	$tmp14	%read{5,86} %write{5,86} %derivs
+temp	float	$tmp15	%read{5,86} %write{5,86} %derivs
+temp	float	$tmp16	%read{5,86} %write{5,86} %derivs
+temp	vector	$tmp17	%read{5,86} %write{5,86} %derivs
+const	string	$const4	"cell"		%read{34,51} %write{2147483647,-1}
+temp	float	$tmp18	%read{5,86} %write{5,86} %derivs
+temp	float	$tmp19	%read{5,86} %write{5,86} %derivs
+temp	int	$tmp20	%read{5,86} %write{5,86} %derivs
+temp	float	$tmp21	%read{5,86} %write{5,86} %derivs
+const	vector	$const5	0.5 0.5 0.5		%read{39,39} %write{2147483647,-1}
+temp	vector	$tmp23	%read{5,86} %write{5,86} %derivs
+temp	vector	$tmp24	%read{5,86} %write{5,86} %derivs
+temp	vector	$tmp25	%read{5,86} %write{5,86} %derivs
+const	int	$const6	2		%read{43,43} %write{2147483647,-1}
+temp	int	$tmp26	%read{5,86} %write{5,86} %derivs
+temp	float	$tmp27	%read{5,86} %write{5,86} %derivs
+temp	vector	$tmp28	%read{5,86} %write{5,86} %derivs
+temp	float	$tmp29	%read{5,86} %write{5,86} %derivs
+const	int	$const7	3		%read{49,49} %write{2147483647,-1}
+temp	int	$tmp30	%read{5,86} %write{5,86} %derivs
+temp	float	$tmp31	%read{5,86} %write{5,86} %derivs
+temp	float	$tmp32	%read{5,86} %write{5,86} %derivs
+temp	float	$tmp33	%read{5,86} %write{5,86} %derivs
+temp	vector	$tmp34	%read{5,86} %write{5,86} %derivs
+temp	float	$tmp35	%read{5,86} %write{5,86} %derivs
+temp	vector	$tmp36	%read{5,86} %write{5,86} %derivs
+temp	vector	$tmp37	%read{5,86} %write{5,86} %derivs
+temp	int	$tmp38	%read{5,86} %write{5,86}
+temp	int	$tmp39	%read{5,86} %write{5,86}
+temp	int	$tmp40	%read{5,86} %write{5,86}
+temp	int	$tmp41	%read{5,86} %write{5,86}
+temp	float	$tmp42	%read{5,86} %write{5,86} %derivs
+const	float	$const8	1		%read{73,73} %write{2147483647,-1}
+const	string	$const9	"alpha"		%read{75,75} %write{2147483647,-1}
+temp	int	$tmp43	%read{5,86} %write{5,86}
+const	float	$const10	0		%read{76,76} %write{2147483647,-1}
+temp	int	$tmp44	%read{2147483647,-1} %write{5,86}
+temp	int	$tmp45	%read{2147483647,-1} %write{5,86}
+temp	int	$tmp46	%read{2147483647,-1} %write{5,86}
+code Vector
+# source/sambler-osl-shaders/MJABook/22MABHedgeImage/MABHedgeImage.osl:15
+# 
+	assign		Vector P 	%filename{"source/sambler-osl-shaders/MJABook/22MABHedgeImage/MABHedgeImage.osl"} %line{15} %argrw{"wr"}
+code Normal
+# source/sambler-osl-shaders/MJABook/22MABHedgeImage/MABHedgeImage.osl:28
+#         output float Fac = 0,
+	assign		Normal N 	%filename{"source/sambler-osl-shaders/MJABook/22MABHedgeImage/MABHedgeImage.osl"} %line{28} %argrw{"wr"}
+code ___main___
+# source/sambler-osl-shaders/MJABook/22MABHedgeImage/MABHedgeImage.osl:32
+# 
+	mul		p Vector Scale 	%filename{"source/sambler-osl-shaders/MJABook/22MABHedgeImage/MABHedgeImage.osl"} %line{32} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/22MABHedgeImage/MABHedgeImage.osl:34
+#     for(int yy=-1; yy<=1 && Fac == 0; yy++) {
+	for		$tmp2 5 11 85 87 	%line{34} %argrw{"r"}
+	assign		___322_xx $const1 	%argrw{"wr"}
+	le		$tmp1 ___322_xx $const2 	%argrw{"wrr"}
+	neq		$tmp2 $tmp1 $const3 	%argrw{"wrr"}
+	if		$tmp2 11 11 	%argrw{"r"}
+	eq		$tmp3 Fac $const3 	%argrw{"wrr"}
+	neq		$tmp4 $tmp3 $const3 	%argrw{"wrr"}
+	assign		$tmp2 $tmp4 	%argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/22MABHedgeImage/MABHedgeImage.osl:35
+#     for(int zz=-1; zz<=1 && Fac == 0; zz++) {
+	for		$tmp6 13 19 83 85 	%line{35} %argrw{"r"}
+	assign		___324_yy $const1 	%argrw{"wr"}
+	le		$tmp5 ___324_yy $const2 	%argrw{"wrr"}
+	neq		$tmp6 $tmp5 $const3 	%argrw{"wrr"}
+	if		$tmp6 19 19 	%argrw{"r"}
+	eq		$tmp7 Fac $const3 	%argrw{"wrr"}
+	neq		$tmp8 $tmp7 $const3 	%argrw{"wrr"}
+	assign		$tmp6 $tmp8 	%argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/22MABHedgeImage/MABHedgeImage.osl:36
+#         vector pp = p + vector(xx,yy,zz);
+	for		$tmp10 21 27 81 83 	%line{36} %argrw{"r"}
+	assign		___326_zz $const1 	%argrw{"wr"}
+	le		$tmp9 ___326_zz $const2 	%argrw{"wrr"}
+	neq		$tmp10 $tmp9 $const3 	%argrw{"wrr"}
+	if		$tmp10 27 27 	%argrw{"r"}
+	eq		$tmp11 Fac $const3 	%argrw{"wrr"}
+	neq		$tmp12 $tmp11 $const3 	%argrw{"wrr"}
+	assign		$tmp10 $tmp12 	%argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/22MABHedgeImage/MABHedgeImage.osl:37
+#         vector ip=floor(pp);
+	assign		$tmp14 ___322_xx 	%line{37} %argrw{"wr"}
+	assign		$tmp15 ___324_yy 	%argrw{"wr"}
+	assign		$tmp16 ___326_zz 	%argrw{"wr"}
+	vector		$tmp13 $tmp14 $tmp15 $tmp16 	%argrw{"wrrr"}
+	add		___327_pp p $tmp13 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/22MABHedgeImage/MABHedgeImage.osl:38
+# 
+	floor		___327_ip ___327_pp 	%line{38} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/22MABHedgeImage/MABHedgeImage.osl:40
+# 
+	assign		$tmp18 Seed 	%line{40} %argrw{"wr"}
+	noise		$tmp17 $const4 ___327_pp $tmp18 	%argrw{"wrrr"}
+	add		___327_leafp ___327_ip $tmp17 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/22MABHedgeImage/MABHedgeImage.osl:42
+#             vector(0.5,0.5,0.5)) * Variance);
+	add		$tmp20 Seed $const2 	%line{42} %argrw{"wrr"}
+	assign		$tmp21 $tmp20 	%argrw{"wr"}
+	noise		$tmp19 $const4 ___327_pp $tmp21 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/MJABook/22MABHedgeImage/MABHedgeImage.osl:43
+#         vector leafk = noise("cell", pp, Seed+2);
+	sub		$tmp23 $tmp19 $const5 	%line{43} %argrw{"wrr"}
+	mul		$tmp24 $tmp23 Variance 	%argrw{"wrr"}
+	add		$tmp25 Direction $tmp24 	%argrw{"wrr"}
+	normalize	___327_leafn $tmp25 	%argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/22MABHedgeImage/MABHedgeImage.osl:44
+#         vector leafj = normalize(cross(leafn,leafk));
+	add		$tmp26 Seed $const6 	%line{44} %argrw{"wrr"}
+	assign		$tmp27 $tmp26 	%argrw{"wr"}
+	noise		___327_leafk $const4 ___327_pp $tmp27 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/MJABook/22MABHedgeImage/MABHedgeImage.osl:45
+#         leafk = cross(leafn, leafj);
+	cross		$tmp28 ___327_leafn ___327_leafk 	%line{45} %argrw{"wrr"}
+	normalize	___327_leafj $tmp28 	%argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/22MABHedgeImage/MABHedgeImage.osl:46
+#         float leafs = Size + SizeVariance * noise("cell", pp, Seed+3);
+	cross		___327_leafk ___327_leafn ___327_leafj 	%line{46} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/22MABHedgeImage/MABHedgeImage.osl:47
+# 
+	add		$tmp30 Seed $const7 	%line{47} %argrw{"wrr"}
+	assign		$tmp31 $tmp30 	%argrw{"wr"}
+	noise		$tmp29 $const4 ___327_pp $tmp31 	%argrw{"wrrr"}
+	mul		$tmp32 SizeVariance $tmp29 	%argrw{"wrr"}
+	add		___327_leafs Size $tmp32 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/22MABHedgeImage/MABHedgeImage.osl:49
+#         float d = dot(leafp - p, leafn)/dot(in, leafn);
+	normalize	___327_in I 	%line{49} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/22MABHedgeImage/MABHedgeImage.osl:50
+#         vector dp = leafp - (d * in + p);
+	sub		$tmp34 ___327_leafp p 	%line{50} %argrw{"wrr"}
+	dot		$tmp33 $tmp34 ___327_leafn 	%argrw{"wrr"}
+	dot		$tmp35 ___327_in ___327_leafn 	%argrw{"wrr"}
+	div		___327_d $tmp33 $tmp35 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/22MABHedgeImage/MABHedgeImage.osl:51
+# 
+	mul		$tmp36 ___327_d ___327_in 	%line{51} %argrw{"wrr"}
+	add		$tmp37 $tmp36 p 	%argrw{"wrr"}
+	sub		___327_dp ___327_leafp $tmp37 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/22MABHedgeImage/MABHedgeImage.osl:53
+#         float dpy = dot(dp,leafj);
+	dot		___327_dpx ___327_dp ___327_leafk 	%line{53} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/22MABHedgeImage/MABHedgeImage.osl:54
+# 
+	dot		___327_dpy ___327_dp ___327_leafj 	%line{54} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/22MABHedgeImage/MABHedgeImage.osl:56
+#             float u = dpx/leafs;
+	gt		$tmp38 ___327_dpx $const3 	%line{56} %argrw{"wrr"}
+	neq		$tmp39 $tmp38 $const3 	%argrw{"wrr"}
+	if		$tmp39 70 70 	%argrw{"r"}
+	gt		$tmp40 ___327_dpy $const3 	%argrw{"wrr"}
+	neq		$tmp41 $tmp40 $const3 	%argrw{"wrr"}
+	assign		$tmp39 $tmp41 	%argrw{"wr"}
+	if		$tmp39 81 81 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/22MABHedgeImage/MABHedgeImage.osl:57
+#             float v = 1-dpy/leafs;
+	div		___328_u ___327_dpx ___327_leafs 	%line{57} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/22MABHedgeImage/MABHedgeImage.osl:58
+#             float alpha = 0;
+	div		$tmp42 ___327_dpy ___327_leafs 	%line{58} %argrw{"wrr"}
+	sub		___328_v $const8 $tmp42 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/22MABHedgeImage/MABHedgeImage.osl:59
+#             color c = texture(LeafImage, u, v, "alpha", alpha);
+	assign		___328_alpha $const3 	%line{59} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/22MABHedgeImage/MABHedgeImage.osl:60
+#             if(alpha){
+	texture		___328_c LeafImage ___328_u ___328_v $const9 ___328_alpha 	%line{60} %argrw{"wrrrrw"} %argderivs{2,3}
+# source/sambler-osl-shaders/MJABook/22MABHedgeImage/MABHedgeImage.osl:61
+#                 Fac = 1;
+	neq		$tmp43 ___328_alpha $const10 	%line{61} %argrw{"wrr"}
+	if		$tmp43 81 81 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/22MABHedgeImage/MABHedgeImage.osl:62
+#                 Normal = leafn;
+	assign		Fac $const2 	%line{62} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/22MABHedgeImage/MABHedgeImage.osl:63
+#                 Color = c;
+	assign		Normal ___327_leafn 	%line{63} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/22MABHedgeImage/MABHedgeImage.osl:64
+#             }
+	assign		Color ___328_c 	%line{64} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/22MABHedgeImage/MABHedgeImage.osl:36
+#         vector pp = p + vector(xx,yy,zz);
+	assign		$tmp44 ___326_zz 	%line{36} %argrw{"wr"}
+	add		___326_zz ___326_zz $const2 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/22MABHedgeImage/MABHedgeImage.osl:35
+#     for(int zz=-1; zz<=1 && Fac == 0; zz++) {
+	assign		$tmp45 ___324_yy 	%line{35} %argrw{"wr"}
+	add		___324_yy ___324_yy $const2 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/22MABHedgeImage/MABHedgeImage.osl:34
+#     for(int yy=-1; yy<=1 && Fac == 0; yy++) {
+	assign		$tmp46 ___322_xx 	%line{34} %argrw{"wr"}
+	add		___322_xx ___322_xx $const2 	%argrw{"wrr"}
+	end

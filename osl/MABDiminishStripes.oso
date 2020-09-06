@@ -1,0 +1,80 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader MABDiminishStripes
+param	point	Vector	0 0 0		%read{1,1} %write{0,0} %initexpr
+param	float	Limit	0.0099999998		%read{10,12} %write{2147483647,-1}
+oparam	float	Fac	0		%read{19,19} %write{15,22}
+global	point	P	%read{0,0} %write{2147483647,-1}
+local	float	x	%read{15,22} %write{7,7}
+local	float	dx	%read{9,22} %write{8,22}
+local	float	xlimit	%read{15,22} %write{9,22}
+local	float	ActualLimit	%read{15,22} %write{12,13}
+temp	float	$tmp1	%read{7,7} %write{6,6}
+const	int	$const1	0		%read{1,1} %write{2147483647,-1}
+temp	float	$tmp2	%read{3,6} %write{1,1}
+const	float	$const3	1		%read{3,19} %write{2147483647,-1}
+const	string	$const4	"mod"		%read{2,2} %write{2147483647,-1}
+temp	float	$tmp3	%read{5,5} %write{4,4}
+temp	float	$tmp4	%read{4,4} %write{3,3}
+temp	float	$tmp5	%read{6,6} %write{5,5}
+const	float	$const6	2		%read{7,7} %write{2147483647,-1}
+const	float	$const7	0.5		%read{8,8} %write{2147483647,-1}
+const	float	$const8	0.001		%read{10,13} %write{2147483647,-1}
+temp	int	$tmp6	%read{11,11} %write{10,10}
+temp	int	$tmp7	%read{14,22} %write{15,22}
+temp	int	$tmp8	%read{15,22} %write{15,22}
+temp	float	$tmp9	%read{15,22} %write{15,22}
+const	float	$const9	0.75		%read{21,21} %write{2147483647,-1}
+code Vector
+# source/sambler-osl-shaders/MJABook/03MABDiminishStripes/MABDiminishStripes.osl:15
+#     float Limit = 0.01,
+	assign		Vector P 	%filename{"source/sambler-osl-shaders/MJABook/03MABDiminishStripes/MABDiminishStripes.osl"} %line{15} %argrw{"wr"}
+code ___main___
+# source/sambler-osl-shaders/MJABook/03MABDiminishStripes/MABDiminishStripes.osl:20
+#     float dx = 0.5;
+	compref		$tmp2 Vector $const1 	%filename{"source/sambler-osl-shaders/MJABook/03MABDiminishStripes/MABDiminishStripes.osl"} %line{20} %argrw{"wrr"}
+	functioncall	$const4 7 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:136
+# float  mod (float  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp4 $tmp2 $const3 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{136} %argrw{"wrr"}
+	floor		$tmp3 $tmp4 	%argrw{"wr"}
+	mul		$tmp5 $const3 $tmp3 	%argrw{"wrr"}
+	sub		$tmp1 $tmp2 $tmp5 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/03MABDiminishStripes/MABDiminishStripes.osl:20
+#     float dx = 0.5;
+	mul		x $tmp1 $const6 	%filename{"source/sambler-osl-shaders/MJABook/03MABDiminishStripes/MABDiminishStripes.osl"} %line{20} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/03MABDiminishStripes/MABDiminishStripes.osl:21
+#     float xlimit = dx;
+	assign		dx $const7 	%line{21} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/03MABDiminishStripes/MABDiminishStripes.osl:22
+# 
+	assign		xlimit dx 	%line{22} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/03MABDiminishStripes/MABDiminishStripes.osl:24
+#     while( dx >= ActualLimit ){
+	gt		$tmp6 Limit $const8 	%line{24} %argrw{"wrr"}
+	if		$tmp6 13 14 	%argrw{"r"}
+	assign		ActualLimit Limit 	%argrw{"wr"}
+	assign		ActualLimit $const8 	%argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/03MABDiminishStripes/MABDiminishStripes.osl:25
+#         if( x < xlimit ){
+	while		$tmp7 15 16 23 23 	%line{25} %argrw{"r"}
+	ge		$tmp7 dx ActualLimit 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/03MABDiminishStripes/MABDiminishStripes.osl:26
+#             break;
+	lt		$tmp8 x xlimit 	%line{26} %argrw{"wrr"}
+	if		$tmp8 19 19 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/03MABDiminishStripes/MABDiminishStripes.osl:27
+#         }
+	break	%line{27}
+# source/sambler-osl-shaders/MJABook/03MABDiminishStripes/MABDiminishStripes.osl:29
+#         dx *= 0.75;
+	sub		$tmp9 Fac $const3 	%line{29} %argrw{"wrr"}
+	abs		Fac $tmp9 	%argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/03MABDiminishStripes/MABDiminishStripes.osl:30
+#         xlimit += dx;
+	mul		dx dx $const9 	%line{30} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/03MABDiminishStripes/MABDiminishStripes.osl:31
+#     }
+	add		xlimit xlimit dx 	%line{31} %argrw{"wrr"}
+	end

@@ -1,0 +1,23 @@
+/*
+ * TDWireframe.osl by Thomas Dinges (c)2012
+ * from https://github.com/sambler/osl-shaders
+ *
+ * original script from -
+ * http://www.openshading.com/osl/example-shaders/
+ *
+ */
+
+#include "oslutil.h"
+
+shader TDwireframe(
+    float Line_Width = 2.0,
+    int Raster = 1,
+    output float Factor = 0.0)
+{
+    //Factor = wireframe("triangles", Line_Width, Raster);
+    /*  currently blender always provides triangles at this point in the render 
+        as in fully triangulated mesh that the render engine works with
+        at some stage the polygons option will provide original poly edges instead */
+    Factor = wireframe("polygons", Line_Width, Raster);
+}
+

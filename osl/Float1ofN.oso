@@ -1,0 +1,85 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader Float1ofN	%meta{string,help,"Pick one of N inputs"} %meta{string,label,"1 of N (float)"} %meta{string,version,"1.0.0"} %meta{string,category,"Switchers"} 
+param	int	Layers	4		%meta{int,min,1} %meta{int,max,99} %meta{int,connectable,0} %meta{string,widget,"null"}  %read{2,7} %write{2147483647,-1}
+param	string	Add	"Add Input"		%meta{string,widget,"max:actionButton"} %meta{int,connectable,0} %meta{string,packName," "} %meta{string,actionID,"UpdateGenericLayering(1)"}  %read{2147483647,-1} %write{2147483647,-1}
+param	string	Delete	"Delete Input"		%meta{string,widget,"max:actionButton"} %meta{int,connectable,0} %meta{string,packName," "} %meta{string,actionID,"UpdateGenericLayering(-1)"}  %read{2147483647,-1} %write{2147483647,-1}
+param	int	Index	0		%meta{string,help,"Pick the index (number) of the input to use. "}  %read{0,0} %write{2147483647,-1}
+param	float	I0	0		%meta{string,label,"Input 0"}  %read{14,14} %write{2147483647,-1}
+param	float	I1	0		%meta{string,label,"Input 1"}  %read{17,17} %write{2147483647,-1}
+param	float	I2	0		%meta{string,label,"Input 2"}  %read{20,20} %write{2147483647,-1}
+param	float	I3	0		%meta{string,label,"Input 3"}  %read{23,23} %write{2147483647,-1}
+param	float	I4	0		%meta{string,label,"Input 4"}  %read{26,26} %write{2147483647,-1}
+param	int	StartIdx	0		%meta{string,label,"Start Index"} %meta{string,help,"Offsets the input index so that this number will map to the first input. E.g. if set to 10, the first input (labeled Input 0) will map to index 10, rather than 0. This allows covering different ranges."}  %read{0,0} %write{2147483647,-1}
+param	int	Repeat	1		%meta{string,widget,"checkBox"} %meta{string,label,"Repeat the inputs"} %meta{string,help,"Repeat the inputs.<br>If off, all indicies outside the range uses the 'Outside Range' input.<br>If on, only uses the existing inputs, repeated in a rotating fashion."}  %read{1,1} %write{2147483647,-1}
+param	float	Outside	0		%meta{string,label,"Outside Range"} %meta{string,help,"The value to return when the index falls outside the set of available inputs, and the 'Repeat the inputs' option is not checked. "}  %read{11,27} %write{2147483647,-1}
+oparam	float	Out	0		%read{2147483647,-1} %write{11,27}
+local	int	idx	%read{3,24} %write{0,3}
+const	int	$const1	1		%read{2,15} %write{2147483647,-1}
+temp	int	$tmp1	%read{3,3} %write{2,2}
+const	int	$const2	0		%read{4,12} %write{2147483647,-1}
+temp	int	$tmp2	%read{5,5} %write{4,4}
+temp	int	$tmp3	%read{6,10} %write{5,9}
+temp	int	$tmp4	%read{8,8} %write{7,7}
+temp	int	$tmp5	%read{9,9} %write{8,8}
+temp	int	$tmp6	%read{13,13} %write{12,12}
+temp	int	$tmp7	%read{16,16} %write{15,15}
+const	int	$const3	2		%read{18,18} %write{2147483647,-1}
+temp	int	$tmp8	%read{19,19} %write{18,18}
+const	int	$const4	3		%read{21,21} %write{2147483647,-1}
+temp	int	$tmp9	%read{22,22} %write{21,21}
+const	int	$const5	4		%read{24,24} %write{2147483647,-1}
+temp	int	$tmp10	%read{25,25} %write{24,24}
+code ___main___
+# source/3dsMax-OSL-Shaders/Float1ofN.osl:59
+# 	
+	sub		idx Index StartIdx 	%filename{"source/3dsMax-OSL-Shaders/Float1ofN.osl"} %line{59} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Float1ofN.osl:61
+# 		idx = idx % (Layers + 1);
+	if		Repeat 4 4 	%line{61} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/Float1ofN.osl:62
+# 
+	add		$tmp1 Layers $const1 	%line{62} %argrw{"wrr"}
+	mod		idx idx $tmp1 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Float1ofN.osl:64
+# 	{
+	lt		$tmp2 idx $const2 	%line{64} %argrw{"wrr"}
+	neq		$tmp3 $tmp2 $const2 	%argrw{"wrr"}
+	if		$tmp3 7 10 	%argrw{"r"}
+	gt		$tmp4 idx Layers 	%argrw{"wrr"}
+	neq		$tmp5 $tmp4 $const2 	%argrw{"wrr"}
+	assign		$tmp3 $tmp5 	%argrw{"wr"}
+	if		$tmp3 12 28 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Float1ofN.osl:66
+# 	}
+	assign		Out Outside 	%line{66} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Float1ofN.osl:71
+# 	//====LAYER-BEGIN====
+	eq		$tmp6 idx $const2 	%line{71} %argrw{"wrr"}
+	if		$tmp6 15 28 	%argrw{"r"}
+	assign		Out I0 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Float1ofN.osl:73
+# 	LAYER(2)
+	eq		$tmp7 idx $const1 	%line{73} %argrw{"wrr"}
+	if		$tmp7 18 28 	%argrw{"r"}
+	assign		Out I1 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Float1ofN.osl:74
+# 	LAYER(3)
+	eq		$tmp8 idx $const3 	%line{74} %argrw{"wrr"}
+	if		$tmp8 21 28 	%argrw{"r"}
+	assign		Out I2 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Float1ofN.osl:75
+# 	LAYER(4)
+	eq		$tmp9 idx $const4 	%line{75} %argrw{"wrr"}
+	if		$tmp9 24 28 	%argrw{"r"}
+	assign		Out I3 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Float1ofN.osl:76
+# 	//====LAYER-END====
+	eq		$tmp10 idx $const5 	%line{76} %argrw{"wrr"}
+	if		$tmp10 27 28 	%argrw{"r"}
+	assign		Out I4 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Float1ofN.osl:78
+# #undef LAYER
+	assign		Out Outside 	%line{78} %argrw{"wr"}
+	end

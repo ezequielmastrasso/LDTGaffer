@@ -1,0 +1,3723 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader arcuateveins
+param	point	Vector	0 0 0		%read{44,1668} %write{0,0} %initexpr
+param	float	BaseAngle	107		%read{8,8} %write{2147483647,-1}
+param	float	BaseCurve	0.69999999		%read{16,16} %write{2147483647,-1}
+param	float	TipAngle	44		%read{12,12} %write{2147483647,-1}
+param	float	TipCurve	1.2		%read{17,19} %write{2147483647,-1}
+param	int	Veins	7		%read{1,44} %write{2147483647,-1}
+param	int	Seed	42		%read{49,57} %write{2147483647,-1}
+param	float	Variance	0		%read{47,55} %write{2147483647,-1}
+param	float	InnerWidth	0.050000001		%read{879,1674} %write{2147483647,-1}
+param	float	NWidth	0.25		%read{871,1665} %write{2147483647,-1}
+param	float	Curve	0.5		%read{70,72} %write{2147483647,-1}
+param	float	Curve2	0.5		%read{105,107} %write{2147483647,-1}
+param	float	Spacing	0.5		%read{54,61} %write{2147483647,-1}
+param	float	Up	0.5		%read{24,39} %write{2147483647,-1}
+oparam	float	Vein	0		%read{2147483647,-1} %write{44,1673}
+oparam	float	Net	0		%read{2147483647,-1} %write{44,1667}
+oparam	float	Fac	0		%read{2147483647,-1} %write{44,1676}
+global	point	P	%read{0,0} %write{2147483647,-1}
+local	vector	___231_d	%read{1651,1662} %write{1650,1650}
+local	float	___231_dd	%read{1652,1658} %write{1651,1651}
+local	float	___231_t	%read{1660,1660} %write{1658,1658}
+local	float	___323_PI	%read{44,1648} %write{44,1648}
+local	float	___323_THIRD	%read{44,1648} %write{44,1648}
+local	float[3]	___323_U	%read{44,1648} %write{44,1648}
+local	float	___323_W	%read{44,1648} %write{44,1648}
+local	float	___323_P	%read{44,1648} %write{44,1648}
+local	float	___323_Q	%read{44,1648} %write{44,1648}
+local	float	___323_DIS	%read{44,1648} %write{44,1648}
+local	float	___323_PHI	%read{44,1648} %write{44,1648}
+local	int	___323_i	%read{44,1648} %write{44,1648}
+local	point	___336_P0	%read{44,1648} %write{44,1648}
+local	point	___336_P1	%read{44,1648} %write{44,1648}
+local	point	___336_P2	%read{44,1648} %write{44,1648}
+local	float	___336_t0	%read{44,1648} %write{44,1648}
+local	float	___336_t1	%read{44,1648} %write{44,1648}
+local	float	___336_t2	%read{44,1648} %write{44,1648}
+local	float	___336_t3	%read{44,1648} %write{44,1648}
+local	float[4]	___336_A	%read{44,1648} %write{44,1648}
+local	float[3]	___336_T	%read{44,1648} %write{44,1648}
+local	int	___336_n	%read{44,1648} %write{44,1648}
+local	int	___336_found	%read{44,1648} %write{44,1648}
+local	float	___338_t	%read{44,1648} %write{44,1648}
+local	float	___338_dd	%read{44,1648} %write{44,1648}
+local	float	delta	%read{4,1648} %write{3,3}
+local	float	delta2	%read{44,1648} %write{4,4}
+local	float	delta4	%read{44,1648} %write{5,5}
+local	float	x1	%read{15,15} %write{9,9}
+local	float	y1	%read{15,15} %write{9,9}
+local	float	x2	%read{17,17} %write{13,13}
+local	float	y2	%read{19,19} %write{13,13}
+local	point	P0	%read{22,1648} %write{14,14}
+local	point	P1	%read{27,1648} %write{16,16}
+local	point	P2	%read{32,1648} %write{20,20}
+local	point	P3	%read{37,1648} %write{21,21}
+local	point	P0q	%read{44,1648} %write{26,26}
+local	point	P1q	%read{44,1648} %write{31,31}
+local	point	P2q	%read{44,1648} %write{36,36}
+local	point	P3q	%read{44,1648} %write{41,41}
+local	int	i	%read{44,1648} %write{43,1648}
+local	float	___341_x	%read{44,1648} %write{44,1648}
+local	float	___341_dx	%read{44,1648} %write{44,1648}
+local	point	___341_P0up	%read{44,1648} %write{44,1648}
+local	point	___341_P0down	%read{44,1648} %write{44,1648}
+local	float	___341_t	%read{44,1648} %write{44,1648}
+local	point	___341_P2up	%read{44,1648} %write{44,1648}
+local	point	___341_P2down	%read{44,1648} %write{44,1648}
+local	point	___341_P1up	%read{44,1648} %write{44,1648}
+local	point	___341_P1down	%read{44,1648} %write{44,1648}
+local	float	___341_r	%read{44,1648} %write{44,1648}
+local	int	___341_f	%read{44,1648} %write{44,1648}
+local	float	d	%read{1665,1674} %write{1654,1664}
+const	float	$const1	1		%read{2,1675} %write{2147483647,-1}
+temp	float	$tmp1	%read{2,2} %write{1,1}
+const	int	$const2	1		%read{23,1673} %write{2147483647,-1}
+temp	float	$tmp2	%read{3,3} %write{2,2}
+const	int	$const3	2		%read{25,1574} %write{2147483647,-1}
+const	float	$const4	2		%read{4,1611} %write{2147483647,-1}
+const	float	$const6	4		%read{5,1274} %write{2147483647,-1}
+temp	float	$tmp3	%read{9,9} %write{8,8}
+const	string	$const7	"radians"		%read{6,10} %write{2147483647,-1}
+const	float	$const8	3.1415927		%read{7,1422} %write{2147483647,-1}
+const	float	$const9	180		%read{7,11} %write{2147483647,-1}
+temp	float	$tmp4	%read{8,8} %write{7,7}
+temp	float	$tmp5	%read{13,13} %write{12,12}
+temp	float	$tmp6	%read{12,12} %write{11,11}
+const	point	$const10	0 0 0		%read{14,1663} %write{2147483647,-1}
+temp	point	$tmp7	%read{16,16} %write{15,15}
+const	int	$const11	0		%read{22,1668} %write{2147483647,-1}
+const	float	$const12	0		%read{15,1661} %write{2147483647,-1}
+temp	float	$tmp8	%read{18,18} %write{17,17}
+temp	float	$tmp9	%read{20,20} %write{18,18}
+temp	float	$tmp10	%read{20,20} %write{19,19}
+const	point	$const13	1 0 0		%read{21,1650} %write{2147483647,-1}
+temp	float	$tmp11	%read{26,26} %write{22,22}
+temp	float	$tmp12	%read{24,24} %write{23,23}
+temp	float	$tmp13	%read{26,26} %write{24,24}
+temp	float	$tmp14	%read{26,26} %write{25,25}
+temp	float	$tmp15	%read{31,31} %write{27,27}
+temp	float	$tmp16	%read{29,29} %write{28,28}
+temp	float	$tmp17	%read{31,31} %write{29,29}
+temp	float	$tmp18	%read{31,31} %write{30,30}
+temp	float	$tmp19	%read{36,36} %write{32,32}
+temp	float	$tmp20	%read{34,34} %write{33,33}
+temp	float	$tmp21	%read{36,36} %write{34,34}
+temp	float	$tmp22	%read{36,36} %write{35,35}
+temp	float	$tmp23	%read{41,41} %write{37,37}
+temp	float	$tmp24	%read{39,39} %write{38,38}
+temp	float	$tmp25	%read{41,41} %write{39,39}
+temp	float	$tmp26	%read{41,41} %write{40,40}
+temp	int	$tmp27	%read{42,1648} %write{43,1648}
+temp	float	$tmp28	%read{44,1648} %write{44,1648}
+temp	float	$tmp29	%read{44,1648} %write{44,1648}
+temp	float	$tmp30	%read{44,1648} %write{44,1648}
+temp	float	$tmp31	%read{44,1648} %write{44,1648}
+const	int	$const14	10		%read{48,48} %write{2147483647,-1}
+temp	int	$tmp32	%read{44,1648} %write{44,1648}
+temp	int	$tmp33	%read{44,1648} %write{44,1648}
+temp	float	$tmp34	%read{44,1648} %write{44,1648}
+temp	float	$tmp35	%read{44,1648} %write{44,1648}
+temp	float	$tmp36	%read{44,1648} %write{44,1648}
+temp	float	$tmp37	%read{44,1648} %write{44,1648}
+temp	float	$tmp38	%read{44,1648} %write{44,1648}
+const	int	$const15	17		%read{56,56} %write{2147483647,-1}
+temp	int	$tmp39	%read{44,1648} %write{44,1648}
+temp	int	$tmp40	%read{44,1648} %write{44,1648}
+temp	float	$tmp41	%read{44,1648} %write{44,1648}
+temp	float	$tmp42	%read{44,1648} %write{44,1648}
+temp	float	$tmp43	%read{44,1648} %write{44,1648}
+temp	float	$tmp44	%read{44,1648} %write{44,1648}
+temp	float	$tmp45	%read{44,1648} %write{44,1648}
+temp	float	$tmp46	%read{44,1648} %write{44,1648}
+temp	float	$tmp47	%read{44,1648} %write{44,1648}
+temp	float	$tmp48	%read{44,1648} %write{44,1648}
+temp	float	$tmp49	%read{44,1648} %write{44,1648}
+temp	float	$tmp50	%read{44,1648} %write{44,1648}
+const	string	$const16	"cubicspline"		%read{73,108} %write{2147483647,-1}
+temp	float	$tmp51	%read{44,1648} %write{44,1648}
+temp	float	$tmp52	%read{44,1648} %write{44,1648}
+temp	float	$tmp53	%read{44,1648} %write{44,1648}
+temp	float	$tmp54	%read{44,1648} %write{44,1648}
+temp	float	$tmp55	%read{44,1648} %write{44,1648}
+temp	point	$tmp56	%read{44,1648} %write{44,1648}
+const	int	$const17	3		%read{665,1578} %write{2147483647,-1}
+temp	float	$tmp57	%read{44,1648} %write{44,1648}
+temp	float	$tmp58	%read{44,1648} %write{44,1648}
+const	float	$const18	3		%read{81,1577} %write{2147483647,-1}
+temp	float	$tmp59	%read{44,1648} %write{44,1648}
+temp	float	$tmp60	%read{44,1648} %write{44,1648}
+temp	float	$tmp61	%read{44,1648} %write{44,1648}
+temp	point	$tmp62	%read{44,1648} %write{44,1648}
+temp	point	$tmp63	%read{44,1648} %write{44,1648}
+temp	float	$tmp64	%read{44,1648} %write{44,1648}
+temp	float	$tmp65	%read{44,1648} %write{44,1648}
+temp	float	$tmp66	%read{44,1648} %write{44,1648}
+temp	float	$tmp67	%read{44,1648} %write{44,1648}
+temp	point	$tmp68	%read{44,1648} %write{44,1648}
+temp	point	$tmp69	%read{44,1648} %write{44,1648}
+temp	float	$tmp70	%read{44,1648} %write{44,1648}
+temp	float	$tmp71	%read{44,1648} %write{44,1648}
+temp	point	$tmp72	%read{44,1648} %write{44,1648}
+temp	float	$tmp73	%read{44,1648} %write{44,1648}
+temp	float	$tmp74	%read{44,1648} %write{44,1648}
+temp	float	$tmp75	%read{44,1648} %write{44,1648}
+temp	float	$tmp76	%read{44,1648} %write{44,1648}
+temp	float	$tmp77	%read{44,1648} %write{44,1648}
+temp	float	$tmp78	%read{44,1648} %write{44,1648}
+temp	float	$tmp79	%read{44,1648} %write{44,1648}
+temp	float	$tmp80	%read{44,1648} %write{44,1648}
+temp	float	$tmp81	%read{44,1648} %write{44,1648}
+temp	float	$tmp82	%read{44,1648} %write{44,1648}
+temp	float	$tmp83	%read{44,1648} %write{44,1648}
+temp	float	$tmp84	%read{44,1648} %write{44,1648}
+temp	float	$tmp85	%read{44,1648} %write{44,1648}
+temp	float	$tmp86	%read{44,1648} %write{44,1648}
+temp	point	$tmp87	%read{44,1648} %write{44,1648}
+temp	float	$tmp88	%read{44,1648} %write{44,1648}
+temp	float	$tmp89	%read{44,1648} %write{44,1648}
+temp	float	$tmp90	%read{44,1648} %write{44,1648}
+temp	float	$tmp91	%read{44,1648} %write{44,1648}
+temp	float	$tmp92	%read{44,1648} %write{44,1648}
+temp	point	$tmp93	%read{44,1648} %write{44,1648}
+temp	point	$tmp94	%read{44,1648} %write{44,1648}
+temp	float	$tmp95	%read{44,1648} %write{44,1648}
+temp	float	$tmp96	%read{44,1648} %write{44,1648}
+temp	float	$tmp97	%read{44,1648} %write{44,1648}
+temp	float	$tmp98	%read{44,1648} %write{44,1648}
+temp	point	$tmp99	%read{44,1648} %write{44,1648}
+temp	point	$tmp100	%read{44,1648} %write{44,1648}
+temp	float	$tmp101	%read{44,1648} %write{44,1648}
+temp	float	$tmp102	%read{44,1648} %write{44,1648}
+temp	point	$tmp103	%read{44,1648} %write{44,1648}
+temp	float	$tmp104	%read{44,1648} %write{44,1648}
+temp	float	$tmp105	%read{44,1648} %write{44,1648}
+temp	float	$tmp106	%read{44,1648} %write{44,1648}
+temp	float	$tmp107	%read{44,1648} %write{44,1648}
+const	string	$const19	"splinedist"		%read{137,892} %write{2147483647,-1}
+temp	float	$tmp108	%read{44,1648} %write{44,1648}
+temp	float	$tmp109	%read{44,1648} %write{44,1648}
+const	float	$const21	-2		%read{142,1249} %write{2147483647,-1}
+temp	float	$tmp110	%read{44,1648} %write{44,1648}
+temp	float	$tmp111	%read{44,1648} %write{44,1648}
+temp	float	$tmp112	%read{44,1648} %write{44,1648}
+temp	float	$tmp113	%read{44,1648} %write{44,1648}
+temp	float	$tmp114	%read{44,1648} %write{44,1648}
+temp	float	$tmp115	%read{44,1648} %write{44,1648}
+temp	float	$tmp116	%read{44,1648} %write{44,1648}
+temp	float	$tmp117	%read{44,1648} %write{44,1648}
+temp	float	$tmp118	%read{44,1648} %write{44,1648}
+temp	float	$tmp119	%read{44,1648} %write{44,1648}
+temp	float	$tmp120	%read{44,1648} %write{44,1648}
+temp	float	$tmp121	%read{44,1648} %write{44,1648}
+temp	float	$tmp122	%read{44,1648} %write{44,1648}
+temp	float	$tmp123	%read{44,1648} %write{44,1648}
+temp	float	$tmp124	%read{44,1648} %write{44,1648}
+temp	float	$tmp125	%read{44,1648} %write{44,1648}
+temp	float	$tmp126	%read{44,1648} %write{44,1648}
+temp	float	$tmp127	%read{44,1648} %write{44,1648}
+temp	float	$tmp128	%read{44,1648} %write{44,1648}
+temp	float	$tmp129	%read{44,1648} %write{44,1648}
+temp	float	$tmp130	%read{44,1648} %write{44,1648}
+temp	float	$tmp131	%read{44,1648} %write{44,1648}
+temp	float	$tmp132	%read{44,1648} %write{44,1648}
+temp	float	$tmp133	%read{44,1648} %write{44,1648}
+temp	float	$tmp134	%read{44,1648} %write{44,1648}
+temp	float	$tmp135	%read{44,1648} %write{44,1648}
+temp	float	$tmp136	%read{44,1648} %write{44,1648}
+temp	float	$tmp137	%read{44,1648} %write{44,1648}
+temp	float	$tmp138	%read{44,1648} %write{44,1648}
+temp	float	$tmp139	%read{44,1648} %write{44,1648}
+temp	float	$tmp140	%read{44,1648} %write{44,1648}
+temp	float	$tmp141	%read{44,1648} %write{44,1648}
+temp	float	$tmp142	%read{44,1648} %write{44,1648}
+temp	float	$tmp143	%read{44,1648} %write{44,1648}
+temp	float	$tmp144	%read{44,1648} %write{44,1648}
+temp	float	$tmp145	%read{44,1648} %write{44,1648}
+temp	float	$tmp146	%read{44,1648} %write{44,1648}
+temp	float	$tmp147	%read{44,1648} %write{44,1648}
+temp	float	$tmp148	%read{44,1648} %write{44,1648}
+temp	float	$tmp149	%read{44,1648} %write{44,1648}
+temp	float	$tmp150	%read{44,1648} %write{44,1648}
+temp	float	$tmp151	%read{44,1648} %write{44,1648}
+temp	float	$tmp152	%read{44,1648} %write{44,1648}
+temp	float	$tmp153	%read{44,1648} %write{44,1648}
+temp	float	$tmp154	%read{44,1648} %write{44,1648}
+temp	float	$tmp155	%read{44,1648} %write{44,1648}
+temp	float	$tmp156	%read{44,1648} %write{44,1648}
+temp	float	$tmp157	%read{44,1648} %write{44,1648}
+temp	float	$tmp158	%read{44,1648} %write{44,1648}
+temp	float	$tmp159	%read{44,1648} %write{44,1648}
+temp	float	$tmp160	%read{44,1648} %write{44,1648}
+temp	float	$tmp161	%read{44,1648} %write{44,1648}
+temp	float	$tmp162	%read{44,1648} %write{44,1648}
+temp	float	$tmp163	%read{44,1648} %write{44,1648}
+temp	float	$tmp164	%read{44,1648} %write{44,1648}
+temp	float	$tmp165	%read{44,1648} %write{44,1648}
+temp	float	$tmp166	%read{44,1648} %write{44,1648}
+temp	float	$tmp167	%read{44,1648} %write{44,1648}
+const	float	$const23	-4		%read{201,1388} %write{2147483647,-1}
+temp	float	$tmp168	%read{44,1648} %write{44,1648}
+temp	float	$tmp169	%read{44,1648} %write{44,1648}
+temp	float	$tmp170	%read{44,1648} %write{44,1648}
+temp	float	$tmp171	%read{44,1648} %write{44,1648}
+temp	float	$tmp172	%read{44,1648} %write{44,1648}
+temp	float	$tmp173	%read{44,1648} %write{44,1648}
+temp	float	$tmp174	%read{44,1648} %write{44,1648}
+temp	float	$tmp175	%read{44,1648} %write{44,1648}
+temp	float	$tmp176	%read{44,1648} %write{44,1648}
+temp	float	$tmp177	%read{44,1648} %write{44,1648}
+temp	float	$tmp178	%read{44,1648} %write{44,1648}
+temp	float	$tmp179	%read{44,1648} %write{44,1648}
+temp	float	$tmp180	%read{44,1648} %write{44,1648}
+temp	float	$tmp181	%read{44,1648} %write{44,1648}
+temp	float	$tmp182	%read{44,1648} %write{44,1648}
+temp	float	$tmp183	%read{44,1648} %write{44,1648}
+temp	float	$tmp184	%read{44,1648} %write{44,1648}
+temp	float	$tmp185	%read{44,1648} %write{44,1648}
+temp	float	$tmp186	%read{44,1648} %write{44,1648}
+temp	float	$tmp187	%read{44,1648} %write{44,1648}
+temp	float	$tmp188	%read{44,1648} %write{44,1648}
+temp	float	$tmp189	%read{44,1648} %write{44,1648}
+temp	float	$tmp190	%read{44,1648} %write{44,1648}
+temp	float	$tmp191	%read{44,1648} %write{44,1648}
+temp	float	$tmp192	%read{44,1648} %write{44,1648}
+temp	float	$tmp193	%read{44,1648} %write{44,1648}
+temp	float	$tmp194	%read{44,1648} %write{44,1648}
+temp	float	$tmp195	%read{44,1648} %write{44,1648}
+temp	float	$tmp196	%read{44,1648} %write{44,1648}
+temp	float	$tmp197	%read{44,1648} %write{44,1648}
+temp	float	$tmp198	%read{44,1648} %write{44,1648}
+temp	float	$tmp199	%read{44,1648} %write{44,1648}
+temp	float	$tmp200	%read{44,1648} %write{44,1648}
+temp	float	$tmp201	%read{44,1648} %write{44,1648}
+temp	float	$tmp202	%read{44,1648} %write{44,1648}
+temp	float	$tmp203	%read{44,1648} %write{44,1648}
+temp	float	$tmp204	%read{44,1648} %write{44,1648}
+temp	float	$tmp205	%read{44,1648} %write{44,1648}
+temp	float	$tmp206	%read{44,1648} %write{44,1648}
+temp	float	$tmp207	%read{44,1648} %write{44,1648}
+temp	float	$tmp208	%read{44,1648} %write{44,1648}
+temp	float	$tmp209	%read{44,1648} %write{44,1648}
+temp	float	$tmp210	%read{44,1648} %write{44,1648}
+temp	float	$tmp211	%read{44,1648} %write{44,1648}
+temp	float	$tmp212	%read{44,1648} %write{44,1648}
+temp	float	$tmp213	%read{44,1648} %write{44,1648}
+temp	float	$tmp214	%read{44,1648} %write{44,1648}
+temp	float	$tmp215	%read{44,1648} %write{44,1648}
+temp	float	$tmp216	%read{44,1648} %write{44,1648}
+temp	float	$tmp217	%read{44,1648} %write{44,1648}
+temp	float	$tmp218	%read{44,1648} %write{44,1648}
+temp	float	$tmp219	%read{44,1648} %write{44,1648}
+temp	float	$tmp220	%read{44,1648} %write{44,1648}
+temp	float	$tmp221	%read{44,1648} %write{44,1648}
+temp	float	$tmp222	%read{44,1648} %write{44,1648}
+temp	float	$tmp223	%read{44,1648} %write{44,1648}
+temp	float	$tmp224	%read{44,1648} %write{44,1648}
+temp	float	$tmp225	%read{44,1648} %write{44,1648}
+temp	float	$tmp226	%read{44,1648} %write{44,1648}
+temp	float	$tmp227	%read{44,1648} %write{44,1648}
+temp	float	$tmp228	%read{44,1648} %write{44,1648}
+temp	float	$tmp229	%read{44,1648} %write{44,1648}
+temp	float	$tmp230	%read{44,1648} %write{44,1648}
+temp	float	$tmp231	%read{44,1648} %write{44,1648}
+temp	float	$tmp232	%read{44,1648} %write{44,1648}
+temp	float	$tmp233	%read{44,1648} %write{44,1648}
+temp	float	$tmp234	%read{44,1648} %write{44,1648}
+temp	float	$tmp235	%read{44,1648} %write{44,1648}
+temp	float	$tmp236	%read{44,1648} %write{44,1648}
+temp	float	$tmp237	%read{44,1648} %write{44,1648}
+temp	float	$tmp238	%read{44,1648} %write{44,1648}
+temp	float	$tmp239	%read{44,1648} %write{44,1648}
+temp	float	$tmp240	%read{44,1648} %write{44,1648}
+temp	float	$tmp241	%read{44,1648} %write{44,1648}
+temp	float	$tmp242	%read{44,1648} %write{44,1648}
+temp	float	$tmp243	%read{44,1648} %write{44,1648}
+temp	float	$tmp244	%read{44,1648} %write{44,1648}
+temp	float	$tmp245	%read{44,1648} %write{44,1648}
+temp	float	$tmp246	%read{44,1648} %write{44,1648}
+temp	float	$tmp247	%read{44,1648} %write{44,1648}
+temp	float	$tmp248	%read{44,1648} %write{44,1648}
+temp	float	$tmp249	%read{44,1648} %write{44,1648}
+temp	float	$tmp250	%read{44,1648} %write{44,1648}
+temp	float	$tmp251	%read{44,1648} %write{44,1648}
+temp	float	$tmp252	%read{44,1648} %write{44,1648}
+temp	float	$tmp253	%read{44,1648} %write{44,1648}
+temp	float	$tmp254	%read{44,1648} %write{44,1648}
+temp	float	$tmp255	%read{44,1648} %write{44,1648}
+temp	float	$tmp256	%read{44,1648} %write{44,1648}
+temp	float	$tmp257	%read{44,1648} %write{44,1648}
+temp	float	$tmp258	%read{44,1648} %write{44,1648}
+temp	float	$tmp259	%read{44,1648} %write{44,1648}
+temp	float	$tmp260	%read{44,1648} %write{44,1648}
+temp	float	$tmp261	%read{44,1648} %write{44,1648}
+temp	float	$tmp262	%read{44,1648} %write{44,1648}
+temp	float	$tmp263	%read{44,1648} %write{44,1648}
+temp	float	$tmp264	%read{44,1648} %write{44,1648}
+temp	float	$tmp265	%read{44,1648} %write{44,1648}
+temp	float	$tmp266	%read{44,1648} %write{44,1648}
+temp	float	$tmp267	%read{44,1648} %write{44,1648}
+temp	float	$tmp268	%read{44,1648} %write{44,1648}
+temp	float	$tmp269	%read{44,1648} %write{44,1648}
+temp	float	$tmp270	%read{44,1648} %write{44,1648}
+temp	float	$tmp271	%read{44,1648} %write{44,1648}
+temp	float	$tmp272	%read{44,1648} %write{44,1648}
+temp	float	$tmp273	%read{44,1648} %write{44,1648}
+temp	float	$tmp274	%read{44,1648} %write{44,1648}
+temp	float	$tmp275	%read{44,1648} %write{44,1648}
+temp	float	$tmp276	%read{44,1648} %write{44,1648}
+temp	float	$tmp277	%read{44,1648} %write{44,1648}
+temp	float	$tmp278	%read{44,1648} %write{44,1648}
+temp	float	$tmp279	%read{44,1648} %write{44,1648}
+temp	float	$tmp280	%read{44,1648} %write{44,1648}
+temp	float	$tmp281	%read{44,1648} %write{44,1648}
+temp	float	$tmp282	%read{44,1648} %write{44,1648}
+temp	float	$tmp283	%read{44,1648} %write{44,1648}
+temp	float	$tmp284	%read{44,1648} %write{44,1648}
+temp	float	$tmp285	%read{44,1648} %write{44,1648}
+temp	float	$tmp286	%read{44,1648} %write{44,1648}
+temp	float	$tmp287	%read{44,1648} %write{44,1648}
+temp	float	$tmp288	%read{44,1648} %write{44,1648}
+temp	float	$tmp289	%read{44,1648} %write{44,1648}
+temp	float	$tmp290	%read{44,1648} %write{44,1648}
+temp	float	$tmp291	%read{44,1648} %write{44,1648}
+temp	float	$tmp292	%read{44,1648} %write{44,1648}
+temp	float	$tmp293	%read{44,1648} %write{44,1648}
+temp	float	$tmp294	%read{44,1648} %write{44,1648}
+temp	float	$tmp295	%read{44,1648} %write{44,1648}
+temp	float	$tmp296	%read{44,1648} %write{44,1648}
+temp	float	$tmp297	%read{44,1648} %write{44,1648}
+temp	float	$tmp298	%read{44,1648} %write{44,1648}
+temp	float	$tmp299	%read{44,1648} %write{44,1648}
+temp	float	$tmp300	%read{44,1648} %write{44,1648}
+temp	float	$tmp301	%read{44,1648} %write{44,1648}
+temp	float	$tmp302	%read{44,1648} %write{44,1648}
+temp	float	$tmp303	%read{44,1648} %write{44,1648}
+temp	float	$tmp304	%read{44,1648} %write{44,1648}
+temp	float	$tmp305	%read{44,1648} %write{44,1648}
+temp	float	$tmp306	%read{44,1648} %write{44,1648}
+temp	float	$tmp307	%read{44,1648} %write{44,1648}
+temp	float	$tmp308	%read{44,1648} %write{44,1648}
+temp	float	$tmp309	%read{44,1648} %write{44,1648}
+temp	float	$tmp310	%read{44,1648} %write{44,1648}
+temp	float	$tmp311	%read{44,1648} %write{44,1648}
+temp	float	$tmp312	%read{44,1648} %write{44,1648}
+temp	float	$tmp313	%read{44,1648} %write{44,1648}
+temp	float	$tmp314	%read{44,1648} %write{44,1648}
+temp	float	$tmp315	%read{44,1648} %write{44,1648}
+const	float	$const25	-8		%read{350,1224} %write{2147483647,-1}
+temp	float	$tmp316	%read{44,1648} %write{44,1648}
+temp	float	$tmp317	%read{44,1648} %write{44,1648}
+temp	float	$tmp318	%read{44,1648} %write{44,1648}
+temp	float	$tmp319	%read{44,1648} %write{44,1648}
+temp	float	$tmp320	%read{44,1648} %write{44,1648}
+temp	float	$tmp321	%read{44,1648} %write{44,1648}
+temp	float	$tmp322	%read{44,1648} %write{44,1648}
+temp	float	$tmp323	%read{44,1648} %write{44,1648}
+temp	float	$tmp324	%read{44,1648} %write{44,1648}
+temp	float	$tmp325	%read{44,1648} %write{44,1648}
+temp	float	$tmp326	%read{44,1648} %write{44,1648}
+temp	float	$tmp327	%read{44,1648} %write{44,1648}
+temp	float	$tmp328	%read{44,1648} %write{44,1648}
+temp	float	$tmp329	%read{44,1648} %write{44,1648}
+temp	float	$tmp330	%read{44,1648} %write{44,1648}
+temp	float	$tmp331	%read{44,1648} %write{44,1648}
+temp	float	$tmp332	%read{44,1648} %write{44,1648}
+temp	float	$tmp333	%read{44,1648} %write{44,1648}
+temp	float	$tmp334	%read{44,1648} %write{44,1648}
+temp	float	$tmp335	%read{44,1648} %write{44,1648}
+temp	float	$tmp336	%read{44,1648} %write{44,1648}
+temp	float	$tmp337	%read{44,1648} %write{44,1648}
+temp	float	$tmp338	%read{44,1648} %write{44,1648}
+temp	float	$tmp339	%read{44,1648} %write{44,1648}
+temp	float	$tmp340	%read{44,1648} %write{44,1648}
+temp	float	$tmp341	%read{44,1648} %write{44,1648}
+temp	float	$tmp342	%read{44,1648} %write{44,1648}
+temp	float	$tmp343	%read{44,1648} %write{44,1648}
+temp	float	$tmp344	%read{44,1648} %write{44,1648}
+temp	float	$tmp345	%read{44,1648} %write{44,1648}
+temp	float	$tmp346	%read{44,1648} %write{44,1648}
+temp	float	$tmp347	%read{44,1648} %write{44,1648}
+temp	float	$tmp348	%read{44,1648} %write{44,1648}
+temp	float	$tmp349	%read{44,1648} %write{44,1648}
+temp	float	$tmp350	%read{44,1648} %write{44,1648}
+temp	float	$tmp351	%read{44,1648} %write{44,1648}
+temp	float	$tmp352	%read{44,1648} %write{44,1648}
+temp	float	$tmp353	%read{44,1648} %write{44,1648}
+temp	float	$tmp354	%read{44,1648} %write{44,1648}
+temp	float	$tmp355	%read{44,1648} %write{44,1648}
+temp	float	$tmp356	%read{44,1648} %write{44,1648}
+temp	float	$tmp357	%read{44,1648} %write{44,1648}
+temp	float	$tmp358	%read{44,1648} %write{44,1648}
+temp	float	$tmp359	%read{44,1648} %write{44,1648}
+temp	float	$tmp360	%read{44,1648} %write{44,1648}
+temp	float	$tmp361	%read{44,1648} %write{44,1648}
+temp	float	$tmp362	%read{44,1648} %write{44,1648}
+temp	float	$tmp363	%read{44,1648} %write{44,1648}
+temp	float	$tmp364	%read{44,1648} %write{44,1648}
+temp	float	$tmp365	%read{44,1648} %write{44,1648}
+temp	float	$tmp366	%read{44,1648} %write{44,1648}
+temp	float	$tmp367	%read{44,1648} %write{44,1648}
+temp	float	$tmp368	%read{44,1648} %write{44,1648}
+temp	float	$tmp369	%read{44,1648} %write{44,1648}
+const	float	$const27	8		%read{404,1413} %write{2147483647,-1}
+temp	float	$tmp370	%read{44,1648} %write{44,1648}
+temp	float	$tmp371	%read{44,1648} %write{44,1648}
+temp	float	$tmp372	%read{44,1648} %write{44,1648}
+temp	float	$tmp373	%read{44,1648} %write{44,1648}
+temp	float	$tmp374	%read{44,1648} %write{44,1648}
+temp	float	$tmp375	%read{44,1648} %write{44,1648}
+temp	float	$tmp376	%read{44,1648} %write{44,1648}
+temp	float	$tmp377	%read{44,1648} %write{44,1648}
+temp	float	$tmp378	%read{44,1648} %write{44,1648}
+temp	float	$tmp379	%read{44,1648} %write{44,1648}
+temp	float	$tmp380	%read{44,1648} %write{44,1648}
+temp	float	$tmp381	%read{44,1648} %write{44,1648}
+temp	float	$tmp382	%read{44,1648} %write{44,1648}
+temp	float	$tmp383	%read{44,1648} %write{44,1648}
+temp	float	$tmp384	%read{44,1648} %write{44,1648}
+temp	float	$tmp385	%read{44,1648} %write{44,1648}
+temp	float	$tmp386	%read{44,1648} %write{44,1648}
+temp	float	$tmp387	%read{44,1648} %write{44,1648}
+temp	float	$tmp388	%read{44,1648} %write{44,1648}
+temp	float	$tmp389	%read{44,1648} %write{44,1648}
+temp	float	$tmp390	%read{44,1648} %write{44,1648}
+temp	float	$tmp391	%read{44,1648} %write{44,1648}
+temp	float	$tmp392	%read{44,1648} %write{44,1648}
+temp	float	$tmp393	%read{44,1648} %write{44,1648}
+temp	float	$tmp394	%read{44,1648} %write{44,1648}
+temp	float	$tmp395	%read{44,1648} %write{44,1648}
+temp	float	$tmp396	%read{44,1648} %write{44,1648}
+temp	float	$tmp397	%read{44,1648} %write{44,1648}
+temp	float	$tmp398	%read{44,1648} %write{44,1648}
+temp	float	$tmp399	%read{44,1648} %write{44,1648}
+temp	float	$tmp400	%read{44,1648} %write{44,1648}
+temp	float	$tmp401	%read{44,1648} %write{44,1648}
+temp	float	$tmp402	%read{44,1648} %write{44,1648}
+temp	float	$tmp403	%read{44,1648} %write{44,1648}
+temp	float	$tmp404	%read{44,1648} %write{44,1648}
+temp	float	$tmp405	%read{44,1648} %write{44,1648}
+temp	float	$tmp406	%read{44,1648} %write{44,1648}
+temp	float	$tmp407	%read{44,1648} %write{44,1648}
+temp	float	$tmp408	%read{44,1648} %write{44,1648}
+temp	float	$tmp409	%read{44,1648} %write{44,1648}
+temp	float	$tmp410	%read{44,1648} %write{44,1648}
+temp	float	$tmp411	%read{44,1648} %write{44,1648}
+temp	float	$tmp412	%read{44,1648} %write{44,1648}
+temp	float	$tmp413	%read{44,1648} %write{44,1648}
+temp	float	$tmp414	%read{44,1648} %write{44,1648}
+temp	float	$tmp415	%read{44,1648} %write{44,1648}
+temp	float	$tmp416	%read{44,1648} %write{44,1648}
+temp	float	$tmp417	%read{44,1648} %write{44,1648}
+temp	float	$tmp418	%read{44,1648} %write{44,1648}
+temp	float	$tmp419	%read{44,1648} %write{44,1648}
+temp	float	$tmp420	%read{44,1648} %write{44,1648}
+temp	float	$tmp421	%read{44,1648} %write{44,1648}
+temp	float	$tmp422	%read{44,1648} %write{44,1648}
+temp	float	$tmp423	%read{44,1648} %write{44,1648}
+temp	float	$tmp424	%read{44,1648} %write{44,1648}
+temp	float	$tmp425	%read{44,1648} %write{44,1648}
+temp	float	$tmp426	%read{44,1648} %write{44,1648}
+temp	float	$tmp427	%read{44,1648} %write{44,1648}
+temp	float	$tmp428	%read{44,1648} %write{44,1648}
+temp	float	$tmp429	%read{44,1648} %write{44,1648}
+temp	float	$tmp430	%read{44,1648} %write{44,1648}
+temp	float	$tmp431	%read{44,1648} %write{44,1648}
+temp	float	$tmp432	%read{44,1648} %write{44,1648}
+temp	float	$tmp433	%read{44,1648} %write{44,1648}
+temp	float	$tmp434	%read{44,1648} %write{44,1648}
+temp	float	$tmp435	%read{44,1648} %write{44,1648}
+temp	float	$tmp436	%read{44,1648} %write{44,1648}
+temp	float	$tmp437	%read{44,1648} %write{44,1648}
+temp	float	$tmp438	%read{44,1648} %write{44,1648}
+temp	float	$tmp439	%read{44,1648} %write{44,1648}
+temp	float	$tmp440	%read{44,1648} %write{44,1648}
+temp	float	$tmp441	%read{44,1648} %write{44,1648}
+temp	float	$tmp442	%read{44,1648} %write{44,1648}
+temp	float	$tmp443	%read{44,1648} %write{44,1648}
+temp	float	$tmp444	%read{44,1648} %write{44,1648}
+temp	float	$tmp445	%read{44,1648} %write{44,1648}
+temp	float	$tmp446	%read{44,1648} %write{44,1648}
+temp	float	$tmp447	%read{44,1648} %write{44,1648}
+temp	float	$tmp448	%read{44,1648} %write{44,1648}
+temp	float	$tmp449	%read{44,1648} %write{44,1648}
+temp	float	$tmp450	%read{44,1648} %write{44,1648}
+temp	float	$tmp451	%read{44,1648} %write{44,1648}
+temp	float	$tmp452	%read{44,1648} %write{44,1648}
+temp	float	$tmp453	%read{44,1648} %write{44,1648}
+temp	float	$tmp454	%read{44,1648} %write{44,1648}
+temp	float	$tmp455	%read{44,1648} %write{44,1648}
+temp	float	$tmp456	%read{44,1648} %write{44,1648}
+temp	float	$tmp457	%read{44,1648} %write{44,1648}
+temp	float	$tmp458	%read{44,1648} %write{44,1648}
+temp	float	$tmp459	%read{44,1648} %write{44,1648}
+temp	float	$tmp460	%read{44,1648} %write{44,1648}
+temp	float	$tmp461	%read{44,1648} %write{44,1648}
+temp	float	$tmp462	%read{44,1648} %write{44,1648}
+temp	float	$tmp463	%read{44,1648} %write{44,1648}
+temp	float	$tmp464	%read{44,1648} %write{44,1648}
+temp	float	$tmp465	%read{44,1648} %write{44,1648}
+temp	float	$tmp466	%read{44,1648} %write{44,1648}
+temp	float	$tmp467	%read{44,1648} %write{44,1648}
+temp	float	$tmp468	%read{44,1648} %write{44,1648}
+temp	float	$tmp469	%read{44,1648} %write{44,1648}
+temp	float	$tmp470	%read{44,1648} %write{44,1648}
+temp	float	$tmp471	%read{44,1648} %write{44,1648}
+temp	float	$tmp472	%read{44,1648} %write{44,1648}
+temp	float	$tmp473	%read{44,1648} %write{44,1648}
+temp	float	$tmp474	%read{44,1648} %write{44,1648}
+temp	float	$tmp475	%read{44,1648} %write{44,1648}
+temp	float	$tmp476	%read{44,1648} %write{44,1648}
+temp	float	$tmp477	%read{44,1648} %write{44,1648}
+temp	float	$tmp478	%read{44,1648} %write{44,1648}
+temp	float	$tmp479	%read{44,1648} %write{44,1648}
+temp	float	$tmp480	%read{44,1648} %write{44,1648}
+temp	float	$tmp481	%read{44,1648} %write{44,1648}
+temp	float	$tmp482	%read{44,1648} %write{44,1648}
+temp	float	$tmp483	%read{44,1648} %write{44,1648}
+temp	float	$tmp484	%read{44,1648} %write{44,1648}
+temp	float	$tmp485	%read{44,1648} %write{44,1648}
+temp	float	$tmp486	%read{44,1648} %write{44,1648}
+temp	float	$tmp487	%read{44,1648} %write{44,1648}
+temp	float	$tmp488	%read{44,1648} %write{44,1648}
+temp	float	$tmp489	%read{44,1648} %write{44,1648}
+temp	float	$tmp490	%read{44,1648} %write{44,1648}
+temp	float	$tmp491	%read{44,1648} %write{44,1648}
+temp	float	$tmp492	%read{44,1648} %write{44,1648}
+temp	float	$tmp493	%read{44,1648} %write{44,1648}
+temp	float	$tmp494	%read{44,1648} %write{44,1648}
+temp	float	$tmp495	%read{44,1648} %write{44,1648}
+temp	float	$tmp496	%read{44,1648} %write{44,1648}
+temp	float	$tmp497	%read{44,1648} %write{44,1648}
+temp	float	$tmp498	%read{44,1648} %write{44,1648}
+temp	float	$tmp499	%read{44,1648} %write{44,1648}
+temp	float	$tmp500	%read{44,1648} %write{44,1648}
+temp	float	$tmp501	%read{44,1648} %write{44,1648}
+temp	float	$tmp502	%read{44,1648} %write{44,1648}
+temp	float	$tmp503	%read{44,1648} %write{44,1648}
+temp	float	$tmp504	%read{44,1648} %write{44,1648}
+temp	float	$tmp505	%read{44,1648} %write{44,1648}
+temp	float	$tmp506	%read{44,1648} %write{44,1648}
+temp	float	$tmp507	%read{44,1648} %write{44,1648}
+temp	float	$tmp508	%read{44,1648} %write{44,1648}
+temp	float	$tmp509	%read{44,1648} %write{44,1648}
+temp	float	$tmp510	%read{44,1648} %write{44,1648}
+temp	float	$tmp511	%read{44,1648} %write{44,1648}
+temp	float	$tmp512	%read{44,1648} %write{44,1648}
+temp	float	$tmp513	%read{44,1648} %write{44,1648}
+temp	float	$tmp514	%read{44,1648} %write{44,1648}
+temp	float	$tmp515	%read{44,1648} %write{44,1648}
+temp	float	$tmp516	%read{44,1648} %write{44,1648}
+temp	float	$tmp517	%read{44,1648} %write{44,1648}
+temp	float	$tmp518	%read{44,1648} %write{44,1648}
+temp	float	$tmp519	%read{44,1648} %write{44,1648}
+temp	float	$tmp520	%read{44,1648} %write{44,1648}
+temp	float	$tmp521	%read{44,1648} %write{44,1648}
+temp	float	$tmp522	%read{44,1648} %write{44,1648}
+temp	float	$tmp523	%read{44,1648} %write{44,1648}
+temp	float	$tmp524	%read{44,1648} %write{44,1648}
+temp	float	$tmp525	%read{44,1648} %write{44,1648}
+temp	float	$tmp526	%read{44,1648} %write{44,1648}
+temp	float	$tmp527	%read{44,1648} %write{44,1648}
+temp	float	$tmp528	%read{44,1648} %write{44,1648}
+temp	float	$tmp529	%read{44,1648} %write{44,1648}
+temp	float	$tmp530	%read{44,1648} %write{44,1648}
+temp	float	$tmp531	%read{44,1648} %write{44,1648}
+temp	float	$tmp532	%read{44,1648} %write{44,1648}
+temp	float	$tmp533	%read{44,1648} %write{44,1648}
+temp	float	$tmp534	%read{44,1648} %write{44,1648}
+temp	float	$tmp535	%read{44,1648} %write{44,1648}
+temp	float	$tmp536	%read{44,1648} %write{44,1648}
+temp	float	$tmp537	%read{44,1648} %write{44,1648}
+temp	float	$tmp538	%read{44,1648} %write{44,1648}
+temp	float	$tmp539	%read{44,1648} %write{44,1648}
+temp	float	$tmp540	%read{44,1648} %write{44,1648}
+temp	float	$tmp541	%read{44,1648} %write{44,1648}
+temp	float	$tmp542	%read{44,1648} %write{44,1648}
+temp	float	$tmp543	%read{44,1648} %write{44,1648}
+temp	float	$tmp544	%read{44,1648} %write{44,1648}
+temp	float	$tmp545	%read{44,1648} %write{44,1648}
+temp	float	$tmp546	%read{44,1648} %write{44,1648}
+temp	float	$tmp547	%read{44,1648} %write{44,1648}
+temp	float	$tmp548	%read{44,1648} %write{44,1648}
+temp	float	$tmp549	%read{44,1648} %write{44,1648}
+temp	float	$tmp550	%read{44,1648} %write{44,1648}
+temp	float	$tmp551	%read{44,1648} %write{44,1648}
+temp	float	$tmp552	%read{44,1648} %write{44,1648}
+temp	float	$tmp553	%read{44,1648} %write{44,1648}
+temp	float	$tmp554	%read{44,1648} %write{44,1648}
+temp	float	$tmp555	%read{44,1648} %write{44,1648}
+temp	float	$tmp556	%read{44,1648} %write{44,1648}
+temp	float	$tmp557	%read{44,1648} %write{44,1648}
+temp	float	$tmp558	%read{44,1648} %write{44,1648}
+temp	float	$tmp559	%read{44,1648} %write{44,1648}
+temp	float	$tmp560	%read{44,1648} %write{44,1648}
+temp	float	$tmp561	%read{44,1648} %write{44,1648}
+temp	float	$tmp562	%read{44,1648} %write{44,1648}
+temp	float	$tmp563	%read{44,1648} %write{44,1648}
+temp	float	$tmp564	%read{44,1648} %write{44,1648}
+temp	float	$tmp565	%read{44,1648} %write{44,1648}
+temp	float	$tmp566	%read{44,1648} %write{44,1648}
+temp	float	$tmp567	%read{44,1648} %write{44,1648}
+temp	float	$tmp568	%read{44,1648} %write{44,1648}
+temp	float	$tmp569	%read{44,1648} %write{44,1648}
+temp	float	$tmp570	%read{44,1648} %write{44,1648}
+temp	float	$tmp571	%read{44,1648} %write{44,1648}
+temp	float	$tmp572	%read{44,1648} %write{44,1648}
+temp	float	$tmp573	%read{44,1648} %write{44,1648}
+temp	float	$tmp574	%read{44,1648} %write{44,1648}
+temp	float	$tmp575	%read{44,1648} %write{44,1648}
+temp	float	$tmp576	%read{44,1648} %write{44,1648}
+temp	float	$tmp577	%read{44,1648} %write{44,1648}
+temp	float	$tmp578	%read{44,1648} %write{44,1648}
+temp	float	$tmp579	%read{44,1648} %write{44,1648}
+temp	float	$tmp580	%read{44,1648} %write{44,1648}
+temp	float	$tmp581	%read{44,1648} %write{44,1648}
+temp	float	$tmp582	%read{44,1648} %write{44,1648}
+temp	float	$tmp583	%read{44,1648} %write{44,1648}
+temp	float	$tmp584	%read{44,1648} %write{44,1648}
+temp	float	$tmp585	%read{44,1648} %write{44,1648}
+temp	float	$tmp586	%read{44,1648} %write{44,1648}
+temp	float	$tmp587	%read{44,1648} %write{44,1648}
+temp	float	$tmp588	%read{44,1648} %write{44,1648}
+temp	float	$tmp589	%read{44,1648} %write{44,1648}
+temp	float	$tmp590	%read{44,1648} %write{44,1648}
+temp	float	$tmp591	%read{44,1648} %write{44,1648}
+temp	float	$tmp592	%read{44,1648} %write{44,1648}
+temp	float	$tmp593	%read{44,1648} %write{44,1648}
+temp	float	$tmp594	%read{44,1648} %write{44,1648}
+temp	float	$tmp595	%read{44,1648} %write{44,1648}
+temp	float	$tmp596	%read{44,1648} %write{44,1648}
+temp	float	$tmp597	%read{44,1648} %write{44,1648}
+temp	float	$tmp598	%read{44,1648} %write{44,1648}
+temp	float	$tmp599	%read{44,1648} %write{44,1648}
+temp	float	$tmp600	%read{44,1648} %write{44,1648}
+temp	float	$tmp601	%read{44,1648} %write{44,1648}
+temp	float	$tmp602	%read{44,1648} %write{44,1648}
+temp	float	$tmp603	%read{44,1648} %write{44,1648}
+temp	float	$tmp604	%read{44,1648} %write{44,1648}
+temp	float	$tmp605	%read{44,1648} %write{44,1648}
+temp	float	$tmp606	%read{44,1648} %write{44,1648}
+temp	float	$tmp607	%read{44,1648} %write{44,1648}
+temp	float	$tmp608	%read{44,1648} %write{44,1648}
+temp	float	$tmp609	%read{44,1648} %write{44,1648}
+temp	float	$tmp610	%read{44,1648} %write{44,1648}
+temp	float	$tmp611	%read{44,1648} %write{44,1648}
+temp	float	$tmp612	%read{44,1648} %write{44,1648}
+temp	float	$tmp613	%read{44,1648} %write{44,1648}
+temp	float	$tmp614	%read{44,1648} %write{44,1648}
+temp	float	$tmp615	%read{44,1648} %write{44,1648}
+temp	float	$tmp616	%read{44,1648} %write{44,1648}
+temp	float	$tmp617	%read{44,1648} %write{44,1648}
+temp	float	$tmp618	%read{44,1648} %write{44,1648}
+temp	float	$tmp619	%read{44,1648} %write{44,1648}
+temp	float	$tmp620	%read{44,1648} %write{44,1648}
+temp	float	$tmp621	%read{44,1648} %write{44,1648}
+temp	float	$tmp622	%read{44,1648} %write{44,1648}
+temp	float	$tmp623	%read{44,1648} %write{44,1648}
+temp	float	$tmp624	%read{44,1648} %write{44,1648}
+temp	int	$tmp625	%read{2147483647,-1} %write{44,1648}
+const	string	$const28	"cubic"		%read{666,1421} %write{2147483647,-1}
+temp	float	$tmp626	%read{44,1648} %write{44,1648}
+temp	int	$tmp627	%read{44,1648} %write{44,1648}
+temp	float	$tmp628	%read{44,1648} %write{44,1648}
+temp	float	$tmp629	%read{44,1648} %write{44,1648}
+temp	float	$tmp630	%read{44,1648} %write{44,1648}
+temp	float	$tmp631	%read{44,1648} %write{44,1648}
+temp	float	$tmp632	%read{44,1648} %write{44,1648}
+temp	float	$tmp633	%read{44,1648} %write{44,1648}
+temp	float	$tmp634	%read{44,1648} %write{44,1648}
+temp	float	$tmp635	%read{44,1648} %write{44,1648}
+temp	float	$tmp636	%read{44,1648} %write{44,1648}
+const	float	$const29	-0.5		%read{692,1447} %write{2147483647,-1}
+temp	float	$tmp637	%read{44,1648} %write{44,1648}
+temp	float	$tmp638	%read{44,1648} %write{44,1648}
+temp	float	$tmp639	%read{44,1648} %write{44,1648}
+temp	float	$tmp640	%read{44,1648} %write{44,1648}
+temp	float	$tmp641	%read{44,1648} %write{44,1648}
+temp	float	$tmp642	%read{44,1648} %write{44,1648}
+temp	float	$tmp643	%read{44,1648} %write{44,1648}
+temp	float	$tmp644	%read{44,1648} %write{44,1648}
+temp	float	$tmp645	%read{44,1648} %write{44,1648}
+temp	float	$tmp646	%read{44,1648} %write{44,1648}
+temp	int	$tmp647	%read{44,1648} %write{44,1648}
+temp	float	$tmp648	%read{44,1648} %write{44,1648}
+temp	float	$tmp649	%read{44,1648} %write{44,1648}
+const	float	$const30	-1		%read{700,1455} %write{2147483647,-1}
+temp	float	$tmp650	%read{44,1648} %write{44,1648}
+temp	float	$tmp651	%read{44,1648} %write{44,1648}
+temp	float	$tmp652	%read{44,1648} %write{44,1648}
+temp	float	$tmp653	%read{44,1648} %write{44,1648}
+temp	float	$tmp654	%read{44,1648} %write{44,1648}
+const	float	$const31	0.5		%read{704,1526} %write{2147483647,-1}
+temp	float	$tmp655	%read{44,1648} %write{44,1648}
+temp	int	$tmp656	%read{44,1648} %write{44,1648}
+temp	float	$tmp657	%read{44,1648} %write{44,1648}
+temp	float	$tmp658	%read{44,1648} %write{44,1648}
+temp	float	$tmp659	%read{44,1648} %write{44,1648}
+temp	float	$tmp660	%read{44,1648} %write{44,1648}
+temp	float	$tmp661	%read{44,1648} %write{44,1648}
+temp	float	$tmp662	%read{44,1648} %write{44,1648}
+temp	float	$tmp663	%read{44,1648} %write{44,1648}
+temp	float	$tmp664	%read{44,1648} %write{44,1648}
+temp	int	$tmp665	%read{2147483647,-1} %write{44,1648}
+temp	float	$tmp666	%read{44,1648} %write{44,1648}
+temp	float	$tmp667	%read{44,1648} %write{44,1648}
+temp	float	$tmp668	%read{44,1648} %write{44,1648}
+temp	float	$tmp669	%read{44,1648} %write{44,1648}
+temp	float	$tmp670	%read{44,1648} %write{44,1648}
+temp	float	$tmp671	%read{44,1648} %write{44,1648}
+temp	float	$tmp672	%read{44,1648} %write{44,1648}
+temp	float	$tmp673	%read{44,1648} %write{44,1648}
+temp	float	$tmp674	%read{44,1648} %write{44,1648}
+temp	float	$tmp675	%read{44,1648} %write{44,1648}
+temp	float	$tmp676	%read{44,1648} %write{44,1648}
+temp	float	$tmp677	%read{44,1648} %write{44,1648}
+temp	float	$tmp678	%read{44,1648} %write{44,1648}
+temp	float	$tmp679	%read{44,1648} %write{44,1648}
+temp	float	$tmp680	%read{44,1648} %write{44,1648}
+temp	float	$tmp681	%read{44,1648} %write{44,1648}
+temp	float	$tmp682	%read{44,1648} %write{44,1648}
+temp	float	$tmp683	%read{44,1648} %write{44,1648}
+temp	float	$tmp684	%read{44,1648} %write{44,1648}
+temp	float	$tmp685	%read{44,1648} %write{44,1648}
+temp	float	$tmp686	%read{44,1648} %write{44,1648}
+temp	float	$tmp687	%read{44,1648} %write{44,1648}
+temp	float	$tmp688	%read{44,1648} %write{44,1648}
+const	string	$const32	"CBRT"		%read{748,1511} %write{2147483647,-1}
+temp	float	$tmp689	%read{44,1648} %write{44,1648}
+temp	float	$tmp690	%read{44,1648} %write{44,1648}
+temp	float	$tmp691	%read{44,1648} %write{44,1648}
+temp	float	$tmp692	%read{44,1648} %write{44,1648}
+temp	float	$tmp693	%read{44,1648} %write{44,1648}
+temp	float	$tmp694	%read{44,1648} %write{44,1648}
+temp	float	$tmp695	%read{44,1648} %write{44,1648}
+temp	float	$tmp696	%read{44,1648} %write{44,1648}
+temp	float	$tmp697	%read{44,1648} %write{44,1648}
+temp	float	$tmp698	%read{44,1648} %write{44,1648}
+temp	float	$tmp699	%read{44,1648} %write{44,1648}
+temp	float	$tmp700	%read{44,1648} %write{44,1648}
+temp	float	$tmp701	%read{44,1648} %write{44,1648}
+temp	float	$tmp702	%read{44,1648} %write{44,1648}
+temp	float	$tmp703	%read{44,1648} %write{44,1648}
+temp	int	$tmp704	%read{44,1648} %write{44,1648}
+temp	float	$tmp705	%read{44,1648} %write{44,1648}
+temp	float	$tmp706	%read{44,1648} %write{44,1648}
+temp	float	$tmp707	%read{44,1648} %write{44,1648}
+temp	float	$tmp708	%read{44,1648} %write{44,1648}
+temp	float	$tmp709	%read{44,1648} %write{44,1648}
+temp	float	$tmp710	%read{44,1648} %write{44,1648}
+temp	float	$tmp711	%read{44,1648} %write{44,1648}
+temp	int	$tmp712	%read{44,1648} %write{44,1648}
+temp	float	$tmp713	%read{44,1648} %write{44,1648}
+temp	float	$tmp714	%read{44,1648} %write{44,1648}
+temp	float	$tmp715	%read{44,1648} %write{44,1648}
+temp	float	$tmp716	%read{44,1648} %write{44,1648}
+temp	float	$tmp717	%read{44,1648} %write{44,1648}
+temp	float	$tmp718	%read{44,1648} %write{44,1648}
+temp	float	$tmp719	%read{44,1648} %write{44,1648}
+temp	int	$tmp720	%read{44,1648} %write{44,1648}
+temp	float	$tmp721	%read{44,1648} %write{44,1648}
+temp	float	$tmp722	%read{44,1648} %write{44,1648}
+temp	float	$tmp723	%read{44,1648} %write{44,1648}
+temp	int	$tmp724	%read{44,1648} %write{44,1648}
+temp	float	$tmp725	%read{44,1648} %write{44,1648}
+temp	float	$tmp726	%read{44,1648} %write{44,1648}
+temp	float	$tmp727	%read{44,1648} %write{44,1648}
+temp	float	$tmp728	%read{44,1648} %write{44,1648}
+temp	float	$tmp729	%read{44,1648} %write{44,1648}
+temp	float	$tmp730	%read{44,1648} %write{44,1648}
+temp	float	$tmp731	%read{44,1648} %write{44,1648}
+temp	float	$tmp732	%read{44,1648} %write{44,1648}
+temp	float	$tmp733	%read{44,1648} %write{44,1648}
+temp	float	$tmp734	%read{44,1648} %write{44,1648}
+temp	float	$tmp735	%read{44,1648} %write{44,1648}
+temp	float	$tmp736	%read{44,1648} %write{44,1648}
+temp	float	$tmp737	%read{44,1648} %write{44,1648}
+temp	float	$tmp738	%read{44,1648} %write{44,1648}
+temp	float	$tmp739	%read{44,1648} %write{44,1648}
+temp	float	$tmp740	%read{44,1648} %write{44,1648}
+temp	float	$tmp741	%read{44,1648} %write{44,1648}
+temp	float	$tmp742	%read{44,1648} %write{44,1648}
+temp	float	$tmp743	%read{44,1648} %write{44,1648}
+temp	float	$tmp744	%read{44,1648} %write{44,1648}
+temp	float	$tmp745	%read{44,1648} %write{44,1648}
+temp	float	$tmp746	%read{44,1648} %write{44,1648}
+temp	float	$tmp747	%read{44,1648} %write{44,1648}
+temp	float	$tmp748	%read{44,1648} %write{44,1648}
+temp	float	$tmp749	%read{44,1648} %write{44,1648}
+temp	float	$tmp750	%read{44,1648} %write{44,1648}
+temp	float	$tmp751	%read{44,1648} %write{44,1648}
+temp	int	$tmp752	%read{2147483647,-1} %write{44,1648}
+const	float	$const33	1000000		%read{834,1589} %write{2147483647,-1}
+temp	int	$tmp753	%read{44,1648} %write{44,1648}
+temp	int	$tmp754	%read{2147483647,-1} %write{44,1648}
+temp	float	$tmp755	%read{44,1648} %write{44,1648}
+temp	int	$tmp756	%read{44,1648} %write{44,1648}
+temp	int	$tmp757	%read{44,1648} %write{44,1648}
+temp	float	$tmp758	%read{44,1648} %write{44,1648}
+temp	int	$tmp759	%read{44,1648} %write{44,1648}
+temp	int	$tmp760	%read{44,1648} %write{44,1648}
+temp	float	$tmp761	%read{44,1648} %write{44,1648}
+temp	float	$tmp762	%read{44,1648} %write{44,1648}
+temp	float	$tmp763	%read{44,1648} %write{44,1648}
+temp	point	$tmp764	%read{44,1648} %write{44,1648}
+temp	float	$tmp765	%read{44,1648} %write{44,1648}
+temp	float	$tmp766	%read{44,1648} %write{44,1648}
+temp	float	$tmp767	%read{44,1648} %write{44,1648}
+temp	point	$tmp768	%read{44,1648} %write{44,1648}
+temp	point	$tmp769	%read{44,1648} %write{44,1648}
+temp	float	$tmp770	%read{44,1648} %write{44,1648}
+temp	point	$tmp771	%read{44,1648} %write{44,1648}
+temp	point	$tmp772	%read{44,1648} %write{44,1648}
+temp	int	$tmp773	%read{44,1648} %write{44,1648}
+temp	int	$tmp774	%read{44,1648} %write{44,1648}
+temp	int	$tmp775	%read{44,1648} %write{44,1648}
+temp	int	$tmp776	%read{44,1648} %write{44,1648}
+temp	int	$tmp777	%read{44,1648} %write{44,1648}
+temp	float	$tmp778	%read{44,1648} %write{44,1648}
+temp	float	$tmp779	%read{44,1648} %write{44,1648}
+temp	float	$tmp780	%read{44,1648} %write{44,1648}
+temp	float	$tmp781	%read{44,1648} %write{44,1648}
+temp	float	$tmp782	%read{44,1648} %write{44,1648}
+temp	int	$tmp783	%read{44,1648} %write{44,1648}
+temp	int	$tmp784	%read{44,1648} %write{44,1648}
+temp	float	$tmp785	%read{44,1648} %write{44,1648}
+temp	float	$tmp786	%read{44,1648} %write{44,1648}
+temp	float	$tmp787	%read{44,1648} %write{44,1648}
+temp	float	$tmp788	%read{44,1648} %write{44,1648}
+temp	float	$tmp789	%read{44,1648} %write{44,1648}
+temp	float	$tmp790	%read{44,1648} %write{44,1648}
+temp	float	$tmp791	%read{44,1648} %write{44,1648}
+temp	float	$tmp792	%read{44,1648} %write{44,1648}
+temp	float	$tmp793	%read{44,1648} %write{44,1648}
+temp	float	$tmp794	%read{44,1648} %write{44,1648}
+temp	float	$tmp795	%read{44,1648} %write{44,1648}
+temp	float	$tmp796	%read{44,1648} %write{44,1648}
+temp	float	$tmp797	%read{44,1648} %write{44,1648}
+temp	float	$tmp798	%read{44,1648} %write{44,1648}
+temp	float	$tmp799	%read{44,1648} %write{44,1648}
+temp	float	$tmp800	%read{44,1648} %write{44,1648}
+temp	float	$tmp801	%read{44,1648} %write{44,1648}
+temp	float	$tmp802	%read{44,1648} %write{44,1648}
+temp	float	$tmp803	%read{44,1648} %write{44,1648}
+temp	float	$tmp804	%read{44,1648} %write{44,1648}
+temp	float	$tmp805	%read{44,1648} %write{44,1648}
+temp	float	$tmp806	%read{44,1648} %write{44,1648}
+temp	float	$tmp807	%read{44,1648} %write{44,1648}
+temp	float	$tmp808	%read{44,1648} %write{44,1648}
+temp	float	$tmp809	%read{44,1648} %write{44,1648}
+temp	float	$tmp810	%read{44,1648} %write{44,1648}
+temp	float	$tmp811	%read{44,1648} %write{44,1648}
+temp	float	$tmp812	%read{44,1648} %write{44,1648}
+temp	float	$tmp813	%read{44,1648} %write{44,1648}
+temp	float	$tmp814	%read{44,1648} %write{44,1648}
+temp	float	$tmp815	%read{44,1648} %write{44,1648}
+temp	float	$tmp816	%read{44,1648} %write{44,1648}
+temp	float	$tmp817	%read{44,1648} %write{44,1648}
+temp	float	$tmp818	%read{44,1648} %write{44,1648}
+temp	float	$tmp819	%read{44,1648} %write{44,1648}
+temp	float	$tmp820	%read{44,1648} %write{44,1648}
+temp	float	$tmp821	%read{44,1648} %write{44,1648}
+temp	float	$tmp822	%read{44,1648} %write{44,1648}
+temp	float	$tmp823	%read{44,1648} %write{44,1648}
+temp	float	$tmp824	%read{44,1648} %write{44,1648}
+temp	float	$tmp825	%read{44,1648} %write{44,1648}
+temp	float	$tmp826	%read{44,1648} %write{44,1648}
+temp	float	$tmp827	%read{44,1648} %write{44,1648}
+temp	float	$tmp828	%read{44,1648} %write{44,1648}
+temp	float	$tmp829	%read{44,1648} %write{44,1648}
+temp	float	$tmp830	%read{44,1648} %write{44,1648}
+temp	float	$tmp831	%read{44,1648} %write{44,1648}
+temp	float	$tmp832	%read{44,1648} %write{44,1648}
+temp	float	$tmp833	%read{44,1648} %write{44,1648}
+temp	float	$tmp834	%read{44,1648} %write{44,1648}
+temp	float	$tmp835	%read{44,1648} %write{44,1648}
+temp	float	$tmp836	%read{44,1648} %write{44,1648}
+temp	float	$tmp837	%read{44,1648} %write{44,1648}
+temp	float	$tmp838	%read{44,1648} %write{44,1648}
+temp	float	$tmp839	%read{44,1648} %write{44,1648}
+temp	float	$tmp840	%read{44,1648} %write{44,1648}
+temp	float	$tmp841	%read{44,1648} %write{44,1648}
+temp	float	$tmp842	%read{44,1648} %write{44,1648}
+temp	float	$tmp843	%read{44,1648} %write{44,1648}
+temp	float	$tmp844	%read{44,1648} %write{44,1648}
+temp	float	$tmp845	%read{44,1648} %write{44,1648}
+temp	float	$tmp846	%read{44,1648} %write{44,1648}
+temp	float	$tmp847	%read{44,1648} %write{44,1648}
+temp	float	$tmp848	%read{44,1648} %write{44,1648}
+temp	float	$tmp849	%read{44,1648} %write{44,1648}
+temp	float	$tmp850	%read{44,1648} %write{44,1648}
+temp	float	$tmp851	%read{44,1648} %write{44,1648}
+temp	float	$tmp852	%read{44,1648} %write{44,1648}
+temp	float	$tmp853	%read{44,1648} %write{44,1648}
+temp	float	$tmp854	%read{44,1648} %write{44,1648}
+temp	float	$tmp855	%read{44,1648} %write{44,1648}
+temp	float	$tmp856	%read{44,1648} %write{44,1648}
+temp	float	$tmp857	%read{44,1648} %write{44,1648}
+temp	float	$tmp858	%read{44,1648} %write{44,1648}
+temp	float	$tmp859	%read{44,1648} %write{44,1648}
+temp	float	$tmp860	%read{44,1648} %write{44,1648}
+temp	float	$tmp861	%read{44,1648} %write{44,1648}
+temp	float	$tmp862	%read{44,1648} %write{44,1648}
+temp	float	$tmp863	%read{44,1648} %write{44,1648}
+temp	float	$tmp864	%read{44,1648} %write{44,1648}
+temp	float	$tmp865	%read{44,1648} %write{44,1648}
+temp	float	$tmp866	%read{44,1648} %write{44,1648}
+temp	float	$tmp867	%read{44,1648} %write{44,1648}
+temp	float	$tmp868	%read{44,1648} %write{44,1648}
+temp	float	$tmp869	%read{44,1648} %write{44,1648}
+temp	float	$tmp870	%read{44,1648} %write{44,1648}
+temp	float	$tmp871	%read{44,1648} %write{44,1648}
+temp	float	$tmp872	%read{44,1648} %write{44,1648}
+temp	float	$tmp873	%read{44,1648} %write{44,1648}
+temp	float	$tmp874	%read{44,1648} %write{44,1648}
+temp	float	$tmp875	%read{44,1648} %write{44,1648}
+temp	float	$tmp876	%read{44,1648} %write{44,1648}
+temp	float	$tmp877	%read{44,1648} %write{44,1648}
+temp	float	$tmp878	%read{44,1648} %write{44,1648}
+temp	float	$tmp879	%read{44,1648} %write{44,1648}
+temp	float	$tmp880	%read{44,1648} %write{44,1648}
+temp	float	$tmp881	%read{44,1648} %write{44,1648}
+temp	float	$tmp882	%read{44,1648} %write{44,1648}
+temp	float	$tmp883	%read{44,1648} %write{44,1648}
+temp	float	$tmp884	%read{44,1648} %write{44,1648}
+temp	float	$tmp885	%read{44,1648} %write{44,1648}
+temp	float	$tmp886	%read{44,1648} %write{44,1648}
+temp	float	$tmp887	%read{44,1648} %write{44,1648}
+temp	float	$tmp888	%read{44,1648} %write{44,1648}
+temp	float	$tmp889	%read{44,1648} %write{44,1648}
+temp	float	$tmp890	%read{44,1648} %write{44,1648}
+temp	float	$tmp891	%read{44,1648} %write{44,1648}
+temp	float	$tmp892	%read{44,1648} %write{44,1648}
+temp	float	$tmp893	%read{44,1648} %write{44,1648}
+temp	float	$tmp894	%read{44,1648} %write{44,1648}
+temp	float	$tmp895	%read{44,1648} %write{44,1648}
+temp	float	$tmp896	%read{44,1648} %write{44,1648}
+temp	float	$tmp897	%read{44,1648} %write{44,1648}
+temp	float	$tmp898	%read{44,1648} %write{44,1648}
+temp	float	$tmp899	%read{44,1648} %write{44,1648}
+temp	float	$tmp900	%read{44,1648} %write{44,1648}
+temp	float	$tmp901	%read{44,1648} %write{44,1648}
+temp	float	$tmp902	%read{44,1648} %write{44,1648}
+temp	float	$tmp903	%read{44,1648} %write{44,1648}
+temp	float	$tmp904	%read{44,1648} %write{44,1648}
+temp	float	$tmp905	%read{44,1648} %write{44,1648}
+temp	float	$tmp906	%read{44,1648} %write{44,1648}
+temp	float	$tmp907	%read{44,1648} %write{44,1648}
+temp	float	$tmp908	%read{44,1648} %write{44,1648}
+temp	float	$tmp909	%read{44,1648} %write{44,1648}
+temp	float	$tmp910	%read{44,1648} %write{44,1648}
+temp	float	$tmp911	%read{44,1648} %write{44,1648}
+temp	float	$tmp912	%read{44,1648} %write{44,1648}
+temp	float	$tmp913	%read{44,1648} %write{44,1648}
+temp	float	$tmp914	%read{44,1648} %write{44,1648}
+temp	float	$tmp915	%read{44,1648} %write{44,1648}
+temp	float	$tmp916	%read{44,1648} %write{44,1648}
+temp	float	$tmp917	%read{44,1648} %write{44,1648}
+temp	float	$tmp918	%read{44,1648} %write{44,1648}
+temp	float	$tmp919	%read{44,1648} %write{44,1648}
+temp	float	$tmp920	%read{44,1648} %write{44,1648}
+temp	float	$tmp921	%read{44,1648} %write{44,1648}
+temp	float	$tmp922	%read{44,1648} %write{44,1648}
+temp	float	$tmp923	%read{44,1648} %write{44,1648}
+temp	float	$tmp924	%read{44,1648} %write{44,1648}
+temp	float	$tmp925	%read{44,1648} %write{44,1648}
+temp	float	$tmp926	%read{44,1648} %write{44,1648}
+temp	float	$tmp927	%read{44,1648} %write{44,1648}
+temp	float	$tmp928	%read{44,1648} %write{44,1648}
+temp	float	$tmp929	%read{44,1648} %write{44,1648}
+temp	float	$tmp930	%read{44,1648} %write{44,1648}
+temp	float	$tmp931	%read{44,1648} %write{44,1648}
+temp	float	$tmp932	%read{44,1648} %write{44,1648}
+temp	float	$tmp933	%read{44,1648} %write{44,1648}
+temp	float	$tmp934	%read{44,1648} %write{44,1648}
+temp	float	$tmp935	%read{44,1648} %write{44,1648}
+temp	float	$tmp936	%read{44,1648} %write{44,1648}
+temp	float	$tmp937	%read{44,1648} %write{44,1648}
+temp	float	$tmp938	%read{44,1648} %write{44,1648}
+temp	float	$tmp939	%read{44,1648} %write{44,1648}
+temp	float	$tmp940	%read{44,1648} %write{44,1648}
+temp	float	$tmp941	%read{44,1648} %write{44,1648}
+temp	float	$tmp942	%read{44,1648} %write{44,1648}
+temp	float	$tmp943	%read{44,1648} %write{44,1648}
+temp	float	$tmp944	%read{44,1648} %write{44,1648}
+temp	float	$tmp945	%read{44,1648} %write{44,1648}
+temp	float	$tmp946	%read{44,1648} %write{44,1648}
+temp	float	$tmp947	%read{44,1648} %write{44,1648}
+temp	float	$tmp948	%read{44,1648} %write{44,1648}
+temp	float	$tmp949	%read{44,1648} %write{44,1648}
+temp	float	$tmp950	%read{44,1648} %write{44,1648}
+temp	float	$tmp951	%read{44,1648} %write{44,1648}
+temp	float	$tmp952	%read{44,1648} %write{44,1648}
+temp	float	$tmp953	%read{44,1648} %write{44,1648}
+temp	float	$tmp954	%read{44,1648} %write{44,1648}
+temp	float	$tmp955	%read{44,1648} %write{44,1648}
+temp	float	$tmp956	%read{44,1648} %write{44,1648}
+temp	float	$tmp957	%read{44,1648} %write{44,1648}
+temp	float	$tmp958	%read{44,1648} %write{44,1648}
+temp	float	$tmp959	%read{44,1648} %write{44,1648}
+temp	float	$tmp960	%read{44,1648} %write{44,1648}
+temp	float	$tmp961	%read{44,1648} %write{44,1648}
+temp	float	$tmp962	%read{44,1648} %write{44,1648}
+temp	float	$tmp963	%read{44,1648} %write{44,1648}
+temp	float	$tmp964	%read{44,1648} %write{44,1648}
+temp	float	$tmp965	%read{44,1648} %write{44,1648}
+temp	float	$tmp966	%read{44,1648} %write{44,1648}
+temp	float	$tmp967	%read{44,1648} %write{44,1648}
+temp	float	$tmp968	%read{44,1648} %write{44,1648}
+temp	float	$tmp969	%read{44,1648} %write{44,1648}
+temp	float	$tmp970	%read{44,1648} %write{44,1648}
+temp	float	$tmp971	%read{44,1648} %write{44,1648}
+temp	float	$tmp972	%read{44,1648} %write{44,1648}
+temp	float	$tmp973	%read{44,1648} %write{44,1648}
+temp	float	$tmp974	%read{44,1648} %write{44,1648}
+temp	float	$tmp975	%read{44,1648} %write{44,1648}
+temp	float	$tmp976	%read{44,1648} %write{44,1648}
+temp	float	$tmp977	%read{44,1648} %write{44,1648}
+temp	float	$tmp978	%read{44,1648} %write{44,1648}
+temp	float	$tmp979	%read{44,1648} %write{44,1648}
+temp	float	$tmp980	%read{44,1648} %write{44,1648}
+temp	float	$tmp981	%read{44,1648} %write{44,1648}
+temp	float	$tmp982	%read{44,1648} %write{44,1648}
+temp	float	$tmp983	%read{44,1648} %write{44,1648}
+temp	float	$tmp984	%read{44,1648} %write{44,1648}
+temp	float	$tmp985	%read{44,1648} %write{44,1648}
+temp	float	$tmp986	%read{44,1648} %write{44,1648}
+temp	float	$tmp987	%read{44,1648} %write{44,1648}
+temp	float	$tmp988	%read{44,1648} %write{44,1648}
+temp	float	$tmp989	%read{44,1648} %write{44,1648}
+temp	float	$tmp990	%read{44,1648} %write{44,1648}
+temp	float	$tmp991	%read{44,1648} %write{44,1648}
+temp	float	$tmp992	%read{44,1648} %write{44,1648}
+temp	float	$tmp993	%read{44,1648} %write{44,1648}
+temp	float	$tmp994	%read{44,1648} %write{44,1648}
+temp	float	$tmp995	%read{44,1648} %write{44,1648}
+temp	float	$tmp996	%read{44,1648} %write{44,1648}
+temp	float	$tmp997	%read{44,1648} %write{44,1648}
+temp	float	$tmp998	%read{44,1648} %write{44,1648}
+temp	float	$tmp999	%read{44,1648} %write{44,1648}
+temp	float	$tmp1000	%read{44,1648} %write{44,1648}
+temp	float	$tmp1001	%read{44,1648} %write{44,1648}
+temp	float	$tmp1002	%read{44,1648} %write{44,1648}
+temp	float	$tmp1003	%read{44,1648} %write{44,1648}
+temp	float	$tmp1004	%read{44,1648} %write{44,1648}
+temp	float	$tmp1005	%read{44,1648} %write{44,1648}
+temp	float	$tmp1006	%read{44,1648} %write{44,1648}
+temp	float	$tmp1007	%read{44,1648} %write{44,1648}
+temp	float	$tmp1008	%read{44,1648} %write{44,1648}
+temp	float	$tmp1009	%read{44,1648} %write{44,1648}
+temp	float	$tmp1010	%read{44,1648} %write{44,1648}
+temp	float	$tmp1011	%read{44,1648} %write{44,1648}
+temp	float	$tmp1012	%read{44,1648} %write{44,1648}
+temp	float	$tmp1013	%read{44,1648} %write{44,1648}
+temp	float	$tmp1014	%read{44,1648} %write{44,1648}
+temp	float	$tmp1015	%read{44,1648} %write{44,1648}
+temp	float	$tmp1016	%read{44,1648} %write{44,1648}
+temp	float	$tmp1017	%read{44,1648} %write{44,1648}
+temp	float	$tmp1018	%read{44,1648} %write{44,1648}
+temp	float	$tmp1019	%read{44,1648} %write{44,1648}
+temp	float	$tmp1020	%read{44,1648} %write{44,1648}
+temp	float	$tmp1021	%read{44,1648} %write{44,1648}
+temp	float	$tmp1022	%read{44,1648} %write{44,1648}
+temp	float	$tmp1023	%read{44,1648} %write{44,1648}
+temp	float	$tmp1024	%read{44,1648} %write{44,1648}
+temp	float	$tmp1025	%read{44,1648} %write{44,1648}
+temp	float	$tmp1026	%read{44,1648} %write{44,1648}
+temp	float	$tmp1027	%read{44,1648} %write{44,1648}
+temp	float	$tmp1028	%read{44,1648} %write{44,1648}
+temp	float	$tmp1029	%read{44,1648} %write{44,1648}
+temp	float	$tmp1030	%read{44,1648} %write{44,1648}
+temp	float	$tmp1031	%read{44,1648} %write{44,1648}
+temp	float	$tmp1032	%read{44,1648} %write{44,1648}
+temp	float	$tmp1033	%read{44,1648} %write{44,1648}
+temp	float	$tmp1034	%read{44,1648} %write{44,1648}
+temp	float	$tmp1035	%read{44,1648} %write{44,1648}
+temp	float	$tmp1036	%read{44,1648} %write{44,1648}
+temp	float	$tmp1037	%read{44,1648} %write{44,1648}
+temp	float	$tmp1038	%read{44,1648} %write{44,1648}
+temp	float	$tmp1039	%read{44,1648} %write{44,1648}
+temp	float	$tmp1040	%read{44,1648} %write{44,1648}
+temp	float	$tmp1041	%read{44,1648} %write{44,1648}
+temp	float	$tmp1042	%read{44,1648} %write{44,1648}
+temp	float	$tmp1043	%read{44,1648} %write{44,1648}
+temp	float	$tmp1044	%read{44,1648} %write{44,1648}
+temp	float	$tmp1045	%read{44,1648} %write{44,1648}
+temp	float	$tmp1046	%read{44,1648} %write{44,1648}
+temp	float	$tmp1047	%read{44,1648} %write{44,1648}
+temp	float	$tmp1048	%read{44,1648} %write{44,1648}
+temp	float	$tmp1049	%read{44,1648} %write{44,1648}
+temp	float	$tmp1050	%read{44,1648} %write{44,1648}
+temp	float	$tmp1051	%read{44,1648} %write{44,1648}
+temp	float	$tmp1052	%read{44,1648} %write{44,1648}
+temp	float	$tmp1053	%read{44,1648} %write{44,1648}
+temp	float	$tmp1054	%read{44,1648} %write{44,1648}
+temp	float	$tmp1055	%read{44,1648} %write{44,1648}
+temp	float	$tmp1056	%read{44,1648} %write{44,1648}
+temp	float	$tmp1057	%read{44,1648} %write{44,1648}
+temp	float	$tmp1058	%read{44,1648} %write{44,1648}
+temp	float	$tmp1059	%read{44,1648} %write{44,1648}
+temp	float	$tmp1060	%read{44,1648} %write{44,1648}
+temp	float	$tmp1061	%read{44,1648} %write{44,1648}
+temp	float	$tmp1062	%read{44,1648} %write{44,1648}
+temp	float	$tmp1063	%read{44,1648} %write{44,1648}
+temp	float	$tmp1064	%read{44,1648} %write{44,1648}
+temp	float	$tmp1065	%read{44,1648} %write{44,1648}
+temp	float	$tmp1066	%read{44,1648} %write{44,1648}
+temp	float	$tmp1067	%read{44,1648} %write{44,1648}
+temp	float	$tmp1068	%read{44,1648} %write{44,1648}
+temp	float	$tmp1069	%read{44,1648} %write{44,1648}
+temp	float	$tmp1070	%read{44,1648} %write{44,1648}
+temp	float	$tmp1071	%read{44,1648} %write{44,1648}
+temp	float	$tmp1072	%read{44,1648} %write{44,1648}
+temp	float	$tmp1073	%read{44,1648} %write{44,1648}
+temp	float	$tmp1074	%read{44,1648} %write{44,1648}
+temp	float	$tmp1075	%read{44,1648} %write{44,1648}
+temp	float	$tmp1076	%read{44,1648} %write{44,1648}
+temp	float	$tmp1077	%read{44,1648} %write{44,1648}
+temp	float	$tmp1078	%read{44,1648} %write{44,1648}
+temp	float	$tmp1079	%read{44,1648} %write{44,1648}
+temp	float	$tmp1080	%read{44,1648} %write{44,1648}
+temp	float	$tmp1081	%read{44,1648} %write{44,1648}
+temp	float	$tmp1082	%read{44,1648} %write{44,1648}
+temp	float	$tmp1083	%read{44,1648} %write{44,1648}
+temp	float	$tmp1084	%read{44,1648} %write{44,1648}
+temp	float	$tmp1085	%read{44,1648} %write{44,1648}
+temp	float	$tmp1086	%read{44,1648} %write{44,1648}
+temp	float	$tmp1087	%read{44,1648} %write{44,1648}
+temp	float	$tmp1088	%read{44,1648} %write{44,1648}
+temp	float	$tmp1089	%read{44,1648} %write{44,1648}
+temp	float	$tmp1090	%read{44,1648} %write{44,1648}
+temp	float	$tmp1091	%read{44,1648} %write{44,1648}
+temp	float	$tmp1092	%read{44,1648} %write{44,1648}
+temp	float	$tmp1093	%read{44,1648} %write{44,1648}
+temp	float	$tmp1094	%read{44,1648} %write{44,1648}
+temp	float	$tmp1095	%read{44,1648} %write{44,1648}
+temp	float	$tmp1096	%read{44,1648} %write{44,1648}
+temp	float	$tmp1097	%read{44,1648} %write{44,1648}
+temp	float	$tmp1098	%read{44,1648} %write{44,1648}
+temp	float	$tmp1099	%read{44,1648} %write{44,1648}
+temp	float	$tmp1100	%read{44,1648} %write{44,1648}
+temp	float	$tmp1101	%read{44,1648} %write{44,1648}
+temp	float	$tmp1102	%read{44,1648} %write{44,1648}
+temp	float	$tmp1103	%read{44,1648} %write{44,1648}
+temp	float	$tmp1104	%read{44,1648} %write{44,1648}
+temp	float	$tmp1105	%read{44,1648} %write{44,1648}
+temp	float	$tmp1106	%read{44,1648} %write{44,1648}
+temp	float	$tmp1107	%read{44,1648} %write{44,1648}
+temp	float	$tmp1108	%read{44,1648} %write{44,1648}
+temp	float	$tmp1109	%read{44,1648} %write{44,1648}
+temp	float	$tmp1110	%read{44,1648} %write{44,1648}
+temp	float	$tmp1111	%read{44,1648} %write{44,1648}
+temp	float	$tmp1112	%read{44,1648} %write{44,1648}
+temp	float	$tmp1113	%read{44,1648} %write{44,1648}
+temp	float	$tmp1114	%read{44,1648} %write{44,1648}
+temp	float	$tmp1115	%read{44,1648} %write{44,1648}
+temp	float	$tmp1116	%read{44,1648} %write{44,1648}
+temp	float	$tmp1117	%read{44,1648} %write{44,1648}
+temp	float	$tmp1118	%read{44,1648} %write{44,1648}
+temp	float	$tmp1119	%read{44,1648} %write{44,1648}
+temp	float	$tmp1120	%read{44,1648} %write{44,1648}
+temp	float	$tmp1121	%read{44,1648} %write{44,1648}
+temp	float	$tmp1122	%read{44,1648} %write{44,1648}
+temp	float	$tmp1123	%read{44,1648} %write{44,1648}
+temp	float	$tmp1124	%read{44,1648} %write{44,1648}
+temp	float	$tmp1125	%read{44,1648} %write{44,1648}
+temp	float	$tmp1126	%read{44,1648} %write{44,1648}
+temp	float	$tmp1127	%read{44,1648} %write{44,1648}
+temp	float	$tmp1128	%read{44,1648} %write{44,1648}
+temp	float	$tmp1129	%read{44,1648} %write{44,1648}
+temp	float	$tmp1130	%read{44,1648} %write{44,1648}
+temp	float	$tmp1131	%read{44,1648} %write{44,1648}
+temp	float	$tmp1132	%read{44,1648} %write{44,1648}
+temp	float	$tmp1133	%read{44,1648} %write{44,1648}
+temp	float	$tmp1134	%read{44,1648} %write{44,1648}
+temp	float	$tmp1135	%read{44,1648} %write{44,1648}
+temp	float	$tmp1136	%read{44,1648} %write{44,1648}
+temp	float	$tmp1137	%read{44,1648} %write{44,1648}
+temp	float	$tmp1138	%read{44,1648} %write{44,1648}
+temp	float	$tmp1139	%read{44,1648} %write{44,1648}
+temp	float	$tmp1140	%read{44,1648} %write{44,1648}
+temp	float	$tmp1141	%read{44,1648} %write{44,1648}
+temp	float	$tmp1142	%read{44,1648} %write{44,1648}
+temp	float	$tmp1143	%read{44,1648} %write{44,1648}
+temp	float	$tmp1144	%read{44,1648} %write{44,1648}
+temp	float	$tmp1145	%read{44,1648} %write{44,1648}
+temp	float	$tmp1146	%read{44,1648} %write{44,1648}
+temp	float	$tmp1147	%read{44,1648} %write{44,1648}
+temp	float	$tmp1148	%read{44,1648} %write{44,1648}
+temp	float	$tmp1149	%read{44,1648} %write{44,1648}
+temp	float	$tmp1150	%read{44,1648} %write{44,1648}
+temp	float	$tmp1151	%read{44,1648} %write{44,1648}
+temp	float	$tmp1152	%read{44,1648} %write{44,1648}
+temp	float	$tmp1153	%read{44,1648} %write{44,1648}
+temp	float	$tmp1154	%read{44,1648} %write{44,1648}
+temp	float	$tmp1155	%read{44,1648} %write{44,1648}
+temp	float	$tmp1156	%read{44,1648} %write{44,1648}
+temp	float	$tmp1157	%read{44,1648} %write{44,1648}
+temp	float	$tmp1158	%read{44,1648} %write{44,1648}
+temp	float	$tmp1159	%read{44,1648} %write{44,1648}
+temp	float	$tmp1160	%read{44,1648} %write{44,1648}
+temp	float	$tmp1161	%read{44,1648} %write{44,1648}
+temp	float	$tmp1162	%read{44,1648} %write{44,1648}
+temp	float	$tmp1163	%read{44,1648} %write{44,1648}
+temp	float	$tmp1164	%read{44,1648} %write{44,1648}
+temp	float	$tmp1165	%read{44,1648} %write{44,1648}
+temp	float	$tmp1166	%read{44,1648} %write{44,1648}
+temp	float	$tmp1167	%read{44,1648} %write{44,1648}
+temp	float	$tmp1168	%read{44,1648} %write{44,1648}
+temp	float	$tmp1169	%read{44,1648} %write{44,1648}
+temp	float	$tmp1170	%read{44,1648} %write{44,1648}
+temp	float	$tmp1171	%read{44,1648} %write{44,1648}
+temp	float	$tmp1172	%read{44,1648} %write{44,1648}
+temp	float	$tmp1173	%read{44,1648} %write{44,1648}
+temp	float	$tmp1174	%read{44,1648} %write{44,1648}
+temp	float	$tmp1175	%read{44,1648} %write{44,1648}
+temp	float	$tmp1176	%read{44,1648} %write{44,1648}
+temp	float	$tmp1177	%read{44,1648} %write{44,1648}
+temp	float	$tmp1178	%read{44,1648} %write{44,1648}
+temp	float	$tmp1179	%read{44,1648} %write{44,1648}
+temp	float	$tmp1180	%read{44,1648} %write{44,1648}
+temp	float	$tmp1181	%read{44,1648} %write{44,1648}
+temp	float	$tmp1182	%read{44,1648} %write{44,1648}
+temp	float	$tmp1183	%read{44,1648} %write{44,1648}
+temp	float	$tmp1184	%read{44,1648} %write{44,1648}
+temp	float	$tmp1185	%read{44,1648} %write{44,1648}
+temp	float	$tmp1186	%read{44,1648} %write{44,1648}
+temp	float	$tmp1187	%read{44,1648} %write{44,1648}
+temp	float	$tmp1188	%read{44,1648} %write{44,1648}
+temp	float	$tmp1189	%read{44,1648} %write{44,1648}
+temp	float	$tmp1190	%read{44,1648} %write{44,1648}
+temp	float	$tmp1191	%read{44,1648} %write{44,1648}
+temp	float	$tmp1192	%read{44,1648} %write{44,1648}
+temp	float	$tmp1193	%read{44,1648} %write{44,1648}
+temp	float	$tmp1194	%read{44,1648} %write{44,1648}
+temp	float	$tmp1195	%read{44,1648} %write{44,1648}
+temp	float	$tmp1196	%read{44,1648} %write{44,1648}
+temp	float	$tmp1197	%read{44,1648} %write{44,1648}
+temp	float	$tmp1198	%read{44,1648} %write{44,1648}
+temp	float	$tmp1199	%read{44,1648} %write{44,1648}
+temp	float	$tmp1200	%read{44,1648} %write{44,1648}
+temp	float	$tmp1201	%read{44,1648} %write{44,1648}
+temp	float	$tmp1202	%read{44,1648} %write{44,1648}
+temp	float	$tmp1203	%read{44,1648} %write{44,1648}
+temp	float	$tmp1204	%read{44,1648} %write{44,1648}
+temp	float	$tmp1205	%read{44,1648} %write{44,1648}
+temp	float	$tmp1206	%read{44,1648} %write{44,1648}
+temp	float	$tmp1207	%read{44,1648} %write{44,1648}
+temp	float	$tmp1208	%read{44,1648} %write{44,1648}
+temp	float	$tmp1209	%read{44,1648} %write{44,1648}
+temp	float	$tmp1210	%read{44,1648} %write{44,1648}
+temp	float	$tmp1211	%read{44,1648} %write{44,1648}
+temp	float	$tmp1212	%read{44,1648} %write{44,1648}
+temp	float	$tmp1213	%read{44,1648} %write{44,1648}
+temp	float	$tmp1214	%read{44,1648} %write{44,1648}
+temp	float	$tmp1215	%read{44,1648} %write{44,1648}
+temp	float	$tmp1216	%read{44,1648} %write{44,1648}
+temp	float	$tmp1217	%read{44,1648} %write{44,1648}
+temp	float	$tmp1218	%read{44,1648} %write{44,1648}
+temp	float	$tmp1219	%read{44,1648} %write{44,1648}
+temp	float	$tmp1220	%read{44,1648} %write{44,1648}
+temp	float	$tmp1221	%read{44,1648} %write{44,1648}
+temp	float	$tmp1222	%read{44,1648} %write{44,1648}
+temp	float	$tmp1223	%read{44,1648} %write{44,1648}
+temp	float	$tmp1224	%read{44,1648} %write{44,1648}
+temp	float	$tmp1225	%read{44,1648} %write{44,1648}
+temp	float	$tmp1226	%read{44,1648} %write{44,1648}
+temp	float	$tmp1227	%read{44,1648} %write{44,1648}
+temp	float	$tmp1228	%read{44,1648} %write{44,1648}
+temp	float	$tmp1229	%read{44,1648} %write{44,1648}
+temp	float	$tmp1230	%read{44,1648} %write{44,1648}
+temp	float	$tmp1231	%read{44,1648} %write{44,1648}
+temp	float	$tmp1232	%read{44,1648} %write{44,1648}
+temp	float	$tmp1233	%read{44,1648} %write{44,1648}
+temp	float	$tmp1234	%read{44,1648} %write{44,1648}
+temp	float	$tmp1235	%read{44,1648} %write{44,1648}
+temp	float	$tmp1236	%read{44,1648} %write{44,1648}
+temp	float	$tmp1237	%read{44,1648} %write{44,1648}
+temp	float	$tmp1238	%read{44,1648} %write{44,1648}
+temp	float	$tmp1239	%read{44,1648} %write{44,1648}
+temp	float	$tmp1240	%read{44,1648} %write{44,1648}
+temp	float	$tmp1241	%read{44,1648} %write{44,1648}
+temp	float	$tmp1242	%read{44,1648} %write{44,1648}
+temp	float	$tmp1243	%read{44,1648} %write{44,1648}
+temp	float	$tmp1244	%read{44,1648} %write{44,1648}
+temp	float	$tmp1245	%read{44,1648} %write{44,1648}
+temp	float	$tmp1246	%read{44,1648} %write{44,1648}
+temp	float	$tmp1247	%read{44,1648} %write{44,1648}
+temp	float	$tmp1248	%read{44,1648} %write{44,1648}
+temp	float	$tmp1249	%read{44,1648} %write{44,1648}
+temp	float	$tmp1250	%read{44,1648} %write{44,1648}
+temp	float	$tmp1251	%read{44,1648} %write{44,1648}
+temp	float	$tmp1252	%read{44,1648} %write{44,1648}
+temp	float	$tmp1253	%read{44,1648} %write{44,1648}
+temp	float	$tmp1254	%read{44,1648} %write{44,1648}
+temp	float	$tmp1255	%read{44,1648} %write{44,1648}
+temp	float	$tmp1256	%read{44,1648} %write{44,1648}
+temp	float	$tmp1257	%read{44,1648} %write{44,1648}
+temp	float	$tmp1258	%read{44,1648} %write{44,1648}
+temp	float	$tmp1259	%read{44,1648} %write{44,1648}
+temp	float	$tmp1260	%read{44,1648} %write{44,1648}
+temp	float	$tmp1261	%read{44,1648} %write{44,1648}
+temp	float	$tmp1262	%read{44,1648} %write{44,1648}
+temp	float	$tmp1263	%read{44,1648} %write{44,1648}
+temp	float	$tmp1264	%read{44,1648} %write{44,1648}
+temp	float	$tmp1265	%read{44,1648} %write{44,1648}
+temp	float	$tmp1266	%read{44,1648} %write{44,1648}
+temp	float	$tmp1267	%read{44,1648} %write{44,1648}
+temp	float	$tmp1268	%read{44,1648} %write{44,1648}
+temp	float	$tmp1269	%read{44,1648} %write{44,1648}
+temp	float	$tmp1270	%read{44,1648} %write{44,1648}
+temp	float	$tmp1271	%read{44,1648} %write{44,1648}
+temp	float	$tmp1272	%read{44,1648} %write{44,1648}
+temp	float	$tmp1273	%read{44,1648} %write{44,1648}
+temp	float	$tmp1274	%read{44,1648} %write{44,1648}
+temp	float	$tmp1275	%read{44,1648} %write{44,1648}
+temp	float	$tmp1276	%read{44,1648} %write{44,1648}
+temp	float	$tmp1277	%read{44,1648} %write{44,1648}
+temp	float	$tmp1278	%read{44,1648} %write{44,1648}
+temp	float	$tmp1279	%read{44,1648} %write{44,1648}
+temp	float	$tmp1280	%read{44,1648} %write{44,1648}
+temp	float	$tmp1281	%read{44,1648} %write{44,1648}
+temp	float	$tmp1282	%read{44,1648} %write{44,1648}
+temp	float	$tmp1283	%read{44,1648} %write{44,1648}
+temp	float	$tmp1284	%read{44,1648} %write{44,1648}
+temp	float	$tmp1285	%read{44,1648} %write{44,1648}
+temp	float	$tmp1286	%read{44,1648} %write{44,1648}
+temp	float	$tmp1287	%read{44,1648} %write{44,1648}
+temp	float	$tmp1288	%read{44,1648} %write{44,1648}
+temp	float	$tmp1289	%read{44,1648} %write{44,1648}
+temp	float	$tmp1290	%read{44,1648} %write{44,1648}
+temp	float	$tmp1291	%read{44,1648} %write{44,1648}
+temp	float	$tmp1292	%read{44,1648} %write{44,1648}
+temp	float	$tmp1293	%read{44,1648} %write{44,1648}
+temp	float	$tmp1294	%read{44,1648} %write{44,1648}
+temp	float	$tmp1295	%read{44,1648} %write{44,1648}
+temp	float	$tmp1296	%read{44,1648} %write{44,1648}
+temp	float	$tmp1297	%read{44,1648} %write{44,1648}
+temp	float	$tmp1298	%read{44,1648} %write{44,1648}
+temp	float	$tmp1299	%read{44,1648} %write{44,1648}
+temp	float	$tmp1300	%read{44,1648} %write{44,1648}
+temp	float	$tmp1301	%read{44,1648} %write{44,1648}
+temp	float	$tmp1302	%read{44,1648} %write{44,1648}
+temp	float	$tmp1303	%read{44,1648} %write{44,1648}
+temp	int	$tmp1304	%read{2147483647,-1} %write{44,1648}
+temp	float	$tmp1305	%read{44,1648} %write{44,1648}
+temp	int	$tmp1306	%read{44,1648} %write{44,1648}
+temp	float	$tmp1307	%read{44,1648} %write{44,1648}
+temp	float	$tmp1308	%read{44,1648} %write{44,1648}
+temp	float	$tmp1309	%read{44,1648} %write{44,1648}
+temp	float	$tmp1310	%read{44,1648} %write{44,1648}
+temp	float	$tmp1311	%read{44,1648} %write{44,1648}
+temp	float	$tmp1312	%read{44,1648} %write{44,1648}
+temp	float	$tmp1313	%read{44,1648} %write{44,1648}
+temp	float	$tmp1314	%read{44,1648} %write{44,1648}
+temp	float	$tmp1315	%read{44,1648} %write{44,1648}
+temp	float	$tmp1316	%read{44,1648} %write{44,1648}
+temp	float	$tmp1317	%read{44,1648} %write{44,1648}
+temp	float	$tmp1318	%read{44,1648} %write{44,1648}
+temp	float	$tmp1319	%read{44,1648} %write{44,1648}
+temp	float	$tmp1320	%read{44,1648} %write{44,1648}
+temp	float	$tmp1321	%read{44,1648} %write{44,1648}
+temp	float	$tmp1322	%read{44,1648} %write{44,1648}
+temp	float	$tmp1323	%read{44,1648} %write{44,1648}
+temp	float	$tmp1324	%read{44,1648} %write{44,1648}
+temp	float	$tmp1325	%read{44,1648} %write{44,1648}
+temp	int	$tmp1326	%read{44,1648} %write{44,1648}
+temp	float	$tmp1327	%read{44,1648} %write{44,1648}
+temp	float	$tmp1328	%read{44,1648} %write{44,1648}
+temp	float	$tmp1329	%read{44,1648} %write{44,1648}
+temp	float	$tmp1330	%read{44,1648} %write{44,1648}
+temp	float	$tmp1331	%read{44,1648} %write{44,1648}
+temp	float	$tmp1332	%read{44,1648} %write{44,1648}
+temp	float	$tmp1333	%read{44,1648} %write{44,1648}
+temp	float	$tmp1334	%read{44,1648} %write{44,1648}
+temp	int	$tmp1335	%read{44,1648} %write{44,1648}
+temp	float	$tmp1336	%read{44,1648} %write{44,1648}
+temp	float	$tmp1337	%read{44,1648} %write{44,1648}
+temp	float	$tmp1338	%read{44,1648} %write{44,1648}
+temp	float	$tmp1339	%read{44,1648} %write{44,1648}
+temp	float	$tmp1340	%read{44,1648} %write{44,1648}
+temp	float	$tmp1341	%read{44,1648} %write{44,1648}
+temp	float	$tmp1342	%read{44,1648} %write{44,1648}
+temp	float	$tmp1343	%read{44,1648} %write{44,1648}
+temp	int	$tmp1344	%read{2147483647,-1} %write{44,1648}
+temp	float	$tmp1345	%read{44,1648} %write{44,1648}
+temp	float	$tmp1346	%read{44,1648} %write{44,1648}
+temp	float	$tmp1347	%read{44,1648} %write{44,1648}
+temp	float	$tmp1348	%read{44,1648} %write{44,1648}
+temp	float	$tmp1349	%read{44,1648} %write{44,1648}
+temp	float	$tmp1350	%read{44,1648} %write{44,1648}
+temp	float	$tmp1351	%read{44,1648} %write{44,1648}
+temp	float	$tmp1352	%read{44,1648} %write{44,1648}
+temp	float	$tmp1353	%read{44,1648} %write{44,1648}
+temp	float	$tmp1354	%read{44,1648} %write{44,1648}
+temp	float	$tmp1355	%read{44,1648} %write{44,1648}
+temp	float	$tmp1356	%read{44,1648} %write{44,1648}
+temp	float	$tmp1357	%read{44,1648} %write{44,1648}
+temp	float	$tmp1358	%read{44,1648} %write{44,1648}
+temp	float	$tmp1359	%read{44,1648} %write{44,1648}
+temp	float	$tmp1360	%read{44,1648} %write{44,1648}
+temp	float	$tmp1361	%read{44,1648} %write{44,1648}
+temp	float	$tmp1362	%read{44,1648} %write{44,1648}
+temp	float	$tmp1363	%read{44,1648} %write{44,1648}
+temp	float	$tmp1364	%read{44,1648} %write{44,1648}
+temp	float	$tmp1365	%read{44,1648} %write{44,1648}
+temp	float	$tmp1366	%read{44,1648} %write{44,1648}
+temp	float	$tmp1367	%read{44,1648} %write{44,1648}
+temp	float	$tmp1368	%read{44,1648} %write{44,1648}
+temp	float	$tmp1369	%read{44,1648} %write{44,1648}
+temp	float	$tmp1370	%read{44,1648} %write{44,1648}
+temp	float	$tmp1371	%read{44,1648} %write{44,1648}
+temp	float	$tmp1372	%read{44,1648} %write{44,1648}
+temp	float	$tmp1373	%read{44,1648} %write{44,1648}
+temp	float	$tmp1374	%read{44,1648} %write{44,1648}
+temp	float	$tmp1375	%read{44,1648} %write{44,1648}
+temp	float	$tmp1376	%read{44,1648} %write{44,1648}
+temp	float	$tmp1377	%read{44,1648} %write{44,1648}
+temp	float	$tmp1378	%read{44,1648} %write{44,1648}
+temp	float	$tmp1379	%read{44,1648} %write{44,1648}
+temp	float	$tmp1380	%read{44,1648} %write{44,1648}
+temp	float	$tmp1381	%read{44,1648} %write{44,1648}
+temp	float	$tmp1382	%read{44,1648} %write{44,1648}
+temp	int	$tmp1383	%read{44,1648} %write{44,1648}
+temp	float	$tmp1384	%read{44,1648} %write{44,1648}
+temp	float	$tmp1385	%read{44,1648} %write{44,1648}
+temp	float	$tmp1386	%read{44,1648} %write{44,1648}
+temp	float	$tmp1387	%read{44,1648} %write{44,1648}
+temp	float	$tmp1388	%read{44,1648} %write{44,1648}
+temp	float	$tmp1389	%read{44,1648} %write{44,1648}
+temp	float	$tmp1390	%read{44,1648} %write{44,1648}
+temp	int	$tmp1391	%read{44,1648} %write{44,1648}
+temp	float	$tmp1392	%read{44,1648} %write{44,1648}
+temp	float	$tmp1393	%read{44,1648} %write{44,1648}
+temp	float	$tmp1394	%read{44,1648} %write{44,1648}
+temp	float	$tmp1395	%read{44,1648} %write{44,1648}
+temp	float	$tmp1396	%read{44,1648} %write{44,1648}
+temp	float	$tmp1397	%read{44,1648} %write{44,1648}
+temp	float	$tmp1398	%read{44,1648} %write{44,1648}
+temp	int	$tmp1399	%read{44,1648} %write{44,1648}
+temp	float	$tmp1400	%read{44,1648} %write{44,1648}
+temp	float	$tmp1401	%read{44,1648} %write{44,1648}
+temp	float	$tmp1402	%read{44,1648} %write{44,1648}
+temp	int	$tmp1403	%read{44,1648} %write{44,1648}
+temp	float	$tmp1404	%read{44,1648} %write{44,1648}
+temp	float	$tmp1405	%read{44,1648} %write{44,1648}
+temp	float	$tmp1406	%read{44,1648} %write{44,1648}
+temp	float	$tmp1407	%read{44,1648} %write{44,1648}
+temp	float	$tmp1408	%read{44,1648} %write{44,1648}
+temp	float	$tmp1409	%read{44,1648} %write{44,1648}
+temp	float	$tmp1410	%read{44,1648} %write{44,1648}
+temp	float	$tmp1411	%read{44,1648} %write{44,1648}
+temp	float	$tmp1412	%read{44,1648} %write{44,1648}
+temp	float	$tmp1413	%read{44,1648} %write{44,1648}
+temp	float	$tmp1414	%read{44,1648} %write{44,1648}
+temp	float	$tmp1415	%read{44,1648} %write{44,1648}
+temp	float	$tmp1416	%read{44,1648} %write{44,1648}
+temp	float	$tmp1417	%read{44,1648} %write{44,1648}
+temp	float	$tmp1418	%read{44,1648} %write{44,1648}
+temp	float	$tmp1419	%read{44,1648} %write{44,1648}
+temp	float	$tmp1420	%read{44,1648} %write{44,1648}
+temp	float	$tmp1421	%read{44,1648} %write{44,1648}
+temp	float	$tmp1422	%read{44,1648} %write{44,1648}
+temp	float	$tmp1423	%read{44,1648} %write{44,1648}
+temp	float	$tmp1424	%read{44,1648} %write{44,1648}
+temp	float	$tmp1425	%read{44,1648} %write{44,1648}
+temp	float	$tmp1426	%read{44,1648} %write{44,1648}
+temp	float	$tmp1427	%read{44,1648} %write{44,1648}
+temp	float	$tmp1428	%read{44,1648} %write{44,1648}
+temp	float	$tmp1429	%read{44,1648} %write{44,1648}
+temp	float	$tmp1430	%read{44,1648} %write{44,1648}
+temp	int	$tmp1431	%read{2147483647,-1} %write{44,1648}
+temp	int	$tmp1432	%read{44,1648} %write{44,1648}
+temp	int	$tmp1433	%read{2147483647,-1} %write{44,1648}
+temp	float	$tmp1434	%read{44,1648} %write{44,1648}
+temp	int	$tmp1435	%read{44,1648} %write{44,1648}
+temp	int	$tmp1436	%read{44,1648} %write{44,1648}
+temp	float	$tmp1437	%read{44,1648} %write{44,1648}
+temp	int	$tmp1438	%read{44,1648} %write{44,1648}
+temp	int	$tmp1439	%read{44,1648} %write{44,1648}
+temp	float	$tmp1440	%read{44,1648} %write{44,1648}
+temp	float	$tmp1441	%read{44,1648} %write{44,1648}
+temp	float	$tmp1442	%read{44,1648} %write{44,1648}
+temp	point	$tmp1443	%read{44,1648} %write{44,1648}
+temp	float	$tmp1444	%read{44,1648} %write{44,1648}
+temp	float	$tmp1445	%read{44,1648} %write{44,1648}
+temp	float	$tmp1446	%read{44,1648} %write{44,1648}
+temp	point	$tmp1447	%read{44,1648} %write{44,1648}
+temp	point	$tmp1448	%read{44,1648} %write{44,1648}
+temp	float	$tmp1449	%read{44,1648} %write{44,1648}
+temp	point	$tmp1450	%read{44,1648} %write{44,1648}
+temp	point	$tmp1451	%read{44,1648} %write{44,1648}
+temp	int	$tmp1452	%read{44,1648} %write{44,1648}
+temp	int	$tmp1453	%read{44,1648} %write{44,1648}
+temp	int	$tmp1454	%read{44,1648} %write{44,1648}
+temp	int	$tmp1455	%read{44,1648} %write{44,1648}
+temp	int	$tmp1456	%read{44,1648} %write{44,1648}
+temp	float	$tmp1457	%read{44,1648} %write{44,1648}
+temp	float	$tmp1458	%read{44,1648} %write{44,1648}
+temp	float	$tmp1459	%read{44,1648} %write{44,1648}
+temp	float	$tmp1460	%read{44,1648} %write{44,1648}
+temp	float	$tmp1461	%read{44,1648} %write{44,1648}
+temp	int	$tmp1462	%read{44,1648} %write{44,1648}
+temp	int	$tmp1463	%read{44,1648} %write{44,1648}
+temp	float	$tmp1464	%read{44,1648} %write{44,1648}
+temp	float	$tmp1465	%read{44,1648} %write{44,1648}
+temp	int	$tmp1466	%read{2147483647,-1} %write{44,1648}
+const	string	$const34	"distance"		%read{1649,1649} %write{2147483647,-1}
+temp	int	$tmp1469	%read{1653,1653} %write{1652,1652}
+temp	float	$tmp1470	%read{1658,1658} %write{1657,1657}
+temp	vector	$tmp1471	%read{1657,1657} %write{1656,1656}
+temp	float	$tmp1472	%read{1662,1662} %write{1661,1661}
+const	string	$const35	"clamp"		%read{1659,1659} %write{2147483647,-1}
+temp	float	$tmp1473	%read{1661,1661} %write{1660,1660}
+temp	vector	$tmp1474	%read{1663,1663} %write{1662,1662}
+temp	point	$tmp1475	%read{1664,1664} %write{1663,1663}
+temp	int	$tmp1476	%read{1666,1666} %write{1665,1665}
+temp	float	$tmp1477	%read{1669,1669} %write{1668,1668}
+temp	float	$tmp1478	%read{1670,1670} %write{1669,1669}
+temp	float	$tmp1479	%read{1671,1671} %write{1670,1670}
+temp	int	$tmp1480	%read{1672,1672} %write{1671,1671}
+temp	float	$tmp1481	%read{1675,1675} %write{1674,1674}
+temp	float	$tmp1482	%read{1676,1676} %write{1675,1675}
+code Vector
+# source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl:16
+#         
+	assign		Vector P 	%filename{"source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl"} %line{16} %argrw{"wr"}
+code ___main___
+# source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl:39
+#  float delta2= delta/2;
+	assign		$tmp1 Veins 	%filename{"source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl"} %line{39} %argrw{"wr"}
+	add		$tmp2 $tmp1 $const1 	%argrw{"wrr"}
+	div		delta $const1 $tmp2 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl:40
+#  float delta4= delta/4;
+	div		delta2 delta $const4 	%line{40} %argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl:41
+# 
+	div		delta4 delta $const6 	%line{41} %argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl:45
+#  sincos(radians(TipAngle),y2,x2);
+	functioncall	$const7 9 	%line{45} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:88
+# float  radians (float x)  { return x*(M_PI/180.0); }
+	div		$tmp4 $const8 $const9 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{88} %argrw{"wrr"}
+	mul		$tmp3 BaseAngle $tmp4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl:45
+#  sincos(radians(TipAngle),y2,x2);
+	sincos		$tmp3 y1 x1 	%filename{"source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl"} %line{45} %argrw{"rww"}
+# source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl:46
+#  point P0 = point(0, 0, 0);
+	functioncall	$const7 13 	%line{46} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:88
+# float  radians (float x)  { return x*(M_PI/180.0); }
+	div		$tmp6 $const8 $const9 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{88} %argrw{"wrr"}
+	mul		$tmp5 TipAngle $tmp6 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl:46
+#  point P0 = point(0, 0, 0);
+	sincos		$tmp5 y2 x2 	%filename{"source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl"} %line{46} %argrw{"rww"}
+# source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl:47
+#  point P1 = point(x1, y1, 0)*BaseCurve;
+	assign		P0 $const10 	%line{47} %argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl:48
+#  point P2 = point(1-x2*TipCurve, y2*TipCurve, 0);
+	point		$tmp7 x1 y1 $const12 	%line{48} %argrw{"wrrr"}
+	mul		P1 $tmp7 BaseCurve 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl:49
+#  point P3 = point(1, 0, 0);
+	mul		$tmp8 x2 TipCurve 	%line{49} %argrw{"wrr"}
+	sub		$tmp9 $const1 $tmp8 	%argrw{"wrr"}
+	mul		$tmp10 y2 TipCurve 	%argrw{"wrr"}
+	point		P2 $tmp9 $tmp10 $const12 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl:50
+# 
+	assign		P3 $const13 	%line{50} %argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl:52
+#  point P1q = point(P1[0],P1[1]*Up,P1[2]);
+	compref		$tmp11 P0 $const11 	%line{52} %argrw{"wrr"}
+	compref		$tmp12 P0 $const2 	%argrw{"wrr"}
+	mul		$tmp13 $tmp12 Up 	%argrw{"wrr"}
+	compref		$tmp14 P0 $const3 	%argrw{"wrr"}
+	point		P0q $tmp11 $tmp13 $tmp14 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl:53
+#  point P2q = point(P2[0],P2[1]*Up,P2[2]);
+	compref		$tmp15 P1 $const11 	%line{53} %argrw{"wrr"}
+	compref		$tmp16 P1 $const2 	%argrw{"wrr"}
+	mul		$tmp17 $tmp16 Up 	%argrw{"wrr"}
+	compref		$tmp18 P1 $const3 	%argrw{"wrr"}
+	point		P1q $tmp15 $tmp17 $tmp18 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl:54
+#  point P3q = point(P3[0],P3[1]*Up,P3[2]);
+	compref		$tmp19 P2 $const11 	%line{54} %argrw{"wrr"}
+	compref		$tmp20 P2 $const2 	%argrw{"wrr"}
+	mul		$tmp21 $tmp20 Up 	%argrw{"wrr"}
+	compref		$tmp22 P2 $const3 	%argrw{"wrr"}
+	point		P2q $tmp19 $tmp21 $tmp22 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl:55
+# 
+	compref		$tmp23 P3 $const11 	%line{55} %argrw{"wrr"}
+	compref		$tmp24 P3 $const2 	%argrw{"wrr"}
+	mul		$tmp25 $tmp24 Up 	%argrw{"wrr"}
+	compref		$tmp26 P3 $const3 	%argrw{"wrr"}
+	point		P3q $tmp23 $tmp25 $tmp26 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl:58
+# 
+	for		$tmp27 44 45 1647 1649 	%line{58} %argrw{"r"}
+	assign		i $const11 	%argrw{"wr"}
+	lt		$tmp27 i Veins 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl:61
+#     float dx = (delta4*Variance*cellnoise(i+17+Seed))*Spacing;
+	assign		$tmp29 i 	%line{61} %argrw{"wr"}
+	mul		$tmp28 $tmp29 delta 	%argrw{"wrr"}
+	mul		$tmp30 delta2 Variance 	%argrw{"wrr"}
+	add		$tmp32 i $const14 	%argrw{"wrr"}
+	add		$tmp33 $tmp32 Seed 	%argrw{"wrr"}
+	assign		$tmp34 $tmp33 	%argrw{"wr"}
+	cellnoise	$tmp31 $tmp34 	%argrw{"wr"}
+	mul		$tmp35 $tmp30 $tmp31 	%argrw{"wrr"}
+	add		$tmp36 $tmp28 $tmp35 	%argrw{"wrr"}
+	mul		___341_x $tmp36 Spacing 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl:62
+#     point P0up   = point(delta2+x+dx,0,0);
+	mul		$tmp37 delta4 Variance 	%line{62} %argrw{"wrr"}
+	add		$tmp39 i $const15 	%argrw{"wrr"}
+	add		$tmp40 $tmp39 Seed 	%argrw{"wrr"}
+	assign		$tmp41 $tmp40 	%argrw{"wr"}
+	cellnoise	$tmp38 $tmp41 	%argrw{"wr"}
+	mul		$tmp42 $tmp37 $tmp38 	%argrw{"wrr"}
+	mul		___341_dx $tmp42 Spacing 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl:63
+#     point P0down = point(delta2+x,0,0);
+	add		$tmp43 delta2 ___341_x 	%line{63} %argrw{"wrr"}
+	add		$tmp44 $tmp43 ___341_dx 	%argrw{"wrr"}
+	point		___341_P0up $tmp44 $const12 $const12 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl:64
+#     // determine the endpoints on the leaf edge
+	add		$tmp45 delta2 ___341_x 	%line{64} %argrw{"wrr"}
+	point		___341_P0down $tmp45 $const12 $const12 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl:66
+#     point P2up   = cubicspline(t,P0,P1,P2,P3);
+	assign		$tmp47 i 	%line{66} %argrw{"wr"}
+	mul		$tmp46 $tmp47 delta 	%argrw{"wrr"}
+	add		$tmp48 $tmp46 delta2 	%argrw{"wrr"}
+	mul		$tmp49 $tmp48 Curve 	%argrw{"wrr"}
+	add		$tmp50 $tmp49 $const1 	%argrw{"wrr"}
+	sub		___341_t $tmp50 Curve 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl:67
+#     point P2down = point(P2up[0],-P2up[1],P2up[2]);
+	functioncall	$const16 97 	%line{67} %argrw{"r"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:119
+#     return (1-t)*(1-t)*(1-t)*P0
+	sub		$tmp51 $const1 ___341_t 	%filename{"source/sambler-osl-shaders/nature/MALeaf/MAEquations.h"} %line{119} %argrw{"wrr"}
+	sub		$tmp52 $const1 ___341_t 	%argrw{"wrr"}
+	mul		$tmp53 $tmp51 $tmp52 	%argrw{"wrr"}
+	sub		$tmp54 $const1 ___341_t 	%argrw{"wrr"}
+	mul		$tmp55 $tmp53 $tmp54 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:120
+#             + 3*(1-t)*(1-t)*t*P1
+	mul		$tmp56 $tmp55 P0 	%line{120} %argrw{"wrr"}
+	sub		$tmp57 $const1 ___341_t 	%argrw{"wrr"}
+	mul		$tmp58 $const18 $tmp57 	%argrw{"wrr"}
+	sub		$tmp59 $const1 ___341_t 	%argrw{"wrr"}
+	mul		$tmp60 $tmp58 $tmp59 	%argrw{"wrr"}
+	mul		$tmp61 $tmp60 ___341_t 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:121
+#             + 3*(1-t)*t*t*P2
+	mul		$tmp62 $tmp61 P1 	%line{121} %argrw{"wrr"}
+	add		$tmp63 $tmp56 $tmp62 	%argrw{"wrr"}
+	sub		$tmp64 $const1 ___341_t 	%argrw{"wrr"}
+	mul		$tmp65 $const18 $tmp64 	%argrw{"wrr"}
+	mul		$tmp66 $tmp65 ___341_t 	%argrw{"wrr"}
+	mul		$tmp67 $tmp66 ___341_t 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:122
+#             + t*t*t*P3;
+	mul		$tmp68 $tmp67 P2 	%line{122} %argrw{"wrr"}
+	add		$tmp69 $tmp63 $tmp68 	%argrw{"wrr"}
+	mul		$tmp70 ___341_t ___341_t 	%argrw{"wrr"}
+	mul		$tmp71 $tmp70 ___341_t 	%argrw{"wrr"}
+	mul		$tmp72 $tmp71 P3 	%argrw{"wrr"}
+	add		___341_P2up $tmp69 $tmp72 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl:68
+#     // the veins are quadratic splines, so need one additional control point
+	compref		$tmp73 ___341_P2up $const11 	%filename{"source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl"} %line{68} %argrw{"wrr"}
+	compref		$tmp74 ___341_P2up $const2 	%argrw{"wrr"}
+	neg		$tmp75 $tmp74 	%argrw{"wr"}
+	compref		$tmp76 ___341_P2up $const3 	%argrw{"wrr"}
+	point		___341_P2down $tmp73 $tmp75 $tmp76 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl:70
+#     point P1up   = cubicspline(t,P0q,P1q,P2q,P3q);
+	assign		$tmp78 i 	%line{70} %argrw{"wr"}
+	mul		$tmp77 $tmp78 delta 	%argrw{"wrr"}
+	add		$tmp79 $tmp77 delta2 	%argrw{"wrr"}
+	mul		$tmp80 $tmp79 Curve2 	%argrw{"wrr"}
+	add		$tmp81 $tmp80 $const1 	%argrw{"wrr"}
+	sub		___341_t $tmp81 Curve2 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl:71
+#     point P1down = point(P1up[0],-P1up[1],P1up[2]);
+	functioncall	$const16 132 	%line{71} %argrw{"r"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:119
+#     return (1-t)*(1-t)*(1-t)*P0
+	sub		$tmp82 $const1 ___341_t 	%filename{"source/sambler-osl-shaders/nature/MALeaf/MAEquations.h"} %line{119} %argrw{"wrr"}
+	sub		$tmp83 $const1 ___341_t 	%argrw{"wrr"}
+	mul		$tmp84 $tmp82 $tmp83 	%argrw{"wrr"}
+	sub		$tmp85 $const1 ___341_t 	%argrw{"wrr"}
+	mul		$tmp86 $tmp84 $tmp85 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:120
+#             + 3*(1-t)*(1-t)*t*P1
+	mul		$tmp87 $tmp86 P0q 	%line{120} %argrw{"wrr"}
+	sub		$tmp88 $const1 ___341_t 	%argrw{"wrr"}
+	mul		$tmp89 $const18 $tmp88 	%argrw{"wrr"}
+	sub		$tmp90 $const1 ___341_t 	%argrw{"wrr"}
+	mul		$tmp91 $tmp89 $tmp90 	%argrw{"wrr"}
+	mul		$tmp92 $tmp91 ___341_t 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:121
+#             + 3*(1-t)*t*t*P2
+	mul		$tmp93 $tmp92 P1q 	%line{121} %argrw{"wrr"}
+	add		$tmp94 $tmp87 $tmp93 	%argrw{"wrr"}
+	sub		$tmp95 $const1 ___341_t 	%argrw{"wrr"}
+	mul		$tmp96 $const18 $tmp95 	%argrw{"wrr"}
+	mul		$tmp97 $tmp96 ___341_t 	%argrw{"wrr"}
+	mul		$tmp98 $tmp97 ___341_t 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:122
+#             + t*t*t*P3;
+	mul		$tmp99 $tmp98 P2q 	%line{122} %argrw{"wrr"}
+	add		$tmp100 $tmp94 $tmp99 	%argrw{"wrr"}
+	mul		$tmp101 ___341_t ___341_t 	%argrw{"wrr"}
+	mul		$tmp102 $tmp101 ___341_t 	%argrw{"wrr"}
+	mul		$tmp103 $tmp102 P3q 	%argrw{"wrr"}
+	add		___341_P1up $tmp100 $tmp103 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl:72
+# 
+	compref		$tmp104 ___341_P1up $const11 	%filename{"source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl"} %line{72} %argrw{"wrr"}
+	compref		$tmp105 ___341_P1up $const2 	%argrw{"wrr"}
+	neg		$tmp106 $tmp105 	%argrw{"wr"}
+	compref		$tmp107 ___341_P1up $const3 	%argrw{"wrr"}
+	point		___341_P1down $tmp104 $tmp106 $tmp107 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl:75
+#     if ( f && (r < NWidth ) ) Net = 1 ;
+	functioncall	$const19 869 	%line{75} %argrw{"r"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:143
+#     point P0 = p0;
+	assign		___336_P0 ___341_P0up 	%filename{"source/sambler-osl-shaders/nature/MALeaf/MAEquations.h"} %line{143} %argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:144
+#     point P1 = p1;
+	assign		___336_P1 ___341_P1up 	%line{144} %argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:145
+#     point P2 = p2;
+	assign		___336_P2 ___341_P2up 	%line{145} %argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:155
+#     float t0 = -2*P0[0]*P0[0]+-2*P1[0]*Pos[0]+2*P0[0]*P1[0]+2*P0[0]*Pos[0]
+	compref		$tmp108 ___336_P0 $const11 	%line{155} %argrw{"wrr"}
+	mul		$tmp109 $const21 $tmp108 	%argrw{"wrr"}
+	compref		$tmp110 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp111 $tmp109 $tmp110 	%argrw{"wrr"}
+	compref		$tmp112 ___336_P1 $const11 	%argrw{"wrr"}
+	mul		$tmp113 $const21 $tmp112 	%argrw{"wrr"}
+	compref		$tmp114 Vector $const11 	%argrw{"wrr"}
+	mul		$tmp115 $tmp113 $tmp114 	%argrw{"wrr"}
+	add		$tmp116 $tmp111 $tmp115 	%argrw{"wrr"}
+	compref		$tmp117 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp118 $const4 $tmp117 	%argrw{"wrr"}
+	compref		$tmp119 ___336_P1 $const11 	%argrw{"wrr"}
+	mul		$tmp120 $tmp118 $tmp119 	%argrw{"wrr"}
+	add		$tmp121 $tmp116 $tmp120 	%argrw{"wrr"}
+	compref		$tmp122 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp123 $const4 $tmp122 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:156
+#                 +-2*P0[1]*P0[1]+-2*P1[1]*Pos[1]+2*P0[1]*P1[1]+2*P0[1]*Pos[1]
+	compref		$tmp124 Vector $const11 	%line{156} %argrw{"wrr"}
+	mul		$tmp125 $tmp123 $tmp124 	%argrw{"wrr"}
+	add		$tmp126 $tmp121 $tmp125 	%argrw{"wrr"}
+	compref		$tmp127 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp128 $const21 $tmp127 	%argrw{"wrr"}
+	compref		$tmp129 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp130 $tmp128 $tmp129 	%argrw{"wrr"}
+	add		$tmp131 $tmp126 $tmp130 	%argrw{"wrr"}
+	compref		$tmp132 ___336_P1 $const2 	%argrw{"wrr"}
+	mul		$tmp133 $const21 $tmp132 	%argrw{"wrr"}
+	compref		$tmp134 Vector $const2 	%argrw{"wrr"}
+	mul		$tmp135 $tmp133 $tmp134 	%argrw{"wrr"}
+	add		$tmp136 $tmp131 $tmp135 	%argrw{"wrr"}
+	compref		$tmp137 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp138 $const4 $tmp137 	%argrw{"wrr"}
+	compref		$tmp139 ___336_P1 $const2 	%argrw{"wrr"}
+	mul		$tmp140 $tmp138 $tmp139 	%argrw{"wrr"}
+	add		$tmp141 $tmp136 $tmp140 	%argrw{"wrr"}
+	compref		$tmp142 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp143 $const4 $tmp142 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:157
+#                 +-2*P0[2]*P0[2]+-2*P1[2]*Pos[2]+2*P0[2]*P1[2]+2*P0[2]*Pos[2];
+	compref		$tmp144 Vector $const2 	%line{157} %argrw{"wrr"}
+	mul		$tmp145 $tmp143 $tmp144 	%argrw{"wrr"}
+	add		$tmp146 $tmp141 $tmp145 	%argrw{"wrr"}
+	compref		$tmp147 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp148 $const21 $tmp147 	%argrw{"wrr"}
+	compref		$tmp149 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp150 $tmp148 $tmp149 	%argrw{"wrr"}
+	add		$tmp151 $tmp146 $tmp150 	%argrw{"wrr"}
+	compref		$tmp152 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp153 $const21 $tmp152 	%argrw{"wrr"}
+	compref		$tmp154 Vector $const3 	%argrw{"wrr"}
+	mul		$tmp155 $tmp153 $tmp154 	%argrw{"wrr"}
+	add		$tmp156 $tmp151 $tmp155 	%argrw{"wrr"}
+	compref		$tmp157 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp158 $const4 $tmp157 	%argrw{"wrr"}
+	compref		$tmp159 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp160 $tmp158 $tmp159 	%argrw{"wrr"}
+	add		$tmp161 $tmp156 $tmp160 	%argrw{"wrr"}
+	compref		$tmp162 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp163 $const4 $tmp162 	%argrw{"wrr"}
+	compref		$tmp164 Vector $const3 	%argrw{"wrr"}
+	mul		$tmp165 $tmp163 $tmp164 	%argrw{"wrr"}
+	add		___336_t0 $tmp161 $tmp165 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:159
+#     float t1 = -4*P0[0]*P1[0]+-4*P0[0]*P1[0]+-4*P0[0]*P1[0]+-2*P0[0]*Pos[0]
+	compref		$tmp166 ___336_P0 $const11 	%line{159} %argrw{"wrr"}
+	mul		$tmp167 $const23 $tmp166 	%argrw{"wrr"}
+	compref		$tmp168 ___336_P1 $const11 	%argrw{"wrr"}
+	mul		$tmp169 $tmp167 $tmp168 	%argrw{"wrr"}
+	compref		$tmp170 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp171 $const23 $tmp170 	%argrw{"wrr"}
+	compref		$tmp172 ___336_P1 $const11 	%argrw{"wrr"}
+	mul		$tmp173 $tmp171 $tmp172 	%argrw{"wrr"}
+	add		$tmp174 $tmp169 $tmp173 	%argrw{"wrr"}
+	compref		$tmp175 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp176 $const23 $tmp175 	%argrw{"wrr"}
+	compref		$tmp177 ___336_P1 $const11 	%argrw{"wrr"}
+	mul		$tmp178 $tmp176 $tmp177 	%argrw{"wrr"}
+	add		$tmp179 $tmp174 $tmp178 	%argrw{"wrr"}
+	compref		$tmp180 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp181 $const21 $tmp180 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:160
+#                 +-2*P2[0]*Pos[0]+2*P0[0]*P0[0]+2*P0[0]*P2[0]+4*P0[0]*P0[0]
+	compref		$tmp182 Vector $const11 	%line{160} %argrw{"wrr"}
+	mul		$tmp183 $tmp181 $tmp182 	%argrw{"wrr"}
+	add		$tmp184 $tmp179 $tmp183 	%argrw{"wrr"}
+	compref		$tmp185 ___336_P2 $const11 	%argrw{"wrr"}
+	mul		$tmp186 $const21 $tmp185 	%argrw{"wrr"}
+	compref		$tmp187 Vector $const11 	%argrw{"wrr"}
+	mul		$tmp188 $tmp186 $tmp187 	%argrw{"wrr"}
+	add		$tmp189 $tmp184 $tmp188 	%argrw{"wrr"}
+	compref		$tmp190 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp191 $const4 $tmp190 	%argrw{"wrr"}
+	compref		$tmp192 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp193 $tmp191 $tmp192 	%argrw{"wrr"}
+	add		$tmp194 $tmp189 $tmp193 	%argrw{"wrr"}
+	compref		$tmp195 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp196 $const4 $tmp195 	%argrw{"wrr"}
+	compref		$tmp197 ___336_P2 $const11 	%argrw{"wrr"}
+	mul		$tmp198 $tmp196 $tmp197 	%argrw{"wrr"}
+	add		$tmp199 $tmp194 $tmp198 	%argrw{"wrr"}
+	compref		$tmp200 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp201 $const6 $tmp200 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:161
+#                 +4*P1[0]*P1[0]+4*P1[0]*Pos[0]+-4*P0[1]*P1[1]+-4*P0[1]*P1[1]
+	compref		$tmp202 ___336_P0 $const11 	%line{161} %argrw{"wrr"}
+	mul		$tmp203 $tmp201 $tmp202 	%argrw{"wrr"}
+	add		$tmp204 $tmp199 $tmp203 	%argrw{"wrr"}
+	compref		$tmp205 ___336_P1 $const11 	%argrw{"wrr"}
+	mul		$tmp206 $const6 $tmp205 	%argrw{"wrr"}
+	compref		$tmp207 ___336_P1 $const11 	%argrw{"wrr"}
+	mul		$tmp208 $tmp206 $tmp207 	%argrw{"wrr"}
+	add		$tmp209 $tmp204 $tmp208 	%argrw{"wrr"}
+	compref		$tmp210 ___336_P1 $const11 	%argrw{"wrr"}
+	mul		$tmp211 $const6 $tmp210 	%argrw{"wrr"}
+	compref		$tmp212 Vector $const11 	%argrw{"wrr"}
+	mul		$tmp213 $tmp211 $tmp212 	%argrw{"wrr"}
+	add		$tmp214 $tmp209 $tmp213 	%argrw{"wrr"}
+	compref		$tmp215 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp216 $const23 $tmp215 	%argrw{"wrr"}
+	compref		$tmp217 ___336_P1 $const2 	%argrw{"wrr"}
+	mul		$tmp218 $tmp216 $tmp217 	%argrw{"wrr"}
+	add		$tmp219 $tmp214 $tmp218 	%argrw{"wrr"}
+	compref		$tmp220 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp221 $const23 $tmp220 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:162
+#                 +-4*P0[1]*P1[1]+-2*P0[1]*Pos[1]+-2*P2[1]*Pos[1]+2*P0[1]*P0[1]
+	compref		$tmp222 ___336_P1 $const2 	%line{162} %argrw{"wrr"}
+	mul		$tmp223 $tmp221 $tmp222 	%argrw{"wrr"}
+	add		$tmp224 $tmp219 $tmp223 	%argrw{"wrr"}
+	compref		$tmp225 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp226 $const23 $tmp225 	%argrw{"wrr"}
+	compref		$tmp227 ___336_P1 $const2 	%argrw{"wrr"}
+	mul		$tmp228 $tmp226 $tmp227 	%argrw{"wrr"}
+	add		$tmp229 $tmp224 $tmp228 	%argrw{"wrr"}
+	compref		$tmp230 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp231 $const21 $tmp230 	%argrw{"wrr"}
+	compref		$tmp232 Vector $const2 	%argrw{"wrr"}
+	mul		$tmp233 $tmp231 $tmp232 	%argrw{"wrr"}
+	add		$tmp234 $tmp229 $tmp233 	%argrw{"wrr"}
+	compref		$tmp235 ___336_P2 $const2 	%argrw{"wrr"}
+	mul		$tmp236 $const21 $tmp235 	%argrw{"wrr"}
+	compref		$tmp237 Vector $const2 	%argrw{"wrr"}
+	mul		$tmp238 $tmp236 $tmp237 	%argrw{"wrr"}
+	add		$tmp239 $tmp234 $tmp238 	%argrw{"wrr"}
+	compref		$tmp240 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp241 $const4 $tmp240 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:163
+#                 +2*P0[1]*P2[1]+4*P0[1]*P0[1]+4*P1[1]*P1[1]+4*P1[1]*Pos[1]
+	compref		$tmp242 ___336_P0 $const2 	%line{163} %argrw{"wrr"}
+	mul		$tmp243 $tmp241 $tmp242 	%argrw{"wrr"}
+	add		$tmp244 $tmp239 $tmp243 	%argrw{"wrr"}
+	compref		$tmp245 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp246 $const4 $tmp245 	%argrw{"wrr"}
+	compref		$tmp247 ___336_P2 $const2 	%argrw{"wrr"}
+	mul		$tmp248 $tmp246 $tmp247 	%argrw{"wrr"}
+	add		$tmp249 $tmp244 $tmp248 	%argrw{"wrr"}
+	compref		$tmp250 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp251 $const6 $tmp250 	%argrw{"wrr"}
+	compref		$tmp252 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp253 $tmp251 $tmp252 	%argrw{"wrr"}
+	add		$tmp254 $tmp249 $tmp253 	%argrw{"wrr"}
+	compref		$tmp255 ___336_P1 $const2 	%argrw{"wrr"}
+	mul		$tmp256 $const6 $tmp255 	%argrw{"wrr"}
+	compref		$tmp257 ___336_P1 $const2 	%argrw{"wrr"}
+	mul		$tmp258 $tmp256 $tmp257 	%argrw{"wrr"}
+	add		$tmp259 $tmp254 $tmp258 	%argrw{"wrr"}
+	compref		$tmp260 ___336_P1 $const2 	%argrw{"wrr"}
+	mul		$tmp261 $const6 $tmp260 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:164
+#                 +-4*P0[2]*P1[2]+-4*P0[2]*P1[2]+-4*P0[2]*P1[2]+-2*P0[2]*Pos[2]
+	compref		$tmp262 Vector $const2 	%line{164} %argrw{"wrr"}
+	mul		$tmp263 $tmp261 $tmp262 	%argrw{"wrr"}
+	add		$tmp264 $tmp259 $tmp263 	%argrw{"wrr"}
+	compref		$tmp265 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp266 $const23 $tmp265 	%argrw{"wrr"}
+	compref		$tmp267 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp268 $tmp266 $tmp267 	%argrw{"wrr"}
+	add		$tmp269 $tmp264 $tmp268 	%argrw{"wrr"}
+	compref		$tmp270 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp271 $const23 $tmp270 	%argrw{"wrr"}
+	compref		$tmp272 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp273 $tmp271 $tmp272 	%argrw{"wrr"}
+	add		$tmp274 $tmp269 $tmp273 	%argrw{"wrr"}
+	compref		$tmp275 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp276 $const23 $tmp275 	%argrw{"wrr"}
+	compref		$tmp277 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp278 $tmp276 $tmp277 	%argrw{"wrr"}
+	add		$tmp279 $tmp274 $tmp278 	%argrw{"wrr"}
+	compref		$tmp280 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp281 $const21 $tmp280 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:165
+#                 +-2*P2[2]*Pos[2]+2*P0[2]*P0[2]+2*P0[2]*P2[2]+4*P0[2]*P0[2]
+	compref		$tmp282 Vector $const3 	%line{165} %argrw{"wrr"}
+	mul		$tmp283 $tmp281 $tmp282 	%argrw{"wrr"}
+	add		$tmp284 $tmp279 $tmp283 	%argrw{"wrr"}
+	compref		$tmp285 ___336_P2 $const3 	%argrw{"wrr"}
+	mul		$tmp286 $const21 $tmp285 	%argrw{"wrr"}
+	compref		$tmp287 Vector $const3 	%argrw{"wrr"}
+	mul		$tmp288 $tmp286 $tmp287 	%argrw{"wrr"}
+	add		$tmp289 $tmp284 $tmp288 	%argrw{"wrr"}
+	compref		$tmp290 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp291 $const4 $tmp290 	%argrw{"wrr"}
+	compref		$tmp292 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp293 $tmp291 $tmp292 	%argrw{"wrr"}
+	add		$tmp294 $tmp289 $tmp293 	%argrw{"wrr"}
+	compref		$tmp295 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp296 $const4 $tmp295 	%argrw{"wrr"}
+	compref		$tmp297 ___336_P2 $const3 	%argrw{"wrr"}
+	mul		$tmp298 $tmp296 $tmp297 	%argrw{"wrr"}
+	add		$tmp299 $tmp294 $tmp298 	%argrw{"wrr"}
+	compref		$tmp300 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp301 $const6 $tmp300 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:166
+#                 +4*P1[2]*P1[2]+4*P1[2]*Pos[2];
+	compref		$tmp302 ___336_P0 $const3 	%line{166} %argrw{"wrr"}
+	mul		$tmp303 $tmp301 $tmp302 	%argrw{"wrr"}
+	add		$tmp304 $tmp299 $tmp303 	%argrw{"wrr"}
+	compref		$tmp305 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp306 $const6 $tmp305 	%argrw{"wrr"}
+	compref		$tmp307 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp308 $tmp306 $tmp307 	%argrw{"wrr"}
+	add		$tmp309 $tmp304 $tmp308 	%argrw{"wrr"}
+	compref		$tmp310 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp311 $const6 $tmp310 	%argrw{"wrr"}
+	compref		$tmp312 Vector $const3 	%argrw{"wrr"}
+	mul		$tmp313 $tmp311 $tmp312 	%argrw{"wrr"}
+	add		___336_t1 $tmp309 $tmp313 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:168
+#     float t2 = -8*P1[0]*P1[0]+-4*P0[0]*P0[0]+-4*P0[0]*P2[0]+-4*P1[0]*P1[0]
+	compref		$tmp314 ___336_P1 $const11 	%line{168} %argrw{"wrr"}
+	mul		$tmp315 $const25 $tmp314 	%argrw{"wrr"}
+	compref		$tmp316 ___336_P1 $const11 	%argrw{"wrr"}
+	mul		$tmp317 $tmp315 $tmp316 	%argrw{"wrr"}
+	compref		$tmp318 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp319 $const23 $tmp318 	%argrw{"wrr"}
+	compref		$tmp320 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp321 $tmp319 $tmp320 	%argrw{"wrr"}
+	add		$tmp322 $tmp317 $tmp321 	%argrw{"wrr"}
+	compref		$tmp323 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp324 $const23 $tmp323 	%argrw{"wrr"}
+	compref		$tmp325 ___336_P2 $const11 	%argrw{"wrr"}
+	mul		$tmp326 $tmp324 $tmp325 	%argrw{"wrr"}
+	add		$tmp327 $tmp322 $tmp326 	%argrw{"wrr"}
+	compref		$tmp328 ___336_P1 $const11 	%argrw{"wrr"}
+	mul		$tmp329 $const23 $tmp328 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:169
+#                 +-2*P0[0]*P0[0]+-2*P0[0]*P2[0]+2*P0[0]*P1[0]+2*P1[0]*P2[0]
+	compref		$tmp330 ___336_P1 $const11 	%line{169} %argrw{"wrr"}
+	mul		$tmp331 $tmp329 $tmp330 	%argrw{"wrr"}
+	add		$tmp332 $tmp327 $tmp331 	%argrw{"wrr"}
+	compref		$tmp333 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp334 $const21 $tmp333 	%argrw{"wrr"}
+	compref		$tmp335 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp336 $tmp334 $tmp335 	%argrw{"wrr"}
+	add		$tmp337 $tmp332 $tmp336 	%argrw{"wrr"}
+	compref		$tmp338 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp339 $const21 $tmp338 	%argrw{"wrr"}
+	compref		$tmp340 ___336_P2 $const11 	%argrw{"wrr"}
+	mul		$tmp341 $tmp339 $tmp340 	%argrw{"wrr"}
+	add		$tmp342 $tmp337 $tmp341 	%argrw{"wrr"}
+	compref		$tmp343 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp344 $const4 $tmp343 	%argrw{"wrr"}
+	compref		$tmp345 ___336_P1 $const11 	%argrw{"wrr"}
+	mul		$tmp346 $tmp344 $tmp345 	%argrw{"wrr"}
+	add		$tmp347 $tmp342 $tmp346 	%argrw{"wrr"}
+	compref		$tmp348 ___336_P1 $const11 	%argrw{"wrr"}
+	mul		$tmp349 $const4 $tmp348 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:170
+#                 +4*P0[0]*P1[0]+4*P0[0]*P1[0]+4*P1[0]*P2[0]+8*P0[0]*P1[0]
+	compref		$tmp350 ___336_P2 $const11 	%line{170} %argrw{"wrr"}
+	mul		$tmp351 $tmp349 $tmp350 	%argrw{"wrr"}
+	add		$tmp352 $tmp347 $tmp351 	%argrw{"wrr"}
+	compref		$tmp353 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp354 $const6 $tmp353 	%argrw{"wrr"}
+	compref		$tmp355 ___336_P1 $const11 	%argrw{"wrr"}
+	mul		$tmp356 $tmp354 $tmp355 	%argrw{"wrr"}
+	add		$tmp357 $tmp352 $tmp356 	%argrw{"wrr"}
+	compref		$tmp358 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp359 $const6 $tmp358 	%argrw{"wrr"}
+	compref		$tmp360 ___336_P1 $const11 	%argrw{"wrr"}
+	mul		$tmp361 $tmp359 $tmp360 	%argrw{"wrr"}
+	add		$tmp362 $tmp357 $tmp361 	%argrw{"wrr"}
+	compref		$tmp363 ___336_P1 $const11 	%argrw{"wrr"}
+	mul		$tmp364 $const6 $tmp363 	%argrw{"wrr"}
+	compref		$tmp365 ___336_P2 $const11 	%argrw{"wrr"}
+	mul		$tmp366 $tmp364 $tmp365 	%argrw{"wrr"}
+	add		$tmp367 $tmp362 $tmp366 	%argrw{"wrr"}
+	compref		$tmp368 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp369 $const27 $tmp368 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:171
+#                 +-8*P1[1]*P1[1]+-4*P0[1]*P0[1]+-4*P0[1]*P2[1]+-4*P1[1]*P1[1]
+	compref		$tmp370 ___336_P1 $const11 	%line{171} %argrw{"wrr"}
+	mul		$tmp371 $tmp369 $tmp370 	%argrw{"wrr"}
+	add		$tmp372 $tmp367 $tmp371 	%argrw{"wrr"}
+	compref		$tmp373 ___336_P1 $const2 	%argrw{"wrr"}
+	mul		$tmp374 $const25 $tmp373 	%argrw{"wrr"}
+	compref		$tmp375 ___336_P1 $const2 	%argrw{"wrr"}
+	mul		$tmp376 $tmp374 $tmp375 	%argrw{"wrr"}
+	add		$tmp377 $tmp372 $tmp376 	%argrw{"wrr"}
+	compref		$tmp378 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp379 $const23 $tmp378 	%argrw{"wrr"}
+	compref		$tmp380 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp381 $tmp379 $tmp380 	%argrw{"wrr"}
+	add		$tmp382 $tmp377 $tmp381 	%argrw{"wrr"}
+	compref		$tmp383 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp384 $const23 $tmp383 	%argrw{"wrr"}
+	compref		$tmp385 ___336_P2 $const2 	%argrw{"wrr"}
+	mul		$tmp386 $tmp384 $tmp385 	%argrw{"wrr"}
+	add		$tmp387 $tmp382 $tmp386 	%argrw{"wrr"}
+	compref		$tmp388 ___336_P1 $const2 	%argrw{"wrr"}
+	mul		$tmp389 $const23 $tmp388 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:172
+#                 +-2*P0[1]*P0[1]+-2*P0[1]*P2[1]+2*P0[1]*P1[1]+2*P1[1]*P2[1]
+	compref		$tmp390 ___336_P1 $const2 	%line{172} %argrw{"wrr"}
+	mul		$tmp391 $tmp389 $tmp390 	%argrw{"wrr"}
+	add		$tmp392 $tmp387 $tmp391 	%argrw{"wrr"}
+	compref		$tmp393 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp394 $const21 $tmp393 	%argrw{"wrr"}
+	compref		$tmp395 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp396 $tmp394 $tmp395 	%argrw{"wrr"}
+	add		$tmp397 $tmp392 $tmp396 	%argrw{"wrr"}
+	compref		$tmp398 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp399 $const21 $tmp398 	%argrw{"wrr"}
+	compref		$tmp400 ___336_P2 $const2 	%argrw{"wrr"}
+	mul		$tmp401 $tmp399 $tmp400 	%argrw{"wrr"}
+	add		$tmp402 $tmp397 $tmp401 	%argrw{"wrr"}
+	compref		$tmp403 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp404 $const4 $tmp403 	%argrw{"wrr"}
+	compref		$tmp405 ___336_P1 $const2 	%argrw{"wrr"}
+	mul		$tmp406 $tmp404 $tmp405 	%argrw{"wrr"}
+	add		$tmp407 $tmp402 $tmp406 	%argrw{"wrr"}
+	compref		$tmp408 ___336_P1 $const2 	%argrw{"wrr"}
+	mul		$tmp409 $const4 $tmp408 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:173
+#                 +4*P0[1]*P1[1]+4*P0[1]*P1[1]+4*P1[1]*P2[1]+8*P0[1]*P1[1]
+	compref		$tmp410 ___336_P2 $const2 	%line{173} %argrw{"wrr"}
+	mul		$tmp411 $tmp409 $tmp410 	%argrw{"wrr"}
+	add		$tmp412 $tmp407 $tmp411 	%argrw{"wrr"}
+	compref		$tmp413 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp414 $const6 $tmp413 	%argrw{"wrr"}
+	compref		$tmp415 ___336_P1 $const2 	%argrw{"wrr"}
+	mul		$tmp416 $tmp414 $tmp415 	%argrw{"wrr"}
+	add		$tmp417 $tmp412 $tmp416 	%argrw{"wrr"}
+	compref		$tmp418 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp419 $const6 $tmp418 	%argrw{"wrr"}
+	compref		$tmp420 ___336_P1 $const2 	%argrw{"wrr"}
+	mul		$tmp421 $tmp419 $tmp420 	%argrw{"wrr"}
+	add		$tmp422 $tmp417 $tmp421 	%argrw{"wrr"}
+	compref		$tmp423 ___336_P1 $const2 	%argrw{"wrr"}
+	mul		$tmp424 $const6 $tmp423 	%argrw{"wrr"}
+	compref		$tmp425 ___336_P2 $const2 	%argrw{"wrr"}
+	mul		$tmp426 $tmp424 $tmp425 	%argrw{"wrr"}
+	add		$tmp427 $tmp422 $tmp426 	%argrw{"wrr"}
+	compref		$tmp428 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp429 $const27 $tmp428 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:174
+#                 +-8*P1[2]*P1[2]+-4*P0[2]*P0[2]+-4*P0[2]*P2[2]+-4*P1[2]*P1[2]
+	compref		$tmp430 ___336_P1 $const2 	%line{174} %argrw{"wrr"}
+	mul		$tmp431 $tmp429 $tmp430 	%argrw{"wrr"}
+	add		$tmp432 $tmp427 $tmp431 	%argrw{"wrr"}
+	compref		$tmp433 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp434 $const25 $tmp433 	%argrw{"wrr"}
+	compref		$tmp435 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp436 $tmp434 $tmp435 	%argrw{"wrr"}
+	add		$tmp437 $tmp432 $tmp436 	%argrw{"wrr"}
+	compref		$tmp438 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp439 $const23 $tmp438 	%argrw{"wrr"}
+	compref		$tmp440 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp441 $tmp439 $tmp440 	%argrw{"wrr"}
+	add		$tmp442 $tmp437 $tmp441 	%argrw{"wrr"}
+	compref		$tmp443 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp444 $const23 $tmp443 	%argrw{"wrr"}
+	compref		$tmp445 ___336_P2 $const3 	%argrw{"wrr"}
+	mul		$tmp446 $tmp444 $tmp445 	%argrw{"wrr"}
+	add		$tmp447 $tmp442 $tmp446 	%argrw{"wrr"}
+	compref		$tmp448 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp449 $const23 $tmp448 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:175
+#                 +-2*P0[2]*P0[2]+-2*P0[2]*P2[2]+2*P0[2]*P1[2]+2*P1[2]*P2[2]
+	compref		$tmp450 ___336_P1 $const3 	%line{175} %argrw{"wrr"}
+	mul		$tmp451 $tmp449 $tmp450 	%argrw{"wrr"}
+	add		$tmp452 $tmp447 $tmp451 	%argrw{"wrr"}
+	compref		$tmp453 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp454 $const21 $tmp453 	%argrw{"wrr"}
+	compref		$tmp455 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp456 $tmp454 $tmp455 	%argrw{"wrr"}
+	add		$tmp457 $tmp452 $tmp456 	%argrw{"wrr"}
+	compref		$tmp458 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp459 $const21 $tmp458 	%argrw{"wrr"}
+	compref		$tmp460 ___336_P2 $const3 	%argrw{"wrr"}
+	mul		$tmp461 $tmp459 $tmp460 	%argrw{"wrr"}
+	add		$tmp462 $tmp457 $tmp461 	%argrw{"wrr"}
+	compref		$tmp463 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp464 $const4 $tmp463 	%argrw{"wrr"}
+	compref		$tmp465 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp466 $tmp464 $tmp465 	%argrw{"wrr"}
+	add		$tmp467 $tmp462 $tmp466 	%argrw{"wrr"}
+	compref		$tmp468 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp469 $const4 $tmp468 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:176
+#                 +4*P0[2]*P1[2]+4*P0[2]*P1[2]+4*P1[2]*P2[2]+8*P0[2]*P1[2];
+	compref		$tmp470 ___336_P2 $const3 	%line{176} %argrw{"wrr"}
+	mul		$tmp471 $tmp469 $tmp470 	%argrw{"wrr"}
+	add		$tmp472 $tmp467 $tmp471 	%argrw{"wrr"}
+	compref		$tmp473 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp474 $const6 $tmp473 	%argrw{"wrr"}
+	compref		$tmp475 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp476 $tmp474 $tmp475 	%argrw{"wrr"}
+	add		$tmp477 $tmp472 $tmp476 	%argrw{"wrr"}
+	compref		$tmp478 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp479 $const6 $tmp478 	%argrw{"wrr"}
+	compref		$tmp480 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp481 $tmp479 $tmp480 	%argrw{"wrr"}
+	add		$tmp482 $tmp477 $tmp481 	%argrw{"wrr"}
+	compref		$tmp483 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp484 $const6 $tmp483 	%argrw{"wrr"}
+	compref		$tmp485 ___336_P2 $const3 	%argrw{"wrr"}
+	mul		$tmp486 $tmp484 $tmp485 	%argrw{"wrr"}
+	add		$tmp487 $tmp482 $tmp486 	%argrw{"wrr"}
+	compref		$tmp488 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp489 $const27 $tmp488 	%argrw{"wrr"}
+	compref		$tmp490 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp491 $tmp489 $tmp490 	%argrw{"wrr"}
+	add		___336_t2 $tmp487 $tmp491 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:178
+#     float t3 = -4*P0[0]*P1[0]+-4*P0[0]*P1[0]+-4*P1[0]*P2[0]+-4*P1[0]*P2[0]
+	compref		$tmp492 ___336_P0 $const11 	%line{178} %argrw{"wrr"}
+	mul		$tmp493 $const23 $tmp492 	%argrw{"wrr"}
+	compref		$tmp494 ___336_P1 $const11 	%argrw{"wrr"}
+	mul		$tmp495 $tmp493 $tmp494 	%argrw{"wrr"}
+	compref		$tmp496 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp497 $const23 $tmp496 	%argrw{"wrr"}
+	compref		$tmp498 ___336_P1 $const11 	%argrw{"wrr"}
+	mul		$tmp499 $tmp497 $tmp498 	%argrw{"wrr"}
+	add		$tmp500 $tmp495 $tmp499 	%argrw{"wrr"}
+	compref		$tmp501 ___336_P1 $const11 	%argrw{"wrr"}
+	mul		$tmp502 $const23 $tmp501 	%argrw{"wrr"}
+	compref		$tmp503 ___336_P2 $const11 	%argrw{"wrr"}
+	mul		$tmp504 $tmp502 $tmp503 	%argrw{"wrr"}
+	add		$tmp505 $tmp500 $tmp504 	%argrw{"wrr"}
+	compref		$tmp506 ___336_P1 $const11 	%argrw{"wrr"}
+	mul		$tmp507 $const23 $tmp506 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:179
+#                 +2*P0[0]*P0[0]+2*P0[0]*P2[0]+2*P0[0]*P2[0]+2*P2[0]*P2[0]
+	compref		$tmp508 ___336_P2 $const11 	%line{179} %argrw{"wrr"}
+	mul		$tmp509 $tmp507 $tmp508 	%argrw{"wrr"}
+	add		$tmp510 $tmp505 $tmp509 	%argrw{"wrr"}
+	compref		$tmp511 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp512 $const4 $tmp511 	%argrw{"wrr"}
+	compref		$tmp513 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp514 $tmp512 $tmp513 	%argrw{"wrr"}
+	add		$tmp515 $tmp510 $tmp514 	%argrw{"wrr"}
+	compref		$tmp516 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp517 $const4 $tmp516 	%argrw{"wrr"}
+	compref		$tmp518 ___336_P2 $const11 	%argrw{"wrr"}
+	mul		$tmp519 $tmp517 $tmp518 	%argrw{"wrr"}
+	add		$tmp520 $tmp515 $tmp519 	%argrw{"wrr"}
+	compref		$tmp521 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp522 $const4 $tmp521 	%argrw{"wrr"}
+	compref		$tmp523 ___336_P2 $const11 	%argrw{"wrr"}
+	mul		$tmp524 $tmp522 $tmp523 	%argrw{"wrr"}
+	add		$tmp525 $tmp520 $tmp524 	%argrw{"wrr"}
+	compref		$tmp526 ___336_P2 $const11 	%argrw{"wrr"}
+	mul		$tmp527 $const4 $tmp526 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:180
+#                 +8*P1[0]*P1[0]+-4*P0[1]*P1[1]+-4*P0[1]*P1[1]+-4*P1[1]*P2[1]
+	compref		$tmp528 ___336_P2 $const11 	%line{180} %argrw{"wrr"}
+	mul		$tmp529 $tmp527 $tmp528 	%argrw{"wrr"}
+	add		$tmp530 $tmp525 $tmp529 	%argrw{"wrr"}
+	compref		$tmp531 ___336_P1 $const11 	%argrw{"wrr"}
+	mul		$tmp532 $const27 $tmp531 	%argrw{"wrr"}
+	compref		$tmp533 ___336_P1 $const11 	%argrw{"wrr"}
+	mul		$tmp534 $tmp532 $tmp533 	%argrw{"wrr"}
+	add		$tmp535 $tmp530 $tmp534 	%argrw{"wrr"}
+	compref		$tmp536 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp537 $const23 $tmp536 	%argrw{"wrr"}
+	compref		$tmp538 ___336_P1 $const2 	%argrw{"wrr"}
+	mul		$tmp539 $tmp537 $tmp538 	%argrw{"wrr"}
+	add		$tmp540 $tmp535 $tmp539 	%argrw{"wrr"}
+	compref		$tmp541 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp542 $const23 $tmp541 	%argrw{"wrr"}
+	compref		$tmp543 ___336_P1 $const2 	%argrw{"wrr"}
+	mul		$tmp544 $tmp542 $tmp543 	%argrw{"wrr"}
+	add		$tmp545 $tmp540 $tmp544 	%argrw{"wrr"}
+	compref		$tmp546 ___336_P1 $const2 	%argrw{"wrr"}
+	mul		$tmp547 $const23 $tmp546 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:181
+#                 +-4*P1[1]*P2[1]+2*P0[1]*P0[1]+2*P0[1]*P2[1]+2*P0[1]*P2[1]
+	compref		$tmp548 ___336_P2 $const2 	%line{181} %argrw{"wrr"}
+	mul		$tmp549 $tmp547 $tmp548 	%argrw{"wrr"}
+	add		$tmp550 $tmp545 $tmp549 	%argrw{"wrr"}
+	compref		$tmp551 ___336_P1 $const2 	%argrw{"wrr"}
+	mul		$tmp552 $const23 $tmp551 	%argrw{"wrr"}
+	compref		$tmp553 ___336_P2 $const2 	%argrw{"wrr"}
+	mul		$tmp554 $tmp552 $tmp553 	%argrw{"wrr"}
+	add		$tmp555 $tmp550 $tmp554 	%argrw{"wrr"}
+	compref		$tmp556 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp557 $const4 $tmp556 	%argrw{"wrr"}
+	compref		$tmp558 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp559 $tmp557 $tmp558 	%argrw{"wrr"}
+	add		$tmp560 $tmp555 $tmp559 	%argrw{"wrr"}
+	compref		$tmp561 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp562 $const4 $tmp561 	%argrw{"wrr"}
+	compref		$tmp563 ___336_P2 $const2 	%argrw{"wrr"}
+	mul		$tmp564 $tmp562 $tmp563 	%argrw{"wrr"}
+	add		$tmp565 $tmp560 $tmp564 	%argrw{"wrr"}
+	compref		$tmp566 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp567 $const4 $tmp566 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:182
+#                 +2*P2[1]*P2[1]+8*P1[1]*P1[1]+-4*P0[2]*P1[2]+-4*P0[2]*P1[2]
+	compref		$tmp568 ___336_P2 $const2 	%line{182} %argrw{"wrr"}
+	mul		$tmp569 $tmp567 $tmp568 	%argrw{"wrr"}
+	add		$tmp570 $tmp565 $tmp569 	%argrw{"wrr"}
+	compref		$tmp571 ___336_P2 $const2 	%argrw{"wrr"}
+	mul		$tmp572 $const4 $tmp571 	%argrw{"wrr"}
+	compref		$tmp573 ___336_P2 $const2 	%argrw{"wrr"}
+	mul		$tmp574 $tmp572 $tmp573 	%argrw{"wrr"}
+	add		$tmp575 $tmp570 $tmp574 	%argrw{"wrr"}
+	compref		$tmp576 ___336_P1 $const2 	%argrw{"wrr"}
+	mul		$tmp577 $const27 $tmp576 	%argrw{"wrr"}
+	compref		$tmp578 ___336_P1 $const2 	%argrw{"wrr"}
+	mul		$tmp579 $tmp577 $tmp578 	%argrw{"wrr"}
+	add		$tmp580 $tmp575 $tmp579 	%argrw{"wrr"}
+	compref		$tmp581 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp582 $const23 $tmp581 	%argrw{"wrr"}
+	compref		$tmp583 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp584 $tmp582 $tmp583 	%argrw{"wrr"}
+	add		$tmp585 $tmp580 $tmp584 	%argrw{"wrr"}
+	compref		$tmp586 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp587 $const23 $tmp586 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:183
+#                 +-4*P1[2]*P2[2]+-4*P1[2]*P2[2]+2*P0[2]*P0[2]+2*P0[2]*P2[2]
+	compref		$tmp588 ___336_P1 $const3 	%line{183} %argrw{"wrr"}
+	mul		$tmp589 $tmp587 $tmp588 	%argrw{"wrr"}
+	add		$tmp590 $tmp585 $tmp589 	%argrw{"wrr"}
+	compref		$tmp591 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp592 $const23 $tmp591 	%argrw{"wrr"}
+	compref		$tmp593 ___336_P2 $const3 	%argrw{"wrr"}
+	mul		$tmp594 $tmp592 $tmp593 	%argrw{"wrr"}
+	add		$tmp595 $tmp590 $tmp594 	%argrw{"wrr"}
+	compref		$tmp596 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp597 $const23 $tmp596 	%argrw{"wrr"}
+	compref		$tmp598 ___336_P2 $const3 	%argrw{"wrr"}
+	mul		$tmp599 $tmp597 $tmp598 	%argrw{"wrr"}
+	add		$tmp600 $tmp595 $tmp599 	%argrw{"wrr"}
+	compref		$tmp601 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp602 $const4 $tmp601 	%argrw{"wrr"}
+	compref		$tmp603 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp604 $tmp602 $tmp603 	%argrw{"wrr"}
+	add		$tmp605 $tmp600 $tmp604 	%argrw{"wrr"}
+	compref		$tmp606 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp607 $const4 $tmp606 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:184
+#                 +2*P0[2]*P2[2]+2*P2[2]*P2[2]+8*P1[2]*P1[2];
+	compref		$tmp608 ___336_P2 $const3 	%line{184} %argrw{"wrr"}
+	mul		$tmp609 $tmp607 $tmp608 	%argrw{"wrr"}
+	add		$tmp610 $tmp605 $tmp609 	%argrw{"wrr"}
+	compref		$tmp611 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp612 $const4 $tmp611 	%argrw{"wrr"}
+	compref		$tmp613 ___336_P2 $const3 	%argrw{"wrr"}
+	mul		$tmp614 $tmp612 $tmp613 	%argrw{"wrr"}
+	add		$tmp615 $tmp610 $tmp614 	%argrw{"wrr"}
+	compref		$tmp616 ___336_P2 $const3 	%argrw{"wrr"}
+	mul		$tmp617 $const4 $tmp616 	%argrw{"wrr"}
+	compref		$tmp618 ___336_P2 $const3 	%argrw{"wrr"}
+	mul		$tmp619 $tmp617 $tmp618 	%argrw{"wrr"}
+	add		$tmp620 $tmp615 $tmp619 	%argrw{"wrr"}
+	compref		$tmp621 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp622 $const27 $tmp621 	%argrw{"wrr"}
+	compref		$tmp623 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp624 $tmp622 $tmp623 	%argrw{"wrr"}
+	add		___336_t3 $tmp620 $tmp624 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:186
+#     float A[4] = {t0,t1,t2,t3};
+	aassign		___336_A $const11 ___336_t0 	%line{186} %argrw{"wrr"}
+	aassign		___336_A $const2 ___336_t1 	%argrw{"wrr"}
+	aassign		___336_A $const3 ___336_t2 	%argrw{"wrr"}
+	aassign		___336_A $const17 ___336_t3 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:189
+#     cubic(A,T,n);
+	functioncall	$const28 834 	%line{189} %argrw{"r"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:39
+#     float PI = 3.1415926535897932;
+	assign		___323_PI $const8 	%line{39} %argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:40
+#     float THIRD = 1./3.;
+	div		___323_THIRD $const1 $const18 	%line{40} %argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:46
+#     if (A[3] != 0.0)
+	aref		$tmp626 ___336_A $const17 	%line{46} %argrw{"wrr"}
+	neq		$tmp627 $tmp626 $const12 	%argrw{"wrr"}
+	if		$tmp627 767 800 	%argrw{"r"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:49
+#         W = A[2]/A[3]*THIRD;
+	aref		$tmp628 ___336_A $const3 	%line{49} %argrw{"wrr"}
+	aref		$tmp629 ___336_A $const17 	%argrw{"wrr"}
+	div		$tmp630 $tmp628 $tmp629 	%argrw{"wrr"}
+	mul		___323_W $tmp630 ___323_THIRD 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:50
+#         P = pow((A[1]/A[3]*THIRD - pow(W,2)),3);
+	aref		$tmp631 ___336_A $const2 	%line{50} %argrw{"wrr"}
+	aref		$tmp632 ___336_A $const17 	%argrw{"wrr"}
+	div		$tmp633 $tmp631 $tmp632 	%argrw{"wrr"}
+	mul		$tmp634 $tmp633 ___323_THIRD 	%argrw{"wrr"}
+	pow		$tmp635 ___323_W $const4 	%argrw{"wrr"}
+	sub		$tmp636 $tmp634 $tmp635 	%argrw{"wrr"}
+	pow		___323_P $tmp636 $const18 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:51
+#         Q = -.5*(2.0*pow(W,3)-(A[1]*W-A[0])/A[3] );
+	pow		$tmp637 ___323_W $const18 	%line{51} %argrw{"wrr"}
+	mul		$tmp638 $const4 $tmp637 	%argrw{"wrr"}
+	aref		$tmp639 ___336_A $const2 	%argrw{"wrr"}
+	mul		$tmp640 $tmp639 ___323_W 	%argrw{"wrr"}
+	aref		$tmp641 ___336_A $const11 	%argrw{"wrr"}
+	sub		$tmp642 $tmp640 $tmp641 	%argrw{"wrr"}
+	aref		$tmp643 ___336_A $const17 	%argrw{"wrr"}
+	div		$tmp644 $tmp642 $tmp643 	%argrw{"wrr"}
+	sub		$tmp645 $tmp638 $tmp644 	%argrw{"wrr"}
+	mul		___323_Q $const29 $tmp645 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:52
+#         DIS = pow(Q,2)+P;
+	pow		$tmp646 ___323_Q $const4 	%line{52} %argrw{"wrr"}
+	add		___323_DIS $tmp646 ___323_P 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:53
+#         if ( DIS < 0.0 )
+	lt		$tmp647 ___323_DIS $const12 	%line{53} %argrw{"wrr"}
+	if		$tmp647 746 767 	%argrw{"r"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:57
+#             PHI = acos(min(1.0,max(-1.0,Q/sqrt(-P))));
+	neg		$tmp651 ___323_P 	%line{57} %argrw{"wr"}
+	sqrt		$tmp650 $tmp651 	%argrw{"wr"}
+	div		$tmp652 ___323_Q $tmp650 	%argrw{"wrr"}
+	max		$tmp649 $const30 $tmp652 	%argrw{"wrr"}
+	min		$tmp648 $const1 $tmp649 	%argrw{"wrr"}
+	acos		___323_PHI $tmp648 	%argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:58
+#             P=2.0*pow((-P),(5.e-1*THIRD));
+	neg		$tmp654 ___323_P 	%line{58} %argrw{"wr"}
+	mul		$tmp655 $const31 ___323_THIRD 	%argrw{"wrr"}
+	pow		$tmp653 $tmp654 $tmp655 	%argrw{"wrr"}
+	mul		___323_P $const4 $tmp653 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:59
+#             for (i=0;i<3;i++)
+	for		$tmp656 709 710 719 721 	%line{59} %argrw{"r"}
+	assign		___323_i $const11 	%argrw{"wr"}
+	lt		$tmp656 ___323_i $const17 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:60
+#                 U[i] = P*cos((PHI+2*((float)i)*PI)*THIRD)-W;
+	assign		$tmp658 ___323_i 	%line{60} %argrw{"wr"}
+	mul		$tmp659 $const4 $tmp658 	%argrw{"wrr"}
+	mul		$tmp660 $tmp659 ___323_PI 	%argrw{"wrr"}
+	add		$tmp661 ___323_PHI $tmp660 	%argrw{"wrr"}
+	mul		$tmp662 $tmp661 ___323_THIRD 	%argrw{"wrr"}
+	cos		$tmp657 $tmp662 	%argrw{"wr"}
+	mul		$tmp663 ___323_P $tmp657 	%argrw{"wrr"}
+	sub		$tmp664 $tmp663 ___323_W 	%argrw{"wrr"}
+	aassign		___323_U ___323_i $tmp664 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:59
+#             for (i=0;i<3;i++)
+	assign		$tmp665 ___323_i 	%line{59} %argrw{"wr"}
+	add		___323_i ___323_i $const2 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:61
+#             X[0] = min(U[0], min(U[1], U[2]));
+	aref		$tmp667 ___323_U $const11 	%line{61} %argrw{"wrr"}
+	aref		$tmp669 ___323_U $const2 	%argrw{"wrr"}
+	aref		$tmp670 ___323_U $const3 	%argrw{"wrr"}
+	min		$tmp668 $tmp669 $tmp670 	%argrw{"wrr"}
+	min		$tmp666 $tmp667 $tmp668 	%argrw{"wrr"}
+	aassign		___336_T $const11 $tmp666 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:62
+#             X[1] = max(min(U[0], U[1]),max( min(U[0], U[2]), min(U[1], U[2])));
+	aref		$tmp673 ___323_U $const11 	%line{62} %argrw{"wrr"}
+	aref		$tmp674 ___323_U $const2 	%argrw{"wrr"}
+	min		$tmp672 $tmp673 $tmp674 	%argrw{"wrr"}
+	aref		$tmp677 ___323_U $const11 	%argrw{"wrr"}
+	aref		$tmp678 ___323_U $const3 	%argrw{"wrr"}
+	min		$tmp676 $tmp677 $tmp678 	%argrw{"wrr"}
+	aref		$tmp680 ___323_U $const2 	%argrw{"wrr"}
+	aref		$tmp681 ___323_U $const3 	%argrw{"wrr"}
+	min		$tmp679 $tmp680 $tmp681 	%argrw{"wrr"}
+	max		$tmp675 $tmp676 $tmp679 	%argrw{"wrr"}
+	max		$tmp671 $tmp672 $tmp675 	%argrw{"wrr"}
+	aassign		___336_T $const2 $tmp671 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:63
+#             X[2] = max(U[0], max(U[1], U[2]));
+	aref		$tmp683 ___323_U $const11 	%line{63} %argrw{"wrr"}
+	aref		$tmp685 ___323_U $const2 	%argrw{"wrr"}
+	aref		$tmp686 ___323_U $const3 	%argrw{"wrr"}
+	max		$tmp684 $tmp685 $tmp686 	%argrw{"wrr"}
+	max		$tmp682 $tmp683 $tmp684 	%argrw{"wrr"}
+	aassign		___336_T $const3 $tmp682 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:64
+#             L = 3;
+	assign		___336_n $const17 	%line{64} %argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:69
+#             DIS = sqrt(DIS);
+	sqrt		___323_DIS ___323_DIS 	%line{69} %argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:70
+#             X[0] = CBRT(Q+DIS)+CBRT(Q-DIS)-W;
+	add		$tmp688 ___323_Q ___323_DIS 	%line{70} %argrw{"wrr"}
+	functioncall	$const32 755 	%argrw{"r"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:15
+# float CBRT(float Z) { return abs(pow(abs(Z),1.0/3.0)) * sign(Z); }
+	abs		$tmp691 $tmp688 	%line{15} %argrw{"wr"}
+	div		$tmp692 $const1 $const18 	%argrw{"wrr"}
+	pow		$tmp690 $tmp691 $tmp692 	%argrw{"wrr"}
+	abs		$tmp689 $tmp690 	%argrw{"wr"}
+	sign		$tmp693 $tmp688 	%argrw{"wr"}
+	mul		$tmp687 $tmp689 $tmp693 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:70
+#             X[0] = CBRT(Q+DIS)+CBRT(Q-DIS)-W;
+	sub		$tmp695 ___323_Q ___323_DIS 	%line{70} %argrw{"wrr"}
+	functioncall	$const32 763 	%argrw{"r"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:15
+# float CBRT(float Z) { return abs(pow(abs(Z),1.0/3.0)) * sign(Z); }
+	abs		$tmp698 $tmp695 	%line{15} %argrw{"wr"}
+	div		$tmp699 $const1 $const18 	%argrw{"wrr"}
+	pow		$tmp697 $tmp698 $tmp699 	%argrw{"wrr"}
+	abs		$tmp696 $tmp697 	%argrw{"wr"}
+	sign		$tmp700 $tmp695 	%argrw{"wr"}
+	mul		$tmp694 $tmp696 $tmp700 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:70
+#             X[0] = CBRT(Q+DIS)+CBRT(Q-DIS)-W;
+	add		$tmp701 $tmp687 $tmp694 	%line{70} %argrw{"wrr"}
+	sub		$tmp702 $tmp701 ___323_W 	%argrw{"wrr"}
+	aassign		___336_T $const11 $tmp702 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:71
+#             L=1;
+	assign		___336_n $const2 	%line{71} %argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:74
+#     else if (A[2] != 0.0)
+	aref		$tmp703 ___336_A $const3 	%line{74} %argrw{"wrr"}
+	neq		$tmp704 $tmp703 $const12 	%argrw{"wrr"}
+	if		$tmp704 791 800 	%argrw{"r"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:77
+#         P = 0.5*A[1]/A[2];
+	aref		$tmp705 ___336_A $const2 	%line{77} %argrw{"wrr"}
+	mul		$tmp706 $const31 $tmp705 	%argrw{"wrr"}
+	aref		$tmp707 ___336_A $const3 	%argrw{"wrr"}
+	div		___323_P $tmp706 $tmp707 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:78
+#         DIS = pow(P,2)-A[0]/A[2];
+	pow		$tmp708 ___323_P $const4 	%line{78} %argrw{"wrr"}
+	aref		$tmp709 ___336_A $const11 	%argrw{"wrr"}
+	aref		$tmp710 ___336_A $const3 	%argrw{"wrr"}
+	div		$tmp711 $tmp709 $tmp710 	%argrw{"wrr"}
+	sub		___323_DIS $tmp708 $tmp711 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:79
+#         if (DIS > 0.0)
+	gt		$tmp712 ___323_DIS $const12 	%line{79} %argrw{"wrr"}
+	if		$tmp712 790 791 	%argrw{"r"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:82
+#             X[0] = -P - sqrt(DIS);
+	neg		$tmp713 ___323_P 	%line{82} %argrw{"wr"}
+	sqrt		$tmp714 ___323_DIS 	%argrw{"wr"}
+	sub		$tmp715 $tmp713 $tmp714 	%argrw{"wrr"}
+	aassign		___336_T $const11 $tmp715 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:83
+#             X[1] = -P + sqrt(DIS);
+	neg		$tmp716 ___323_P 	%line{83} %argrw{"wr"}
+	sqrt		$tmp717 ___323_DIS 	%argrw{"wr"}
+	add		$tmp718 $tmp716 $tmp717 	%argrw{"wrr"}
+	aassign		___336_T $const2 $tmp718 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:84
+#             L=2;
+	assign		___336_n $const3 	%line{84} %argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:89
+#             L=0;
+	assign		___336_n $const11 	%line{89} %argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:92
+#     else if (A[1] != 0.0)
+	aref		$tmp719 ___336_A $const2 	%line{92} %argrw{"wrr"}
+	neq		$tmp720 $tmp719 $const12 	%argrw{"wrr"}
+	if		$tmp720 799 800 	%argrw{"r"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:95
+#         X[0] =A[0]/A[1];
+	aref		$tmp721 ___336_A $const11 	%line{95} %argrw{"wrr"}
+	aref		$tmp722 ___336_A $const2 	%argrw{"wrr"}
+	div		$tmp723 $tmp721 $tmp722 	%argrw{"wrr"}
+	aassign		___336_T $const11 $tmp723 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:96
+#         L=1;
+	assign		___336_n $const2 	%line{96} %argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:101
+#         L=0;
+	assign		___336_n $const11 	%line{101} %argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:107
+#     for (i=0;i < L;i++)
+	for		$tmp724 802 803 831 833 	%line{107} %argrw{"r"}
+	assign		___323_i $const11 	%argrw{"wr"}
+	lt		$tmp724 ___323_i ___336_n 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:109
+#         X[i] = X[i] - (A[0]+X[i]*(A[1]+X[i]*(A[2]+X[i]*A[3])))
+	aref		$tmp725 ___336_T ___323_i 	%line{109} %argrw{"wrr"}
+	aref		$tmp726 ___336_A $const11 	%argrw{"wrr"}
+	aref		$tmp727 ___336_T ___323_i 	%argrw{"wrr"}
+	aref		$tmp728 ___336_A $const2 	%argrw{"wrr"}
+	aref		$tmp729 ___336_T ___323_i 	%argrw{"wrr"}
+	aref		$tmp730 ___336_A $const3 	%argrw{"wrr"}
+	aref		$tmp731 ___336_T ___323_i 	%argrw{"wrr"}
+	aref		$tmp732 ___336_A $const17 	%argrw{"wrr"}
+	mul		$tmp733 $tmp731 $tmp732 	%argrw{"wrr"}
+	add		$tmp734 $tmp730 $tmp733 	%argrw{"wrr"}
+	mul		$tmp735 $tmp729 $tmp734 	%argrw{"wrr"}
+	add		$tmp736 $tmp728 $tmp735 	%argrw{"wrr"}
+	mul		$tmp737 $tmp727 $tmp736 	%argrw{"wrr"}
+	add		$tmp738 $tmp726 $tmp737 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:110
+#             /(A[1]+X[i]*(2.0*A[2]+X[i]*3.0*A[3]));
+	aref		$tmp739 ___336_A $const2 	%line{110} %argrw{"wrr"}
+	aref		$tmp740 ___336_T ___323_i 	%argrw{"wrr"}
+	aref		$tmp741 ___336_A $const3 	%argrw{"wrr"}
+	mul		$tmp742 $const4 $tmp741 	%argrw{"wrr"}
+	aref		$tmp743 ___336_T ___323_i 	%argrw{"wrr"}
+	mul		$tmp744 $tmp743 $const18 	%argrw{"wrr"}
+	aref		$tmp745 ___336_A $const17 	%argrw{"wrr"}
+	mul		$tmp746 $tmp744 $tmp745 	%argrw{"wrr"}
+	add		$tmp747 $tmp742 $tmp746 	%argrw{"wrr"}
+	mul		$tmp748 $tmp740 $tmp747 	%argrw{"wrr"}
+	add		$tmp749 $tmp739 $tmp748 	%argrw{"wrr"}
+	div		$tmp750 $tmp738 $tmp749 	%argrw{"wrr"}
+	sub		$tmp751 $tmp725 $tmp750 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:109
+#         X[i] = X[i] - (A[0]+X[i]*(A[1]+X[i]*(A[2]+X[i]*A[3])))
+	aassign		___336_T ___323_i $tmp751 	%line{109} %argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:107
+#     for (i=0;i < L;i++)
+	assign		$tmp752 ___323_i 	%line{107} %argrw{"wr"}
+	add		___323_i ___323_i $const2 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:113
+#     return 0;
+	assign		$tmp625 $const11 	%line{113} %argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:190
+#     d = 1e6;
+	assign		___341_r $const33 	%line{190} %argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:195
+#     int found = 0;
+	assign		___336_found $const11 	%line{195} %argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:196
+#     while(n>0){
+	while		$tmp753 837 838 868 868 	%line{196} %argrw{"r"}
+	gt		$tmp753 ___336_n $const11 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:197
+#         n--;
+	assign		$tmp754 ___336_n 	%line{197} %argrw{"wr"}
+	sub		___336_n ___336_n $const2 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:198
+#         if(T[n]>=0 && T[n]<=1){
+	aref		$tmp755 ___336_T ___336_n 	%line{198} %argrw{"wrr"}
+	ge		$tmp756 $tmp755 $const11 	%argrw{"wrr"}
+	neq		$tmp757 $tmp756 $const11 	%argrw{"wrr"}
+	if		$tmp757 848 848 	%argrw{"r"}
+	aref		$tmp758 ___336_T ___336_n 	%argrw{"wrr"}
+	le		$tmp759 $tmp758 $const2 	%argrw{"wrr"}
+	neq		$tmp760 $tmp759 $const11 	%argrw{"wrr"}
+	assign		$tmp757 $tmp760 	%argrw{"wr"}
+	if		$tmp757 868 868 	%argrw{"r"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:199
+#             float t = T[n];
+	aref		___338_t ___336_T ___336_n 	%line{199} %argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:200
+#             found = 1;
+	assign		___336_found $const2 	%line{200} %argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:201
+#             float dd = distance((1-t)*(1-t)*P0 + 2*(1-t)*t *P1 + t*t*P2, Pos);
+	sub		$tmp761 $const1 ___338_t 	%line{201} %argrw{"wrr"}
+	sub		$tmp762 $const1 ___338_t 	%argrw{"wrr"}
+	mul		$tmp763 $tmp761 $tmp762 	%argrw{"wrr"}
+	mul		$tmp764 $tmp763 ___336_P0 	%argrw{"wrr"}
+	sub		$tmp765 $const1 ___338_t 	%argrw{"wrr"}
+	mul		$tmp766 $const4 $tmp765 	%argrw{"wrr"}
+	mul		$tmp767 $tmp766 ___338_t 	%argrw{"wrr"}
+	mul		$tmp768 $tmp767 ___336_P1 	%argrw{"wrr"}
+	add		$tmp769 $tmp764 $tmp768 	%argrw{"wrr"}
+	mul		$tmp770 ___338_t ___338_t 	%argrw{"wrr"}
+	mul		$tmp771 $tmp770 ___336_P2 	%argrw{"wrr"}
+	add		$tmp772 $tmp769 $tmp771 	%argrw{"wrr"}
+	distance	___338_dd $tmp772 Vector 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:202
+#             if (dd < d) {
+	lt		$tmp773 ___338_dd ___341_r 	%line{202} %argrw{"wrr"}
+	if		$tmp773 868 868 	%argrw{"r"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:203
+#                 d = dd;
+	assign		___341_r ___338_dd 	%line{203} %argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:204
+#                 tc = t;
+	assign		___341_t ___338_t 	%line{204} %argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:208
+#     return found;
+	assign		___341_f ___336_found 	%line{208} %argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl:76
+#     if ( f && (r < InnerWidth * ( 1- t) * (1-Vector[0]) ) ) { 
+	neq		$tmp774 ___341_f $const11 	%filename{"source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl"} %line{76} %argrw{"wrr"}
+	if		$tmp774 874 874 	%argrw{"r"}
+	lt		$tmp775 ___341_r NWidth 	%argrw{"wrr"}
+	neq		$tmp776 $tmp775 $const11 	%argrw{"wrr"}
+	assign		$tmp774 $tmp776 	%argrw{"wr"}
+	if		$tmp774 876 876 	%argrw{"r"}
+	assign		Net $const2 	%argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl:77
+#         Vein = 1; Fac = sqrt(1-r/InnerWidth); break; 
+	neq		$tmp777 ___341_f $const11 	%line{77} %argrw{"wrr"}
+	if		$tmp777 886 886 	%argrw{"r"}
+	sub		$tmp778 $const1 ___341_t 	%argrw{"wrr"}
+	mul		$tmp779 InnerWidth $tmp778 	%argrw{"wrr"}
+	compref		$tmp780 Vector $const11 	%argrw{"wrr"}
+	sub		$tmp781 $const1 $tmp780 	%argrw{"wrr"}
+	mul		$tmp782 $tmp779 $tmp781 	%argrw{"wrr"}
+	lt		$tmp783 ___341_r $tmp782 	%argrw{"wrr"}
+	neq		$tmp784 $tmp783 $const11 	%argrw{"wrr"}
+	assign		$tmp777 $tmp784 	%argrw{"wr"}
+	if		$tmp777 892 892 	%argrw{"r"}
+# source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl:78
+#     }
+	assign		Vein $const2 	%line{78} %argrw{"wr"}
+	div		$tmp785 ___341_r InnerWidth 	%argrw{"wrr"}
+	sub		$tmp786 $const1 $tmp785 	%argrw{"wrr"}
+	sqrt		Fac $tmp786 	%argrw{"wr"}
+	break
+# source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl:80
+#     if ( f && (r < NWidth ) ) Net = 1 ;
+	functioncall	$const19 1624 	%line{80} %argrw{"r"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:143
+#     point P0 = p0;
+	assign		___336_P0 ___341_P0down 	%filename{"source/sambler-osl-shaders/nature/MALeaf/MAEquations.h"} %line{143} %argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:144
+#     point P1 = p1;
+	assign		___336_P1 ___341_P1down 	%line{144} %argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:145
+#     point P2 = p2;
+	assign		___336_P2 ___341_P2down 	%line{145} %argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:155
+#     float t0 = -2*P0[0]*P0[0]+-2*P1[0]*Pos[0]+2*P0[0]*P1[0]+2*P0[0]*Pos[0]
+	compref		$tmp787 ___336_P0 $const11 	%line{155} %argrw{"wrr"}
+	mul		$tmp788 $const21 $tmp787 	%argrw{"wrr"}
+	compref		$tmp789 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp790 $tmp788 $tmp789 	%argrw{"wrr"}
+	compref		$tmp791 ___336_P1 $const11 	%argrw{"wrr"}
+	mul		$tmp792 $const21 $tmp791 	%argrw{"wrr"}
+	compref		$tmp793 Vector $const11 	%argrw{"wrr"}
+	mul		$tmp794 $tmp792 $tmp793 	%argrw{"wrr"}
+	add		$tmp795 $tmp790 $tmp794 	%argrw{"wrr"}
+	compref		$tmp796 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp797 $const4 $tmp796 	%argrw{"wrr"}
+	compref		$tmp798 ___336_P1 $const11 	%argrw{"wrr"}
+	mul		$tmp799 $tmp797 $tmp798 	%argrw{"wrr"}
+	add		$tmp800 $tmp795 $tmp799 	%argrw{"wrr"}
+	compref		$tmp801 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp802 $const4 $tmp801 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:156
+#                 +-2*P0[1]*P0[1]+-2*P1[1]*Pos[1]+2*P0[1]*P1[1]+2*P0[1]*Pos[1]
+	compref		$tmp803 Vector $const11 	%line{156} %argrw{"wrr"}
+	mul		$tmp804 $tmp802 $tmp803 	%argrw{"wrr"}
+	add		$tmp805 $tmp800 $tmp804 	%argrw{"wrr"}
+	compref		$tmp806 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp807 $const21 $tmp806 	%argrw{"wrr"}
+	compref		$tmp808 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp809 $tmp807 $tmp808 	%argrw{"wrr"}
+	add		$tmp810 $tmp805 $tmp809 	%argrw{"wrr"}
+	compref		$tmp811 ___336_P1 $const2 	%argrw{"wrr"}
+	mul		$tmp812 $const21 $tmp811 	%argrw{"wrr"}
+	compref		$tmp813 Vector $const2 	%argrw{"wrr"}
+	mul		$tmp814 $tmp812 $tmp813 	%argrw{"wrr"}
+	add		$tmp815 $tmp810 $tmp814 	%argrw{"wrr"}
+	compref		$tmp816 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp817 $const4 $tmp816 	%argrw{"wrr"}
+	compref		$tmp818 ___336_P1 $const2 	%argrw{"wrr"}
+	mul		$tmp819 $tmp817 $tmp818 	%argrw{"wrr"}
+	add		$tmp820 $tmp815 $tmp819 	%argrw{"wrr"}
+	compref		$tmp821 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp822 $const4 $tmp821 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:157
+#                 +-2*P0[2]*P0[2]+-2*P1[2]*Pos[2]+2*P0[2]*P1[2]+2*P0[2]*Pos[2];
+	compref		$tmp823 Vector $const2 	%line{157} %argrw{"wrr"}
+	mul		$tmp824 $tmp822 $tmp823 	%argrw{"wrr"}
+	add		$tmp825 $tmp820 $tmp824 	%argrw{"wrr"}
+	compref		$tmp826 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp827 $const21 $tmp826 	%argrw{"wrr"}
+	compref		$tmp828 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp829 $tmp827 $tmp828 	%argrw{"wrr"}
+	add		$tmp830 $tmp825 $tmp829 	%argrw{"wrr"}
+	compref		$tmp831 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp832 $const21 $tmp831 	%argrw{"wrr"}
+	compref		$tmp833 Vector $const3 	%argrw{"wrr"}
+	mul		$tmp834 $tmp832 $tmp833 	%argrw{"wrr"}
+	add		$tmp835 $tmp830 $tmp834 	%argrw{"wrr"}
+	compref		$tmp836 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp837 $const4 $tmp836 	%argrw{"wrr"}
+	compref		$tmp838 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp839 $tmp837 $tmp838 	%argrw{"wrr"}
+	add		$tmp840 $tmp835 $tmp839 	%argrw{"wrr"}
+	compref		$tmp841 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp842 $const4 $tmp841 	%argrw{"wrr"}
+	compref		$tmp843 Vector $const3 	%argrw{"wrr"}
+	mul		$tmp844 $tmp842 $tmp843 	%argrw{"wrr"}
+	add		___336_t0 $tmp840 $tmp844 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:159
+#     float t1 = -4*P0[0]*P1[0]+-4*P0[0]*P1[0]+-4*P0[0]*P1[0]+-2*P0[0]*Pos[0]
+	compref		$tmp845 ___336_P0 $const11 	%line{159} %argrw{"wrr"}
+	mul		$tmp846 $const23 $tmp845 	%argrw{"wrr"}
+	compref		$tmp847 ___336_P1 $const11 	%argrw{"wrr"}
+	mul		$tmp848 $tmp846 $tmp847 	%argrw{"wrr"}
+	compref		$tmp849 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp850 $const23 $tmp849 	%argrw{"wrr"}
+	compref		$tmp851 ___336_P1 $const11 	%argrw{"wrr"}
+	mul		$tmp852 $tmp850 $tmp851 	%argrw{"wrr"}
+	add		$tmp853 $tmp848 $tmp852 	%argrw{"wrr"}
+	compref		$tmp854 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp855 $const23 $tmp854 	%argrw{"wrr"}
+	compref		$tmp856 ___336_P1 $const11 	%argrw{"wrr"}
+	mul		$tmp857 $tmp855 $tmp856 	%argrw{"wrr"}
+	add		$tmp858 $tmp853 $tmp857 	%argrw{"wrr"}
+	compref		$tmp859 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp860 $const21 $tmp859 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:160
+#                 +-2*P2[0]*Pos[0]+2*P0[0]*P0[0]+2*P0[0]*P2[0]+4*P0[0]*P0[0]
+	compref		$tmp861 Vector $const11 	%line{160} %argrw{"wrr"}
+	mul		$tmp862 $tmp860 $tmp861 	%argrw{"wrr"}
+	add		$tmp863 $tmp858 $tmp862 	%argrw{"wrr"}
+	compref		$tmp864 ___336_P2 $const11 	%argrw{"wrr"}
+	mul		$tmp865 $const21 $tmp864 	%argrw{"wrr"}
+	compref		$tmp866 Vector $const11 	%argrw{"wrr"}
+	mul		$tmp867 $tmp865 $tmp866 	%argrw{"wrr"}
+	add		$tmp868 $tmp863 $tmp867 	%argrw{"wrr"}
+	compref		$tmp869 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp870 $const4 $tmp869 	%argrw{"wrr"}
+	compref		$tmp871 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp872 $tmp870 $tmp871 	%argrw{"wrr"}
+	add		$tmp873 $tmp868 $tmp872 	%argrw{"wrr"}
+	compref		$tmp874 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp875 $const4 $tmp874 	%argrw{"wrr"}
+	compref		$tmp876 ___336_P2 $const11 	%argrw{"wrr"}
+	mul		$tmp877 $tmp875 $tmp876 	%argrw{"wrr"}
+	add		$tmp878 $tmp873 $tmp877 	%argrw{"wrr"}
+	compref		$tmp879 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp880 $const6 $tmp879 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:161
+#                 +4*P1[0]*P1[0]+4*P1[0]*Pos[0]+-4*P0[1]*P1[1]+-4*P0[1]*P1[1]
+	compref		$tmp881 ___336_P0 $const11 	%line{161} %argrw{"wrr"}
+	mul		$tmp882 $tmp880 $tmp881 	%argrw{"wrr"}
+	add		$tmp883 $tmp878 $tmp882 	%argrw{"wrr"}
+	compref		$tmp884 ___336_P1 $const11 	%argrw{"wrr"}
+	mul		$tmp885 $const6 $tmp884 	%argrw{"wrr"}
+	compref		$tmp886 ___336_P1 $const11 	%argrw{"wrr"}
+	mul		$tmp887 $tmp885 $tmp886 	%argrw{"wrr"}
+	add		$tmp888 $tmp883 $tmp887 	%argrw{"wrr"}
+	compref		$tmp889 ___336_P1 $const11 	%argrw{"wrr"}
+	mul		$tmp890 $const6 $tmp889 	%argrw{"wrr"}
+	compref		$tmp891 Vector $const11 	%argrw{"wrr"}
+	mul		$tmp892 $tmp890 $tmp891 	%argrw{"wrr"}
+	add		$tmp893 $tmp888 $tmp892 	%argrw{"wrr"}
+	compref		$tmp894 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp895 $const23 $tmp894 	%argrw{"wrr"}
+	compref		$tmp896 ___336_P1 $const2 	%argrw{"wrr"}
+	mul		$tmp897 $tmp895 $tmp896 	%argrw{"wrr"}
+	add		$tmp898 $tmp893 $tmp897 	%argrw{"wrr"}
+	compref		$tmp899 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp900 $const23 $tmp899 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:162
+#                 +-4*P0[1]*P1[1]+-2*P0[1]*Pos[1]+-2*P2[1]*Pos[1]+2*P0[1]*P0[1]
+	compref		$tmp901 ___336_P1 $const2 	%line{162} %argrw{"wrr"}
+	mul		$tmp902 $tmp900 $tmp901 	%argrw{"wrr"}
+	add		$tmp903 $tmp898 $tmp902 	%argrw{"wrr"}
+	compref		$tmp904 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp905 $const23 $tmp904 	%argrw{"wrr"}
+	compref		$tmp906 ___336_P1 $const2 	%argrw{"wrr"}
+	mul		$tmp907 $tmp905 $tmp906 	%argrw{"wrr"}
+	add		$tmp908 $tmp903 $tmp907 	%argrw{"wrr"}
+	compref		$tmp909 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp910 $const21 $tmp909 	%argrw{"wrr"}
+	compref		$tmp911 Vector $const2 	%argrw{"wrr"}
+	mul		$tmp912 $tmp910 $tmp911 	%argrw{"wrr"}
+	add		$tmp913 $tmp908 $tmp912 	%argrw{"wrr"}
+	compref		$tmp914 ___336_P2 $const2 	%argrw{"wrr"}
+	mul		$tmp915 $const21 $tmp914 	%argrw{"wrr"}
+	compref		$tmp916 Vector $const2 	%argrw{"wrr"}
+	mul		$tmp917 $tmp915 $tmp916 	%argrw{"wrr"}
+	add		$tmp918 $tmp913 $tmp917 	%argrw{"wrr"}
+	compref		$tmp919 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp920 $const4 $tmp919 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:163
+#                 +2*P0[1]*P2[1]+4*P0[1]*P0[1]+4*P1[1]*P1[1]+4*P1[1]*Pos[1]
+	compref		$tmp921 ___336_P0 $const2 	%line{163} %argrw{"wrr"}
+	mul		$tmp922 $tmp920 $tmp921 	%argrw{"wrr"}
+	add		$tmp923 $tmp918 $tmp922 	%argrw{"wrr"}
+	compref		$tmp924 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp925 $const4 $tmp924 	%argrw{"wrr"}
+	compref		$tmp926 ___336_P2 $const2 	%argrw{"wrr"}
+	mul		$tmp927 $tmp925 $tmp926 	%argrw{"wrr"}
+	add		$tmp928 $tmp923 $tmp927 	%argrw{"wrr"}
+	compref		$tmp929 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp930 $const6 $tmp929 	%argrw{"wrr"}
+	compref		$tmp931 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp932 $tmp930 $tmp931 	%argrw{"wrr"}
+	add		$tmp933 $tmp928 $tmp932 	%argrw{"wrr"}
+	compref		$tmp934 ___336_P1 $const2 	%argrw{"wrr"}
+	mul		$tmp935 $const6 $tmp934 	%argrw{"wrr"}
+	compref		$tmp936 ___336_P1 $const2 	%argrw{"wrr"}
+	mul		$tmp937 $tmp935 $tmp936 	%argrw{"wrr"}
+	add		$tmp938 $tmp933 $tmp937 	%argrw{"wrr"}
+	compref		$tmp939 ___336_P1 $const2 	%argrw{"wrr"}
+	mul		$tmp940 $const6 $tmp939 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:164
+#                 +-4*P0[2]*P1[2]+-4*P0[2]*P1[2]+-4*P0[2]*P1[2]+-2*P0[2]*Pos[2]
+	compref		$tmp941 Vector $const2 	%line{164} %argrw{"wrr"}
+	mul		$tmp942 $tmp940 $tmp941 	%argrw{"wrr"}
+	add		$tmp943 $tmp938 $tmp942 	%argrw{"wrr"}
+	compref		$tmp944 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp945 $const23 $tmp944 	%argrw{"wrr"}
+	compref		$tmp946 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp947 $tmp945 $tmp946 	%argrw{"wrr"}
+	add		$tmp948 $tmp943 $tmp947 	%argrw{"wrr"}
+	compref		$tmp949 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp950 $const23 $tmp949 	%argrw{"wrr"}
+	compref		$tmp951 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp952 $tmp950 $tmp951 	%argrw{"wrr"}
+	add		$tmp953 $tmp948 $tmp952 	%argrw{"wrr"}
+	compref		$tmp954 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp955 $const23 $tmp954 	%argrw{"wrr"}
+	compref		$tmp956 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp957 $tmp955 $tmp956 	%argrw{"wrr"}
+	add		$tmp958 $tmp953 $tmp957 	%argrw{"wrr"}
+	compref		$tmp959 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp960 $const21 $tmp959 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:165
+#                 +-2*P2[2]*Pos[2]+2*P0[2]*P0[2]+2*P0[2]*P2[2]+4*P0[2]*P0[2]
+	compref		$tmp961 Vector $const3 	%line{165} %argrw{"wrr"}
+	mul		$tmp962 $tmp960 $tmp961 	%argrw{"wrr"}
+	add		$tmp963 $tmp958 $tmp962 	%argrw{"wrr"}
+	compref		$tmp964 ___336_P2 $const3 	%argrw{"wrr"}
+	mul		$tmp965 $const21 $tmp964 	%argrw{"wrr"}
+	compref		$tmp966 Vector $const3 	%argrw{"wrr"}
+	mul		$tmp967 $tmp965 $tmp966 	%argrw{"wrr"}
+	add		$tmp968 $tmp963 $tmp967 	%argrw{"wrr"}
+	compref		$tmp969 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp970 $const4 $tmp969 	%argrw{"wrr"}
+	compref		$tmp971 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp972 $tmp970 $tmp971 	%argrw{"wrr"}
+	add		$tmp973 $tmp968 $tmp972 	%argrw{"wrr"}
+	compref		$tmp974 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp975 $const4 $tmp974 	%argrw{"wrr"}
+	compref		$tmp976 ___336_P2 $const3 	%argrw{"wrr"}
+	mul		$tmp977 $tmp975 $tmp976 	%argrw{"wrr"}
+	add		$tmp978 $tmp973 $tmp977 	%argrw{"wrr"}
+	compref		$tmp979 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp980 $const6 $tmp979 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:166
+#                 +4*P1[2]*P1[2]+4*P1[2]*Pos[2];
+	compref		$tmp981 ___336_P0 $const3 	%line{166} %argrw{"wrr"}
+	mul		$tmp982 $tmp980 $tmp981 	%argrw{"wrr"}
+	add		$tmp983 $tmp978 $tmp982 	%argrw{"wrr"}
+	compref		$tmp984 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp985 $const6 $tmp984 	%argrw{"wrr"}
+	compref		$tmp986 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp987 $tmp985 $tmp986 	%argrw{"wrr"}
+	add		$tmp988 $tmp983 $tmp987 	%argrw{"wrr"}
+	compref		$tmp989 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp990 $const6 $tmp989 	%argrw{"wrr"}
+	compref		$tmp991 Vector $const3 	%argrw{"wrr"}
+	mul		$tmp992 $tmp990 $tmp991 	%argrw{"wrr"}
+	add		___336_t1 $tmp988 $tmp992 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:168
+#     float t2 = -8*P1[0]*P1[0]+-4*P0[0]*P0[0]+-4*P0[0]*P2[0]+-4*P1[0]*P1[0]
+	compref		$tmp993 ___336_P1 $const11 	%line{168} %argrw{"wrr"}
+	mul		$tmp994 $const25 $tmp993 	%argrw{"wrr"}
+	compref		$tmp995 ___336_P1 $const11 	%argrw{"wrr"}
+	mul		$tmp996 $tmp994 $tmp995 	%argrw{"wrr"}
+	compref		$tmp997 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp998 $const23 $tmp997 	%argrw{"wrr"}
+	compref		$tmp999 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp1000 $tmp998 $tmp999 	%argrw{"wrr"}
+	add		$tmp1001 $tmp996 $tmp1000 	%argrw{"wrr"}
+	compref		$tmp1002 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp1003 $const23 $tmp1002 	%argrw{"wrr"}
+	compref		$tmp1004 ___336_P2 $const11 	%argrw{"wrr"}
+	mul		$tmp1005 $tmp1003 $tmp1004 	%argrw{"wrr"}
+	add		$tmp1006 $tmp1001 $tmp1005 	%argrw{"wrr"}
+	compref		$tmp1007 ___336_P1 $const11 	%argrw{"wrr"}
+	mul		$tmp1008 $const23 $tmp1007 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:169
+#                 +-2*P0[0]*P0[0]+-2*P0[0]*P2[0]+2*P0[0]*P1[0]+2*P1[0]*P2[0]
+	compref		$tmp1009 ___336_P1 $const11 	%line{169} %argrw{"wrr"}
+	mul		$tmp1010 $tmp1008 $tmp1009 	%argrw{"wrr"}
+	add		$tmp1011 $tmp1006 $tmp1010 	%argrw{"wrr"}
+	compref		$tmp1012 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp1013 $const21 $tmp1012 	%argrw{"wrr"}
+	compref		$tmp1014 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp1015 $tmp1013 $tmp1014 	%argrw{"wrr"}
+	add		$tmp1016 $tmp1011 $tmp1015 	%argrw{"wrr"}
+	compref		$tmp1017 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp1018 $const21 $tmp1017 	%argrw{"wrr"}
+	compref		$tmp1019 ___336_P2 $const11 	%argrw{"wrr"}
+	mul		$tmp1020 $tmp1018 $tmp1019 	%argrw{"wrr"}
+	add		$tmp1021 $tmp1016 $tmp1020 	%argrw{"wrr"}
+	compref		$tmp1022 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp1023 $const4 $tmp1022 	%argrw{"wrr"}
+	compref		$tmp1024 ___336_P1 $const11 	%argrw{"wrr"}
+	mul		$tmp1025 $tmp1023 $tmp1024 	%argrw{"wrr"}
+	add		$tmp1026 $tmp1021 $tmp1025 	%argrw{"wrr"}
+	compref		$tmp1027 ___336_P1 $const11 	%argrw{"wrr"}
+	mul		$tmp1028 $const4 $tmp1027 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:170
+#                 +4*P0[0]*P1[0]+4*P0[0]*P1[0]+4*P1[0]*P2[0]+8*P0[0]*P1[0]
+	compref		$tmp1029 ___336_P2 $const11 	%line{170} %argrw{"wrr"}
+	mul		$tmp1030 $tmp1028 $tmp1029 	%argrw{"wrr"}
+	add		$tmp1031 $tmp1026 $tmp1030 	%argrw{"wrr"}
+	compref		$tmp1032 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp1033 $const6 $tmp1032 	%argrw{"wrr"}
+	compref		$tmp1034 ___336_P1 $const11 	%argrw{"wrr"}
+	mul		$tmp1035 $tmp1033 $tmp1034 	%argrw{"wrr"}
+	add		$tmp1036 $tmp1031 $tmp1035 	%argrw{"wrr"}
+	compref		$tmp1037 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp1038 $const6 $tmp1037 	%argrw{"wrr"}
+	compref		$tmp1039 ___336_P1 $const11 	%argrw{"wrr"}
+	mul		$tmp1040 $tmp1038 $tmp1039 	%argrw{"wrr"}
+	add		$tmp1041 $tmp1036 $tmp1040 	%argrw{"wrr"}
+	compref		$tmp1042 ___336_P1 $const11 	%argrw{"wrr"}
+	mul		$tmp1043 $const6 $tmp1042 	%argrw{"wrr"}
+	compref		$tmp1044 ___336_P2 $const11 	%argrw{"wrr"}
+	mul		$tmp1045 $tmp1043 $tmp1044 	%argrw{"wrr"}
+	add		$tmp1046 $tmp1041 $tmp1045 	%argrw{"wrr"}
+	compref		$tmp1047 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp1048 $const27 $tmp1047 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:171
+#                 +-8*P1[1]*P1[1]+-4*P0[1]*P0[1]+-4*P0[1]*P2[1]+-4*P1[1]*P1[1]
+	compref		$tmp1049 ___336_P1 $const11 	%line{171} %argrw{"wrr"}
+	mul		$tmp1050 $tmp1048 $tmp1049 	%argrw{"wrr"}
+	add		$tmp1051 $tmp1046 $tmp1050 	%argrw{"wrr"}
+	compref		$tmp1052 ___336_P1 $const2 	%argrw{"wrr"}
+	mul		$tmp1053 $const25 $tmp1052 	%argrw{"wrr"}
+	compref		$tmp1054 ___336_P1 $const2 	%argrw{"wrr"}
+	mul		$tmp1055 $tmp1053 $tmp1054 	%argrw{"wrr"}
+	add		$tmp1056 $tmp1051 $tmp1055 	%argrw{"wrr"}
+	compref		$tmp1057 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp1058 $const23 $tmp1057 	%argrw{"wrr"}
+	compref		$tmp1059 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp1060 $tmp1058 $tmp1059 	%argrw{"wrr"}
+	add		$tmp1061 $tmp1056 $tmp1060 	%argrw{"wrr"}
+	compref		$tmp1062 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp1063 $const23 $tmp1062 	%argrw{"wrr"}
+	compref		$tmp1064 ___336_P2 $const2 	%argrw{"wrr"}
+	mul		$tmp1065 $tmp1063 $tmp1064 	%argrw{"wrr"}
+	add		$tmp1066 $tmp1061 $tmp1065 	%argrw{"wrr"}
+	compref		$tmp1067 ___336_P1 $const2 	%argrw{"wrr"}
+	mul		$tmp1068 $const23 $tmp1067 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:172
+#                 +-2*P0[1]*P0[1]+-2*P0[1]*P2[1]+2*P0[1]*P1[1]+2*P1[1]*P2[1]
+	compref		$tmp1069 ___336_P1 $const2 	%line{172} %argrw{"wrr"}
+	mul		$tmp1070 $tmp1068 $tmp1069 	%argrw{"wrr"}
+	add		$tmp1071 $tmp1066 $tmp1070 	%argrw{"wrr"}
+	compref		$tmp1072 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp1073 $const21 $tmp1072 	%argrw{"wrr"}
+	compref		$tmp1074 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp1075 $tmp1073 $tmp1074 	%argrw{"wrr"}
+	add		$tmp1076 $tmp1071 $tmp1075 	%argrw{"wrr"}
+	compref		$tmp1077 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp1078 $const21 $tmp1077 	%argrw{"wrr"}
+	compref		$tmp1079 ___336_P2 $const2 	%argrw{"wrr"}
+	mul		$tmp1080 $tmp1078 $tmp1079 	%argrw{"wrr"}
+	add		$tmp1081 $tmp1076 $tmp1080 	%argrw{"wrr"}
+	compref		$tmp1082 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp1083 $const4 $tmp1082 	%argrw{"wrr"}
+	compref		$tmp1084 ___336_P1 $const2 	%argrw{"wrr"}
+	mul		$tmp1085 $tmp1083 $tmp1084 	%argrw{"wrr"}
+	add		$tmp1086 $tmp1081 $tmp1085 	%argrw{"wrr"}
+	compref		$tmp1087 ___336_P1 $const2 	%argrw{"wrr"}
+	mul		$tmp1088 $const4 $tmp1087 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:173
+#                 +4*P0[1]*P1[1]+4*P0[1]*P1[1]+4*P1[1]*P2[1]+8*P0[1]*P1[1]
+	compref		$tmp1089 ___336_P2 $const2 	%line{173} %argrw{"wrr"}
+	mul		$tmp1090 $tmp1088 $tmp1089 	%argrw{"wrr"}
+	add		$tmp1091 $tmp1086 $tmp1090 	%argrw{"wrr"}
+	compref		$tmp1092 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp1093 $const6 $tmp1092 	%argrw{"wrr"}
+	compref		$tmp1094 ___336_P1 $const2 	%argrw{"wrr"}
+	mul		$tmp1095 $tmp1093 $tmp1094 	%argrw{"wrr"}
+	add		$tmp1096 $tmp1091 $tmp1095 	%argrw{"wrr"}
+	compref		$tmp1097 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp1098 $const6 $tmp1097 	%argrw{"wrr"}
+	compref		$tmp1099 ___336_P1 $const2 	%argrw{"wrr"}
+	mul		$tmp1100 $tmp1098 $tmp1099 	%argrw{"wrr"}
+	add		$tmp1101 $tmp1096 $tmp1100 	%argrw{"wrr"}
+	compref		$tmp1102 ___336_P1 $const2 	%argrw{"wrr"}
+	mul		$tmp1103 $const6 $tmp1102 	%argrw{"wrr"}
+	compref		$tmp1104 ___336_P2 $const2 	%argrw{"wrr"}
+	mul		$tmp1105 $tmp1103 $tmp1104 	%argrw{"wrr"}
+	add		$tmp1106 $tmp1101 $tmp1105 	%argrw{"wrr"}
+	compref		$tmp1107 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp1108 $const27 $tmp1107 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:174
+#                 +-8*P1[2]*P1[2]+-4*P0[2]*P0[2]+-4*P0[2]*P2[2]+-4*P1[2]*P1[2]
+	compref		$tmp1109 ___336_P1 $const2 	%line{174} %argrw{"wrr"}
+	mul		$tmp1110 $tmp1108 $tmp1109 	%argrw{"wrr"}
+	add		$tmp1111 $tmp1106 $tmp1110 	%argrw{"wrr"}
+	compref		$tmp1112 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp1113 $const25 $tmp1112 	%argrw{"wrr"}
+	compref		$tmp1114 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp1115 $tmp1113 $tmp1114 	%argrw{"wrr"}
+	add		$tmp1116 $tmp1111 $tmp1115 	%argrw{"wrr"}
+	compref		$tmp1117 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp1118 $const23 $tmp1117 	%argrw{"wrr"}
+	compref		$tmp1119 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp1120 $tmp1118 $tmp1119 	%argrw{"wrr"}
+	add		$tmp1121 $tmp1116 $tmp1120 	%argrw{"wrr"}
+	compref		$tmp1122 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp1123 $const23 $tmp1122 	%argrw{"wrr"}
+	compref		$tmp1124 ___336_P2 $const3 	%argrw{"wrr"}
+	mul		$tmp1125 $tmp1123 $tmp1124 	%argrw{"wrr"}
+	add		$tmp1126 $tmp1121 $tmp1125 	%argrw{"wrr"}
+	compref		$tmp1127 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp1128 $const23 $tmp1127 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:175
+#                 +-2*P0[2]*P0[2]+-2*P0[2]*P2[2]+2*P0[2]*P1[2]+2*P1[2]*P2[2]
+	compref		$tmp1129 ___336_P1 $const3 	%line{175} %argrw{"wrr"}
+	mul		$tmp1130 $tmp1128 $tmp1129 	%argrw{"wrr"}
+	add		$tmp1131 $tmp1126 $tmp1130 	%argrw{"wrr"}
+	compref		$tmp1132 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp1133 $const21 $tmp1132 	%argrw{"wrr"}
+	compref		$tmp1134 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp1135 $tmp1133 $tmp1134 	%argrw{"wrr"}
+	add		$tmp1136 $tmp1131 $tmp1135 	%argrw{"wrr"}
+	compref		$tmp1137 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp1138 $const21 $tmp1137 	%argrw{"wrr"}
+	compref		$tmp1139 ___336_P2 $const3 	%argrw{"wrr"}
+	mul		$tmp1140 $tmp1138 $tmp1139 	%argrw{"wrr"}
+	add		$tmp1141 $tmp1136 $tmp1140 	%argrw{"wrr"}
+	compref		$tmp1142 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp1143 $const4 $tmp1142 	%argrw{"wrr"}
+	compref		$tmp1144 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp1145 $tmp1143 $tmp1144 	%argrw{"wrr"}
+	add		$tmp1146 $tmp1141 $tmp1145 	%argrw{"wrr"}
+	compref		$tmp1147 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp1148 $const4 $tmp1147 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:176
+#                 +4*P0[2]*P1[2]+4*P0[2]*P1[2]+4*P1[2]*P2[2]+8*P0[2]*P1[2];
+	compref		$tmp1149 ___336_P2 $const3 	%line{176} %argrw{"wrr"}
+	mul		$tmp1150 $tmp1148 $tmp1149 	%argrw{"wrr"}
+	add		$tmp1151 $tmp1146 $tmp1150 	%argrw{"wrr"}
+	compref		$tmp1152 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp1153 $const6 $tmp1152 	%argrw{"wrr"}
+	compref		$tmp1154 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp1155 $tmp1153 $tmp1154 	%argrw{"wrr"}
+	add		$tmp1156 $tmp1151 $tmp1155 	%argrw{"wrr"}
+	compref		$tmp1157 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp1158 $const6 $tmp1157 	%argrw{"wrr"}
+	compref		$tmp1159 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp1160 $tmp1158 $tmp1159 	%argrw{"wrr"}
+	add		$tmp1161 $tmp1156 $tmp1160 	%argrw{"wrr"}
+	compref		$tmp1162 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp1163 $const6 $tmp1162 	%argrw{"wrr"}
+	compref		$tmp1164 ___336_P2 $const3 	%argrw{"wrr"}
+	mul		$tmp1165 $tmp1163 $tmp1164 	%argrw{"wrr"}
+	add		$tmp1166 $tmp1161 $tmp1165 	%argrw{"wrr"}
+	compref		$tmp1167 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp1168 $const27 $tmp1167 	%argrw{"wrr"}
+	compref		$tmp1169 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp1170 $tmp1168 $tmp1169 	%argrw{"wrr"}
+	add		___336_t2 $tmp1166 $tmp1170 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:178
+#     float t3 = -4*P0[0]*P1[0]+-4*P0[0]*P1[0]+-4*P1[0]*P2[0]+-4*P1[0]*P2[0]
+	compref		$tmp1171 ___336_P0 $const11 	%line{178} %argrw{"wrr"}
+	mul		$tmp1172 $const23 $tmp1171 	%argrw{"wrr"}
+	compref		$tmp1173 ___336_P1 $const11 	%argrw{"wrr"}
+	mul		$tmp1174 $tmp1172 $tmp1173 	%argrw{"wrr"}
+	compref		$tmp1175 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp1176 $const23 $tmp1175 	%argrw{"wrr"}
+	compref		$tmp1177 ___336_P1 $const11 	%argrw{"wrr"}
+	mul		$tmp1178 $tmp1176 $tmp1177 	%argrw{"wrr"}
+	add		$tmp1179 $tmp1174 $tmp1178 	%argrw{"wrr"}
+	compref		$tmp1180 ___336_P1 $const11 	%argrw{"wrr"}
+	mul		$tmp1181 $const23 $tmp1180 	%argrw{"wrr"}
+	compref		$tmp1182 ___336_P2 $const11 	%argrw{"wrr"}
+	mul		$tmp1183 $tmp1181 $tmp1182 	%argrw{"wrr"}
+	add		$tmp1184 $tmp1179 $tmp1183 	%argrw{"wrr"}
+	compref		$tmp1185 ___336_P1 $const11 	%argrw{"wrr"}
+	mul		$tmp1186 $const23 $tmp1185 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:179
+#                 +2*P0[0]*P0[0]+2*P0[0]*P2[0]+2*P0[0]*P2[0]+2*P2[0]*P2[0]
+	compref		$tmp1187 ___336_P2 $const11 	%line{179} %argrw{"wrr"}
+	mul		$tmp1188 $tmp1186 $tmp1187 	%argrw{"wrr"}
+	add		$tmp1189 $tmp1184 $tmp1188 	%argrw{"wrr"}
+	compref		$tmp1190 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp1191 $const4 $tmp1190 	%argrw{"wrr"}
+	compref		$tmp1192 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp1193 $tmp1191 $tmp1192 	%argrw{"wrr"}
+	add		$tmp1194 $tmp1189 $tmp1193 	%argrw{"wrr"}
+	compref		$tmp1195 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp1196 $const4 $tmp1195 	%argrw{"wrr"}
+	compref		$tmp1197 ___336_P2 $const11 	%argrw{"wrr"}
+	mul		$tmp1198 $tmp1196 $tmp1197 	%argrw{"wrr"}
+	add		$tmp1199 $tmp1194 $tmp1198 	%argrw{"wrr"}
+	compref		$tmp1200 ___336_P0 $const11 	%argrw{"wrr"}
+	mul		$tmp1201 $const4 $tmp1200 	%argrw{"wrr"}
+	compref		$tmp1202 ___336_P2 $const11 	%argrw{"wrr"}
+	mul		$tmp1203 $tmp1201 $tmp1202 	%argrw{"wrr"}
+	add		$tmp1204 $tmp1199 $tmp1203 	%argrw{"wrr"}
+	compref		$tmp1205 ___336_P2 $const11 	%argrw{"wrr"}
+	mul		$tmp1206 $const4 $tmp1205 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:180
+#                 +8*P1[0]*P1[0]+-4*P0[1]*P1[1]+-4*P0[1]*P1[1]+-4*P1[1]*P2[1]
+	compref		$tmp1207 ___336_P2 $const11 	%line{180} %argrw{"wrr"}
+	mul		$tmp1208 $tmp1206 $tmp1207 	%argrw{"wrr"}
+	add		$tmp1209 $tmp1204 $tmp1208 	%argrw{"wrr"}
+	compref		$tmp1210 ___336_P1 $const11 	%argrw{"wrr"}
+	mul		$tmp1211 $const27 $tmp1210 	%argrw{"wrr"}
+	compref		$tmp1212 ___336_P1 $const11 	%argrw{"wrr"}
+	mul		$tmp1213 $tmp1211 $tmp1212 	%argrw{"wrr"}
+	add		$tmp1214 $tmp1209 $tmp1213 	%argrw{"wrr"}
+	compref		$tmp1215 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp1216 $const23 $tmp1215 	%argrw{"wrr"}
+	compref		$tmp1217 ___336_P1 $const2 	%argrw{"wrr"}
+	mul		$tmp1218 $tmp1216 $tmp1217 	%argrw{"wrr"}
+	add		$tmp1219 $tmp1214 $tmp1218 	%argrw{"wrr"}
+	compref		$tmp1220 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp1221 $const23 $tmp1220 	%argrw{"wrr"}
+	compref		$tmp1222 ___336_P1 $const2 	%argrw{"wrr"}
+	mul		$tmp1223 $tmp1221 $tmp1222 	%argrw{"wrr"}
+	add		$tmp1224 $tmp1219 $tmp1223 	%argrw{"wrr"}
+	compref		$tmp1225 ___336_P1 $const2 	%argrw{"wrr"}
+	mul		$tmp1226 $const23 $tmp1225 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:181
+#                 +-4*P1[1]*P2[1]+2*P0[1]*P0[1]+2*P0[1]*P2[1]+2*P0[1]*P2[1]
+	compref		$tmp1227 ___336_P2 $const2 	%line{181} %argrw{"wrr"}
+	mul		$tmp1228 $tmp1226 $tmp1227 	%argrw{"wrr"}
+	add		$tmp1229 $tmp1224 $tmp1228 	%argrw{"wrr"}
+	compref		$tmp1230 ___336_P1 $const2 	%argrw{"wrr"}
+	mul		$tmp1231 $const23 $tmp1230 	%argrw{"wrr"}
+	compref		$tmp1232 ___336_P2 $const2 	%argrw{"wrr"}
+	mul		$tmp1233 $tmp1231 $tmp1232 	%argrw{"wrr"}
+	add		$tmp1234 $tmp1229 $tmp1233 	%argrw{"wrr"}
+	compref		$tmp1235 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp1236 $const4 $tmp1235 	%argrw{"wrr"}
+	compref		$tmp1237 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp1238 $tmp1236 $tmp1237 	%argrw{"wrr"}
+	add		$tmp1239 $tmp1234 $tmp1238 	%argrw{"wrr"}
+	compref		$tmp1240 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp1241 $const4 $tmp1240 	%argrw{"wrr"}
+	compref		$tmp1242 ___336_P2 $const2 	%argrw{"wrr"}
+	mul		$tmp1243 $tmp1241 $tmp1242 	%argrw{"wrr"}
+	add		$tmp1244 $tmp1239 $tmp1243 	%argrw{"wrr"}
+	compref		$tmp1245 ___336_P0 $const2 	%argrw{"wrr"}
+	mul		$tmp1246 $const4 $tmp1245 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:182
+#                 +2*P2[1]*P2[1]+8*P1[1]*P1[1]+-4*P0[2]*P1[2]+-4*P0[2]*P1[2]
+	compref		$tmp1247 ___336_P2 $const2 	%line{182} %argrw{"wrr"}
+	mul		$tmp1248 $tmp1246 $tmp1247 	%argrw{"wrr"}
+	add		$tmp1249 $tmp1244 $tmp1248 	%argrw{"wrr"}
+	compref		$tmp1250 ___336_P2 $const2 	%argrw{"wrr"}
+	mul		$tmp1251 $const4 $tmp1250 	%argrw{"wrr"}
+	compref		$tmp1252 ___336_P2 $const2 	%argrw{"wrr"}
+	mul		$tmp1253 $tmp1251 $tmp1252 	%argrw{"wrr"}
+	add		$tmp1254 $tmp1249 $tmp1253 	%argrw{"wrr"}
+	compref		$tmp1255 ___336_P1 $const2 	%argrw{"wrr"}
+	mul		$tmp1256 $const27 $tmp1255 	%argrw{"wrr"}
+	compref		$tmp1257 ___336_P1 $const2 	%argrw{"wrr"}
+	mul		$tmp1258 $tmp1256 $tmp1257 	%argrw{"wrr"}
+	add		$tmp1259 $tmp1254 $tmp1258 	%argrw{"wrr"}
+	compref		$tmp1260 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp1261 $const23 $tmp1260 	%argrw{"wrr"}
+	compref		$tmp1262 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp1263 $tmp1261 $tmp1262 	%argrw{"wrr"}
+	add		$tmp1264 $tmp1259 $tmp1263 	%argrw{"wrr"}
+	compref		$tmp1265 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp1266 $const23 $tmp1265 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:183
+#                 +-4*P1[2]*P2[2]+-4*P1[2]*P2[2]+2*P0[2]*P0[2]+2*P0[2]*P2[2]
+	compref		$tmp1267 ___336_P1 $const3 	%line{183} %argrw{"wrr"}
+	mul		$tmp1268 $tmp1266 $tmp1267 	%argrw{"wrr"}
+	add		$tmp1269 $tmp1264 $tmp1268 	%argrw{"wrr"}
+	compref		$tmp1270 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp1271 $const23 $tmp1270 	%argrw{"wrr"}
+	compref		$tmp1272 ___336_P2 $const3 	%argrw{"wrr"}
+	mul		$tmp1273 $tmp1271 $tmp1272 	%argrw{"wrr"}
+	add		$tmp1274 $tmp1269 $tmp1273 	%argrw{"wrr"}
+	compref		$tmp1275 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp1276 $const23 $tmp1275 	%argrw{"wrr"}
+	compref		$tmp1277 ___336_P2 $const3 	%argrw{"wrr"}
+	mul		$tmp1278 $tmp1276 $tmp1277 	%argrw{"wrr"}
+	add		$tmp1279 $tmp1274 $tmp1278 	%argrw{"wrr"}
+	compref		$tmp1280 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp1281 $const4 $tmp1280 	%argrw{"wrr"}
+	compref		$tmp1282 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp1283 $tmp1281 $tmp1282 	%argrw{"wrr"}
+	add		$tmp1284 $tmp1279 $tmp1283 	%argrw{"wrr"}
+	compref		$tmp1285 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp1286 $const4 $tmp1285 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:184
+#                 +2*P0[2]*P2[2]+2*P2[2]*P2[2]+8*P1[2]*P1[2];
+	compref		$tmp1287 ___336_P2 $const3 	%line{184} %argrw{"wrr"}
+	mul		$tmp1288 $tmp1286 $tmp1287 	%argrw{"wrr"}
+	add		$tmp1289 $tmp1284 $tmp1288 	%argrw{"wrr"}
+	compref		$tmp1290 ___336_P0 $const3 	%argrw{"wrr"}
+	mul		$tmp1291 $const4 $tmp1290 	%argrw{"wrr"}
+	compref		$tmp1292 ___336_P2 $const3 	%argrw{"wrr"}
+	mul		$tmp1293 $tmp1291 $tmp1292 	%argrw{"wrr"}
+	add		$tmp1294 $tmp1289 $tmp1293 	%argrw{"wrr"}
+	compref		$tmp1295 ___336_P2 $const3 	%argrw{"wrr"}
+	mul		$tmp1296 $const4 $tmp1295 	%argrw{"wrr"}
+	compref		$tmp1297 ___336_P2 $const3 	%argrw{"wrr"}
+	mul		$tmp1298 $tmp1296 $tmp1297 	%argrw{"wrr"}
+	add		$tmp1299 $tmp1294 $tmp1298 	%argrw{"wrr"}
+	compref		$tmp1300 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp1301 $const27 $tmp1300 	%argrw{"wrr"}
+	compref		$tmp1302 ___336_P1 $const3 	%argrw{"wrr"}
+	mul		$tmp1303 $tmp1301 $tmp1302 	%argrw{"wrr"}
+	add		___336_t3 $tmp1299 $tmp1303 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:186
+#     float A[4] = {t0,t1,t2,t3};
+	aassign		___336_A $const11 ___336_t0 	%line{186} %argrw{"wrr"}
+	aassign		___336_A $const2 ___336_t1 	%argrw{"wrr"}
+	aassign		___336_A $const3 ___336_t2 	%argrw{"wrr"}
+	aassign		___336_A $const17 ___336_t3 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:189
+#     cubic(A,T,n);
+	functioncall	$const28 1589 	%line{189} %argrw{"r"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:39
+#     float PI = 3.1415926535897932;
+	assign		___323_PI $const8 	%line{39} %argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:40
+#     float THIRD = 1./3.;
+	div		___323_THIRD $const1 $const18 	%line{40} %argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:46
+#     if (A[3] != 0.0)
+	aref		$tmp1305 ___336_A $const17 	%line{46} %argrw{"wrr"}
+	neq		$tmp1306 $tmp1305 $const12 	%argrw{"wrr"}
+	if		$tmp1306 1522 1555 	%argrw{"r"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:49
+#         W = A[2]/A[3]*THIRD;
+	aref		$tmp1307 ___336_A $const3 	%line{49} %argrw{"wrr"}
+	aref		$tmp1308 ___336_A $const17 	%argrw{"wrr"}
+	div		$tmp1309 $tmp1307 $tmp1308 	%argrw{"wrr"}
+	mul		___323_W $tmp1309 ___323_THIRD 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:50
+#         P = pow((A[1]/A[3]*THIRD - pow(W,2)),3);
+	aref		$tmp1310 ___336_A $const2 	%line{50} %argrw{"wrr"}
+	aref		$tmp1311 ___336_A $const17 	%argrw{"wrr"}
+	div		$tmp1312 $tmp1310 $tmp1311 	%argrw{"wrr"}
+	mul		$tmp1313 $tmp1312 ___323_THIRD 	%argrw{"wrr"}
+	pow		$tmp1314 ___323_W $const4 	%argrw{"wrr"}
+	sub		$tmp1315 $tmp1313 $tmp1314 	%argrw{"wrr"}
+	pow		___323_P $tmp1315 $const18 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:51
+#         Q = -.5*(2.0*pow(W,3)-(A[1]*W-A[0])/A[3] );
+	pow		$tmp1316 ___323_W $const18 	%line{51} %argrw{"wrr"}
+	mul		$tmp1317 $const4 $tmp1316 	%argrw{"wrr"}
+	aref		$tmp1318 ___336_A $const2 	%argrw{"wrr"}
+	mul		$tmp1319 $tmp1318 ___323_W 	%argrw{"wrr"}
+	aref		$tmp1320 ___336_A $const11 	%argrw{"wrr"}
+	sub		$tmp1321 $tmp1319 $tmp1320 	%argrw{"wrr"}
+	aref		$tmp1322 ___336_A $const17 	%argrw{"wrr"}
+	div		$tmp1323 $tmp1321 $tmp1322 	%argrw{"wrr"}
+	sub		$tmp1324 $tmp1317 $tmp1323 	%argrw{"wrr"}
+	mul		___323_Q $const29 $tmp1324 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:52
+#         DIS = pow(Q,2)+P;
+	pow		$tmp1325 ___323_Q $const4 	%line{52} %argrw{"wrr"}
+	add		___323_DIS $tmp1325 ___323_P 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:53
+#         if ( DIS < 0.0 )
+	lt		$tmp1326 ___323_DIS $const12 	%line{53} %argrw{"wrr"}
+	if		$tmp1326 1501 1522 	%argrw{"r"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:57
+#             PHI = acos(min(1.0,max(-1.0,Q/sqrt(-P))));
+	neg		$tmp1330 ___323_P 	%line{57} %argrw{"wr"}
+	sqrt		$tmp1329 $tmp1330 	%argrw{"wr"}
+	div		$tmp1331 ___323_Q $tmp1329 	%argrw{"wrr"}
+	max		$tmp1328 $const30 $tmp1331 	%argrw{"wrr"}
+	min		$tmp1327 $const1 $tmp1328 	%argrw{"wrr"}
+	acos		___323_PHI $tmp1327 	%argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:58
+#             P=2.0*pow((-P),(5.e-1*THIRD));
+	neg		$tmp1333 ___323_P 	%line{58} %argrw{"wr"}
+	mul		$tmp1334 $const31 ___323_THIRD 	%argrw{"wrr"}
+	pow		$tmp1332 $tmp1333 $tmp1334 	%argrw{"wrr"}
+	mul		___323_P $const4 $tmp1332 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:59
+#             for (i=0;i<3;i++)
+	for		$tmp1335 1464 1465 1474 1476 	%line{59} %argrw{"r"}
+	assign		___323_i $const11 	%argrw{"wr"}
+	lt		$tmp1335 ___323_i $const17 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:60
+#                 U[i] = P*cos((PHI+2*((float)i)*PI)*THIRD)-W;
+	assign		$tmp1337 ___323_i 	%line{60} %argrw{"wr"}
+	mul		$tmp1338 $const4 $tmp1337 	%argrw{"wrr"}
+	mul		$tmp1339 $tmp1338 ___323_PI 	%argrw{"wrr"}
+	add		$tmp1340 ___323_PHI $tmp1339 	%argrw{"wrr"}
+	mul		$tmp1341 $tmp1340 ___323_THIRD 	%argrw{"wrr"}
+	cos		$tmp1336 $tmp1341 	%argrw{"wr"}
+	mul		$tmp1342 ___323_P $tmp1336 	%argrw{"wrr"}
+	sub		$tmp1343 $tmp1342 ___323_W 	%argrw{"wrr"}
+	aassign		___323_U ___323_i $tmp1343 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:59
+#             for (i=0;i<3;i++)
+	assign		$tmp1344 ___323_i 	%line{59} %argrw{"wr"}
+	add		___323_i ___323_i $const2 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:61
+#             X[0] = min(U[0], min(U[1], U[2]));
+	aref		$tmp1346 ___323_U $const11 	%line{61} %argrw{"wrr"}
+	aref		$tmp1348 ___323_U $const2 	%argrw{"wrr"}
+	aref		$tmp1349 ___323_U $const3 	%argrw{"wrr"}
+	min		$tmp1347 $tmp1348 $tmp1349 	%argrw{"wrr"}
+	min		$tmp1345 $tmp1346 $tmp1347 	%argrw{"wrr"}
+	aassign		___336_T $const11 $tmp1345 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:62
+#             X[1] = max(min(U[0], U[1]),max( min(U[0], U[2]), min(U[1], U[2])));
+	aref		$tmp1352 ___323_U $const11 	%line{62} %argrw{"wrr"}
+	aref		$tmp1353 ___323_U $const2 	%argrw{"wrr"}
+	min		$tmp1351 $tmp1352 $tmp1353 	%argrw{"wrr"}
+	aref		$tmp1356 ___323_U $const11 	%argrw{"wrr"}
+	aref		$tmp1357 ___323_U $const3 	%argrw{"wrr"}
+	min		$tmp1355 $tmp1356 $tmp1357 	%argrw{"wrr"}
+	aref		$tmp1359 ___323_U $const2 	%argrw{"wrr"}
+	aref		$tmp1360 ___323_U $const3 	%argrw{"wrr"}
+	min		$tmp1358 $tmp1359 $tmp1360 	%argrw{"wrr"}
+	max		$tmp1354 $tmp1355 $tmp1358 	%argrw{"wrr"}
+	max		$tmp1350 $tmp1351 $tmp1354 	%argrw{"wrr"}
+	aassign		___336_T $const2 $tmp1350 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:63
+#             X[2] = max(U[0], max(U[1], U[2]));
+	aref		$tmp1362 ___323_U $const11 	%line{63} %argrw{"wrr"}
+	aref		$tmp1364 ___323_U $const2 	%argrw{"wrr"}
+	aref		$tmp1365 ___323_U $const3 	%argrw{"wrr"}
+	max		$tmp1363 $tmp1364 $tmp1365 	%argrw{"wrr"}
+	max		$tmp1361 $tmp1362 $tmp1363 	%argrw{"wrr"}
+	aassign		___336_T $const3 $tmp1361 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:64
+#             L = 3;
+	assign		___336_n $const17 	%line{64} %argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:69
+#             DIS = sqrt(DIS);
+	sqrt		___323_DIS ___323_DIS 	%line{69} %argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:70
+#             X[0] = CBRT(Q+DIS)+CBRT(Q-DIS)-W;
+	add		$tmp1367 ___323_Q ___323_DIS 	%line{70} %argrw{"wrr"}
+	functioncall	$const32 1510 	%argrw{"r"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:15
+# float CBRT(float Z) { return abs(pow(abs(Z),1.0/3.0)) * sign(Z); }
+	abs		$tmp1370 $tmp1367 	%line{15} %argrw{"wr"}
+	div		$tmp1371 $const1 $const18 	%argrw{"wrr"}
+	pow		$tmp1369 $tmp1370 $tmp1371 	%argrw{"wrr"}
+	abs		$tmp1368 $tmp1369 	%argrw{"wr"}
+	sign		$tmp1372 $tmp1367 	%argrw{"wr"}
+	mul		$tmp1366 $tmp1368 $tmp1372 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:70
+#             X[0] = CBRT(Q+DIS)+CBRT(Q-DIS)-W;
+	sub		$tmp1374 ___323_Q ___323_DIS 	%line{70} %argrw{"wrr"}
+	functioncall	$const32 1518 	%argrw{"r"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:15
+# float CBRT(float Z) { return abs(pow(abs(Z),1.0/3.0)) * sign(Z); }
+	abs		$tmp1377 $tmp1374 	%line{15} %argrw{"wr"}
+	div		$tmp1378 $const1 $const18 	%argrw{"wrr"}
+	pow		$tmp1376 $tmp1377 $tmp1378 	%argrw{"wrr"}
+	abs		$tmp1375 $tmp1376 	%argrw{"wr"}
+	sign		$tmp1379 $tmp1374 	%argrw{"wr"}
+	mul		$tmp1373 $tmp1375 $tmp1379 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:70
+#             X[0] = CBRT(Q+DIS)+CBRT(Q-DIS)-W;
+	add		$tmp1380 $tmp1366 $tmp1373 	%line{70} %argrw{"wrr"}
+	sub		$tmp1381 $tmp1380 ___323_W 	%argrw{"wrr"}
+	aassign		___336_T $const11 $tmp1381 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:71
+#             L=1;
+	assign		___336_n $const2 	%line{71} %argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:74
+#     else if (A[2] != 0.0)
+	aref		$tmp1382 ___336_A $const3 	%line{74} %argrw{"wrr"}
+	neq		$tmp1383 $tmp1382 $const12 	%argrw{"wrr"}
+	if		$tmp1383 1546 1555 	%argrw{"r"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:77
+#         P = 0.5*A[1]/A[2];
+	aref		$tmp1384 ___336_A $const2 	%line{77} %argrw{"wrr"}
+	mul		$tmp1385 $const31 $tmp1384 	%argrw{"wrr"}
+	aref		$tmp1386 ___336_A $const3 	%argrw{"wrr"}
+	div		___323_P $tmp1385 $tmp1386 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:78
+#         DIS = pow(P,2)-A[0]/A[2];
+	pow		$tmp1387 ___323_P $const4 	%line{78} %argrw{"wrr"}
+	aref		$tmp1388 ___336_A $const11 	%argrw{"wrr"}
+	aref		$tmp1389 ___336_A $const3 	%argrw{"wrr"}
+	div		$tmp1390 $tmp1388 $tmp1389 	%argrw{"wrr"}
+	sub		___323_DIS $tmp1387 $tmp1390 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:79
+#         if (DIS > 0.0)
+	gt		$tmp1391 ___323_DIS $const12 	%line{79} %argrw{"wrr"}
+	if		$tmp1391 1545 1546 	%argrw{"r"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:82
+#             X[0] = -P - sqrt(DIS);
+	neg		$tmp1392 ___323_P 	%line{82} %argrw{"wr"}
+	sqrt		$tmp1393 ___323_DIS 	%argrw{"wr"}
+	sub		$tmp1394 $tmp1392 $tmp1393 	%argrw{"wrr"}
+	aassign		___336_T $const11 $tmp1394 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:83
+#             X[1] = -P + sqrt(DIS);
+	neg		$tmp1395 ___323_P 	%line{83} %argrw{"wr"}
+	sqrt		$tmp1396 ___323_DIS 	%argrw{"wr"}
+	add		$tmp1397 $tmp1395 $tmp1396 	%argrw{"wrr"}
+	aassign		___336_T $const2 $tmp1397 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:84
+#             L=2;
+	assign		___336_n $const3 	%line{84} %argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:89
+#             L=0;
+	assign		___336_n $const11 	%line{89} %argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:92
+#     else if (A[1] != 0.0)
+	aref		$tmp1398 ___336_A $const2 	%line{92} %argrw{"wrr"}
+	neq		$tmp1399 $tmp1398 $const12 	%argrw{"wrr"}
+	if		$tmp1399 1554 1555 	%argrw{"r"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:95
+#         X[0] =A[0]/A[1];
+	aref		$tmp1400 ___336_A $const11 	%line{95} %argrw{"wrr"}
+	aref		$tmp1401 ___336_A $const2 	%argrw{"wrr"}
+	div		$tmp1402 $tmp1400 $tmp1401 	%argrw{"wrr"}
+	aassign		___336_T $const11 $tmp1402 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:96
+#         L=1;
+	assign		___336_n $const2 	%line{96} %argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:101
+#         L=0;
+	assign		___336_n $const11 	%line{101} %argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:107
+#     for (i=0;i < L;i++)
+	for		$tmp1403 1557 1558 1586 1588 	%line{107} %argrw{"r"}
+	assign		___323_i $const11 	%argrw{"wr"}
+	lt		$tmp1403 ___323_i ___336_n 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:109
+#         X[i] = X[i] - (A[0]+X[i]*(A[1]+X[i]*(A[2]+X[i]*A[3])))
+	aref		$tmp1404 ___336_T ___323_i 	%line{109} %argrw{"wrr"}
+	aref		$tmp1405 ___336_A $const11 	%argrw{"wrr"}
+	aref		$tmp1406 ___336_T ___323_i 	%argrw{"wrr"}
+	aref		$tmp1407 ___336_A $const2 	%argrw{"wrr"}
+	aref		$tmp1408 ___336_T ___323_i 	%argrw{"wrr"}
+	aref		$tmp1409 ___336_A $const3 	%argrw{"wrr"}
+	aref		$tmp1410 ___336_T ___323_i 	%argrw{"wrr"}
+	aref		$tmp1411 ___336_A $const17 	%argrw{"wrr"}
+	mul		$tmp1412 $tmp1410 $tmp1411 	%argrw{"wrr"}
+	add		$tmp1413 $tmp1409 $tmp1412 	%argrw{"wrr"}
+	mul		$tmp1414 $tmp1408 $tmp1413 	%argrw{"wrr"}
+	add		$tmp1415 $tmp1407 $tmp1414 	%argrw{"wrr"}
+	mul		$tmp1416 $tmp1406 $tmp1415 	%argrw{"wrr"}
+	add		$tmp1417 $tmp1405 $tmp1416 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:110
+#             /(A[1]+X[i]*(2.0*A[2]+X[i]*3.0*A[3]));
+	aref		$tmp1418 ___336_A $const2 	%line{110} %argrw{"wrr"}
+	aref		$tmp1419 ___336_T ___323_i 	%argrw{"wrr"}
+	aref		$tmp1420 ___336_A $const3 	%argrw{"wrr"}
+	mul		$tmp1421 $const4 $tmp1420 	%argrw{"wrr"}
+	aref		$tmp1422 ___336_T ___323_i 	%argrw{"wrr"}
+	mul		$tmp1423 $tmp1422 $const18 	%argrw{"wrr"}
+	aref		$tmp1424 ___336_A $const17 	%argrw{"wrr"}
+	mul		$tmp1425 $tmp1423 $tmp1424 	%argrw{"wrr"}
+	add		$tmp1426 $tmp1421 $tmp1425 	%argrw{"wrr"}
+	mul		$tmp1427 $tmp1419 $tmp1426 	%argrw{"wrr"}
+	add		$tmp1428 $tmp1418 $tmp1427 	%argrw{"wrr"}
+	div		$tmp1429 $tmp1417 $tmp1428 	%argrw{"wrr"}
+	sub		$tmp1430 $tmp1404 $tmp1429 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:109
+#         X[i] = X[i] - (A[0]+X[i]*(A[1]+X[i]*(A[2]+X[i]*A[3])))
+	aassign		___336_T ___323_i $tmp1430 	%line{109} %argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:107
+#     for (i=0;i < L;i++)
+	assign		$tmp1431 ___323_i 	%line{107} %argrw{"wr"}
+	add		___323_i ___323_i $const2 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:113
+#     return 0;
+	assign		$tmp1304 $const11 	%line{113} %argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:190
+#     d = 1e6;
+	assign		___341_r $const33 	%line{190} %argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:195
+#     int found = 0;
+	assign		___336_found $const11 	%line{195} %argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:196
+#     while(n>0){
+	while		$tmp1432 1592 1593 1623 1623 	%line{196} %argrw{"r"}
+	gt		$tmp1432 ___336_n $const11 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:197
+#         n--;
+	assign		$tmp1433 ___336_n 	%line{197} %argrw{"wr"}
+	sub		___336_n ___336_n $const2 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:198
+#         if(T[n]>=0 && T[n]<=1){
+	aref		$tmp1434 ___336_T ___336_n 	%line{198} %argrw{"wrr"}
+	ge		$tmp1435 $tmp1434 $const11 	%argrw{"wrr"}
+	neq		$tmp1436 $tmp1435 $const11 	%argrw{"wrr"}
+	if		$tmp1436 1603 1603 	%argrw{"r"}
+	aref		$tmp1437 ___336_T ___336_n 	%argrw{"wrr"}
+	le		$tmp1438 $tmp1437 $const2 	%argrw{"wrr"}
+	neq		$tmp1439 $tmp1438 $const11 	%argrw{"wrr"}
+	assign		$tmp1436 $tmp1439 	%argrw{"wr"}
+	if		$tmp1436 1623 1623 	%argrw{"r"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:199
+#             float t = T[n];
+	aref		___338_t ___336_T ___336_n 	%line{199} %argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:200
+#             found = 1;
+	assign		___336_found $const2 	%line{200} %argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:201
+#             float dd = distance((1-t)*(1-t)*P0 + 2*(1-t)*t *P1 + t*t*P2, Pos);
+	sub		$tmp1440 $const1 ___338_t 	%line{201} %argrw{"wrr"}
+	sub		$tmp1441 $const1 ___338_t 	%argrw{"wrr"}
+	mul		$tmp1442 $tmp1440 $tmp1441 	%argrw{"wrr"}
+	mul		$tmp1443 $tmp1442 ___336_P0 	%argrw{"wrr"}
+	sub		$tmp1444 $const1 ___338_t 	%argrw{"wrr"}
+	mul		$tmp1445 $const4 $tmp1444 	%argrw{"wrr"}
+	mul		$tmp1446 $tmp1445 ___338_t 	%argrw{"wrr"}
+	mul		$tmp1447 $tmp1446 ___336_P1 	%argrw{"wrr"}
+	add		$tmp1448 $tmp1443 $tmp1447 	%argrw{"wrr"}
+	mul		$tmp1449 ___338_t ___338_t 	%argrw{"wrr"}
+	mul		$tmp1450 $tmp1449 ___336_P2 	%argrw{"wrr"}
+	add		$tmp1451 $tmp1448 $tmp1450 	%argrw{"wrr"}
+	distance	___338_dd $tmp1451 Vector 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:202
+#             if (dd < d) {
+	lt		$tmp1452 ___338_dd ___341_r 	%line{202} %argrw{"wrr"}
+	if		$tmp1452 1623 1623 	%argrw{"r"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:203
+#                 d = dd;
+	assign		___341_r ___338_dd 	%line{203} %argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:204
+#                 tc = t;
+	assign		___341_t ___338_t 	%line{204} %argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MAEquations.h:208
+#     return found;
+	assign		___341_f ___336_found 	%line{208} %argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl:81
+#     if ( f && (r < InnerWidth * ( 1- t) * (1-Vector[0]) ) ) {
+	neq		$tmp1453 ___341_f $const11 	%filename{"source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl"} %line{81} %argrw{"wrr"}
+	if		$tmp1453 1629 1629 	%argrw{"r"}
+	lt		$tmp1454 ___341_r NWidth 	%argrw{"wrr"}
+	neq		$tmp1455 $tmp1454 $const11 	%argrw{"wrr"}
+	assign		$tmp1453 $tmp1455 	%argrw{"wr"}
+	if		$tmp1453 1631 1631 	%argrw{"r"}
+	assign		Net $const2 	%argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl:82
+#         Vein = 1; Fac = sqrt(1-r/InnerWidth); break; 
+	neq		$tmp1456 ___341_f $const11 	%line{82} %argrw{"wrr"}
+	if		$tmp1456 1641 1641 	%argrw{"r"}
+	sub		$tmp1457 $const1 ___341_t 	%argrw{"wrr"}
+	mul		$tmp1458 InnerWidth $tmp1457 	%argrw{"wrr"}
+	compref		$tmp1459 Vector $const11 	%argrw{"wrr"}
+	sub		$tmp1460 $const1 $tmp1459 	%argrw{"wrr"}
+	mul		$tmp1461 $tmp1458 $tmp1460 	%argrw{"wrr"}
+	lt		$tmp1462 ___341_r $tmp1461 	%argrw{"wrr"}
+	neq		$tmp1463 $tmp1462 $const11 	%argrw{"wrr"}
+	assign		$tmp1456 $tmp1463 	%argrw{"wr"}
+	if		$tmp1456 1647 1647 	%argrw{"r"}
+# source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl:83
+#     }
+	assign		Vein $const2 	%line{83} %argrw{"wr"}
+	div		$tmp1464 ___341_r InnerWidth 	%argrw{"wrr"}
+	sub		$tmp1465 $const1 $tmp1464 	%argrw{"wrr"}
+	sqrt		Fac $tmp1465 	%argrw{"wr"}
+	break
+# source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl:58
+# 
+	assign		$tmp1466 i 	%line{58} %argrw{"wr"}
+	add		i i $const2 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl:88
+#  if ( d < NWidth ) Net = 1 ;
+	functioncall	$const34 1665 	%line{88} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:199
+#     vector d = b - a;
+	sub		___231_d $const13 $const10 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{199} %argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:200
+#     float dd = dot(d, d);
+	dot		___231_dd ___231_d ___231_d 	%line{200} %argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:201
+#     if(dd == 0.0)
+	eq		$tmp1469 ___231_dd $const12 	%line{201} %argrw{"wrr"}
+	if		$tmp1469 1656 1656 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:202
+#         return distance(q, a);
+	distance	d Vector $const10 	%line{202} %argrw{"wrr"}
+	return
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:203
+#     float t = dot(q - a, d)/dd;
+	sub		$tmp1471 Vector $const10 	%line{203} %argrw{"wrr"}
+	dot		$tmp1470 $tmp1471 ___231_d 	%argrw{"wrr"}
+	div		___231_t $tmp1470 ___231_dd 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:204
+#     return distance(q, a + clamp(t, 0.0, 1.0)*d);
+	functioncall	$const35 1662 	%line{204} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:145
+# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
+	min		$tmp1473 ___231_t $const1 	%line{145} %argrw{"wrr"}
+	max		$tmp1472 $tmp1473 $const12 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:204
+#     return distance(q, a + clamp(t, 0.0, 1.0)*d);
+	mul		$tmp1474 $tmp1472 ___231_d 	%line{204} %argrw{"wrr"}
+	add		$tmp1475 $const10 $tmp1474 	%argrw{"wrr"}
+	distance	d Vector $tmp1475 	%argrw{"wrr"}
+# source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl:89
+#  if (d < (InnerWidth * (1-Vector[0])) ) { Vein = 1; Fac = sqrt(1-d/InnerWidth);}
+	lt		$tmp1476 d NWidth 	%filename{"source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl"} %line{89} %argrw{"wrr"}
+	if		$tmp1476 1668 1668 	%argrw{"r"}
+	assign		Net $const2 	%argrw{"wr"}
+# source/sambler-osl-shaders/nature/MALeaf/MALeafVeins.osl:90
+# }
+	compref		$tmp1477 Vector $const11 	%line{90} %argrw{"wrr"}
+	sub		$tmp1478 $const1 $tmp1477 	%argrw{"wrr"}
+	mul		$tmp1479 InnerWidth $tmp1478 	%argrw{"wrr"}
+	lt		$tmp1480 d $tmp1479 	%argrw{"wrr"}
+	if		$tmp1480 1677 1677 	%argrw{"r"}
+	assign		Vein $const2 	%argrw{"wr"}
+	div		$tmp1481 d InnerWidth 	%argrw{"wrr"}
+	sub		$tmp1482 $const1 $tmp1481 	%argrw{"wrr"}
+	sqrt		Fac $tmp1482 	%argrw{"wr"}
+	end

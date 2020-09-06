@@ -1,0 +1,18 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader TD4D_noise
+param	float	Time	1		%read{0,1} %write{2147483647,-1}
+oparam	color	Perlin	0.80000001 0.80000001 0.80000001		%read{2147483647,-1} %write{0,0}
+oparam	color	UPerlin	0.80000001 0.80000001 0.80000001		%read{2147483647,-1} %write{1,1}
+global	point	P	%read{0,1} %write{2147483647,-1}
+const	string	$const1	"perlin"		%read{0,0} %write{2147483647,-1}
+const	string	$const2	"uperlin"		%read{1,1} %write{2147483647,-1}
+code ___main___
+# source/sambler-osl-shaders/random-noise/TD4d_noise/TD4d_noise.osl:19
+#    
+	noise		Perlin $const1 P Time 	%filename{"source/sambler-osl-shaders/random-noise/TD4d_noise/TD4d_noise.osl"} %line{19} %argrw{"wrrr"}
+# source/sambler-osl-shaders/random-noise/TD4d_noise/TD4d_noise.osl:22
+# }
+	noise		UPerlin $const2 P Time 	%line{22} %argrw{"wrrr"}
+	end

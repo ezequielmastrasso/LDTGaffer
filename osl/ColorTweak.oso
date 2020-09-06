@@ -1,0 +1,85 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader ColorTweak	%meta{string,help,"Tweaks a color (Levels)"} %meta{string,label,"Tweak/Levels"} 
+param	color	Input	0 0 0		%read{0,0} %write{2147483647,-1}
+param	vector	HSV	0 1 1		%meta{string,help,"Hue shift and Saturation / Value multiplier "}  %read{4,12} %write{2147483647,-1}
+param	color	InputMin	0 0 0		%meta{string,help,"The input value that maps to the darkest output. Incoming black level. "}  %read{0,0} %write{2147483647,-1}
+param	color	InputMax	1 1 1		%meta{string,help,"The input value that maps to the brightst output. Incoming white level. "}  %read{1,1} %write{2147483647,-1}
+param	float	MidTones	1		%meta{string,help,"Adjusts the MidTones/Gamma."} %meta{float,min,0.0099999998} %meta{float,max,9.9899998}  %read{16,16} %write{2147483647,-1}
+param	color	OutputMin	0 0 0		%meta{string,help,"The output black level."}  %read{18,18} %write{2147483647,-1}
+param	color	OutputMax	1 1 1		%meta{string,help,"The output white level."}  %read{18,18} %write{2147483647,-1}
+param	int	Clamp	1		%meta{string,widget,"checkBox"} %meta{string,help,"Clamp the output to the 0-1 range for each component"}  %read{19,19} %write{2147483647,-1}
+oparam	color	Out	0 0 0		%read{23,23} %write{18,24}
+local	color	col	%read{2,17} %write{1,15}
+local	color	hsv	%read{3,15} %write{2,14}
+temp	color	$tmp1	%read{1,1} %write{0,0}
+const	string	$const1	"rgb"		%read{2,15} %write{2147483647,-1}
+const	string	$const2	"hsv"		%read{2,15} %write{2147483647,-1}
+const	int	$const3	0		%read{3,6} %write{2147483647,-1}
+temp	float	$tmp2	%read{5,5} %write{3,3}
+temp	float	$tmp3	%read{5,5} %write{4,4}
+temp	float	$tmp4	%read{6,6} %write{5,5}
+const	int	$const4	1		%read{7,10} %write{2147483647,-1}
+temp	float	$tmp5	%read{9,9} %write{7,7}
+temp	float	$tmp6	%read{9,9} %write{8,8}
+temp	float	$tmp7	%read{10,10} %write{9,9}
+const	int	$const5	2		%read{11,14} %write{2147483647,-1}
+temp	float	$tmp8	%read{13,13} %write{11,11}
+temp	float	$tmp9	%read{13,13} %write{12,12}
+temp	float	$tmp10	%read{14,14} %write{13,13}
+temp	color	$tmp11	%read{18,18} %write{17,17}
+const	float	$const6	1		%read{16,21} %write{2147483647,-1}
+temp	float	$tmp12	%read{17,17} %write{16,16}
+const	float	$const7	0		%read{20,20} %write{2147483647,-1}
+temp	color	$tmp13	%read{24,24} %write{20,20}
+temp	color	$tmp14	%read{23,23} %write{21,21}
+const	string	$const8	"clamp"		%read{22,22} %write{2147483647,-1}
+temp	color	$tmp15	%read{24,24} %write{23,23}
+code ___main___
+# source/3dsMax-OSL-Shaders/ColorTweak.osl:37
+# 
+	sub		$tmp1 Input InputMin 	%filename{"source/3dsMax-OSL-Shaders/ColorTweak.osl"} %line{37} %argrw{"wrr"}
+	div		col $tmp1 InputMax 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorTweak.osl:40
+# 
+	transformc	hsv $const1 $const2 col 	%line{40} %argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/ColorTweak.osl:42
+# 	hsv[1] *= HSV[1]; // Scale saturation
+	compref		$tmp2 hsv $const3 	%line{42} %argrw{"wrr"}
+	compref		$tmp3 HSV $const3 	%argrw{"wrr"}
+	add		$tmp4 $tmp2 $tmp3 	%argrw{"wrr"}
+	compassign	hsv $const3 $tmp4 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorTweak.osl:43
+# 	hsv[2] *= HSV[2]; // Scale value
+	compref		$tmp5 hsv $const4 	%line{43} %argrw{"wrr"}
+	compref		$tmp6 HSV $const4 	%argrw{"wrr"}
+	mul		$tmp7 $tmp5 $tmp6 	%argrw{"wrr"}
+	compassign	hsv $const4 $tmp7 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorTweak.osl:44
+# 	
+	compref		$tmp8 hsv $const5 	%line{44} %argrw{"wrr"}
+	compref		$tmp9 HSV $const5 	%argrw{"wrr"}
+	mul		$tmp10 $tmp8 $tmp9 	%argrw{"wrr"}
+	compassign	hsv $const5 $tmp10 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/ColorTweak.osl:47
+# 		
+	transformc	col $const2 $const1 hsv 	%line{47} %argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/ColorTweak.osl:49
+# 	
+	div		$tmp12 $const6 MidTones 	%line{49} %argrw{"wrr"}
+	pow		$tmp11 col $tmp12 	%argrw{"wrr"}
+	mix		Out OutputMin OutputMax $tmp11 	%argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/ColorTweak.osl:51
+# 		Out = clamp(Out, 0.0, 1.0);
+	if		Clamp 25 25 	%line{51} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/ColorTweak.osl:52
+# }
+	assign		$tmp13 $const7 	%line{52} %argrw{"wr"}
+	assign		$tmp14 $const6 	%argrw{"wr"}
+	functioncall	$const8 25 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:144
+# color  clamp (color x, color minval, color maxval) { return max(min(x,maxval),minval); }
+	min		$tmp15 Out $tmp14 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{144} %argrw{"wrr"}
+	max		Out $tmp15 $tmp13 	%argrw{"wrr"}
+	end

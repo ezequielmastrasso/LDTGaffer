@@ -1,0 +1,423 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader FBinterior_mapping
+param	vector	RoomCount	5 5 5		%read{1,25} %write{2147483647,-1}
+param	float	AtlasRows	1		%read{133,139} %write{2147483647,-1}
+param	float	Emission	0		%read{155,155} %write{2147483647,-1}
+param	float	LightsOn	0		%read{28,28} %write{2147483647,-1}
+oparam	vector	TexCoords	0 0 0		%read{76,140} %write{71,140}
+oparam	normal	WallNormal	0 0 0		%read{153,153} %write{0,153} %initexpr
+oparam	float	EmissionFactor	0		%read{2147483647,-1} %write{155,155}
+global	point	P	%read{12,12} %write{2147483647,-1}
+global	vector	I	%read{13,13} %write{2147483647,-1}
+global	normal	N	%read{0,0} %write{2147483647,-1}
+local	vector	roomSize	%read{17,71} %write{10,10}
+local	point	localP	%read{17,58} %write{12,12}
+local	vector	localI	%read{16,57} %write{15,15}
+local	vector	nextWall	%read{19,120} %write{16,16}
+local	vector	walls	%read{32,48} %write{20,47}
+local	vector	signs	%read{45,147} %write{22,22}
+local	point	roomID	%read{25,129} %write{24,26}
+local	float	c	%read{31,31} %write{29,29}
+local	int	emit	%read{154,154} %write{31,31}
+local	vector	wall_on_surface	%read{46,121} %write{44,44}
+local	vector	sf	%read{50,151} %write{49,49}
+local	point	intersectionXY	%read{65,65} %write{52,52}
+local	point	intersectionXZ	%read{68,68} %write{55,55}
+local	point	intersectionYZ	%read{65,65} %write{58,58}
+local	float	xVSz	%read{64,150} %write{61,61}
+local	float	sf_xVSz	%read{67,152} %write{64,64}
+local	point	intersection	%read{68,70} %write{65,68}
+local	normal	normalXY	%read{150,150} %write{143,143}
+local	normal	normalXZ	%read{153,153} %write{146,146}
+local	normal	normalYZ	%read{150,150} %write{149,149}
+const	int	$const1	1		%read{4,151} %write{2147483647,-1}
+temp	float	$tmp1	%read{3,3} %write{2,2}
+const	int	$const2	0		%read{1,127} %write{2147483647,-1}
+temp	float	$tmp2	%read{2,2} %write{1,1}
+const	float	$const3	1		%read{2,139} %write{2147483647,-1}
+temp	float	$tmp3	%read{10,10} %write{3,3}
+temp	float	$tmp4	%read{6,6} %write{5,5}
+temp	float	$tmp5	%read{5,5} %write{4,4}
+temp	float	$tmp6	%read{10,10} %write{6,6}
+temp	float	$tmp7	%read{9,9} %write{8,8}
+const	int	$const4	2		%read{7,127} %write{2147483647,-1}
+temp	float	$tmp8	%read{8,8} %write{7,7}
+temp	float	$tmp9	%read{10,10} %write{9,9}
+const	string	$const5	"object"		%read{12,149} %write{2147483647,-1}
+const	string	$const6	"transform"		%read{11,14} %write{2147483647,-1}
+const	string	$const7	"common"		%read{12,149} %write{2147483647,-1}
+temp	vector	$tmp10	%read{15,15} %write{13,13}
+const	vector	$const8	0 0 0		%read{16,16} %write{2147483647,-1}
+temp	point	$tmp12	%read{19,19} %write{18,18}
+temp	point	$tmp13	%read{18,18} %write{17,17}
+temp	point	$tmp14	%read{20,20} %write{19,19}
+temp	vector	$tmp15	%read{22,22} %write{21,21}
+const	float	$const9	2		%read{21,107} %write{2147483647,-1}
+temp	point	$tmp16	%read{24,24} %write{23,23}
+temp	point	$tmp17	%read{26,26} %write{25,25}
+const	float	$const10	0		%read{29,74} %write{2147483647,-1}
+const	string	$const11	"clamp"		%read{27,27} %write{2147483647,-1}
+temp	float	$tmp18	%read{29,29} %write{28,28}
+temp	float	$tmp19	%read{31,31} %write{30,30}
+temp	float	$tmp20	%read{34,34} %write{32,32}
+temp	float	$tmp21	%read{34,34} %write{33,33}
+temp	int	$tmp22	%read{35,35} %write{34,34}
+temp	float	$tmp23	%read{44,44} %write{35,35}
+temp	float	$tmp24	%read{38,38} %write{36,36}
+temp	float	$tmp25	%read{38,38} %write{37,37}
+temp	int	$tmp26	%read{39,39} %write{38,38}
+temp	float	$tmp27	%read{44,44} %write{39,39}
+temp	float	$tmp28	%read{42,42} %write{40,40}
+temp	float	$tmp29	%read{42,42} %write{41,41}
+temp	int	$tmp30	%read{43,43} %write{42,42}
+temp	float	$tmp31	%read{44,44} %write{43,43}
+temp	vector	$tmp32	%read{46,46} %write{45,45}
+temp	vector	$tmp33	%read{47,47} %write{46,46}
+temp	point	$tmp34	%read{49,49} %write{48,48}
+temp	float	$tmp35	%read{51,51} %write{50,50}
+temp	vector	$tmp36	%read{52,52} %write{51,51}
+temp	float	$tmp37	%read{54,54} %write{53,53}
+temp	vector	$tmp38	%read{55,55} %write{54,54}
+temp	float	$tmp39	%read{57,57} %write{56,56}
+temp	vector	$tmp40	%read{58,58} %write{57,57}
+temp	float	$tmp41	%read{61,61} %write{59,59}
+temp	float	$tmp42	%read{61,61} %write{60,60}
+temp	float	$tmp43	%read{64,64} %write{62,62}
+temp	float	$tmp44	%read{64,64} %write{63,63}
+temp	float	$tmp45	%read{68,68} %write{67,67}
+temp	float	$tmp46	%read{67,67} %write{66,66}
+temp	point	$tmp47	%read{70,70} %write{69,69}
+temp	vector	$tmp48	%read{71,71} %write{70,70}
+temp	float	$tmp49	%read{74,74} %write{73,73}
+temp	float	$tmp50	%read{73,73} %write{72,72}
+temp	int	$tmp51	%read{75,75} %write{74,74}
+temp	float	$tmp52	%read{77,77} %write{76,76}
+temp	float	$tmp53	%read{95,95} %write{94,94}
+temp	float	$tmp54	%read{79,79} %write{78,78}
+temp	float	$tmp55	%read{85,85} %write{79,79}
+temp	float	$tmp56	%read{83,83} %write{80,80}
+temp	float	$tmp57	%read{82,82} %write{81,81}
+temp	float	$tmp58	%read{83,83} %write{82,82}
+temp	float	$tmp59	%read{84,84} %write{83,83}
+temp	float	$tmp60	%read{85,85} %write{84,84}
+temp	float	$tmp61	%read{89,89} %write{85,85}
+temp	float	$tmp62	%read{89,89} %write{88,88}
+temp	float	$tmp63	%read{87,87} %write{86,86}
+temp	float	$tmp64	%read{88,88} %write{87,87}
+const	float	$const13	6		%read{87,139} %write{2147483647,-1}
+temp	float	$tmp65	%read{91,94} %write{89,89}
+const	float	$const14	4		%read{91,124} %write{2147483647,-1}
+const	string	$const15	"mod"		%read{90,132} %write{2147483647,-1}
+temp	float	$tmp66	%read{93,93} %write{92,92}
+temp	float	$tmp67	%read{92,92} %write{91,91}
+temp	float	$tmp68	%read{94,94} %write{93,93}
+temp	int	$tmp69	%read{97,97} %write{96,96}
+temp	float	$tmp70	%read{99,99} %write{98,98}
+temp	float	$tmp71	%read{101,101} %write{100,100}
+temp	float	$tmp72	%read{118,118} %write{117,117}
+temp	float	$tmp73	%read{108,108} %write{102,102}
+temp	float	$tmp74	%read{106,106} %write{103,103}
+temp	float	$tmp75	%read{105,105} %write{104,104}
+temp	float	$tmp76	%read{106,106} %write{105,105}
+temp	float	$tmp77	%read{107,107} %write{106,106}
+temp	float	$tmp78	%read{108,108} %write{107,107}
+temp	float	$tmp79	%read{112,112} %write{108,108}
+temp	float	$tmp80	%read{112,112} %write{111,111}
+temp	float	$tmp81	%read{110,110} %write{109,109}
+temp	float	$tmp82	%read{111,111} %write{110,110}
+temp	float	$tmp83	%read{114,117} %write{112,112}
+temp	float	$tmp84	%read{116,116} %write{115,115}
+temp	float	$tmp85	%read{115,115} %write{114,114}
+temp	float	$tmp86	%read{117,117} %write{116,116}
+temp	float	$tmp87	%read{125,125} %write{119,119}
+temp	float	$tmp88	%read{123,123} %write{120,120}
+temp	float	$tmp89	%read{122,122} %write{121,121}
+temp	float	$tmp90	%read{123,123} %write{122,122}
+temp	float	$tmp91	%read{124,124} %write{123,123}
+temp	float	$tmp92	%read{125,125} %write{124,124}
+temp	float	$tmp93	%read{126,126} %write{125,125}
+temp	float	$tmp94	%read{137,137} %write{128,128}
+temp	float	$tmp95	%read{137,137} %write{136,136}
+temp	float	$tmp96	%read{133,136} %write{131,131}
+temp	float	$tmp97	%read{130,130} %write{129,129}
+temp	float	$tmp98	%read{131,131} %write{130,130}
+temp	float	$tmp99	%read{135,135} %write{134,134}
+temp	float	$tmp100	%read{134,134} %write{133,133}
+temp	float	$tmp101	%read{136,136} %write{135,135}
+temp	float	$tmp102	%read{138,138} %write{137,137}
+temp	vector	$tmp103	%read{140,140} %write{139,139}
+const	normal	$const17	0 0 1		%read{142,142} %write{2147483647,-1}
+temp	vector	$tmp105	%read{142,142} %write{141,141}
+temp	normal	$tmp106	%read{143,143} %write{142,142}
+const	normal	$const18	0 1 0		%read{145,145} %write{2147483647,-1}
+temp	vector	$tmp108	%read{145,145} %write{144,144}
+temp	normal	$tmp109	%read{146,146} %write{145,145}
+const	normal	$const19	1 0 0		%read{148,148} %write{2147483647,-1}
+temp	vector	$tmp111	%read{148,148} %write{147,147}
+temp	normal	$tmp112	%read{149,149} %write{148,148}
+temp	float	$tmp113	%read{153,153} %write{152,152}
+temp	float	$tmp114	%read{152,152} %write{151,151}
+temp	float	$tmp115	%read{155,155} %write{154,154}
+code WallNormal
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:27
+#         output float EmissionFactor = 0.0)
+	assign		WallNormal N 	%filename{"source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl"} %line{27} %argrw{"wr"}
+code ___main___
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:30
+# 
+	compref		$tmp2 RoomCount $const2 	%filename{"source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl"} %line{30} %argrw{"wrr"}
+	max		$tmp1 $tmp2 $const3 	%argrw{"wrr"}
+	div		$tmp3 $const3 $tmp1 	%argrw{"wrr"}
+	compref		$tmp5 RoomCount $const1 	%argrw{"wrr"}
+	max		$tmp4 $tmp5 $const3 	%argrw{"wrr"}
+	div		$tmp6 $const3 $tmp4 	%argrw{"wrr"}
+	compref		$tmp8 RoomCount $const4 	%argrw{"wrr"}
+	max		$tmp7 $tmp8 $const3 	%argrw{"wrr"}
+	div		$tmp9 $const3 $tmp7 	%argrw{"wrr"}
+	vector		roomSize $tmp3 $tmp6 $tmp9 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:32
+#     vector localI = transform("object", -I);
+	functioncall	$const6 13 	%line{32} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:267
+# point  transform (string to, point p)  { return transform("common",to,p); }
+	transform	localP $const7 $const5 P 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{267} %argrw{"wrrr"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:33
+# 
+	neg		$tmp10 I 	%filename{"source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl"} %line{33} %argrw{"wr"}
+	functioncall	$const6 16 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:266
+# vector transform (string to, vector p) { return transform("common",to,p); }
+	transformv	localI $const7 $const5 $tmp10 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{266} %argrw{"wrrr"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:35
+#     vector walls = (floor(localP/roomSize)+nextWall)*roomSize;
+	step		nextWall $const8 localI 	%filename{"source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl"} %line{35} %argrw{"wrr"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:36
+#     vector signs = nextWall*2-1;
+	div		$tmp13 localP roomSize 	%line{36} %argrw{"wrr"}
+	floor		$tmp12 $tmp13 	%argrw{"wr"}
+	add		$tmp14 $tmp12 nextWall 	%argrw{"wrr"}
+	mul		walls $tmp14 roomSize 	%argrw{"wrr"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:37
+# 
+	mul		$tmp15 nextWall $const9 	%line{37} %argrw{"wrr"}
+	sub		signs $tmp15 $const3 	%argrw{"wrr"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:39
+#     roomID -= step(RoomCount, roomID);
+	div		$tmp16 localP roomSize 	%line{39} %argrw{"wrr"}
+	floor		roomID $tmp16 	%argrw{"wr"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:40
+#     float c = clamp(LightsOn, 0.0, 1.0);
+	step		$tmp17 RoomCount roomID 	%line{40} %argrw{"wrr"}
+	sub		roomID roomID $tmp17 	%argrw{"wrr"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:41
+#     int emit = cellnoise(roomID) < c;
+	functioncall	$const11 30 	%line{41} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:145
+# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
+	min		$tmp18 LightsOn $const3 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{145} %argrw{"wrr"}
+	max		c $tmp18 $const10 	%argrw{"wrr"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:42
+# 
+	cellnoise	$tmp19 roomID 	%filename{"source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl"} %line{42} %argrw{"wr"}
+	lt		emit $tmp19 c 	%argrw{"wrr"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:45
+#     walls[Y] == localP[Y],
+	compref		$tmp20 walls $const2 	%line{45} %argrw{"wrr"}
+	compref		$tmp21 localP $const2 	%argrw{"wrr"}
+	eq		$tmp22 $tmp20 $tmp21 	%argrw{"wrr"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:47
+#     walls += roomSize*signs*wall_on_surface;
+	assign		$tmp23 $tmp22 	%line{47} %argrw{"wr"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:46
+#     walls[Z] == localP[Z]);
+	compref		$tmp24 walls $const1 	%line{46} %argrw{"wrr"}
+	compref		$tmp25 localP $const1 	%argrw{"wrr"}
+	eq		$tmp26 $tmp24 $tmp25 	%argrw{"wrr"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:47
+#     walls += roomSize*signs*wall_on_surface;
+	assign		$tmp27 $tmp26 	%line{47} %argrw{"wr"}
+	compref		$tmp28 walls $const4 	%argrw{"wrr"}
+	compref		$tmp29 localP $const4 	%argrw{"wrr"}
+	eq		$tmp30 $tmp28 $tmp29 	%argrw{"wrr"}
+	assign		$tmp31 $tmp30 	%argrw{"wr"}
+	vector		wall_on_surface $tmp23 $tmp27 $tmp31 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:48
+# 
+	mul		$tmp32 roomSize signs 	%line{48} %argrw{"wrr"}
+	mul		$tmp33 $tmp32 wall_on_surface 	%argrw{"wrr"}
+	add		walls walls $tmp33 	%argrw{"wrr"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:50
+#     point intersectionXY = sf[Z]*localI+localP;
+	sub		$tmp34 walls localP 	%line{50} %argrw{"wrr"}
+	div		sf $tmp34 localI 	%argrw{"wrr"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:51
+#     point intersectionXZ = sf[Y]*localI+localP;
+	compref		$tmp35 sf $const4 	%line{51} %argrw{"wrr"}
+	mul		$tmp36 $tmp35 localI 	%argrw{"wrr"}
+	add		intersectionXY $tmp36 localP 	%argrw{"wrr"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:52
+#     point intersectionYZ = sf[X]*localI+localP;
+	compref		$tmp37 sf $const1 	%line{52} %argrw{"wrr"}
+	mul		$tmp38 $tmp37 localI 	%argrw{"wrr"}
+	add		intersectionXZ $tmp38 localP 	%argrw{"wrr"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:53
+# 
+	compref		$tmp39 sf $const2 	%line{53} %argrw{"wrr"}
+	mul		$tmp40 $tmp39 localI 	%argrw{"wrr"}
+	add		intersectionYZ $tmp40 localP 	%argrw{"wrr"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:55
+#     float sf_xVSz = mix(sf[Z], sf[X], xVSz);
+	compref		$tmp41 sf $const2 	%line{55} %argrw{"wrr"}
+	compref		$tmp42 sf $const4 	%argrw{"wrr"}
+	step		xVSz $tmp41 $tmp42 	%argrw{"wrr"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:56
+#     point intersection = mix(intersectionXY, intersectionYZ, xVSz);
+	compref		$tmp43 sf $const4 	%line{56} %argrw{"wrr"}
+	compref		$tmp44 sf $const2 	%argrw{"wrr"}
+	mix		sf_xVSz $tmp43 $tmp44 xVSz 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:57
+#     intersection = mix(intersectionXZ, intersection, step(sf_xVSz, sf[Y]));
+	mix		intersection intersectionXY intersectionYZ xVSz 	%line{57} %argrw{"wrrr"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:58
+# 
+	compref		$tmp46 sf $const1 	%line{58} %argrw{"wrr"}
+	step		$tmp45 sf_xVSz $tmp46 	%argrw{"wrr"}
+	mix		intersection intersectionXZ intersection $tmp45 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:60
+#     if (!step(sf_xVSz, sf[Y])) {
+	mul		$tmp47 roomID roomSize 	%line{60} %argrw{"wrr"}
+	sub		$tmp48 intersection $tmp47 	%argrw{"wrr"}
+	div		TexCoords $tmp48 roomSize 	%argrw{"wrr"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:61
+#         TexCoords[Y] = TexCoords[Z];
+	compref		$tmp50 sf $const1 	%line{61} %argrw{"wrr"}
+	step		$tmp49 sf_xVSz $tmp50 	%argrw{"wrr"}
+	eq		$tmp51 $tmp49 $const10 	%argrw{"wrr"}
+	if		$tmp51 96 127 	%argrw{"r"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:62
+#         TexCoords[X] = mod(TexCoords[X]+1+nextWall[Y]*(1-wall_on_surface[Z])*2+floor(cellnoise(roomID)*6), 4.0);
+	compref		$tmp52 TexCoords $const4 	%line{62} %argrw{"wrr"}
+	compassign	TexCoords $const1 $tmp52 	%argrw{"wrr"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:63
+#     } else if (xVSz == 1) {
+	compref		$tmp54 TexCoords $const2 	%line{63} %argrw{"wrr"}
+	add		$tmp55 $tmp54 $const3 	%argrw{"wrr"}
+	compref		$tmp56 nextWall $const1 	%argrw{"wrr"}
+	compref		$tmp57 wall_on_surface $const4 	%argrw{"wrr"}
+	sub		$tmp58 $const3 $tmp57 	%argrw{"wrr"}
+	mul		$tmp59 $tmp56 $tmp58 	%argrw{"wrr"}
+	mul		$tmp60 $tmp59 $const9 	%argrw{"wrr"}
+	add		$tmp61 $tmp55 $tmp60 	%argrw{"wrr"}
+	cellnoise	$tmp63 roomID 	%argrw{"wr"}
+	mul		$tmp64 $tmp63 $const13 	%argrw{"wrr"}
+	floor		$tmp62 $tmp64 	%argrw{"wr"}
+	add		$tmp65 $tmp61 $tmp62 	%argrw{"wrr"}
+	functioncall	$const15 95 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:136
+# float  mod (float  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp67 $tmp65 $const14 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{136} %argrw{"wrr"}
+	floor		$tmp66 $tmp67 	%argrw{"wr"}
+	mul		$tmp68 $const14 $tmp66 	%argrw{"wrr"}
+	sub		$tmp53 $tmp65 $tmp68 	%argrw{"wrr"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:63
+#     } else if (xVSz == 1) {
+	compassign	TexCoords $const2 $tmp53 	%filename{"source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl"} %line{63} %argrw{"wrr"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:64
+#         TexCoords[X] = TexCoords[Y];
+	eq		$tmp69 xVSz $const1 	%line{64} %argrw{"wrr"}
+	if		$tmp69 119 127 	%argrw{"r"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:65
+#         TexCoords[Y] = TexCoords[Z];
+	compref		$tmp70 TexCoords $const1 	%line{65} %argrw{"wrr"}
+	compassign	TexCoords $const2 $tmp70 	%argrw{"wrr"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:66
+#         TexCoords[X] = mod(TexCoords[X]+nextWall[X]*(1-wall_on_surface[Z])*2+floor(cellnoise(roomID)*6), 4.0);
+	compref		$tmp71 TexCoords $const4 	%line{66} %argrw{"wrr"}
+	compassign	TexCoords $const1 $tmp71 	%argrw{"wrr"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:67
+#     } else {
+	compref		$tmp73 TexCoords $const2 	%line{67} %argrw{"wrr"}
+	compref		$tmp74 nextWall $const2 	%argrw{"wrr"}
+	compref		$tmp75 wall_on_surface $const4 	%argrw{"wrr"}
+	sub		$tmp76 $const3 $tmp75 	%argrw{"wrr"}
+	mul		$tmp77 $tmp74 $tmp76 	%argrw{"wrr"}
+	mul		$tmp78 $tmp77 $const9 	%argrw{"wrr"}
+	add		$tmp79 $tmp73 $tmp78 	%argrw{"wrr"}
+	cellnoise	$tmp81 roomID 	%argrw{"wr"}
+	mul		$tmp82 $tmp81 $const13 	%argrw{"wrr"}
+	floor		$tmp80 $tmp82 	%argrw{"wr"}
+	add		$tmp83 $tmp79 $tmp80 	%argrw{"wrr"}
+	functioncall	$const15 118 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:136
+# float  mod (float  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp85 $tmp83 $const14 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{136} %argrw{"wrr"}
+	floor		$tmp84 $tmp85 	%argrw{"wr"}
+	mul		$tmp86 $const14 $tmp84 	%argrw{"wrr"}
+	sub		$tmp72 $tmp83 $tmp86 	%argrw{"wrr"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:67
+#     } else {
+	compassign	TexCoords $const2 $tmp72 	%filename{"source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl"} %line{67} %argrw{"wrr"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:69
+#     }
+	compref		$tmp87 TexCoords $const2 	%line{69} %argrw{"wrr"}
+	compref		$tmp88 nextWall $const4 	%argrw{"wrr"}
+	compref		$tmp89 wall_on_surface $const4 	%argrw{"wrr"}
+	sub		$tmp90 $const3 $tmp89 	%argrw{"wrr"}
+	mul		$tmp91 $tmp88 $tmp90 	%argrw{"wrr"}
+	add		$tmp92 $const14 $tmp91 	%argrw{"wrr"}
+	add		$tmp93 $tmp87 $tmp92 	%argrw{"wrr"}
+	compassign	TexCoords $const2 $tmp93 	%argrw{"wrr"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:72
+#     TexCoords[Y] += mod(floor(cellnoise(roomID)*6), AtlasRows);
+	compassign	TexCoords $const4 $const2 	%line{72} %argrw{"wrr"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:73
+#     TexCoords /= vector(6, AtlasRows, 1);
+	compref		$tmp94 TexCoords $const1 	%line{73} %argrw{"wrr"}
+	cellnoise	$tmp97 roomID 	%argrw{"wr"}
+	mul		$tmp98 $tmp97 $const13 	%argrw{"wrr"}
+	floor		$tmp96 $tmp98 	%argrw{"wr"}
+	functioncall	$const15 137 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:136
+# float  mod (float  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp100 $tmp96 AtlasRows 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{136} %argrw{"wrr"}
+	floor		$tmp99 $tmp100 	%argrw{"wr"}
+	mul		$tmp101 AtlasRows $tmp99 	%argrw{"wrr"}
+	sub		$tmp95 $tmp96 $tmp101 	%argrw{"wrr"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:73
+#     TexCoords /= vector(6, AtlasRows, 1);
+	add		$tmp102 $tmp94 $tmp95 	%filename{"source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl"} %line{73} %argrw{"wrr"}
+	compassign	TexCoords $const1 $tmp102 	%argrw{"wrr"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:74
+#     
+	vector		$tmp103 $const13 AtlasRows $const3 	%line{74} %argrw{"wrrr"}
+	div		TexCoords TexCoords $tmp103 	%argrw{"wrr"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:76
+#     normal normalXZ = transform("object", "common", normal(0, 1, 0)*(-signs));
+	neg		$tmp105 signs 	%line{76} %argrw{"wr"}
+	mul		$tmp106 $const17 $tmp105 	%argrw{"wrr"}
+	transformn	normalXY $const5 $const7 $tmp106 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:77
+#     normal normalYZ = transform("object", "common", normal(1, 0, 0)*(-signs));
+	neg		$tmp108 signs 	%line{77} %argrw{"wr"}
+	mul		$tmp109 $const18 $tmp108 	%argrw{"wrr"}
+	transformn	normalXZ $const5 $const7 $tmp109 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:78
+#     
+	neg		$tmp111 signs 	%line{78} %argrw{"wr"}
+	mul		$tmp112 $const19 $tmp111 	%argrw{"wrr"}
+	transformn	normalYZ $const5 $const7 $tmp112 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:80
+#     WallNormal = mix(normalXZ, WallNormal, step(sf_xVSz, sf[Y]));
+	mix		WallNormal normalXY normalYZ xVSz 	%line{80} %argrw{"wrrr"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:81
+#     
+	compref		$tmp114 sf $const1 	%line{81} %argrw{"wrr"}
+	step		$tmp113 sf_xVSz $tmp114 	%argrw{"wrr"}
+	mix		WallNormal normalXZ WallNormal $tmp113 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/combine-multiple/FBinterior_mapping.osl:83
+# }
+	assign		$tmp115 emit 	%line{83} %argrw{"wr"}
+	mul		EmissionFactor $tmp115 Emission 	%argrw{"wrr"}
+	end

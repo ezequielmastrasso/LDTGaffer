@@ -1,0 +1,18 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader LiftGammaGain	%meta{string,help,"Simple Lift / Gamma / Gain color modifier"} %meta{string,label,"Lift/Gamma/Gain"} 
+param	color	Input	0 0 0		%read{0,0} %write{2147483647,-1}
+param	float	Lift	0		%read{2,2} %write{2147483647,-1}
+param	float	Gamma	1		%read{0,0} %write{2147483647,-1}
+param	float	Gain	1		%read{1,1} %write{2147483647,-1}
+oparam	color	Col	0 0 0		%read{2147483647,-1} %write{2,2}
+temp	color	$tmp1	%read{1,1} %write{0,0}
+temp	color	$tmp2	%read{2,2} %write{1,1}
+code ___main___
+# source/3dsMax-OSL-Shaders/LiftGammaGain.osl:20
+# }
+	pow		$tmp1 Input Gamma 	%filename{"source/3dsMax-OSL-Shaders/LiftGammaGain.osl"} %line{20} %argrw{"wrr"}
+	mul		$tmp2 $tmp1 Gain 	%argrw{"wrr"}
+	add		Col Lift $tmp2 	%argrw{"wrr"}
+	end

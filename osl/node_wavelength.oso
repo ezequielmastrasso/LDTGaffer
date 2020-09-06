@@ -1,0 +1,11 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader node_wavelength
+param	float	Wavelength	500		%read{0,0} %write{2147483647,-1}
+oparam	color	Color	0 0 0		%read{2147483647,-1} %write{0,0}
+code ___main___
+# include/node_wavelength.osl:24
+# }
+	wavelength_color	Color Wavelength 	%filename{"include/node_wavelength.osl"} %line{24} %argrw{"wr"}
+	end

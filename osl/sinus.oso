@@ -1,0 +1,132 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader sinus
+param	vector	Vector	0 0 0		%read{1,2} %write{0,0} %initexpr
+param	int	Type	0		%read{9,16} %write{2147483647,-1}
+param	float	Scale	16		%read{5,6} %write{2147483647,-1}
+param	float	Shift	0		%read{19,26} %write{2147483647,-1}
+oparam	float	Intensity	0		%read{2147483647,-1} %write{4,38}
+oparam	float	X	0		%read{5,37} %write{1,34}
+oparam	float	Y	0		%read{6,37} %write{2,36}
+global	point	P	%read{0,0} %write{2147483647,-1}
+const	int	$const1	0		%read{1,4} %write{2147483647,-1}
+const	int	$const2	1		%read{2,9} %write{2147483647,-1}
+const	string	$const3	"calc_sinus"		%read{3,3} %write{2147483647,-1}
+temp	int	$tmp1	%read{10,10} %write{9,9}
+const	int	$const4	2		%read{13,13} %write{2147483647,-1}
+temp	int	$tmp2	%read{14,14} %write{13,13}
+const	int	$const5	3		%read{16,16} %write{2147483647,-1}
+temp	int	$tmp3	%read{17,17} %write{16,16}
+const	float	$const6	0		%read{19,23} %write{2147483647,-1}
+temp	int	$tmp4	%read{20,20} %write{19,19}
+temp	int	$tmp5	%read{24,24} %write{23,23}
+const	float	$const7	-1		%read{29,32} %write{2147483647,-1}
+const	float	$const8	1		%read{28,35} %write{2147483647,-1}
+const	string	$const9	"clamp"		%read{27,30} %write{2147483647,-1}
+temp	float	$tmp6	%read{29,29} %write{28,28}
+temp	float	$tmp7	%read{32,32} %write{31,31}
+temp	float	$tmp8	%read{34,34} %write{33,33}
+const	float	$const10	2		%read{34,38} %write{2147483647,-1}
+temp	float	$tmp9	%read{36,36} %write{35,35}
+temp	float	$tmp10	%read{38,38} %write{37,37}
+code Vector
+# source/sambler-osl-shaders/patterns/ChSinus/ChSinus.osl:15
+#     int Type = 0,
+	assign		Vector P 	%filename{"source/sambler-osl-shaders/patterns/ChSinus/ChSinus.osl"} %line{15} %argrw{"wr"}
+code ___main___
+# source/sambler-osl-shaders/patterns/ChSinus/ChSinus.osl:23
+#     Y = Vector[1];
+	compref		X Vector $const1 	%filename{"source/sambler-osl-shaders/patterns/ChSinus/ChSinus.osl"} %line{23} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ChSinus/ChSinus.osl:24
+# 
+	compref		Y Vector $const2 	%line{24} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ChSinus/ChSinus.osl:68
+# 
+	functioncall	$const3 39 	%line{68} %argrw{"r"}
+# source/sambler-osl-shaders/patterns/ChSinus/ChSinus.osl:28
+# 
+	assign		Intensity $const1 	%line{28} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/ChSinus/ChSinus.osl:30
+#         Y *= Scale;
+	mul		X X Scale 	%line{30} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ChSinus/ChSinus.osl:31
+# 
+	mul		Y Y Scale 	%line{31} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ChSinus/ChSinus.osl:33
+#         Y = sin(Y);
+	sin		X X 	%line{33} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/ChSinus/ChSinus.osl:34
+# 
+	sin		Y Y 	%line{34} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/ChSinus/ChSinus.osl:36
+#             X= abs(X);
+	eq		$tmp1 Type $const2 	%line{36} %argrw{"wrr"}
+	if		$tmp1 13 19 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/ChSinus/ChSinus.osl:37
+#             Y= abs(Y);
+	abs		X X 	%line{37} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/ChSinus/ChSinus.osl:38
+#         }
+	abs		Y Y 	%line{38} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/ChSinus/ChSinus.osl:40
+#             X= abs(X);
+	eq		$tmp2 Type $const4 	%line{40} %argrw{"wrr"}
+	if		$tmp2 16 19 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/ChSinus/ChSinus.osl:41
+#         }
+	abs		X X 	%line{41} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/ChSinus/ChSinus.osl:43
+#             Y= abs(Y);
+	eq		$tmp3 Type $const5 	%line{43} %argrw{"wrr"}
+	if		$tmp3 19 19 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/ChSinus/ChSinus.osl:44
+#         }
+	abs		Y Y 	%line{44} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/ChSinus/ChSinus.osl:47
+#             X+= Shift;
+	gt		$tmp4 Shift $const6 	%line{47} %argrw{"wrr"}
+	if		$tmp4 23 27 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/ChSinus/ChSinus.osl:48
+#             Y-= Shift;
+	add		X X Shift 	%line{48} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ChSinus/ChSinus.osl:49
+#         }
+	sub		Y Y Shift 	%line{49} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ChSinus/ChSinus.osl:51
+#             X-= Shift;
+	lt		$tmp5 Shift $const6 	%line{51} %argrw{"wrr"}
+	if		$tmp5 27 27 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/ChSinus/ChSinus.osl:52
+#             Y+= Shift;
+	sub		X X Shift 	%line{52} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ChSinus/ChSinus.osl:53
+#         }
+	add		Y Y Shift 	%line{53} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ChSinus/ChSinus.osl:56
+#         Y = clamp(Y, -1.0, 1.0);
+	functioncall	$const9 30 	%line{56} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:145
+# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
+	min		$tmp6 X $const8 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{145} %argrw{"wrr"}
+	max		X $tmp6 $const7 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ChSinus/ChSinus.osl:57
+# 
+	functioncall	$const9 33 	%filename{"source/sambler-osl-shaders/patterns/ChSinus/ChSinus.osl"} %line{57} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:145
+# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
+	min		$tmp7 Y $const8 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{145} %argrw{"wrr"}
+	max		Y $tmp7 $const7 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ChSinus/ChSinus.osl:60
+#         Y = (Y+1.0)/2.0;
+	add		$tmp8 X $const8 	%filename{"source/sambler-osl-shaders/patterns/ChSinus/ChSinus.osl"} %line{60} %argrw{"wrr"}
+	div		X $tmp8 $const10 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ChSinus/ChSinus.osl:61
+# 
+	add		$tmp9 Y $const8 	%line{61} %argrw{"wrr"}
+	div		Y $tmp9 $const10 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/ChSinus/ChSinus.osl:63
+# 
+	add		$tmp10 X Y 	%line{63} %argrw{"wrr"}
+	div		Intensity $tmp10 $const10 	%argrw{"wrr"}
+	end

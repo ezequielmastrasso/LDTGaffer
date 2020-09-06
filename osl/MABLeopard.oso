@@ -1,0 +1,830 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader MABLeopard
+param	point	Vector	0 0 0		%read{2,2} %write{0,0} %initexpr
+param	float	Scale	3		%read{2,2} %write{2147483647,-1}
+param	color	BaseColor	0.79000002 0.68000001 0.36000001		%read{313,313} %write{2147483647,-1}
+param	float	Shape	0.30000001		%read{25,107} %write{2147483647,-1}
+param	float	Ratio	160		%read{267,267} %write{2147483647,-1}
+param	float	Radius	2.5999999		%read{240,240} %write{2147483647,-1}
+param	float	InnerNoise	0.1		%read{271,271} %write{2147483647,-1}
+param	float	InnerNoiseSeed	5		%read{269,269} %write{2147483647,-1}
+param	color	InnerColor	0.67000002 0.25 0.11		%read{312,312} %write{2147483647,-1}
+param	float	OuterSize	1.4		%read{246,246} %write{2147483647,-1}
+param	float	OuterBlur	-2.0999999		%read{245,245} %write{2147483647,-1}
+param	color	OuterColor	0.012 0.001 0.0070000002		%read{1,1} %write{2147483647,-1}
+param	float	CentreProbability	0.2		%read{257,257} %write{2147483647,-1}
+param	float	CentreRadius	0.2		%read{261,261} %write{2147483647,-1}
+param	color	CenterColor	0.046 0.037999999 0.035999998		%read{266,266} %write{2147483647,-1}
+oparam	color	Color	0 0 0		%read{2147483647,-1} %write{1,313} %initexpr
+global	point	P	%read{0,0} %write{2147483647,-1}
+local	int	___322_n	%read{55,156} %write{52,156}
+local	int	___323_j	%read{55,156} %write{54,156}
+local	int	___325_i	%read{55,156} %write{55,156}
+local	float	___327_tf	%read{55,156} %write{55,156}
+local	point	___327_tp	%read{55,156} %write{55,156}
+local	point	___328_p	%read{8,50} %write{7,7}
+local	float	___328_xx	%read{15,50} %write{14,50}
+local	float	___328_yy	%read{15,50} %write{15,50}
+local	float	___328_xi	%read{14,50} %write{9,9}
+local	float	___328_yi	%read{15,50} %write{11,11}
+local	int	___328_i	%read{15,50} %write{12,50}
+local	vector	___332_ip	%read{15,50} %write{15,50}
+local	vector	___332_np	%read{15,50} %write{15,50}
+local	vector	___332_dp	%read{15,50} %write{15,50}
+local	point	___333_p	%read{87,125} %write{86,86}
+local	float	___333_xx	%read{94,125} %write{93,125}
+local	float	___333_yy	%read{94,125} %write{94,125}
+local	float	___333_xi	%read{93,125} %write{88,88}
+local	float	___333_yi	%read{94,125} %write{90,90}
+local	int	___333_i	%read{94,125} %write{91,125}
+local	vector	___337_ip	%read{94,125} %write{94,125}
+local	vector	___337_np	%read{94,125} %write{94,125}
+local	vector	___337_vvp	%read{94,125} %write{94,125}
+local	vector	___337_d	%read{94,125} %write{94,125}
+local	float	___338_angle	%read{94,125} %write{94,125}
+local	int[8]	___339_imp	%read{163,231} %write{159,192}
+local	int	___339_nmp	%read{163,232} %write{160,223}
+local	float	___340_alpha	%read{163,223} %write{163,223}
+local	float	___340_gamma	%read{163,223} %write{163,223}
+local	int	___341_i	%read{163,192} %write{162,192}
+local	int	___346_i	%read{226,231} %write{225,231}
+local	int	___348_i	%read{281,290} %write{280,290}
+local	vector	___348_ref	%read{281,294} %write{278,290}
+local	vector	___348_ref2	%read{281,294} %write{281,293}
+local	float	___348_amod	%read{303,306} %write{302,302}
+local	point	p	%read{5,273} %write{2,3}
+local	point[9]	vp	%read{15,255} %write{15,81}
+local	float[9]	dp	%read{55,260} %write{15,81}
+local	point[8]	nvp	%read{130,231} %write{94,156}
+local	float[8]	angles	%read{130,156} %write{94,156}
+local	point[8]	mp	%read{237,255} %write{226,231}
+local	int	m	%read{237,290} %write{232,232}
+local	float	sump	%read{237,267} %write{233,255}
+local	float	mind	%read{237,255} %write{234,255}
+local	point[8]	mmp	%read{237,291} %write{237,255}
+local	int	___351_i	%read{237,255} %write{236,255}
+local	float	___352_d	%read{237,255} %write{237,255}
+local	float	___355_sumangle	%read{281,301} %write{275,296}
+const	int	$const1	0		%read{3,308} %write{2147483647,-1}
+const	int	$const2	2		%read{3,197} %write{2147483647,-1}
+const	string	$const3	"voronoip9d"		%read{4,4} %write{2147483647,-1}
+temp	float	$tmp1	%read{7,7} %write{5,5}
+const	int	$const4	1		%read{6,290} %write{2147483647,-1}
+temp	float	$tmp2	%read{7,7} %write{6,6}
+const	float	$const5	0		%read{7,109} %write{2147483647,-1}
+temp	float	$tmp3	%read{9,9} %write{8,8}
+temp	float	$tmp4	%read{11,11} %write{10,10}
+const	int	$const6	-1		%read{12,91} %write{2147483647,-1}
+const	float	$const7	1		%read{14,125} %write{2147483647,-1}
+temp	float	$tmp5	%read{15,50} %write{15,50}
+temp	int	$tmp6	%read{13,50} %write{14,50}
+temp	float	$tmp7	%read{15,50} %write{15,50}
+temp	int	$tmp8	%read{15,50} %write{15,50}
+temp	int	$tmp9	%read{2147483647,-1} %write{15,50}
+temp	vector	$tmp10	%read{15,50} %write{15,50}
+temp	vector	$tmp11	%read{15,50} %write{15,50}
+temp	vector	$tmp12	%read{15,50} %write{15,50}
+temp	float	$tmp13	%read{15,50} %write{15,50}
+temp	float	$tmp14	%read{15,50} %write{15,50}
+const	float	$const8	2		%read{28,108} %write{2147483647,-1}
+temp	float	$tmp15	%read{15,50} %write{15,50}
+temp	float	$tmp16	%read{15,50} %write{15,50}
+temp	vector	$tmp17	%read{15,50} %write{15,50}
+temp	point	$tmp18	%read{15,50} %write{15,50}
+temp	point	$tmp19	%read{15,50} %write{15,50}
+temp	float	$tmp20	%read{15,50} %write{15,50}
+temp	float	$tmp21	%read{15,50} %write{15,50}
+temp	float	$tmp22	%read{15,50} %write{15,50}
+temp	float	$tmp23	%read{15,50} %write{15,50}
+temp	float	$tmp24	%read{15,50} %write{15,50}
+temp	float	$tmp25	%read{15,50} %write{15,50}
+temp	float	$tmp26	%read{15,50} %write{15,50}
+temp	float	$tmp27	%read{2147483647,-1} %write{15,50}
+temp	float	$tmp28	%read{2147483647,-1} %write{15,50}
+const	int	$const9	9		%read{52,55} %write{2147483647,-1}
+const	string	$const10	"sort"		%read{51,126} %write{2147483647,-1}
+temp	int	$tmp29	%read{53,81} %write{54,81}
+temp	int	$tmp30	%read{55,81} %write{55,81}
+temp	int	$tmp31	%read{55,81} %write{55,81}
+temp	float	$tmp32	%read{55,81} %write{55,81}
+temp	float	$tmp33	%read{55,81} %write{55,81}
+temp	int	$tmp34	%read{55,81} %write{55,81}
+temp	int	$tmp35	%read{55,81} %write{55,81}
+temp	float	$tmp36	%read{55,81} %write{55,81}
+temp	int	$tmp37	%read{55,81} %write{55,81}
+temp	int	$tmp38	%read{55,81} %write{55,81}
+temp	point	$tmp39	%read{55,81} %write{55,81}
+temp	int	$tmp40	%read{55,81} %write{55,81}
+temp	int	$tmp41	%read{2147483647,-1} %write{55,81}
+temp	int	$tmp42	%read{2147483647,-1} %write{55,81}
+temp	int	$tmp43	%read{2147483647,-1} %write{55,81}
+temp	point	$tmp44	%read{84,85} %write{82,82}
+const	string	$const11	"voronoip8a"		%read{83,83} %write{2147483647,-1}
+temp	float	$tmp45	%read{86,86} %write{84,84}
+temp	float	$tmp46	%read{86,86} %write{85,85}
+temp	float	$tmp47	%read{88,88} %write{87,87}
+temp	float	$tmp48	%read{90,90} %write{89,89}
+temp	float	$tmp49	%read{94,125} %write{94,125}
+temp	int	$tmp50	%read{92,125} %write{93,125}
+temp	float	$tmp51	%read{94,125} %write{94,125}
+temp	int	$tmp52	%read{94,125} %write{94,125}
+temp	vector	$tmp53	%read{94,125} %write{94,125}
+temp	vector	$tmp54	%read{94,125} %write{94,125}
+temp	vector	$tmp55	%read{94,125} %write{94,125}
+temp	float	$tmp56	%read{94,125} %write{94,125}
+temp	float	$tmp57	%read{94,125} %write{94,125}
+temp	float	$tmp58	%read{94,125} %write{94,125}
+temp	float	$tmp59	%read{94,125} %write{94,125}
+temp	float	$tmp60	%read{94,125} %write{94,125}
+const	float	$const12	1e-07		%read{113,113} %write{2147483647,-1}
+temp	int	$tmp61	%read{94,125} %write{94,125}
+temp	float	$tmp62	%read{94,125} %write{94,125}
+temp	float	$tmp63	%read{94,125} %write{94,125}
+temp	int	$tmp64	%read{2147483647,-1} %write{94,125}
+temp	float	$tmp65	%read{2147483647,-1} %write{94,125}
+temp	float	$tmp66	%read{2147483647,-1} %write{94,125}
+const	int	$const13	8		%read{127,163} %write{2147483647,-1}
+temp	int	$tmp67	%read{128,156} %write{129,156}
+temp	int	$tmp68	%read{130,156} %write{130,156}
+temp	int	$tmp69	%read{130,156} %write{130,156}
+temp	float	$tmp70	%read{130,156} %write{130,156}
+temp	float	$tmp71	%read{130,156} %write{130,156}
+temp	int	$tmp72	%read{130,156} %write{130,156}
+temp	int	$tmp73	%read{130,156} %write{130,156}
+temp	float	$tmp74	%read{130,156} %write{130,156}
+temp	int	$tmp75	%read{130,156} %write{130,156}
+temp	int	$tmp76	%read{130,156} %write{130,156}
+temp	point	$tmp77	%read{130,156} %write{130,156}
+temp	int	$tmp78	%read{130,156} %write{130,156}
+temp	int	$tmp79	%read{2147483647,-1} %write{130,156}
+temp	int	$tmp80	%read{2147483647,-1} %write{130,156}
+temp	int	$tmp81	%read{2147483647,-1} %write{130,156}
+temp	point	$tmp82	%read{163,223} %write{157,157}
+const	string	$const14	"closest_convex_polygon"		%read{158,158} %write{2147483647,-1}
+const	int[8]	$const15	0 1 0 0 0 0 0 0 		%read{159,159} %write{2147483647,-1}
+temp	int	$tmp83	%read{161,192} %write{162,192}
+temp	int	$tmp84	%read{163,192} %write{163,192}
+temp	int	$tmp85	%read{163,192} %write{163,192}
+temp	int	$tmp86	%read{163,192} %write{163,192}
+temp	int	$tmp87	%read{163,192} %write{163,192}
+temp	int	$tmp88	%read{163,192} %write{163,192}
+const	string	$const16	"delauney"		%read{168,202} %write{2147483647,-1}
+temp	float	$tmp89	%read{163,192} %write{163,192}
+temp	point	$tmp90	%read{163,192} %write{163,192}
+temp	point	$tmp91	%read{163,192} %write{163,192}
+temp	vector	$tmp92	%read{163,192} %write{163,192}
+temp	point	$tmp93	%read{163,192} %write{163,192}
+temp	vector	$tmp94	%read{163,192} %write{163,192}
+temp	float	$tmp95	%read{163,192} %write{163,192}
+temp	point	$tmp96	%read{163,192} %write{163,192}
+temp	point	$tmp97	%read{163,192} %write{163,192}
+temp	vector	$tmp98	%read{163,192} %write{163,192}
+temp	point	$tmp99	%read{163,192} %write{163,192}
+temp	vector	$tmp100	%read{163,192} %write{163,192}
+temp	float	$tmp101	%read{163,192} %write{163,192}
+const	float	$const17	3.1415927		%read{184,218} %write{2147483647,-1}
+temp	int	$tmp102	%read{2147483647,-1} %write{163,192}
+temp	int	$tmp103	%read{163,192} %write{163,192}
+temp	int	$tmp104	%read{2147483647,-1} %write{163,192}
+const	int	$const18	3		%read{194,194} %write{2147483647,-1}
+temp	int	$tmp105	%read{194,223} %write{194,223}
+temp	int	$tmp106	%read{193,223} %write{194,223}
+temp	int	$tmp107	%read{194,223} %write{194,223}
+temp	int	$tmp108	%read{194,223} %write{194,223}
+temp	int	$tmp109	%read{194,223} %write{194,223}
+temp	int	$tmp110	%read{194,223} %write{194,223}
+temp	int	$tmp111	%read{194,223} %write{194,223}
+temp	int	$tmp112	%read{194,223} %write{194,223}
+temp	float	$tmp113	%read{194,223} %write{194,223}
+temp	point	$tmp114	%read{194,223} %write{194,223}
+temp	point	$tmp115	%read{194,223} %write{194,223}
+temp	vector	$tmp116	%read{194,223} %write{194,223}
+temp	point	$tmp117	%read{194,223} %write{194,223}
+temp	vector	$tmp118	%read{194,223} %write{194,223}
+temp	float	$tmp119	%read{194,223} %write{194,223}
+temp	point	$tmp120	%read{194,223} %write{194,223}
+temp	point	$tmp121	%read{194,223} %write{194,223}
+temp	vector	$tmp122	%read{194,223} %write{194,223}
+temp	point	$tmp123	%read{194,223} %write{194,223}
+temp	vector	$tmp124	%read{194,223} %write{194,223}
+temp	float	$tmp125	%read{194,223} %write{194,223}
+temp	int	$tmp126	%read{194,223} %write{194,223}
+temp	int	$tmp127	%read{194,223} %write{194,223}
+temp	int	$tmp128	%read{2147483647,-1} %write{194,223}
+temp	int	$tmp129	%read{224,231} %write{225,231}
+temp	int	$tmp130	%read{226,231} %write{226,231}
+temp	point	$tmp131	%read{226,231} %write{226,231}
+temp	int	$tmp132	%read{2147483647,-1} %write{226,231}
+const	float	$const19	10000000		%read{234,234} %write{2147483647,-1}
+temp	int	$tmp133	%read{235,255} %write{236,255}
+temp	point	$tmp134	%read{237,255} %write{237,255}
+temp	point	$tmp135	%read{237,255} %write{237,255}
+temp	point	$tmp136	%read{237,255} %write{237,255}
+temp	float	$tmp137	%read{237,255} %write{237,255}
+const	float	$const21	10		%read{240,240} %write{2147483647,-1}
+temp	point	$tmp138	%read{237,255} %write{237,255}
+temp	float	$tmp139	%read{237,255} %write{237,255}
+temp	float	$tmp140	%read{237,255} %write{237,255}
+temp	point	$tmp141	%read{237,255} %write{237,255}
+temp	point	$tmp142	%read{237,255} %write{237,255}
+temp	int	$tmp143	%read{237,255} %write{237,255}
+temp	int	$tmp144	%read{2147483647,-1} %write{237,255}
+temp	float	$tmp145	%read{257,257} %write{256,256}
+const	string	$const22	"cell"		%read{256,256} %write{2147483647,-1}
+temp	int	$tmp146	%read{258,258} %write{257,257}
+temp	int	$tmp147	%read{259,265} %write{258,264}
+temp	float	$tmp148	%read{262,262} %write{260,260}
+const	float	$const23	0.0099999998		%read{261,307} %write{2147483647,-1}
+temp	float	$tmp149	%read{262,262} %write{261,261}
+temp	int	$tmp150	%read{263,263} %write{262,262}
+temp	int	$tmp151	%read{264,264} %write{263,263}
+temp	int	$tmp152	%read{268,268} %write{267,267}
+temp	int	$tmp153	%read{311,311} %write{310,310}
+temp	float	$tmp154	%read{272,272} %write{270,270}
+const	string	$const24	"snoise"		%read{270,270} %write{2147483647,-1}
+temp	point	$tmp155	%read{270,270} %write{269,269}
+temp	float	$tmp156	%read{272,272} %write{271,271}
+temp	float	$tmp157	%read{273,273} %write{272,272}
+temp	point	$tmp158	%read{277,292} %write{273,273}
+const	string	$const25	"point_inside_polygon"		%read{274,274} %write{2147483647,-1}
+temp	point	$tmp159	%read{277,277} %write{276,276}
+temp	vector	$tmp160	%read{278,278} %write{277,277}
+temp	int	$tmp161	%read{279,290} %write{280,290}
+temp	point	$tmp162	%read{281,290} %write{281,290}
+temp	vector	$tmp163	%read{281,290} %write{281,290}
+temp	float	$tmp164	%read{281,290} %write{281,290}
+temp	float	$tmp165	%read{281,290} %write{281,290}
+temp	int	$tmp166	%read{2147483647,-1} %write{281,290}
+temp	point	$tmp167	%read{292,292} %write{291,291}
+temp	vector	$tmp168	%read{293,293} %write{292,292}
+temp	float	$tmp169	%read{296,296} %write{295,295}
+temp	float	$tmp170	%read{295,295} %write{294,294}
+temp	float	$tmp171	%read{302,302} %write{301,301}
+const	float	$const26	6.2831855		%read{298,306} %write{2147483647,-1}
+const	string	$const27	"mod"		%read{297,297} %write{2147483647,-1}
+temp	float	$tmp172	%read{300,300} %write{299,299}
+temp	float	$tmp173	%read{299,299} %write{298,298}
+temp	float	$tmp174	%read{301,301} %write{300,300}
+temp	int	$tmp175	%read{304,304} %write{303,303}
+temp	int	$tmp176	%read{305,310} %write{304,309}
+temp	float	$tmp177	%read{307,307} %write{306,306}
+temp	int	$tmp178	%read{308,308} %write{307,307}
+temp	int	$tmp179	%read{309,309} %write{308,308}
+code Vector
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:157
+#     float Scale = 3.0,
+	assign		Vector P 	%filename{"source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl"} %line{157} %argrw{"wr"}
+code Color
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:183
+# {
+	assign		Color OuterColor 	%filename{"source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl"} %line{183} %argrw{"wr"}
+code ___main___
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:185
+#     p[2] = 0;
+	mul		p Vector Scale 	%filename{"source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl"} %line{185} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:186
+#     point vp[9];
+	compassign	p $const2 $const1 	%line{186} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:190
+# 
+	functioncall	$const3 82 	%line{190} %argrw{"r"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:42
+# 
+	compref		$tmp1 p $const1 	%line{42} %argrw{"wrr"}
+	compref		$tmp2 p $const4 	%argrw{"wrr"}
+	point		___328_p $tmp1 $tmp2 $const5 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:46
+#     yi = floor(p[1]);
+	compref		$tmp3 ___328_p $const1 	%line{46} %argrw{"wrr"}
+	floor		___328_xi $tmp3 	%argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:47
+# 
+	compref		$tmp4 ___328_p $const4 	%line{47} %argrw{"wrr"}
+	floor		___328_yi $tmp4 	%argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:49
+#     for(xx = xi-1; xx <= xi+1; xx++){
+	assign		___328_i $const6 	%line{49} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:50
+#         for(yy = yi-1; yy <= yi+1; yy++){
+	for		$tmp6 15 17 49 51 	%line{50} %argrw{"r"}
+	sub		___328_xx ___328_xi $const7 	%argrw{"wrr"}
+	add		$tmp5 ___328_xi $const7 	%argrw{"wrr"}
+	le		$tmp6 ___328_xx $tmp5 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:51
+#             i++;
+	for		$tmp8 19 21 47 49 	%line{51} %argrw{"r"}
+	sub		___328_yy ___328_yi $const7 	%argrw{"wrr"}
+	add		$tmp7 ___328_yi $const7 	%argrw{"wrr"}
+	le		$tmp8 ___328_yy $tmp7 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:52
+#             vector ip = vector(xx, yy, 0);
+	assign		$tmp9 ___328_i 	%line{52} %argrw{"wr"}
+	add		___328_i ___328_i $const4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:53
+#             vector np = cellnoise(ip);
+	vector		___332_ip ___328_xx ___328_yy $const5 	%line{53} %argrw{"wrrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:54
+#             vp[i] = ip + np * T + vector((1-T)/2,(1-T)/2,0);
+	cellnoise	___332_np ___332_ip 	%line{54} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:55
+#             vp[i][2] = 0;
+	mul		$tmp10 ___332_np Shape 	%line{55} %argrw{"wrr"}
+	add		$tmp11 ___332_ip $tmp10 	%argrw{"wrr"}
+	sub		$tmp13 $const7 Shape 	%argrw{"wrr"}
+	div		$tmp14 $tmp13 $const8 	%argrw{"wrr"}
+	sub		$tmp15 $const7 Shape 	%argrw{"wrr"}
+	div		$tmp16 $tmp15 $const8 	%argrw{"wrr"}
+	vector		$tmp12 $tmp14 $tmp16 $const5 	%argrw{"wrrr"}
+	add		$tmp17 $tmp11 $tmp12 	%argrw{"wrr"}
+	aassign		vp ___328_i $tmp17 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:56
+#             vector dp = vp[i] - p;
+	aref		$tmp18 vp ___328_i 	%line{56} %argrw{"wrr"}
+	compassign	$tmp18 $const2 $const1 	%argrw{"wrr"}
+	aassign		vp ___328_i $tmp18 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:57
+#             vd[i] = dp[0] * dp[0] + dp[1] * dp[1];
+	aref		$tmp19 vp ___328_i 	%line{57} %argrw{"wrr"}
+	sub		___332_dp $tmp19 ___328_p 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:58
+#         }
+	compref		$tmp20 ___332_dp $const1 	%line{58} %argrw{"wrr"}
+	compref		$tmp21 ___332_dp $const1 	%argrw{"wrr"}
+	mul		$tmp22 $tmp20 $tmp21 	%argrw{"wrr"}
+	compref		$tmp23 ___332_dp $const4 	%argrw{"wrr"}
+	compref		$tmp24 ___332_dp $const4 	%argrw{"wrr"}
+	mul		$tmp25 $tmp23 $tmp24 	%argrw{"wrr"}
+	add		$tmp26 $tmp22 $tmp25 	%argrw{"wrr"}
+	aassign		dp ___328_i $tmp26 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:51
+#             i++;
+	assign		$tmp27 ___328_yy 	%line{51} %argrw{"wr"}
+	add		___328_yy ___328_yy $const7 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:50
+#         for(yy = yi-1; yy <= yi+1; yy++){
+	assign		$tmp28 ___328_xx 	%line{50} %argrw{"wr"}
+	add		___328_xx ___328_xx $const7 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:61
+# }
+	functioncall	$const10 82 	%line{61} %argrw{"r"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:20
+#     for(int j = 0; j < np; j++){
+	assign		___322_n $const9 	%line{20} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:21
+#         for(int i = 1; i < n; i++){
+	for		$tmp29 55 56 80 82 	%line{21} %argrw{"r"}
+	assign		___323_j $const1 	%argrw{"wr"}
+	lt		$tmp29 ___323_j $const9 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:22
+#             if( f[i-1] > f[i] ){
+	for		$tmp30 58 59 76 78 	%line{22} %argrw{"r"}
+	assign		___325_i $const4 	%argrw{"wr"}
+	lt		$tmp30 ___325_i ___322_n 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:23
+#                 float tf = f[i-1];
+	sub		$tmp31 ___325_i $const4 	%line{23} %argrw{"wrr"}
+	aref		$tmp32 dp $tmp31 	%argrw{"wrr"}
+	aref		$tmp33 dp ___325_i 	%argrw{"wrr"}
+	gt		$tmp34 $tmp32 $tmp33 	%argrw{"wrr"}
+	if		$tmp34 76 76 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:24
+#                 f[i-1] = f[i];
+	sub		$tmp35 ___325_i $const4 	%line{24} %argrw{"wrr"}
+	aref		___327_tf dp $tmp35 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:25
+#                 f[i] = tf;
+	aref		$tmp36 dp ___325_i 	%line{25} %argrw{"wrr"}
+	sub		$tmp37 ___325_i $const4 	%argrw{"wrr"}
+	aassign		dp $tmp37 $tmp36 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:26
+#                 point tp = p[i-1];
+	aassign		dp ___325_i ___327_tf 	%line{26} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:27
+#                 p[i-1] = p[i];
+	sub		$tmp38 ___325_i $const4 	%line{27} %argrw{"wrr"}
+	aref		___327_tp vp $tmp38 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:28
+#                 p[i] = tp;
+	aref		$tmp39 vp ___325_i 	%line{28} %argrw{"wrr"}
+	sub		$tmp40 ___325_i $const4 	%argrw{"wrr"}
+	aassign		vp $tmp40 $tmp39 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:29
+#             }
+	aassign		vp ___325_i ___327_tp 	%line{29} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:22
+#             if( f[i-1] > f[i] ){
+	assign		$tmp41 ___325_i 	%line{22} %argrw{"wr"}
+	add		___325_i ___325_i $const4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:32
+#     }
+	assign		$tmp42 ___322_n 	%line{32} %argrw{"wr"}
+	sub		___322_n ___322_n $const4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:21
+#         for(int i = 1; i < n; i++){
+	assign		$tmp43 ___323_j 	%line{21} %argrw{"wr"}
+	add		___323_j ___323_j $const4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:194
+# 
+	aref		$tmp44 vp $const1 	%line{194} %argrw{"wrr"}
+	functioncall	$const11 157 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:70
+# 
+	compref		$tmp45 $tmp44 $const1 	%line{70} %argrw{"wrr"}
+	compref		$tmp46 $tmp44 $const4 	%argrw{"wrr"}
+	point		___333_p $tmp45 $tmp46 $const5 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:74
+#     yi = floor(p[1]);
+	compref		$tmp47 ___333_p $const1 	%line{74} %argrw{"wrr"}
+	floor		___333_xi $tmp47 	%argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:75
+# 
+	compref		$tmp48 ___333_p $const4 	%line{75} %argrw{"wrr"}
+	floor		___333_yi $tmp48 	%argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:77
+#     for(xx = xi-1; xx <= xi+1; xx++){
+	assign		___333_i $const6 	%line{77} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:78
+#         for(yy = yi-1; yy <= yi+1; yy++){
+	for		$tmp50 94 96 124 126 	%line{78} %argrw{"r"}
+	sub		___333_xx ___333_xi $const7 	%argrw{"wrr"}
+	add		$tmp49 ___333_xi $const7 	%argrw{"wrr"}
+	le		$tmp50 ___333_xx $tmp49 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:79
+#             vector ip = vector(xx, yy, 0);
+	for		$tmp52 98 100 122 124 	%line{79} %argrw{"r"}
+	sub		___333_yy ___333_yi $const7 	%argrw{"wrr"}
+	add		$tmp51 ___333_yi $const7 	%argrw{"wrr"}
+	le		$tmp52 ___333_yy $tmp51 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:80
+#             vector np = cellnoise(ip);
+	vector		___337_ip ___333_xx ___333_yy $const5 	%line{80} %argrw{"wrrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:81
+#             np[2] = 0;
+	cellnoise	___337_np ___337_ip 	%line{81} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:82
+#             vector vvp = ip + np * T + vector((1-T)/2,(1-T)/2,0);
+	compassign	___337_np $const2 $const1 	%line{82} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:83
+#             vector d = vvp-p;
+	mul		$tmp53 ___337_np Shape 	%line{83} %argrw{"wrr"}
+	add		$tmp54 ___337_ip $tmp53 	%argrw{"wrr"}
+	sub		$tmp56 $const7 Shape 	%argrw{"wrr"}
+	div		$tmp57 $tmp56 $const8 	%argrw{"wrr"}
+	sub		$tmp58 $const7 Shape 	%argrw{"wrr"}
+	div		$tmp59 $tmp58 $const8 	%argrw{"wrr"}
+	vector		$tmp55 $tmp57 $tmp59 $const5 	%argrw{"wrrr"}
+	add		___337_vvp $tmp54 $tmp55 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:84
+#             if( dot(d,d) > 1e-7 ){
+	sub		___337_d ___337_vvp ___333_p 	%line{84} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:85
+#                 float angle = atan2(d[1],d[0]);
+	dot		$tmp60 ___337_d ___337_d 	%line{85} %argrw{"wrr"}
+	gt		$tmp61 $tmp60 $const12 	%argrw{"wrr"}
+	if		$tmp61 122 122 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:86
+#                 i++;
+	compref		$tmp62 ___337_d $const4 	%line{86} %argrw{"wrr"}
+	compref		$tmp63 ___337_d $const1 	%argrw{"wrr"}
+	atan2		___338_angle $tmp62 $tmp63 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:87
+#                 vp[i] = vvp;
+	assign		$tmp64 ___333_i 	%line{87} %argrw{"wr"}
+	add		___333_i ___333_i $const4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:88
+#                 angles[i] = angle;
+	aassign		nvp ___333_i ___337_vvp 	%line{88} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:89
+#             }
+	aassign		angles ___333_i ___338_angle 	%line{89} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:79
+#             vector ip = vector(xx, yy, 0);
+	assign		$tmp65 ___333_yy 	%line{79} %argrw{"wr"}
+	add		___333_yy ___333_yy $const7 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:78
+#         for(yy = yi-1; yy <= yi+1; yy++){
+	assign		$tmp66 ___333_xx 	%line{78} %argrw{"wr"}
+	add		___333_xx ___333_xx $const7 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:93
+# }
+	functioncall	$const10 157 	%line{93} %argrw{"r"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:20
+#     for(int j = 0; j < np; j++){
+	assign		___322_n $const13 	%line{20} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:21
+#         for(int i = 1; i < n; i++){
+	for		$tmp67 130 131 155 157 	%line{21} %argrw{"r"}
+	assign		___323_j $const1 	%argrw{"wr"}
+	lt		$tmp67 ___323_j $const13 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:22
+#             if( f[i-1] > f[i] ){
+	for		$tmp68 133 134 151 153 	%line{22} %argrw{"r"}
+	assign		___325_i $const4 	%argrw{"wr"}
+	lt		$tmp68 ___325_i ___322_n 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:23
+#                 float tf = f[i-1];
+	sub		$tmp69 ___325_i $const4 	%line{23} %argrw{"wrr"}
+	aref		$tmp70 angles $tmp69 	%argrw{"wrr"}
+	aref		$tmp71 angles ___325_i 	%argrw{"wrr"}
+	gt		$tmp72 $tmp70 $tmp71 	%argrw{"wrr"}
+	if		$tmp72 151 151 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:24
+#                 f[i-1] = f[i];
+	sub		$tmp73 ___325_i $const4 	%line{24} %argrw{"wrr"}
+	aref		___327_tf angles $tmp73 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:25
+#                 f[i] = tf;
+	aref		$tmp74 angles ___325_i 	%line{25} %argrw{"wrr"}
+	sub		$tmp75 ___325_i $const4 	%argrw{"wrr"}
+	aassign		angles $tmp75 $tmp74 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:26
+#                 point tp = p[i-1];
+	aassign		angles ___325_i ___327_tf 	%line{26} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:27
+#                 p[i-1] = p[i];
+	sub		$tmp76 ___325_i $const4 	%line{27} %argrw{"wrr"}
+	aref		___327_tp nvp $tmp76 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:28
+#                 p[i] = tp;
+	aref		$tmp77 nvp ___325_i 	%line{28} %argrw{"wrr"}
+	sub		$tmp78 ___325_i $const4 	%argrw{"wrr"}
+	aassign		nvp $tmp78 $tmp77 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:29
+#             }
+	aassign		nvp ___325_i ___327_tp 	%line{29} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:22
+#             if( f[i-1] > f[i] ){
+	assign		$tmp79 ___325_i 	%line{22} %argrw{"wr"}
+	add		___325_i ___325_i $const4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:32
+#     }
+	assign		$tmp80 ___322_n 	%line{32} %argrw{"wr"}
+	sub		___322_n ___322_n $const4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:21
+#         for(int i = 1; i < n; i++){
+	assign		$tmp81 ___323_j 	%line{21} %argrw{"wr"}
+	add		___323_j ___323_j $const4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:197
+# 
+	aref		$tmp82 vp $const1 	%line{197} %argrw{"wrr"}
+	functioncall	$const14 233 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:101
+#     int nmp = 2;
+	assign		___339_imp $const15 	%line{101} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:102
+# 
+	assign		___339_nmp $const2 	%line{102} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:112
+#         if( delauney(imp[nmp-2], imp[nmp-1], i) )
+	for		$tmp83 163 164 191 193 	%line{112} %argrw{"r"}
+	assign		___341_i $const2 	%argrw{"wr"}
+	lt		$tmp83 ___341_i $const13 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:113
+#         {
+	sub		$tmp85 ___339_nmp $const2 	%line{113} %argrw{"wrr"}
+	aref		$tmp86 ___339_imp $tmp85 	%argrw{"wrr"}
+	sub		$tmp87 ___339_nmp $const4 	%argrw{"wrr"}
+	aref		$tmp88 ___339_imp $tmp87 	%argrw{"wrr"}
+	functioncall	$const16 185 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:107
+#         float gamma = acos(dot(vp[d]-vp[c],vp[d]-c0));
+	aref		$tmp90 nvp $tmp86 	%line{107} %argrw{"wrr"}
+	aref		$tmp91 nvp $tmp88 	%argrw{"wrr"}
+	sub		$tmp92 $tmp90 $tmp91 	%argrw{"wrr"}
+	aref		$tmp93 nvp $tmp86 	%argrw{"wrr"}
+	sub		$tmp94 $tmp93 $tmp82 	%argrw{"wrr"}
+	dot		$tmp89 $tmp92 $tmp94 	%argrw{"wrr"}
+	acos		___340_alpha $tmp89 	%argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:108
+#         return (alpha+gamma) <= M_PI;
+	aref		$tmp96 nvp ___341_i 	%line{108} %argrw{"wrr"}
+	aref		$tmp97 nvp $tmp88 	%argrw{"wrr"}
+	sub		$tmp98 $tmp96 $tmp97 	%argrw{"wrr"}
+	aref		$tmp99 nvp ___341_i 	%argrw{"wrr"}
+	sub		$tmp100 $tmp99 $tmp82 	%argrw{"wrr"}
+	dot		$tmp95 $tmp98 $tmp100 	%argrw{"wrr"}
+	acos		___340_gamma $tmp95 	%argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:109
+#     }
+	add		$tmp101 ___340_alpha ___340_gamma 	%line{109} %argrw{"wrr"}
+	le		$tmp84 $tmp101 $const17 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:113
+#         {
+	if		$tmp84 189 191 	%line{113} %argrw{"r"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:115
+#             nmp++;
+	aassign		___339_imp ___339_nmp ___341_i 	%line{115} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:116
+#         }else{
+	assign		$tmp102 ___339_nmp 	%line{116} %argrw{"wr"}
+	add		___339_nmp ___339_nmp $const4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:118
+#         }
+	sub		$tmp103 ___339_nmp $const4 	%line{118} %argrw{"wrr"}
+	aassign		___339_imp $tmp103 ___341_i 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:112
+#         if( delauney(imp[nmp-2], imp[nmp-1], i) )
+	assign		$tmp104 ___341_i 	%line{112} %argrw{"wr"}
+	add		___341_i ___341_i $const4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:121
+#     {
+	while		$tmp106 194 222 224 224 	%line{121} %argrw{"r"}
+	gt		$tmp105 ___339_nmp $const18 	%argrw{"wrr"}
+	neq		$tmp106 $tmp105 $const1 	%argrw{"wrr"}
+	if		$tmp106 222 222 	%argrw{"r"}
+	sub		$tmp108 ___339_nmp $const2 	%argrw{"wrr"}
+	aref		$tmp109 ___339_imp $tmp108 	%argrw{"wrr"}
+	sub		$tmp110 ___339_nmp $const4 	%argrw{"wrr"}
+	aref		$tmp111 ___339_imp $tmp110 	%argrw{"wrr"}
+	aref		$tmp112 ___339_imp $const1 	%argrw{"wrr"}
+	functioncall	$const16 219 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:107
+#         float gamma = acos(dot(vp[d]-vp[c],vp[d]-c0));
+	aref		$tmp114 nvp $tmp109 	%line{107} %argrw{"wrr"}
+	aref		$tmp115 nvp $tmp111 	%argrw{"wrr"}
+	sub		$tmp116 $tmp114 $tmp115 	%argrw{"wrr"}
+	aref		$tmp117 nvp $tmp109 	%argrw{"wrr"}
+	sub		$tmp118 $tmp117 $tmp82 	%argrw{"wrr"}
+	dot		$tmp113 $tmp116 $tmp118 	%argrw{"wrr"}
+	acos		___340_alpha $tmp113 	%argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:108
+#         return (alpha+gamma) <= M_PI;
+	aref		$tmp120 nvp $tmp112 	%line{108} %argrw{"wrr"}
+	aref		$tmp121 nvp $tmp111 	%argrw{"wrr"}
+	sub		$tmp122 $tmp120 $tmp121 	%argrw{"wrr"}
+	aref		$tmp123 nvp $tmp112 	%argrw{"wrr"}
+	sub		$tmp124 $tmp123 $tmp82 	%argrw{"wrr"}
+	dot		$tmp119 $tmp122 $tmp124 	%argrw{"wrr"}
+	acos		___340_gamma $tmp119 	%argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:109
+#     }
+	add		$tmp125 ___340_alpha ___340_gamma 	%line{109} %argrw{"wrr"}
+	le		$tmp107 $tmp125 $const17 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:121
+#     {
+	eq		$tmp126 $tmp107 $const1 	%line{121} %argrw{"wrr"}
+	neq		$tmp127 $tmp126 $const1 	%argrw{"wrr"}
+	assign		$tmp106 $tmp127 	%argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:123
+#     }
+	assign		$tmp128 ___339_nmp 	%line{123} %argrw{"wr"}
+	sub		___339_nmp ___339_nmp $const4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:126
+#         mp[i] = vp[imp[i]];
+	for		$tmp129 226 227 230 232 	%line{126} %argrw{"r"}
+	assign		___346_i $const1 	%argrw{"wr"}
+	lt		$tmp129 ___346_i ___339_nmp 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:127
+#     }
+	aref		$tmp130 ___339_imp ___346_i 	%line{127} %argrw{"wrr"}
+	aref		$tmp131 nvp $tmp130 	%argrw{"wrr"}
+	aassign		mp ___346_i $tmp131 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:126
+#         mp[i] = vp[imp[i]];
+	assign		$tmp132 ___346_i 	%line{126} %argrw{"wr"}
+	add		___346_i ___346_i $const4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:129
+# }
+	assign		m ___339_nmp 	%line{129} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:199
+#     float mind = 1e7;
+	assign		sump $const1 	%line{199} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:200
+# 
+	assign		mind $const19 	%line{200} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:203
+#         mmp[i] = mix(vp[0], mp[i], Radius/10);
+	for		$tmp133 237 238 254 256 	%line{203} %argrw{"r"}
+	assign		___351_i $const1 	%argrw{"wr"}
+	lt		$tmp133 ___351_i m 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:204
+#         float d = distance(mmp[i], p);
+	aref		$tmp135 vp $const1 	%line{204} %argrw{"wrr"}
+	aref		$tmp136 mp ___351_i 	%argrw{"wrr"}
+	div		$tmp137 Radius $const21 	%argrw{"wrr"}
+	mix		$tmp134 $tmp135 $tmp136 $tmp137 	%argrw{"wrrr"}
+	aassign		mmp ___351_i $tmp134 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:205
+#         sump += OuterSize * pow(d, OuterBlur);
+	aref		$tmp138 mmp ___351_i 	%line{205} %argrw{"wrr"}
+	distance	___352_d $tmp138 p 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:206
+#         d = distance(vp[0], mp[i]);
+	pow		$tmp139 ___352_d OuterBlur 	%line{206} %argrw{"wrr"}
+	mul		$tmp140 OuterSize $tmp139 	%argrw{"wrr"}
+	add		sump sump $tmp140 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:207
+#         if( d < mind ){ mind = d; }
+	aref		$tmp141 vp $const1 	%line{207} %argrw{"wrr"}
+	aref		$tmp142 mp ___351_i 	%argrw{"wrr"}
+	distance	___352_d $tmp141 $tmp142 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:208
+#     }
+	lt		$tmp143 ___352_d mind 	%line{208} %argrw{"wrr"}
+	if		$tmp143 254 254 	%argrw{"r"}
+	assign		mind ___352_d 	%argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:203
+#         mmp[i] = mix(vp[0], mp[i], Radius/10);
+	assign		$tmp144 ___351_i 	%line{203} %argrw{"wr"}
+	add		___351_i ___351_i $const4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:211
+#         Color = CenterColor;
+	noise		$tmp145 $const22 p 	%line{211} %argrw{"wrr"}
+	lt		$tmp146 $tmp145 CentreProbability 	%argrw{"wrr"}
+	neq		$tmp147 $tmp146 $const1 	%argrw{"wrr"}
+	if		$tmp147 265 265 	%argrw{"r"}
+	aref		$tmp148 dp $const1 	%argrw{"wrr"}
+	mul		$tmp149 CentreRadius $const23 	%argrw{"wrr"}
+	lt		$tmp150 $tmp148 $tmp149 	%argrw{"wrr"}
+	neq		$tmp151 $tmp150 $const1 	%argrw{"wrr"}
+	assign		$tmp147 $tmp151 	%argrw{"wr"}
+	if		$tmp147 267 314 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:212
+#     }else if( sump < Ratio ){
+	assign		Color CenterColor 	%line{212} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:213
+#         float sumangle;
+	lt		$tmp152 sump Ratio 	%line{213} %argrw{"wrr"}
+	if		$tmp152 314 314 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:215
+#             Color = InnerColor;
+	mul		$tmp155 InnerNoiseSeed p 	%line{215} %argrw{"wrr"}
+	noise		$tmp154 $const24 $tmp155 	%argrw{"wrr"}
+	mul		$tmp156 InnerNoise $const23 	%argrw{"wrr"}
+	mul		$tmp157 $tmp154 $tmp156 	%argrw{"wrr"}
+	add		$tmp158 p $tmp157 	%argrw{"wrr"}
+	functioncall	$const25 311 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:140
+#     vector ref = normalize(verts[0]-p);
+	assign		___355_sumangle $const1 	%line{140} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:141
+#     vector ref2;
+	aref		$tmp159 mmp $const1 	%line{141} %argrw{"wrr"}
+	sub		$tmp160 $tmp159 $tmp158 	%argrw{"wrr"}
+	normalize	___348_ref $tmp160 	%argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:144
+#         ref2 = normalize(verts[i]-p);
+	for		$tmp161 281 282 289 291 	%line{144} %argrw{"r"}
+	assign		___348_i $const4 	%argrw{"wr"}
+	lt		$tmp161 ___348_i m 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:145
+#         sumangle += acos(dot(ref, ref2));
+	aref		$tmp162 mmp ___348_i 	%line{145} %argrw{"wrr"}
+	sub		$tmp163 $tmp162 $tmp158 	%argrw{"wrr"}
+	normalize	___348_ref2 $tmp163 	%argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:146
+#         ref = ref2;
+	dot		$tmp165 ___348_ref ___348_ref2 	%line{146} %argrw{"wrr"}
+	acos		$tmp164 $tmp165 	%argrw{"wr"}
+	add		___355_sumangle ___355_sumangle $tmp164 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:147
+#     }
+	assign		___348_ref ___348_ref2 	%line{147} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:144
+#         ref2 = normalize(verts[i]-p);
+	assign		$tmp166 ___348_i 	%line{144} %argrw{"wr"}
+	add		___348_i ___348_i $const4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:149
+#     sumangle += acos(dot(ref, ref2));
+	aref		$tmp167 mmp $const1 	%line{149} %argrw{"wrr"}
+	sub		$tmp168 $tmp167 $tmp158 	%argrw{"wrr"}
+	normalize	___348_ref2 $tmp168 	%argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:150
+#     amod = abs(mod(sumangle,M_2PI));
+	dot		$tmp170 ___348_ref ___348_ref2 	%line{150} %argrw{"wrr"}
+	acos		$tmp169 $tmp170 	%argrw{"wr"}
+	add		___355_sumangle ___355_sumangle $tmp169 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:151
+# 
+	functioncall	$const27 302 	%line{151} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:136
+# float  mod (float  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp173 ___355_sumangle $const26 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{136} %argrw{"wrr"}
+	floor		$tmp172 $tmp173 	%argrw{"wr"}
+	mul		$tmp174 $const26 $tmp172 	%argrw{"wrr"}
+	sub		$tmp171 ___355_sumangle $tmp174 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:151
+# 
+	abs		___348_amod $tmp171 	%filename{"source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl"} %line{151} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:153
+# }
+	lt		$tmp175 ___348_amod $const23 	%line{153} %argrw{"wrr"}
+	neq		$tmp176 $tmp175 $const1 	%argrw{"wrr"}
+	if		$tmp176 306 310 	%argrw{"r"}
+	sub		$tmp177 $const26 ___348_amod 	%argrw{"wrr"}
+	lt		$tmp178 $tmp177 $const23 	%argrw{"wrr"}
+	neq		$tmp179 $tmp178 $const1 	%argrw{"wrr"}
+	assign		$tmp176 $tmp179 	%argrw{"wr"}
+	assign		$tmp153 $tmp176 	%argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:215
+#             Color = InnerColor;
+	if		$tmp153 313 314 	%line{215} %argrw{"r"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:216
+#         }else{
+	assign		Color InnerColor 	%line{216} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/10MABLeopard/MABLeopard.osl:218
+#         }
+	assign		Color BaseColor 	%line{218} %argrw{"wr"}
+	end

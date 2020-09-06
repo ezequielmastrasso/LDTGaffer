@@ -1,0 +1,502 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader FloatCurves	%meta{string,label,"Curves (float)"} %meta{string,help,"<h3>Curves</h3> Transform an input using an arbitrary curve. An incoming float value is transformed to an outgoing value defined by the curve. "} %meta{string,version,"1.0"} 
+param	int[]	interpolation	2 2		%meta{string,widget,"max:ramp0"} %meta{string,interpolation,"interpolation"} %meta{string,position,"position"} %meta{string,values,"values"} %meta{int,connectable,0}  %read{38,38} %write{2147483647,-1}
+param	float[]	values	0 1		%meta{string,widget,"null"} %meta{int,connectable,0}  %read{7,184} %write{2147483647,-1}
+param	float[]	position	0 1		%meta{string,widget,"null"} %meta{int,connectable,0}  %read{2,110} %write{2147483647,-1}
+param	float	Input	0		%read{5,49} %write{0,0} %initexpr
+oparam	float	Out	0		%read{2147483647,-1} %write{7,185}
+global	float	u	%read{0,0} %write{2147483647,-1}
+local	int	___322_l	%read{3,3} %write{2,2}
+local	int	___322_last	%read{11,142} %write{3,3}
+local	int	___322_i	%read{11,33} %write{10,24}
+local	int	___322_i0	%read{70,113} %write{30,30}
+local	int	___322_i1	%read{36,183} %write{31,31}
+local	int	___322_i2	%read{35,184} %write{32,32}
+local	int	___322_i3	%read{73,120} %write{34,34}
+local	float	___322_delta	%read{39,50} %write{37,37}
+local	int	___322_interp	%read{42,99} %write{38,38}
+local	float	___322_along	%read{55,185} %write{50,50}
+local	float	___325_M12	%read{74,74} %write{59,59}
+local	float	___325_M21	%read{75,75} %write{60,60}
+local	float	___325_M23	%read{76,76} %write{61,61}
+local	float	___325_M31	%read{78,78} %write{62,62}
+local	float	___325_M32	%read{79,79} %write{63,63}
+local	float	___325_M33	%read{81,81} %write{64,64}
+local	float	___325_M34	%read{83,83} %write{65,65}
+local	float	___325_M41	%read{85,85} %write{66,66}
+local	float	___325_M42	%read{86,86} %write{67,67}
+local	float	___325_M43	%read{88,88} %write{68,68}
+local	float	___325_M44	%read{90,90} %write{69,69}
+local	float	___325_v0	%read{75,85} %write{70,70}
+local	float	___325_v1	%read{74,86} %write{71,71}
+local	float	___325_v2	%read{76,88} %write{72,72}
+local	float	___325_v3	%read{83,90} %write{73,73}
+local	float	___325_c1	%read{97,97} %write{74,74}
+local	float	___325_c2	%read{95,95} %write{77,77}
+local	float	___325_c3	%read{93,93} %write{84,84}
+local	float	___325_c4	%read{92,92} %write{91,91}
+local	float	___326_i1_tangent	%read{163,176} %write{101,141}
+local	float	___326_i2_tangent	%read{165,167} %write{102,159}
+local	float	___326_i0_interval	%read{115,137} %write{105,105}
+local	float	___326_i1_interval	%read{119,172} %write{108,108}
+local	float	___326_i2_interval	%read{123,156} %write{111,111}
+local	float	___326_i0_delta	%read{127,136} %write{115,115}
+local	float	___326_i1_delta	%read{127,161} %write{119,119}
+local	float	___326_i2_delta	%read{145,157} %write{123,123}
+local	float	___326_invint	%read{166,171} %write{160,160}
+local	float	___326_si	%read{162,168} %write{161,161}
+local	float	___326_ci	%read{178,178} %write{166,166}
+local	float	___326_di	%read{180,180} %write{171,171}
+local	float	___326_t	%read{173,176} %write{172,172}
+local	float	___326_t2	%read{174,178} %write{173,173}
+local	float	___326_t3	%read{180,180} %write{174,174}
+const	string	$const1	"interpolate"		%read{1,1} %write{2147483647,-1}
+const	int	$const2	1		%read{3,51} %write{2147483647,-1}
+const	int	$const3	0		%read{4,147} %write{2147483647,-1}
+temp	float	$tmp1	%read{5,5} %write{4,4}
+temp	int	$tmp2	%read{6,6} %write{5,5}
+temp	int	$tmp3	%read{9,24} %write{10,24}
+temp	float	$tmp4	%read{11,24} %write{11,24}
+temp	int	$tmp5	%read{11,24} %write{11,24}
+temp	int	$tmp6	%read{11,24} %write{11,24}
+temp	int	$tmp7	%read{11,24} %write{11,24}
+temp	float	$tmp8	%read{11,24} %write{11,24}
+temp	int	$tmp9	%read{11,24} %write{11,24}
+temp	int	$tmp10	%read{11,24} %write{11,24}
+temp	int	$tmp11	%read{2147483647,-1} %write{11,24}
+temp	int	$tmp12	%read{26,26} %write{25,25}
+temp	int	$tmp13	%read{30,30} %write{29,29}
+const	int	$const4	2		%read{33,57} %write{2147483647,-1}
+temp	int	$tmp14	%read{34,34} %write{33,33}
+temp	float	$tmp15	%read{37,37} %write{35,35}
+temp	float	$tmp16	%read{37,37} %write{36,36}
+const	float	$const5	0		%read{39,146} %write{2147483647,-1}
+temp	int	$tmp17	%read{40,40} %write{39,39}
+temp	int	$tmp18	%read{41,45} %write{40,44}
+temp	int	$tmp19	%read{43,43} %write{42,42}
+temp	int	$tmp20	%read{44,44} %write{43,43}
+temp	float	$tmp21	%read{49,49} %write{48,48}
+temp	float	$tmp22	%read{50,50} %write{49,49}
+temp	int	$tmp23	%read{52,52} %write{51,51}
+temp	float	$tmp24	%read{55,55} %write{53,53}
+temp	float	$tmp25	%read{55,55} %write{54,54}
+temp	int	$tmp26	%read{58,58} %write{57,57}
+const	float	$const6	1		%read{59,160} %write{2147483647,-1}
+const	float	$const7	-0.5		%read{60,66} %write{2147483647,-1}
+const	float	$const8	0.5		%read{61,69} %write{2147483647,-1}
+const	float	$const9	-2.5		%read{63,63} %write{2147483647,-1}
+const	float	$const10	2		%read{64,168} %write{2147483647,-1}
+const	float	$const11	1.5		%read{67,67} %write{2147483647,-1}
+const	float	$const12	-1.5		%read{68,68} %write{2147483647,-1}
+temp	float	$tmp27	%read{77,77} %write{75,75}
+temp	float	$tmp28	%read{77,77} %write{76,76}
+temp	float	$tmp29	%read{80,80} %write{78,78}
+temp	float	$tmp30	%read{80,80} %write{79,79}
+temp	float	$tmp31	%read{82,82} %write{80,80}
+temp	float	$tmp32	%read{82,82} %write{81,81}
+temp	float	$tmp33	%read{84,84} %write{82,82}
+temp	float	$tmp34	%read{84,84} %write{83,83}
+temp	float	$tmp35	%read{87,87} %write{85,85}
+temp	float	$tmp36	%read{87,87} %write{86,86}
+temp	float	$tmp37	%read{89,89} %write{87,87}
+temp	float	$tmp38	%read{89,89} %write{88,88}
+temp	float	$tmp39	%read{91,91} %write{89,89}
+temp	float	$tmp40	%read{91,91} %write{90,90}
+temp	float	$tmp41	%read{93,93} %write{92,92}
+temp	float	$tmp42	%read{94,94} %write{93,93}
+temp	float	$tmp43	%read{95,95} %write{94,94}
+temp	float	$tmp44	%read{96,96} %write{95,95}
+temp	float	$tmp45	%read{97,97} %write{96,96}
+const	int	$const13	3		%read{99,99} %write{2147483647,-1}
+temp	int	$tmp46	%read{100,100} %write{99,99}
+temp	float	$tmp47	%read{105,105} %write{103,103}
+temp	float	$tmp48	%read{105,105} %write{104,104}
+temp	float	$tmp49	%read{108,108} %write{106,106}
+temp	float	$tmp50	%read{108,108} %write{107,107}
+temp	float	$tmp51	%read{111,111} %write{109,109}
+temp	float	$tmp52	%read{111,111} %write{110,110}
+temp	float	$tmp53	%read{114,114} %write{112,112}
+temp	float	$tmp54	%read{114,114} %write{113,113}
+temp	float	$tmp55	%read{115,115} %write{114,114}
+temp	float	$tmp56	%read{118,118} %write{116,116}
+temp	float	$tmp57	%read{118,118} %write{117,117}
+temp	float	$tmp58	%read{119,119} %write{118,118}
+temp	float	$tmp59	%read{122,122} %write{120,120}
+temp	float	$tmp60	%read{122,122} %write{121,121}
+temp	float	$tmp61	%read{123,123} %write{122,122}
+temp	int	$tmp62	%read{125,125} %write{124,124}
+temp	int	$tmp63	%read{126,131} %write{125,130}
+temp	float	$tmp64	%read{128,128} %write{127,127}
+temp	int	$tmp65	%read{129,129} %write{128,128}
+temp	int	$tmp66	%read{130,130} %write{129,129}
+const	float	$const14	3		%read{133,162} %write{2147483647,-1}
+temp	float	$tmp67	%read{133,133} %write{132,132}
+temp	float	$tmp68	%read{141,141} %write{133,133}
+temp	float	$tmp69	%read{135,135} %write{134,134}
+temp	float	$tmp70	%read{136,136} %write{135,135}
+temp	float	$tmp71	%read{140,140} %write{136,136}
+temp	float	$tmp72	%read{138,138} %write{137,137}
+temp	float	$tmp73	%read{139,139} %write{138,138}
+temp	float	$tmp74	%read{140,140} %write{139,139}
+temp	float	$tmp75	%read{141,141} %write{140,140}
+temp	int	$tmp76	%read{143,143} %write{142,142}
+temp	int	$tmp77	%read{144,149} %write{143,148}
+temp	float	$tmp78	%read{146,146} %write{145,145}
+temp	int	$tmp79	%read{147,147} %write{146,146}
+temp	int	$tmp80	%read{148,148} %write{147,147}
+temp	float	$tmp81	%read{151,151} %write{150,150}
+temp	float	$tmp82	%read{159,159} %write{151,151}
+temp	float	$tmp83	%read{153,153} %write{152,152}
+temp	float	$tmp84	%read{154,154} %write{153,153}
+temp	float	$tmp85	%read{158,158} %write{154,154}
+temp	float	$tmp86	%read{156,156} %write{155,155}
+temp	float	$tmp87	%read{157,157} %write{156,156}
+temp	float	$tmp88	%read{158,158} %write{157,157}
+temp	float	$tmp89	%read{159,159} %write{158,158}
+temp	float	$tmp90	%read{164,164} %write{162,162}
+temp	float	$tmp91	%read{164,164} %write{163,163}
+temp	float	$tmp92	%read{165,165} %write{164,164}
+temp	float	$tmp93	%read{166,166} %write{165,165}
+temp	float	$tmp94	%read{169,169} %write{167,167}
+temp	float	$tmp95	%read{169,169} %write{168,168}
+temp	float	$tmp96	%read{170,170} %write{169,169}
+temp	float	$tmp97	%read{171,171} %write{170,170}
+temp	float	$tmp98	%read{177,177} %write{175,175}
+temp	float	$tmp99	%read{177,177} %write{176,176}
+temp	float	$tmp100	%read{179,179} %write{177,177}
+temp	float	$tmp101	%read{179,179} %write{178,178}
+temp	float	$tmp102	%read{181,181} %write{179,179}
+temp	float	$tmp103	%read{181,181} %write{180,180}
+temp	float	$tmp104	%read{185,185} %write{183,183}
+temp	float	$tmp105	%read{185,185} %write{184,184}
+code Input
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:145
+# 	 
+	assign		Input u 	%filename{"source/3dsMax-OSL-Shaders/FloatCurves.osl"} %line{145} %argrw{"wr"}
+code ___main___
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:151
+# 
+	functioncall	$const1 186 	%filename{"source/3dsMax-OSL-Shaders/FloatCurves.osl"} %line{151} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:10
+# 	int last = l-1;
+	arraylength	___322_l position 	%line{10} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:11
+# 
+	sub		___322_last ___322_l $const2 	%line{11} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:14
+# 		return values[0];
+	aref		$tmp1 position $const3 	%line{14} %argrw{"wrr"}
+	lt		$tmp2 Input $tmp1 	%argrw{"wrr"}
+	if		$tmp2 9 9 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:15
+# 
+	aref		Out values $const3 	%line{15} %argrw{"wrr"}
+	return
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:19
+# 	{
+	for		$tmp3 11 12 23 25 	%line{19} %argrw{"r"}
+	assign		___322_i $const3 	%argrw{"wr"}
+	lt		$tmp3 ___322_i ___322_last 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:21
+# 			break;
+	aref		$tmp4 position ___322_i 	%line{21} %argrw{"wrr"}
+	ge		$tmp5 Input $tmp4 	%argrw{"wrr"}
+	neq		$tmp6 $tmp5 $const3 	%argrw{"wrr"}
+	if		$tmp6 21 21 	%argrw{"r"}
+	add		$tmp7 ___322_i $const2 	%argrw{"wrr"}
+	aref		$tmp8 position $tmp7 	%argrw{"wrr"}
+	lt		$tmp9 Input $tmp8 	%argrw{"wrr"}
+	neq		$tmp10 $tmp9 $const3 	%argrw{"wrr"}
+	assign		$tmp6 $tmp10 	%argrw{"wr"}
+	if		$tmp6 23 23 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:22
+# 	}
+	break	%line{22}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:19
+# 	{
+	assign		$tmp11 ___322_i 	%line{19} %argrw{"wr"}
+	add		___322_i ___322_i $const2 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:26
+# 		return values[last];
+	ge		$tmp12 ___322_i ___322_last 	%line{26} %argrw{"wrr"}
+	if		$tmp12 29 29 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:27
+# 		
+	aref		Out values ___322_last 	%line{27} %argrw{"wrr"}
+	return
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:29
+# 	int i1 = i;
+	sub		$tmp13 ___322_i $const2 	%line{29} %argrw{"wrr"}
+	max		___322_i0 $const3 $tmp13 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:30
+# 	int i2 = i+1;
+	assign		___322_i1 ___322_i 	%line{30} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:31
+# 	int i3 = min(last, i+2);
+	add		___322_i2 ___322_i $const2 	%line{31} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:32
+# 	
+	add		$tmp14 ___322_i $const4 	%line{32} %argrw{"wrr"}
+	min		___322_i3 ___322_last $tmp14 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:34
+# 
+	aref		$tmp15 position ___322_i2 	%line{34} %argrw{"wrr"}
+	aref		$tmp16 position ___322_i1 	%argrw{"wrr"}
+	sub		___322_delta $tmp15 $tmp16 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:37
+# 
+	aref		___322_interp interpolation ___322_i1 	%line{37} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:40
+# 		return values[i1];
+	le		$tmp17 ___322_delta $const5 	%line{40} %argrw{"wrr"}
+	neq		$tmp18 $tmp17 $const3 	%argrw{"wrr"}
+	if		$tmp18 42 45 	%argrw{"r"}
+	eq		$tmp19 ___322_interp $const3 	%argrw{"wrr"}
+	neq		$tmp20 $tmp19 $const3 	%argrw{"wrr"}
+	assign		$tmp18 $tmp20 	%argrw{"wr"}
+	if		$tmp18 48 48 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:41
+# 
+	aref		Out values ___322_i1 	%line{41} %argrw{"wrr"}
+	return
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:44
+# 
+	aref		$tmp21 position ___322_i1 	%line{44} %argrw{"wrr"}
+	sub		$tmp22 Input $tmp21 	%argrw{"wrr"}
+	div		___322_along $tmp22 ___322_delta 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:47
+# 		return mix(values[i1], values[i2], along);	
+	eq		$tmp23 ___322_interp $const2 	%line{47} %argrw{"wrr"}
+	if		$tmp23 57 57 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:48
+# 	if (interp == 2)
+	aref		$tmp24 values ___322_i1 	%line{48} %argrw{"wrr"}
+	aref		$tmp25 values ___322_i2 	%argrw{"wrr"}
+	mix		Out $tmp24 $tmp25 ___322_along 	%argrw{"wrrr"}
+	return
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:49
+# 	{
+	eq		$tmp26 ___322_interp $const4 	%line{49} %argrw{"wrr"}
+	if		$tmp26 99 99 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:58
+# 		float M21 = -0.5;
+	assign		___325_M12 $const6 	%line{58} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:59
+# 		float M23 =  0.5;
+	assign		___325_M21 $const7 	%line{59} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:60
+# 		float M31 =  1.0;
+	assign		___325_M23 $const8 	%line{60} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:61
+# 		float M32 = -2.5;
+	assign		___325_M31 $const6 	%line{61} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:62
+# 		float M33 =  2.0;
+	assign		___325_M32 $const9 	%line{62} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:63
+# 		float M34 = -0.5;
+	assign		___325_M33 $const10 	%line{63} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:64
+# 		float M41 = -0.5;
+	assign		___325_M34 $const7 	%line{64} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:65
+# 		float M42 =  1.5;
+	assign		___325_M41 $const7 	%line{65} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:66
+# 		float M43 = -1.5;
+	assign		___325_M42 $const11 	%line{66} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:67
+# 		float M44 =  0.5;
+	assign		___325_M43 $const12 	%line{67} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:68
+# 
+	assign		___325_M44 $const8 	%line{68} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:70
+# 		float v1 = values[i1];
+	aref		___325_v0 values ___322_i0 	%line{70} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:71
+# 		float v2 = values[i2];
+	aref		___325_v1 values ___322_i1 	%line{71} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:72
+# 		float v3 = values[i3];
+	aref		___325_v2 values ___322_i2 	%line{72} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:73
+# 
+	aref		___325_v3 values ___322_i3 	%line{73} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:75
+# 		float c2 = M21 * v0 + M23 * v2;
+	mul		___325_c1 ___325_M12 ___325_v1 	%line{75} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:76
+# 		float c3 = M31 * v0 + M32 * v1 + M33 * v2 + M34 * v3;
+	mul		$tmp27 ___325_M21 ___325_v0 	%line{76} %argrw{"wrr"}
+	mul		$tmp28 ___325_M23 ___325_v2 	%argrw{"wrr"}
+	add		___325_c2 $tmp27 $tmp28 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:77
+# 		float c4 = M41 * v0 + M42 * v1 + M43 * v2 + M44 * v3;
+	mul		$tmp29 ___325_M31 ___325_v0 	%line{77} %argrw{"wrr"}
+	mul		$tmp30 ___325_M32 ___325_v1 	%argrw{"wrr"}
+	add		$tmp31 $tmp29 $tmp30 	%argrw{"wrr"}
+	mul		$tmp32 ___325_M33 ___325_v2 	%argrw{"wrr"}
+	add		$tmp33 $tmp31 $tmp32 	%argrw{"wrr"}
+	mul		$tmp34 ___325_M34 ___325_v3 	%argrw{"wrr"}
+	add		___325_c3 $tmp33 $tmp34 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:78
+# 
+	mul		$tmp35 ___325_M41 ___325_v0 	%line{78} %argrw{"wrr"}
+	mul		$tmp36 ___325_M42 ___325_v1 	%argrw{"wrr"}
+	add		$tmp37 $tmp35 $tmp36 	%argrw{"wrr"}
+	mul		$tmp38 ___325_M43 ___325_v2 	%argrw{"wrr"}
+	add		$tmp39 $tmp37 $tmp38 	%argrw{"wrr"}
+	mul		$tmp40 ___325_M44 ___325_v3 	%argrw{"wrr"}
+	add		___325_c4 $tmp39 $tmp40 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:80
+# 	}
+	mul		$tmp41 ___325_c4 ___322_along 	%line{80} %argrw{"wrr"}
+	add		$tmp42 $tmp41 ___325_c3 	%argrw{"wrr"}
+	mul		$tmp43 $tmp42 ___322_along 	%argrw{"wrr"}
+	add		$tmp44 $tmp43 ___325_c2 	%argrw{"wrr"}
+	mul		$tmp45 $tmp44 ___322_along 	%argrw{"wrr"}
+	add		Out $tmp45 ___325_c1 	%argrw{"wrr"}
+	return
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:82
+# 	{
+	eq		$tmp46 ___322_interp $const13 	%line{82} %argrw{"wrr"}
+	if		$tmp46 183 183 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:84
+# 		float i2_tangent = 0;
+	assign		___326_i1_tangent $const3 	%line{84} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:85
+# 
+	assign		___326_i2_tangent $const3 	%line{85} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:87
+# 		float i1_interval = position[i2] - position[i1];
+	aref		$tmp47 position ___322_i1 	%line{87} %argrw{"wrr"}
+	aref		$tmp48 position ___322_i0 	%argrw{"wrr"}
+	sub		___326_i0_interval $tmp47 $tmp48 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:88
+# 		float i2_interval = position[i3] - position[i2];
+	aref		$tmp49 position ___322_i2 	%line{88} %argrw{"wrr"}
+	aref		$tmp50 position ___322_i1 	%argrw{"wrr"}
+	sub		___326_i1_interval $tmp49 $tmp50 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:89
+# 
+	aref		$tmp51 position ___322_i3 	%line{89} %argrw{"wrr"}
+	aref		$tmp52 position ___322_i2 	%argrw{"wrr"}
+	sub		___326_i2_interval $tmp51 $tmp52 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:91
+# 		float i1_delta = (values[i2] - values[i1]) / i1_interval;		
+	aref		$tmp53 values ___322_i1 	%line{91} %argrw{"wrr"}
+	aref		$tmp54 values ___322_i0 	%argrw{"wrr"}
+	sub		$tmp55 $tmp53 $tmp54 	%argrw{"wrr"}
+	div		___326_i0_delta $tmp55 ___326_i0_interval 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:92
+# 		float i2_delta = (values[i3] - values[i2]) / i2_interval;		
+	aref		$tmp56 values ___322_i2 	%line{92} %argrw{"wrr"}
+	aref		$tmp57 values ___322_i1 	%argrw{"wrr"}
+	sub		$tmp58 $tmp56 $tmp57 	%argrw{"wrr"}
+	div		___326_i1_delta $tmp58 ___326_i1_interval 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:93
+# 		
+	aref		$tmp59 values ___322_i3 	%line{93} %argrw{"wrr"}
+	aref		$tmp60 values ___322_i2 	%argrw{"wrr"}
+	sub		$tmp61 $tmp59 $tmp60 	%argrw{"wrr"}
+	div		___326_i2_delta $tmp61 ___326_i2_interval 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:96
+# 			i1_tangent = 3.0 * (i0_interval + i1_interval)
+	gt		$tmp62 ___322_i1 $const3 	%line{96} %argrw{"wrr"}
+	neq		$tmp63 $tmp62 $const3 	%argrw{"wrr"}
+	if		$tmp63 131 131 	%argrw{"r"}
+	mul		$tmp64 ___326_i1_delta ___326_i0_delta 	%argrw{"wrr"}
+	ge		$tmp65 $tmp64 $const5 	%argrw{"wrr"}
+	neq		$tmp66 $tmp65 $const3 	%argrw{"wrr"}
+	assign		$tmp63 $tmp66 	%argrw{"wr"}
+	if		$tmp63 142 142 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:97
+# 						/ ((2.0 * i1_interval + i0_interval) / i0_delta
+	add		$tmp67 ___326_i0_interval ___326_i1_interval 	%line{97} %argrw{"wrr"}
+	mul		$tmp68 $const14 $tmp67 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:98
+# 						+ (i1_interval + 2.0  * i0_interval) / i1_delta);
+	mul		$tmp69 $const10 ___326_i1_interval 	%line{98} %argrw{"wrr"}
+	add		$tmp70 $tmp69 ___326_i0_interval 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:99
+# 		}
+	div		$tmp71 $tmp70 ___326_i0_delta 	%line{99} %argrw{"wrr"}
+	mul		$tmp72 $const10 ___326_i0_interval 	%argrw{"wrr"}
+	add		$tmp73 ___326_i1_interval $tmp72 	%argrw{"wrr"}
+	div		$tmp74 $tmp73 ___326_i1_delta 	%argrw{"wrr"}
+	add		$tmp75 $tmp71 $tmp74 	%argrw{"wrr"}
+	div		___326_i1_tangent $tmp68 $tmp75 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:102
+# 						i2_tangent = 3.0 * (i1_interval + i2_interval)
+	lt		$tmp76 ___322_i2 ___322_last 	%line{102} %argrw{"wrr"}
+	neq		$tmp77 $tmp76 $const3 	%argrw{"wrr"}
+	if		$tmp77 149 149 	%argrw{"r"}
+	mul		$tmp78 ___326_i2_delta ___326_i1_delta 	%argrw{"wrr"}
+	ge		$tmp79 $tmp78 $const5 	%argrw{"wrr"}
+	neq		$tmp80 $tmp79 $const3 	%argrw{"wrr"}
+	assign		$tmp77 $tmp80 	%argrw{"wr"}
+	if		$tmp77 160 160 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:103
+# 						/ ((2.0 * i2_interval + i1_interval) / i1_delta
+	add		$tmp81 ___326_i1_interval ___326_i2_interval 	%line{103} %argrw{"wrr"}
+	mul		$tmp82 $const14 $tmp81 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:104
+# 						+ (i2_interval + 2.0 * i1_interval) / i2_delta);
+	mul		$tmp83 $const10 ___326_i2_interval 	%line{104} %argrw{"wrr"}
+	add		$tmp84 $tmp83 ___326_i1_interval 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:105
+# 		}
+	div		$tmp85 $tmp84 ___326_i1_delta 	%line{105} %argrw{"wrr"}
+	mul		$tmp86 $const10 ___326_i1_interval 	%argrw{"wrr"}
+	add		$tmp87 ___326_i2_interval $tmp86 	%argrw{"wrr"}
+	div		$tmp88 $tmp87 ___326_i2_delta 	%argrw{"wrr"}
+	add		$tmp89 $tmp85 $tmp88 	%argrw{"wrr"}
+	div		___326_i2_tangent $tmp82 $tmp89 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:108
+# 		float si = i1_delta;
+	div		___326_invint $const6 ___326_i1_interval 	%line{108} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:109
+# 		float ci = (3.0 * si - 2.0 * i1_tangent - i2_tangent) * invint;
+	assign		___326_si ___326_i1_delta 	%line{109} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:110
+# 		float di = (i1_tangent + i2_tangent - 2.0 * si) * invint * invint;
+	mul		$tmp90 $const14 ___326_si 	%line{110} %argrw{"wrr"}
+	mul		$tmp91 $const10 ___326_i1_tangent 	%argrw{"wrr"}
+	sub		$tmp92 $tmp90 $tmp91 	%argrw{"wrr"}
+	sub		$tmp93 $tmp92 ___326_i2_tangent 	%argrw{"wrr"}
+	mul		___326_ci $tmp93 ___326_invint 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:111
+# 
+	add		$tmp94 ___326_i1_tangent ___326_i2_tangent 	%line{111} %argrw{"wrr"}
+	mul		$tmp95 $const10 ___326_si 	%argrw{"wrr"}
+	sub		$tmp96 $tmp94 $tmp95 	%argrw{"wrr"}
+	mul		$tmp97 $tmp96 ___326_invint 	%argrw{"wrr"}
+	mul		___326_di $tmp97 ___326_invint 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:113
+# 		float t2 = t * t;
+	mul		___326_t ___322_along ___326_i1_interval 	%line{113} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:114
+# 		float t3 = t * t2;
+	mul		___326_t2 ___326_t ___326_t 	%line{114} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:115
+# 		return values[i1] + i1_tangent * t + ci * t2 + di * t3;
+	mul		___326_t3 ___326_t ___326_t2 	%line{115} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:116
+# 	}
+	aref		$tmp98 values ___322_i1 	%line{116} %argrw{"wrr"}
+	mul		$tmp99 ___326_i1_tangent ___326_t 	%argrw{"wrr"}
+	add		$tmp100 $tmp98 $tmp99 	%argrw{"wrr"}
+	mul		$tmp101 ___326_ci ___326_t2 	%argrw{"wrr"}
+	add		$tmp102 $tmp100 $tmp101 	%argrw{"wrr"}
+	mul		$tmp103 ___326_di ___326_t3 	%argrw{"wrr"}
+	add		Out $tmp102 $tmp103 	%argrw{"wrr"}
+	return
+# source/3dsMax-OSL-Shaders/FloatCurves.osl:120
+# }
+	aref		$tmp104 values ___322_i1 	%line{120} %argrw{"wrr"}
+	aref		$tmp105 values ___322_i2 	%argrw{"wrr"}
+	mix		Out $tmp104 $tmp105 ___322_along 	%argrw{"wrrr"}
+	end

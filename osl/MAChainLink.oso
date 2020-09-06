@@ -1,0 +1,196 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader MAChainLink
+param	vector	Vector	0 0 0		%read{1,7} %write{0,0} %initexpr
+param	float	Width	0.050000001		%read{16,64} %write{2147483647,-1}
+oparam	float	Fac	0		%read{2147483647,-1} %write{30,63}
+oparam	float	Displ	0		%read{2147483647,-1} %write{40,71}
+global	point	P	%read{0,0} %write{2147483647,-1}
+local	float	x	%read{13,54} %write{6,24}
+local	float	y	%read{14,55} %write{12,23}
+local	float	ox	%read{18,18} %write{13,13}
+local	float	oy	%read{15,15} %write{14,14}
+local	float	___327_r	%read{61,64} %write{60,60}
+const	int	$const1	0		%read{1,1} %write{2147483647,-1}
+temp	float	$tmp1	%read{3,6} %write{1,1}
+const	int	$const2	1		%read{7,63} %write{2147483647,-1}
+const	float	$const3	1		%read{3,70} %write{2147483647,-1}
+const	string	$const4	"mod"		%read{2,8} %write{2147483647,-1}
+temp	float	$tmp2	%read{5,5} %write{4,4}
+temp	float	$tmp3	%read{4,4} %write{3,3}
+temp	float	$tmp4	%read{6,6} %write{5,5}
+temp	float	$tmp5	%read{9,12} %write{7,7}
+temp	float	$tmp6	%read{11,11} %write{10,10}
+temp	float	$tmp7	%read{10,10} %write{9,9}
+temp	float	$tmp8	%read{12,12} %write{11,11}
+const	float	$const5	0.5		%read{15,67} %write{2147483647,-1}
+temp	float	$tmp9	%read{16,16} %write{15,15}
+temp	float	$tmp10	%read{17,17} %write{16,16}
+temp	float	$tmp11	%read{19,19} %write{18,18}
+temp	float	$tmp12	%read{20,20} %write{19,19}
+temp	int	$tmp13	%read{22,22} %write{21,21}
+temp	int	$tmp14	%read{26,26} %write{25,25}
+temp	float	$tmp15	%read{28,28} %write{27,27}
+temp	int	$tmp16	%read{29,29} %write{28,28}
+temp	float	$tmp17	%read{32,32} %write{31,31}
+temp	float	$tmp18	%read{33,33} %write{32,32}
+temp	float	$tmp19	%read{35,36} %write{33,33}
+const	string	$const6	"arc"		%read{34,65} %write{2147483647,-1}
+temp	float	$tmp20	%read{37,37} %write{35,35}
+temp	float	$tmp21	%read{37,37} %write{36,36}
+temp	float	$tmp22	%read{38,38} %write{37,37}
+const	float	$const7	0.25		%read{38,69} %write{2147483647,-1}
+temp	float	$tmp23	%read{39,39} %write{38,38}
+temp	float	$tmp24	%read{40,40} %write{39,39}
+temp	float	$tmp25	%read{42,42} %write{41,41}
+temp	int	$tmp26	%read{43,43} %write{42,42}
+temp	float	$tmp27	%read{46,46} %write{45,45}
+temp	float	$tmp28	%read{48,49} %write{46,46}
+temp	float	$tmp29	%read{50,50} %write{48,48}
+temp	float	$tmp30	%read{50,50} %write{49,49}
+temp	float	$tmp31	%read{51,51} %write{50,50}
+temp	float	$tmp32	%read{52,52} %write{51,51}
+temp	float	$tmp33	%read{53,53} %write{52,52}
+temp	float	$tmp34	%read{57,57} %write{54,54}
+temp	float	$tmp35	%read{58,58} %write{55,55}
+const	string	$const8	"hypot"		%read{56,56} %write{2147483647,-1}
+temp	float	$tmp36	%read{59,59} %write{57,57}
+temp	float	$tmp37	%read{59,59} %write{58,58}
+temp	float	$tmp38	%read{60,60} %write{59,59}
+temp	int	$tmp39	%read{62,62} %write{61,61}
+temp	float	$tmp40	%read{66,67} %write{64,64}
+temp	float	$tmp41	%read{68,68} %write{66,66}
+temp	float	$tmp42	%read{68,68} %write{67,67}
+temp	float	$tmp43	%read{69,69} %write{68,68}
+temp	float	$tmp44	%read{70,70} %write{69,69}
+temp	float	$tmp45	%read{71,71} %write{70,70}
+code Vector
+# source/sambler-osl-shaders/patterns/MAChainLink/MAChainLink.osl:17
+#         float Width = 0.05,
+	assign		Vector P 	%filename{"source/sambler-osl-shaders/patterns/MAChainLink/MAChainLink.osl"} %line{17} %argrw{"wr"}
+code ___main___
+# source/sambler-osl-shaders/patterns/MAChainLink/MAChainLink.osl:22
+#     float y = mod(Vector[1],1);
+	compref		$tmp1 Vector $const1 	%filename{"source/sambler-osl-shaders/patterns/MAChainLink/MAChainLink.osl"} %line{22} %argrw{"wrr"}
+	functioncall	$const4 7 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:136
+# float  mod (float  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp3 $tmp1 $const3 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{136} %argrw{"wrr"}
+	floor		$tmp2 $tmp3 	%argrw{"wr"}
+	mul		$tmp4 $const3 $tmp2 	%argrw{"wrr"}
+	sub		x $tmp1 $tmp4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAChainLink/MAChainLink.osl:23
+#     float ox = x ;
+	compref		$tmp5 Vector $const2 	%filename{"source/sambler-osl-shaders/patterns/MAChainLink/MAChainLink.osl"} %line{23} %argrw{"wrr"}
+	functioncall	$const4 13 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:136
+# float  mod (float  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp7 $tmp5 $const3 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{136} %argrw{"wrr"}
+	floor		$tmp6 $tmp7 	%argrw{"wr"}
+	mul		$tmp8 $const3 $tmp6 	%argrw{"wrr"}
+	sub		y $tmp5 $tmp8 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAChainLink/MAChainLink.osl:24
+#     float oy = y ;
+	assign		ox x 	%filename{"source/sambler-osl-shaders/patterns/MAChainLink/MAChainLink.osl"} %line{24} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainLink/MAChainLink.osl:25
+#     x += Width * (0.5 - oy );
+	assign		oy y 	%line{25} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainLink/MAChainLink.osl:26
+#     y -= Width * (ox - 0.5 );
+	sub		$tmp9 $const5 oy 	%line{26} %argrw{"wrr"}
+	mul		$tmp10 Width $tmp9 	%argrw{"wrr"}
+	add		x x $tmp10 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAChainLink/MAChainLink.osl:27
+# 
+	sub		$tmp11 ox $const5 	%line{27} %argrw{"wrr"}
+	mul		$tmp12 Width $tmp11 	%argrw{"wrr"}
+	sub		y y $tmp12 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAChainLink/MAChainLink.osl:29
+#         y = 1 - y;
+	gt		$tmp13 y $const5 	%line{29} %argrw{"wrr"}
+	if		$tmp13 25 25 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainLink/MAChainLink.osl:30
+#         x = 1 - x;
+	sub		y $const3 y 	%line{30} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAChainLink/MAChainLink.osl:31
+#     }
+	sub		x $const3 x 	%line{31} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MAChainLink/MAChainLink.osl:33
+#         if ( y > 0.5 - Width ){
+	gt		$tmp14 x $const5 	%line{33} %argrw{"wrr"}
+	if		$tmp14 72 72 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainLink/MAChainLink.osl:34
+#             Fac = 1;
+	sub		$tmp15 $const5 Width 	%line{34} %argrw{"wrr"}
+	gt		$tmp16 y $tmp15 	%argrw{"wrr"}
+	if		$tmp16 41 72 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainLink/MAChainLink.osl:35
+#             Displ = arc((y-(0.5-Width))/Width);
+	assign		Fac $const2 	%line{35} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainLink/MAChainLink.osl:36
+#         }else if (x < 0.5 + Width) {
+	sub		$tmp17 $const5 Width 	%line{36} %argrw{"wrr"}
+	sub		$tmp18 y $tmp17 	%argrw{"wrr"}
+	div		$tmp19 $tmp18 Width 	%argrw{"wrr"}
+	functioncall	$const6 41 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainLink/MAChainLink.osl:14
+# 
+	sub		$tmp20 $tmp19 $const5 	%line{14} %argrw{"wrr"}
+	sub		$tmp21 $tmp19 $const5 	%argrw{"wrr"}
+	mul		$tmp22 $tmp20 $tmp21 	%argrw{"wrr"}
+	div		$tmp23 $tmp22 $const7 	%argrw{"wrr"}
+	sub		$tmp24 $const3 $tmp23 	%argrw{"wrr"}
+	sqrt		Displ $tmp24 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainLink/MAChainLink.osl:37
+#             Fac = 1;
+	add		$tmp25 $const5 Width 	%line{37} %argrw{"wrr"}
+	lt		$tmp26 x $tmp25 	%argrw{"wrr"}
+	if		$tmp26 54 72 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainLink/MAChainLink.osl:38
+#             Displ = arc((x-0.5)/Width);
+	assign		Fac $const2 	%line{38} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainLink/MAChainLink.osl:39
+#         }else{
+	sub		$tmp27 x $const5 	%line{39} %argrw{"wrr"}
+	div		$tmp28 $tmp27 Width 	%argrw{"wrr"}
+	functioncall	$const6 54 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainLink/MAChainLink.osl:14
+# 
+	sub		$tmp29 $tmp28 $const5 	%line{14} %argrw{"wrr"}
+	sub		$tmp30 $tmp28 $const5 	%argrw{"wrr"}
+	mul		$tmp31 $tmp29 $tmp30 	%argrw{"wrr"}
+	div		$tmp32 $tmp31 $const7 	%argrw{"wrr"}
+	sub		$tmp33 $const3 $tmp32 	%argrw{"wrr"}
+	sqrt		Displ $tmp33 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainLink/MAChainLink.osl:41
+#             if (r < Width) {
+	sub		$tmp34 x $const5 	%line{41} %argrw{"wrr"}
+	sub		$tmp35 y $const5 	%argrw{"wrr"}
+	functioncall	$const8 61 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:114
+# float hypot (float a, float b) { return sqrt (a*a + b*b); }
+	mul		$tmp36 $tmp34 $tmp34 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{114} %argrw{"wrr"}
+	mul		$tmp37 $tmp35 $tmp35 	%argrw{"wrr"}
+	add		$tmp38 $tmp36 $tmp37 	%argrw{"wrr"}
+	sqrt		___327_r $tmp38 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainLink/MAChainLink.osl:42
+#                 Fac = 1;
+	lt		$tmp39 ___327_r Width 	%filename{"source/sambler-osl-shaders/patterns/MAChainLink/MAChainLink.osl"} %line{42} %argrw{"wrr"}
+	if		$tmp39 72 72 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainLink/MAChainLink.osl:43
+#                 Displ = arc(r/Width);
+	assign		Fac $const2 	%line{43} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MAChainLink/MAChainLink.osl:44
+#             }
+	div		$tmp40 ___327_r Width 	%line{44} %argrw{"wrr"}
+	functioncall	$const6 72 	%argrw{"r"}
+# source/sambler-osl-shaders/patterns/MAChainLink/MAChainLink.osl:14
+# 
+	sub		$tmp41 $tmp40 $const5 	%line{14} %argrw{"wrr"}
+	sub		$tmp42 $tmp40 $const5 	%argrw{"wrr"}
+	mul		$tmp43 $tmp41 $tmp42 	%argrw{"wrr"}
+	div		$tmp44 $tmp43 $const7 	%argrw{"wrr"}
+	sub		$tmp45 $const3 $tmp44 	%argrw{"wrr"}
+	sqrt		Displ $tmp45 	%argrw{"wr"}
+	end

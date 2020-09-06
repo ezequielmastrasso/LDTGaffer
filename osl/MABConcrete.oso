@@ -1,0 +1,385 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader MABConcrete
+param	point	Vector	0 0 0		%read{1,1} %write{0,0} %derivs %initexpr
+param	float	Scale	1		%read{1,1} %write{2147483647,-1} %derivs
+param	color	Cement1	0.89999998 0.89999998 0.89999998		%read{3,3} %write{2147483647,-1}
+param	color	Cement2	0.75 0.75 0.75		%read{3,3} %write{2147483647,-1}
+param	color	Sand1	0.34999999 0.34999999 0.34999999		%read{102,102} %write{2147483647,-1}
+param	color	Sand2	0.41999999 0.41999999 0.41999999		%read{102,102} %write{2147483647,-1}
+param	float	Sand	0.5		%read{88,88} %write{2147483647,-1}
+param	float	SandSize	0.1		%read{86,86} %write{2147483647,-1}
+param	float	SandDensity	4		%read{90,107} %write{2147483647,-1}
+param	float	GrainHigh	0.5		%read{95,95} %write{2147483647,-1}
+param	float	GrainLow	0.1		%read{92,92} %write{2147483647,-1}
+param	color	Split1	0.69999999 0.69999999 0.69999999		%read{84,84} %write{2147483647,-1}
+param	color	Split2	0.69999999 0.60000002 0.5		%read{84,84} %write{2147483647,-1}
+param	float	Split	0.2		%read{72,72} %write{2147483647,-1}
+param	float	SplitSize	0.12		%read{21,81} %write{2147483647,-1}
+param	float	SplitGaps	0.30000001		%read{77,77} %write{2147483647,-1}
+param	color	Pebble1	0.80000001 0.80000001 0.80000001		%read{19,19} %write{2147483647,-1}
+param	color	Pebble2	0.80000001 0.69999999 0.60000002		%read{19,19} %write{2147483647,-1}
+param	float	Pebbles	0.2		%read{6,8} %write{2147483647,-1}
+param	float	PebbleSize	1.5		%read{4,16} %write{2147483647,-1}
+param	float	PebbleGaps	0.059999999		%read{12,12} %write{2147483647,-1}
+param	color	Stain1	0.30000001 0.30000001 0.30000001		%read{118,118} %write{2147483647,-1}
+param	color	Stain2	0.30000001 0.40000001 0.30000001		%read{118,118} %write{2147483647,-1}
+param	float	Stains	0.40000001		%read{115,115} %write{2147483647,-1}
+param	float	StainSize	4		%read{113,113} %write{2147483647,-1}
+param	float	StainMix	0.050000001		%read{119,119} %write{2147483647,-1}
+oparam	color	Col	0.5 0.5 0.5		%read{119,119} %write{3,119}
+oparam	normal	Normal	0 0 0		%read{112,112} %write{110,112}
+oparam	float	Disp	0		%read{20,85} %write{9,106}
+oparam	int	IsCement	1		%read{2147483647,-1} %write{14,99}
+oparam	int	IsPebble	0		%read{2147483647,-1} %write{15,15}
+oparam	int	IsSplit	0		%read{2147483647,-1} %write{80,80}
+oparam	int	IsSand	0		%read{2147483647,-1} %write{100,100}
+global	point	P	%read{0,0} %write{2147483647,-1} %derivs
+local	int	___322_xx	%read{37,64} %write{36,64}
+local	int	___322_yy	%read{37,64} %write{37,64}
+local	int	___322_zz	%read{37,64} %write{37,64}
+local	int	___322_xi	%read{36,64} %write{26,26}
+local	int	___322_yi	%read{37,64} %write{29,29}
+local	int	___322_zi	%read{37,64} %write{32,32}
+local	float	___322_dbest	%read{37,64} %write{33,64}
+local	point	___322_pbest	%read{65,65} %write{34,64}
+local	vector	___328_ip	%read{37,64} %write{37,64}
+local	point	___328_vp	%read{37,64} %write{37,64}
+local	vector	___328_dp	%read{37,64} %write{37,64}
+local	float	___328_d	%read{37,64} %write{37,64}
+local	point	p	%read{2,117} %write{1,1} %derivs
+local	float	pebblenoise	%read{6,8} %write{5,5}
+local	float	___334_peakheight	%read{76,76} %write{67,67}
+local	float	___334_gapvalue	%read{77,77} %write{69,69}
+local	point	___334_splitpos	%read{67,74} %write{65,65}
+local	float	___334_splitnoise	%read{72,72} %write{71,71}
+local	int	___338_sandvisible	%read{89,89} %write{88,88}
+local	float	___339_grain	%read{92,109} %write{91,91}
+local	float	stainnoise	%read{115,115} %write{114,114}
+local	color	___341_StainCol	%read{119,119} %write{118,118}
+temp	float	$tmp1	%read{3,3} %write{2,2}
+const	string	$const1	"uperlin"		%read{2,117} %write{2147483647,-1}
+const	int	$const2	0		%read{14,99} %write{2147483647,-1}
+const	float	$const3	0		%read{2,90} %write{2147483647,-1}
+temp	point	$tmp2	%read{5,5} %write{4,4}
+const	int	$const4	1		%read{15,111} %write{2147483647,-1}
+const	float	$const5	1		%read{5,75} %write{2147483647,-1}
+temp	int	$tmp3	%read{7,7} %write{6,6}
+temp	float	$tmp4	%read{9,9} %write{8,8}
+temp	float	$tmp5	%read{12,12} %write{11,11}
+const	string	$const6	"cell"		%read{11,110} %write{2147483647,-1}
+temp	point	$tmp6	%read{11,11} %write{10,10}
+const	int	$const7	2		%read{30,111} %write{2147483647,-1}
+const	float	$const8	2		%read{11,83} %write{2147483647,-1}
+temp	int	$tmp7	%read{13,13} %write{12,12}
+temp	float	$tmp8	%read{19,19} %write{18,18}
+temp	float	$tmp9	%read{18,18} %write{17,17}
+temp	point	$tmp10	%read{17,17} %write{16,16}
+const	float	$const10	3		%read{17,17} %write{2147483647,-1}
+temp	point	$tmp11	%read{24,64} %write{21,21}
+const	int	$const11	4		%read{91,91} %write{2147483647,-1}
+const	float	$const12	4		%read{51,70} %write{2147483647,-1}
+const	string	$const13	"voronoi"		%read{22,22} %write{2147483647,-1}
+const	string	$const14	"voronoi3d"		%read{23,23} %write{2147483647,-1}
+temp	float	$tmp12	%read{26,26} %write{25,25}
+temp	float	$tmp13	%read{25,25} %write{24,24}
+temp	float	$tmp14	%read{29,29} %write{28,28}
+temp	float	$tmp15	%read{28,28} %write{27,27}
+temp	float	$tmp16	%read{32,32} %write{31,31}
+temp	float	$tmp17	%read{31,31} %write{30,30}
+const	float	$const15	1e+10		%read{33,34} %write{2147483647,-1}
+temp	int	$tmp18	%read{37,64} %write{37,64}
+temp	int	$tmp19	%read{35,64} %write{36,64}
+temp	int	$tmp20	%read{37,64} %write{37,64}
+temp	int	$tmp21	%read{37,64} %write{37,64}
+temp	int	$tmp22	%read{37,64} %write{37,64}
+temp	int	$tmp23	%read{37,64} %write{37,64}
+temp	float	$tmp24	%read{37,64} %write{37,64}
+temp	float	$tmp25	%read{37,64} %write{37,64}
+temp	float	$tmp26	%read{37,64} %write{37,64}
+temp	color	$tmp27	%read{37,64} %write{37,64}
+temp	int	$tmp28	%read{37,64} %write{37,64}
+temp	int	$tmp29	%read{2147483647,-1} %write{37,64}
+temp	int	$tmp30	%read{2147483647,-1} %write{37,64}
+temp	int	$tmp31	%read{2147483647,-1} %write{37,64}
+temp	float	$tmp32	%read{67,67} %write{66,66}
+const	float	$const17	713		%read{66,66} %write{2147483647,-1}
+temp	float	$tmp33	%read{69,69} %write{68,68}
+const	float	$const19	317		%read{68,68} %write{2147483647,-1}
+temp	float	$tmp34	%read{71,71} %write{70,70}
+const	float	$const21	173		%read{70,70} %write{2147483647,-1}
+temp	int	$tmp35	%read{73,73} %write{72,72}
+temp	float	$tmp36	%read{75,75} %write{74,74}
+temp	float	$tmp37	%read{76,76} %write{75,75}
+temp	int	$tmp38	%read{78,78} %write{77,77}
+temp	float	$tmp39	%read{84,84} %write{83,83}
+temp	float	$tmp40	%read{83,83} %write{82,82}
+temp	point	$tmp41	%read{82,82} %write{81,81}
+const	float	$const23	6		%read{82,82} %write{2147483647,-1}
+temp	float	$tmp42	%read{88,88} %write{87,87}
+temp	point	$tmp43	%read{87,87} %write{86,86}
+const	float	$const25	7		%read{87,87} %write{2147483647,-1}
+const	string	$const26	"gabor"		%read{91,91} %write{2147483647,-1}
+const	float	$const28	8		%read{91,91} %write{2147483647,-1} %derivs
+const	string	$const29	"bandwidth"		%read{91,91} %write{2147483647,-1}
+const	string	$const30	"anisotropic"		%read{91,91} %write{2147483647,-1}
+const	string	$const31	"direction"		%read{91,91} %write{2147483647,-1}
+temp	vector	$tmp44	%read{91,91} %write{90,90}
+temp	int	$tmp45	%read{93,93} %write{92,92}
+temp	int	$tmp46	%read{94,98} %write{93,97}
+temp	int	$tmp47	%read{96,96} %write{95,95}
+temp	int	$tmp48	%read{97,97} %write{96,96}
+temp	float	$tmp49	%read{102,102} %write{101,101}
+const	float	$const33	9		%read{101,101} %write{2147483647,-1}
+temp	point	$tmp50	%read{104,104} %write{103,103}
+const	float	$const34	0.001		%read{104,108} %write{2147483647,-1}
+temp	point	$tmp51	%read{105,105} %write{104,104}
+temp	point	$tmp52	%read{106,106} %write{105,105}
+const	float	$const36	10		%read{106,106} %write{2147483647,-1}
+temp	point	$tmp53	%read{108,108} %write{107,107}
+temp	point	$tmp54	%read{109,109} %write{108,108}
+temp	point	$tmp55	%read{110,110} %write{109,109}
+const	float	$const38	11		%read{110,110} %write{2147483647,-1}
+temp	point	$tmp56	%read{114,114} %write{113,113}
+const	float	$const40	12		%read{114,114} %write{2147483647,-1}
+temp	int	$tmp57	%read{116,116} %write{115,115}
+temp	float	$tmp58	%read{118,118} %write{117,117}
+const	float	$const42	13		%read{117,117} %write{2147483647,-1}
+code Vector
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:49
+#         float Scale      = 1.0,
+	assign		Vector P 	%filename{"source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl"} %line{49} %argrw{"wr"}
+code ___main___
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:88
+#     Col = mix(Cement1,Cement2,noise("uperlin",p,0));
+	mul		p Vector Scale 	%filename{"source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl"} %line{88} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:89
+# 
+	noise		$tmp1 $const1 p $const3 	%line{89} %argrw{"wrrr"}
+	mix		Col Cement1 Cement2 $tmp1 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:91
+#     if(Pebbles > pebblenoise) {
+	div		$tmp2 p PebbleSize 	%line{91} %argrw{"wrr"}
+	noise		pebblenoise $const1 $tmp2 $const5 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:92
+#         Disp = sqrt(pebblenoise-Pebbles);
+	gt		$tmp3 Pebbles pebblenoise 	%line{92} %argrw{"wrr"}
+	if		$tmp3 21 113 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:93
+#         if(PebbleGaps < noise("cell",p/PebbleSize,2)) {
+	sub		$tmp4 pebblenoise Pebbles 	%line{93} %argrw{"wrr"}
+	sqrt		Disp $tmp4 	%argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:94
+#             IsCement = 0;
+	div		$tmp6 p PebbleSize 	%line{94} %argrw{"wrr"}
+	noise		$tmp5 $const6 $tmp6 $const8 	%argrw{"wrrr"}
+	lt		$tmp7 PebbleGaps $tmp5 	%argrw{"wrr"}
+	if		$tmp7 20 21 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:95
+#             IsPebble = 1;
+	assign		IsCement $const2 	%line{95} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:96
+#             Col = mix(Pebble1, Pebble2, pow(noise("uperlin",p/PebbleSize, 3), 2));
+	assign		IsPebble $const4 	%line{96} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:97
+#         }else{
+	div		$tmp10 p PebbleSize 	%line{97} %argrw{"wrr"}
+	noise		$tmp9 $const1 $tmp10 $const10 	%argrw{"wrrr"}
+	pow		$tmp8 $tmp9 $const8 	%argrw{"wrr"}
+	mix		Col Pebble1 Pebble2 $tmp8 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:99
+#         }
+	neg		Disp Disp 	%line{99} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:105
+#         if(Split > splitnoise) {
+	div		$tmp11 p SplitSize 	%line{105} %argrw{"wrr"}
+	functioncall	$const13 72 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:42
+#   v1 = noise("cell",pos,t-713);
+	functioncall	$const14 66 	%line{42} %argrw{"r"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:18
+#     yi = (int)floor(p[1]);
+	compref		$tmp13 $tmp11 $const2 	%line{18} %argrw{"wrr"}
+	floor		$tmp12 $tmp13 	%argrw{"wr"}
+	assign		___322_xi $tmp12 	%argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:19
+#     zi = (int)floor(p[2]);
+	compref		$tmp15 $tmp11 $const4 	%line{19} %argrw{"wrr"}
+	floor		$tmp14 $tmp15 	%argrw{"wr"}
+	assign		___322_yi $tmp14 	%argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:20
+# 
+	compref		$tmp17 $tmp11 $const7 	%line{20} %argrw{"wrr"}
+	floor		$tmp16 $tmp17 	%argrw{"wr"}
+	assign		___322_zi $tmp16 	%argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:22
+#     point pbest = 1e10;
+	assign		___322_dbest $const15 	%line{22} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:23
+#     for (xx = xi - 1; xx <= xi + 1; xx++) {
+	assign		___322_pbest $const15 	%line{23} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:24
+#         for (yy = yi - 1; yy <= yi + 1; yy++) {
+	for		$tmp19 37 39 63 65 	%line{24} %argrw{"r"}
+	sub		___322_xx ___322_xi $const4 	%argrw{"wrr"}
+	add		$tmp18 ___322_xi $const4 	%argrw{"wrr"}
+	le		$tmp19 ___322_xx $tmp18 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:25
+#             for (zz = zi - 1; zz <= zi + 1; zz++) {
+	for		$tmp21 41 43 61 63 	%line{25} %argrw{"r"}
+	sub		___322_yy ___322_yi $const4 	%argrw{"wrr"}
+	add		$tmp20 ___322_yi $const4 	%argrw{"wrr"}
+	le		$tmp21 ___322_yy $tmp20 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:26
+#                 vector ip = vector(xx, yy, zz);
+	for		$tmp23 45 47 59 61 	%line{26} %argrw{"r"}
+	sub		___322_zz ___322_zi $const4 	%argrw{"wrr"}
+	add		$tmp22 ___322_zi $const4 	%argrw{"wrr"}
+	le		$tmp23 ___322_zz $tmp22 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:27
+#                 point  vp = ip + noise("cell", ip, t);
+	assign		$tmp24 ___322_xx 	%line{27} %argrw{"wr"}
+	assign		$tmp25 ___322_yy 	%argrw{"wr"}
+	assign		$tmp26 ___322_zz 	%argrw{"wr"}
+	vector		___328_ip $tmp24 $tmp25 $tmp26 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:28
+#                 vector dp = p - vp;
+	noise		$tmp27 $const6 ___328_ip $const12 	%line{28} %argrw{"wrrr"}
+	add		___328_vp ___328_ip $tmp27 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:29
+#                 float  d  = dot(dp,dp);
+	sub		___328_dp $tmp11 ___328_vp 	%line{29} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:30
+#                 if (d < dbest) {
+	dot		___328_d ___328_dp ___328_dp 	%line{30} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:31
+#                     dbest = d;
+	lt		$tmp28 ___328_d ___322_dbest 	%line{31} %argrw{"wrr"}
+	if		$tmp28 59 59 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:32
+#                     pbest = vp;
+	assign		___322_dbest ___328_d 	%line{32} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:33
+#                 }
+	assign		___322_pbest ___328_vp 	%line{33} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:26
+#                 vector ip = vector(xx, yy, zz);
+	assign		$tmp29 ___322_zz 	%line{26} %argrw{"wr"}
+	add		___322_zz ___322_zz $const4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:25
+#             for (zz = zi - 1; zz <= zi + 1; zz++) {
+	assign		$tmp30 ___322_yy 	%line{25} %argrw{"wr"}
+	add		___322_yy ___322_yy $const4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:24
+#         for (yy = yi - 1; yy <= yi + 1; yy++) {
+	assign		$tmp31 ___322_xx 	%line{24} %argrw{"wr"}
+	add		___322_xx ___322_xx $const4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:38
+# }
+	assign		___334_splitpos ___322_pbest 	%line{38} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:43
+#   v2 = noise("cell",pos,t+317);
+	sub		$tmp32 $const12 $const17 	%line{43} %argrw{"wrr"}
+	noise		___334_peakheight $const6 ___334_splitpos $tmp32 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:44
+#   return noise("cell",pos,t+173);
+	add		$tmp33 $const12 $const19 	%line{44} %argrw{"wrr"}
+	noise		___334_gapvalue $const6 ___334_splitpos $tmp33 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:45
+# }
+	add		$tmp34 $const12 $const21 	%line{45} %argrw{"wrr"}
+	noise		___334_splitnoise $const6 ___334_splitpos $tmp34 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:106
+#             Disp = peakheight*(1-distance(p, splitpos));
+	gt		$tmp35 Split ___334_splitnoise 	%line{106} %argrw{"wrr"}
+	if		$tmp35 86 113 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:107
+#             if(SplitGaps < gapvalue) {
+	distance	$tmp36 p ___334_splitpos 	%line{107} %argrw{"wrr"}
+	sub		$tmp37 $const5 $tmp36 	%argrw{"wrr"}
+	mul		Disp ___334_peakheight $tmp37 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:108
+#                 IsCement = 0;
+	lt		$tmp38 SplitGaps ___334_gapvalue 	%line{108} %argrw{"wrr"}
+	if		$tmp38 85 86 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:109
+#                 IsSplit = 1;
+	assign		IsCement $const2 	%line{109} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:110
+#                 Col = mix(Split1, Split2, pow(noise("uperlin", p/SplitSize, 6), 2));
+	assign		IsSplit $const4 	%line{110} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:111
+#             }else{
+	div		$tmp41 p SplitSize 	%line{111} %argrw{"wrr"}
+	noise		$tmp40 $const1 $tmp41 $const23 	%argrw{"wrrr"}
+	pow		$tmp39 $tmp40 $const8 	%argrw{"wrr"}
+	mix		Col Split1 Split2 $tmp39 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:113
+#             }
+	neg		Disp Disp 	%line{113} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:117
+#             if(sandvisible) {
+	div		$tmp43 p SandSize 	%line{117} %argrw{"wrr"}
+	noise		$tmp42 $const1 $tmp43 $const25 	%argrw{"wrrr"}
+	gt		___338_sandvisible Sand $tmp42 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:118
+#                 float grain = noise("gabor", p, 8, "bandwidth", 4,
+	if		___338_sandvisible 113 113 	%line{118} %argrw{"r"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:120
+#                 if(grain > GrainLow && grain < GrainHigh) {
+	vector		$tmp44 SandDensity $const3 $const3 	%line{120} %argrw{"wrrr"}
+	noise		___339_grain $const26 p $const28 $const29 $const11 $const30 $const7 $const31 $tmp44 	%argrw{"wrrrrrrrrr"} %argderivs{2,3}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:121
+#                     IsCement = 0;
+	gt		$tmp45 ___339_grain GrainLow 	%line{121} %argrw{"wrr"}
+	neq		$tmp46 $tmp45 $const2 	%argrw{"wrr"}
+	if		$tmp46 98 98 	%argrw{"r"}
+	lt		$tmp47 ___339_grain GrainHigh 	%argrw{"wrr"}
+	neq		$tmp48 $tmp47 $const2 	%argrw{"wrr"}
+	assign		$tmp46 $tmp48 	%argrw{"wr"}
+	if		$tmp46 113 113 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:122
+#                     IsSand = 1;
+	assign		IsCement $const2 	%line{122} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:123
+#                     Col   = mix(Sand1, Sand2, noise("uperlin", p, 9));
+	assign		IsSand $const4 	%line{123} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:124
+#                     Disp  = noise("cell", (p*SandDensity)*0.001*grain, 10);
+	noise		$tmp49 $const1 p $const33 	%line{124} %argrw{"wrrr"}
+	mix		Col Sand1 Sand2 $tmp49 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:125
+#                     Normal= noise("cell", (p*SandDensity)*0.001*grain, 11);
+	mul		$tmp50 p SandDensity 	%line{125} %argrw{"wrr"}
+	mul		$tmp51 $tmp50 $const34 	%argrw{"wrr"}
+	mul		$tmp52 $tmp51 ___339_grain 	%argrw{"wrr"}
+	noise		Disp $const6 $tmp52 $const36 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:126
+#                     Normal[2]=1;
+	mul		$tmp53 p SandDensity 	%line{126} %argrw{"wrr"}
+	mul		$tmp54 $tmp53 $const34 	%argrw{"wrr"}
+	mul		$tmp55 $tmp54 ___339_grain 	%argrw{"wrr"}
+	noise		Normal $const6 $tmp55 $const38 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:127
+#                     Normal = normalize(Normal);
+	compassign	Normal $const7 $const4 	%line{127} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:128
+#                 }
+	normalize	Normal Normal 	%line{128} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:134
+#     if(Stains > stainnoise){
+	div		$tmp56 p StainSize 	%line{134} %argrw{"wrr"}
+	noise		stainnoise $const1 $tmp56 $const40 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:135
+#         color StainCol = mix(Stain1, Stain2, noise("uperlin", p, 13));
+	gt		$tmp57 Stains stainnoise 	%line{135} %argrw{"wrr"}
+	if		$tmp57 120 120 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:136
+#         Col = mix(Col, StainCol, StainMix);
+	noise		$tmp58 $const1 p $const42 	%line{136} %argrw{"wrrr"}
+	mix		___341_StainCol Stain1 Stain2 $tmp58 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/MJABook/16MABConcrete/MABConcrete.osl:137
+#     }
+	mix		Col Col ___341_StainCol StainMix 	%line{137} %argrw{"wrrr"}
+	end

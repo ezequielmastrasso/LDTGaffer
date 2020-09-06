@@ -1,0 +1,208 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader SetNumFile	%meta{string,help,"Append a 4-digit number to a file name (for image sequences)"} %meta{string,label,"Numbered File Name"} %meta{string,category,"Values"} 
+param	string	In	"uv-grid.png"		%meta{string,widget,"filename"} %meta{string,label,"File Name"}  %read{4,15} %write{2147483647,-1} %derivs
+param	int	Number	0		%meta{string,label,"Frame Number"} %meta{string,help,"The number to insert at the end of the filename"}  %read{0,0} %write{2147483647,-1} %derivs
+param	int	FrameCount	0		%meta{string,label,"Frame Count"} %meta{string,help,"If nonzero, will loop after this many frames."}  %read{1,2} %write{2147483647,-1} %derivs
+param	string	Extension	".png"		%meta{string,help,"The file extension to use"}  %read{5,11} %write{2147483647,-1} %derivs
+param	int	Replace	0		%meta{string,widget,"checkBox"} %meta{string,help,"If off, inserts the number in front of the extension. If ON, overwrites the N digits in front of the extension with the number (assuming some dummy number was already there, like 0000)"}  %read{7,7} %write{2147483647,-1} %derivs
+param	int	DoPreview	0		%meta{string,label,"Show Preview"} %meta{string,help,"Will output the image on the 'Preview' output"} %meta{string,widget,"checkBox"}  %read{19,19} %write{2147483647,-1}
+oparam	color	Preview	0.25 0.25 0.25		%read{77,77} %write{49,77}
+oparam	string	FileName	""		%meta{string,label,"File Name"}  %read{20,49} %write{18,18} %derivs
+global	float	u	%read{22,22} %write{2147483647,-1} %derivs
+global	float	v	%read{23,23} %write{2147483647,-1} %derivs
+local	int	frame	%read{2,3} %write{0,2} %derivs
+local	string	numberString	%read{17,17} %write{3,3} %derivs
+local	string	left	%read{17,17} %write{9,9} %derivs
+local	string	ext	%read{18,73} %write{15,15} %derivs
+local	int[2]	___322_res	%read{24,43} %write{20,20} %derivs
+local	float	___323_x	%read{38,49} %write{22,47} %derivs
+local	float	___323_y	%read{28,48} %write{23,37} %derivs
+const	string	$const1	"%04d"		%read{3,3} %write{2147483647,-1}
+const	int	$const2	0		%read{9,74} %write{2147483647,-1}
+temp	int	$tmp1	%read{6,6} %write{4,4} %derivs
+temp	int	$tmp2	%read{6,6} %write{5,5} %derivs
+temp	int	$tmp3	%read{8,8} %write{6,6} %derivs
+const	int	$const3	4		%read{7,7} %write{2147483647,-1}
+temp	int	$tmp4	%read{8,8} %write{7,7} %derivs
+temp	int	$tmp5	%read{9,9} %write{8,8} %derivs
+temp	int	$tmp6	%read{12,12} %write{10,10} %derivs
+temp	int	$tmp7	%read{12,12} %write{11,11} %derivs
+temp	int	$tmp8	%read{15,15} %write{12,12} %derivs
+const	string	$const4	"substr"		%read{13,13} %write{2147483647,-1}
+temp	int	$tmp9	%read{15,15} %write{14,14} %derivs
+const	string	$const5	"concat"		%read{16,16} %write{2147483647,-1}
+temp	string	$tmp10	%read{18,18} %write{17,17} %derivs
+temp	int	$tmp11	%read{21,21} %write{20,20}
+const	string	$const6	"resolution"		%read{20,20} %write{2147483647,-1}
+temp	int	$tmp12	%read{26,26} %write{24,24}
+const	int	$const7	1		%read{25,39} %write{2147483647,-1}
+temp	int	$tmp13	%read{26,26} %write{25,25}
+temp	int	$tmp14	%read{27,27} %write{26,26}
+const	float	$const8	0.5		%read{28,47} %write{2147483647,-1}
+temp	float	$tmp15	%read{32,32} %write{28,28} %derivs
+temp	float	$tmp16	%read{32,32} %write{31,31} %derivs
+temp	int	$tmp17	%read{30,30} %write{29,29} %derivs
+temp	float	$tmp18	%read{31,31} %write{30,30} %derivs
+temp	float	$tmp19	%read{36,36} %write{32,32} %derivs
+temp	float	$tmp20	%read{36,36} %write{35,35} %derivs
+temp	int	$tmp21	%read{34,34} %write{33,33} %derivs
+temp	float	$tmp22	%read{35,35} %write{34,34} %derivs
+temp	float	$tmp23	%read{37,37} %write{36,36} %derivs
+temp	float	$tmp24	%read{42,42} %write{38,38} %derivs
+temp	float	$tmp25	%read{42,42} %write{41,41} %derivs
+temp	int	$tmp26	%read{40,40} %write{39,39} %derivs
+temp	float	$tmp27	%read{41,41} %write{40,40} %derivs
+temp	float	$tmp28	%read{46,46} %write{42,42} %derivs
+temp	float	$tmp29	%read{46,46} %write{45,45} %derivs
+temp	int	$tmp30	%read{44,44} %write{43,43} %derivs
+temp	float	$tmp31	%read{45,45} %write{44,44} %derivs
+temp	float	$tmp32	%read{47,47} %write{46,46} %derivs
+temp	float	$tmp33	%read{49,49} %write{48,48} %derivs
+const	float	$const9	1		%read{48,48} %write{2147483647,-1}
+const	string	$const10	".exr"		%read{50,50} %write{2147483647,-1}
+temp	int	$tmp34	%read{51,51} %write{50,50}
+temp	int	$tmp35	%read{52,56} %write{51,55}
+const	string	$const11	".EXR"		%read{53,53} %write{2147483647,-1}
+temp	int	$tmp36	%read{54,54} %write{53,53}
+temp	int	$tmp37	%read{55,55} %write{54,54}
+temp	int	$tmp38	%read{57,61} %write{56,60}
+const	string	$const12	".hdr"		%read{58,58} %write{2147483647,-1}
+temp	int	$tmp39	%read{59,59} %write{58,58}
+temp	int	$tmp40	%read{60,60} %write{59,59}
+temp	int	$tmp41	%read{62,66} %write{61,65}
+const	string	$const13	".HDR "		%read{63,63} %write{2147483647,-1}
+temp	int	$tmp42	%read{64,64} %write{63,63}
+temp	int	$tmp43	%read{65,65} %write{64,64}
+temp	int	$tmp44	%read{67,71} %write{66,70}
+const	string	$const14	".tx"		%read{68,68} %write{2147483647,-1}
+temp	int	$tmp45	%read{69,69} %write{68,68}
+temp	int	$tmp46	%read{70,70} %write{69,69}
+temp	int	$tmp47	%read{72,76} %write{71,75}
+const	string	$const15	".TX"		%read{73,73} %write{2147483647,-1}
+temp	int	$tmp48	%read{74,74} %write{73,73}
+temp	int	$tmp49	%read{75,75} %write{74,74}
+const	float	$const16	2.2		%read{77,77} %write{2147483647,-1}
+code ___main___
+# source/3dsMax-OSL-Shaders/SetNumFile.osl:33
+# 	// Apply modulo on frame count
+	assign		frame Number 	%filename{"source/3dsMax-OSL-Shaders/SetNumFile.osl"} %line{33} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/SetNumFile.osl:35
+# 		frame = frame % FrameCount;
+	if		FrameCount 3 3 	%line{35} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/SetNumFile.osl:36
+# 		
+	mod		frame frame FrameCount 	%line{36} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/SetNumFile.osl:40
+# 	string left = substr(In, 0, strlen(In) - strlen(Extension) - Replace*4);
+	format		numberString $const1 frame 	%line{40} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/SetNumFile.osl:41
+# 	string ext  = substr(In, strlen(In) - strlen(Extension));
+	strlen		$tmp1 In 	%line{41} %argrw{"wr"}
+	strlen		$tmp2 Extension 	%argrw{"wr"}
+	sub		$tmp3 $tmp1 $tmp2 	%argrw{"wrr"}
+	mul		$tmp4 Replace $const3 	%argrw{"wrr"}
+	sub		$tmp5 $tmp3 $tmp4 	%argrw{"wrr"}
+	substr		left In $const2 $tmp5 	%argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/SetNumFile.osl:42
+# 
+	strlen		$tmp6 In 	%line{42} %argrw{"wr"}
+	strlen		$tmp7 Extension 	%argrw{"wr"}
+	sub		$tmp8 $tmp6 $tmp7 	%argrw{"wrr"}
+	functioncall	$const4 16 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:401
+# string substr (string s, int start) { return substr (s, start, strlen(s)); }
+	strlen		$tmp9 In 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{401} %argrw{"wr"}
+	substr		ext In $tmp8 $tmp9 	%argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/SetNumFile.osl:44
+# 	
+	functioncall	$const5 19 	%filename{"source/3dsMax-OSL-Shaders/SetNumFile.osl"} %line{44} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:407
+#     return concat(concat(a,b), c);
+	concat		$tmp10 left numberString 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{407} %argrw{"wrr"}
+	concat		FileName $tmp10 ext 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/SetNumFile.osl:46
+# 	{
+	if		DoPreview 78 78 	%filename{"source/3dsMax-OSL-Shaders/SetNumFile.osl"} %line{46} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/SetNumFile.osl:49
+# 		{
+	gettextureinfo	$tmp11 FileName $const6 ___322_res 	%line{49} %argrw{"wrrw"}
+	if		$tmp11 78 78 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/SetNumFile.osl:51
+# 			
+	assign		___323_x u 	%line{51} %argrw{"wr"}
+	assign		___323_y v 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/SetNumFile.osl:53
+# 			{
+	aref		$tmp12 ___322_res $const2 	%line{53} %argrw{"wrr"}
+	aref		$tmp13 ___322_res $const7 	%argrw{"wrr"}
+	gt		$tmp14 $tmp12 $tmp13 	%argrw{"wrr"}
+	if		$tmp14 38 48 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/SetNumFile.osl:55
+# 			}
+	sub		$tmp15 ___323_y $const8 	%line{55} %argrw{"wrr"}
+	aref		$tmp17 ___322_res $const2 	%argrw{"wrr"}
+	assign		$tmp18 $tmp17 	%argrw{"wr"}
+	assign		$tmp16 $tmp18 	%argrw{"wr"}
+	mul		$tmp19 $tmp15 $tmp16 	%argrw{"wrr"}
+	aref		$tmp21 ___322_res $const7 	%argrw{"wrr"}
+	assign		$tmp22 $tmp21 	%argrw{"wr"}
+	assign		$tmp20 $tmp22 	%argrw{"wr"}
+	div		$tmp23 $tmp19 $tmp20 	%argrw{"wrr"}
+	add		___323_y $tmp23 $const8 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/SetNumFile.osl:59
+# 			}
+	sub		$tmp24 ___323_x $const8 	%line{59} %argrw{"wrr"}
+	aref		$tmp26 ___322_res $const7 	%argrw{"wrr"}
+	assign		$tmp27 $tmp26 	%argrw{"wr"}
+	assign		$tmp25 $tmp27 	%argrw{"wr"}
+	mul		$tmp28 $tmp24 $tmp25 	%argrw{"wrr"}
+	aref		$tmp30 ___322_res $const2 	%argrw{"wrr"}
+	assign		$tmp31 $tmp30 	%argrw{"wr"}
+	assign		$tmp29 $tmp31 	%argrw{"wr"}
+	div		$tmp32 $tmp28 $tmp29 	%argrw{"wrr"}
+	add		___323_x $tmp32 $const8 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/SetNumFile.osl:62
+# 	
+	sub		$tmp33 $const9 ___323_y 	%line{62} %argrw{"wrr"}
+	texture		Preview FileName ___323_x $tmp33 	%argrw{"wrrr"} %argderivs{2,3}
+# source/3dsMax-OSL-Shaders/SetNumFile.osl:64
+# 			    ext != ".hdr"  && ext != ".HDR " &&	
+	neq		$tmp34 ext $const10 	%line{64} %argrw{"wrr"}
+	neq		$tmp35 $tmp34 $const2 	%argrw{"wrr"}
+	if		$tmp35 56 56 	%argrw{"r"}
+	neq		$tmp36 ext $const11 	%argrw{"wrr"}
+	neq		$tmp37 $tmp36 $const2 	%argrw{"wrr"}
+	assign		$tmp35 $tmp37 	%argrw{"wr"}
+	neq		$tmp38 $tmp35 $const2 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/SetNumFile.osl:65
+# 		    	ext != ".tx"   && ext != ".TX")
+	if		$tmp38 61 61 	%line{65} %argrw{"r"}
+	neq		$tmp39 ext $const12 	%argrw{"wrr"}
+	neq		$tmp40 $tmp39 $const2 	%argrw{"wrr"}
+	assign		$tmp38 $tmp40 	%argrw{"wr"}
+	neq		$tmp41 $tmp38 $const2 	%argrw{"wrr"}
+	if		$tmp41 66 66 	%argrw{"r"}
+	neq		$tmp42 ext $const13 	%argrw{"wrr"}
+	neq		$tmp43 $tmp42 $const2 	%argrw{"wrr"}
+	assign		$tmp41 $tmp43 	%argrw{"wr"}
+	neq		$tmp44 $tmp41 $const2 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/SetNumFile.osl:66
+# 		    {
+	if		$tmp44 71 71 	%line{66} %argrw{"r"}
+	neq		$tmp45 ext $const14 	%argrw{"wrr"}
+	neq		$tmp46 $tmp45 $const2 	%argrw{"wrr"}
+	assign		$tmp44 $tmp46 	%argrw{"wr"}
+	neq		$tmp47 $tmp44 $const2 	%argrw{"wrr"}
+	if		$tmp47 76 76 	%argrw{"r"}
+	neq		$tmp48 ext $const15 	%argrw{"wrr"}
+	neq		$tmp49 $tmp48 $const2 	%argrw{"wrr"}
+	assign		$tmp47 $tmp49 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/SetNumFile.osl:64
+# 			    ext != ".hdr"  && ext != ".HDR " &&	
+	if		$tmp47 78 78 	%line{64} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/SetNumFile.osl:68
+# 	    	}	
+	pow		Preview Preview $const16 	%line{68} %argrw{"wrr"}
+	end

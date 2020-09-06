@@ -1,0 +1,70 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader outline
+param	normal	Normal	0 0 0		%read{8,8} %write{0,0} %initexpr
+param	normal	Incidental	0 0 0		%read{10,10} %write{1,1} %initexpr
+param	float	Width	0.5		%read{3,3} %write{2147483647,-1}
+param	float	Blend	0.2		%read{6,6} %write{2147483647,-1}
+param	color	MainColor	0 0 0.60000002		%read{16,16} %write{2147483647,-1}
+param	color	EdgeColor	1 0 0		%read{16,16} %write{2147483647,-1}
+oparam	color	Color	0 0 0		%read{2147483647,-1} %write{16,16}
+oparam	float	MixAmt	0		%read{16,16} %write{15,15}
+global	vector	I	%read{1,1} %write{2147483647,-1}
+global	normal	N	%read{0,0} %write{2147483647,-1}
+local	float	wdth	%read{11,11} %write{4,4}
+local	float	smth	%read{13,13} %write{7,7}
+local	vector	Nn	%read{12,14} %write{9,12}
+local	vector	In	%read{14,14} %write{10,10}
+const	float	$const1	0		%read{4,15} %write{2147483647,-1}
+const	float	$const2	1		%read{3,11} %write{2147483647,-1}
+const	string	$const3	"clamp"		%read{2,5} %write{2147483647,-1}
+temp	float	$tmp1	%read{4,4} %write{3,3}
+temp	float	$tmp2	%read{7,7} %write{6,6}
+temp	normal	$tmp3	%read{9,9} %write{8,8}
+temp	float	$tmp4	%read{12,12} %write{11,11}
+temp	float	$tmp5	%read{15,15} %write{13,13}
+temp	float	$tmp6	%read{15,15} %write{14,14}
+code Normal
+# source/sambler-osl-shaders/ramps/IDOutline/IDOutline.osl:19
+#     normal Incidental = I,
+	assign		Normal N 	%filename{"source/sambler-osl-shaders/ramps/IDOutline/IDOutline.osl"} %line{19} %argrw{"wr"}
+code Incidental
+# source/sambler-osl-shaders/ramps/IDOutline/IDOutline.osl:20
+#     float Width = 0.5,
+	assign		Incidental I 	%filename{"source/sambler-osl-shaders/ramps/IDOutline/IDOutline.osl"} %line{20} %argrw{"wr"}
+code ___main___
+# source/sambler-osl-shaders/ramps/IDOutline/IDOutline.osl:28
+#     float smth = clamp(Blend,0.0,1.0); 
+	functioncall	$const3 5 	%filename{"source/sambler-osl-shaders/ramps/IDOutline/IDOutline.osl"} %line{28} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:145
+# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
+	min		$tmp1 Width $const2 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{145} %argrw{"wrr"}
+	max		wdth $tmp1 $const1 	%argrw{"wrr"}
+# source/sambler-osl-shaders/ramps/IDOutline/IDOutline.osl:29
+#     vector Nn = normalize(-Normal);
+	functioncall	$const3 8 	%filename{"source/sambler-osl-shaders/ramps/IDOutline/IDOutline.osl"} %line{29} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:145
+# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
+	min		$tmp2 Blend $const2 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{145} %argrw{"wrr"}
+	max		smth $tmp2 $const1 	%argrw{"wrr"}
+# source/sambler-osl-shaders/ramps/IDOutline/IDOutline.osl:30
+#     vector In = normalize(Incidental);
+	neg		$tmp3 Normal 	%filename{"source/sambler-osl-shaders/ramps/IDOutline/IDOutline.osl"} %line{30} %argrw{"wr"}
+	normalize	Nn $tmp3 	%argrw{"wr"}
+# source/sambler-osl-shaders/ramps/IDOutline/IDOutline.osl:31
+#     Nn *= 1-wdth;
+	normalize	In Incidental 	%line{31} %argrw{"wr"}
+# source/sambler-osl-shaders/ramps/IDOutline/IDOutline.osl:32
+#     MixAmt = smoothstep(-smth,0,dot(Nn,In));
+	sub		$tmp4 $const2 wdth 	%line{32} %argrw{"wrr"}
+	mul		Nn Nn $tmp4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/ramps/IDOutline/IDOutline.osl:33
+#     Color = mix(MainColor,EdgeColor,MixAmt); 
+	neg		$tmp5 smth 	%line{33} %argrw{"wr"}
+	dot		$tmp6 Nn In 	%argrw{"wrr"}
+	smoothstep	MixAmt $tmp5 $const1 $tmp6 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/ramps/IDOutline/IDOutline.osl:34
+# }
+	mix		Color MainColor EdgeColor MixAmt 	%line{34} %argrw{"wrrr"}
+	end

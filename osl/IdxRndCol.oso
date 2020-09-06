@@ -1,0 +1,30 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader IdxRndCol	%meta{string,help,"Return a randomized color based on an input integer index"} %meta{string,category,"Math Color"} %meta{string,label,"Random by Index (color)"} 
+param	int	Idx	0		%read{0,0} %write{2147483647,-1}
+param	int	Seed	1		%read{2,2} %write{2147483647,-1}
+param	color	Min	0 0 0		%read{6,6} %write{2147483647,-1}
+param	color	Max	1 1 1		%read{6,6} %write{2147483647,-1}
+oparam	color	Out	0 0 0		%read{2147483647,-1} %write{6,6}
+local	float	ratio	%read{6,6} %write{5,5}
+const	string	$const1	"cell"		%read{5,5} %write{2147483647,-1}
+temp	vector	$tmp1	%read{5,5} %write{4,4}
+temp	int	$tmp2	%read{1,1} %write{0,0}
+temp	float	$tmp3	%read{4,4} %write{1,1}
+temp	int	$tmp4	%read{3,3} %write{2,2}
+temp	float	$tmp5	%read{4,4} %write{3,3}
+const	float	$const3	10		%read{4,4} %write{2147483647,-1}
+code ___main___
+# source/3dsMax-OSL-Shaders/IdxRndCol.osl:21
+# 	Out = mix(Min, Max, ratio);
+	abs		$tmp2 Idx 	%filename{"source/3dsMax-OSL-Shaders/IdxRndCol.osl"} %line{21} %argrw{"wr"}
+	assign		$tmp3 $tmp2 	%argrw{"wr"}
+	abs		$tmp4 Seed 	%argrw{"wr"}
+	assign		$tmp5 $tmp4 	%argrw{"wr"}
+	vector		$tmp1 $tmp3 $tmp5 $const3 	%argrw{"wrrr"}
+	noise		ratio $const1 $tmp1 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/IdxRndCol.osl:22
+# }
+	mix		Out Min Max ratio 	%line{22} %argrw{"wrrr"}
+	end

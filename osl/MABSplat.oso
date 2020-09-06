@@ -1,0 +1,416 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader MABSplat
+param	point	Vector	0 0 0		%read{1,1} %write{0,0} %derivs %initexpr
+param	float	Scale	1		%read{1,1} %write{2147483647,-1} %derivs
+param	string	Texture	""		%read{2,141} %write{2147483647,-1} %derivs
+param	color	Background	1 1 1		%read{71,71} %write{2147483647,-1}
+param	float	TextureScale	1		%read{137,137} %write{2147483647,-1} %derivs
+oparam	color	Color	1 0 1		%read{2147483647,-1} %write{145,145}
+global	point	P	%read{0,0} %write{2147483647,-1} %derivs
+local	vector	___254_axis	%read{74,144} %write{74,144} %derivs
+local	float	___254_cosang	%read{74,144} %write{74,144} %derivs
+local	float	___254_sinang	%read{74,144} %write{74,144} %derivs
+local	float	___254_cosang1	%read{74,144} %write{74,144} %derivs
+local	float	___254_x	%read{74,144} %write{74,144} %derivs
+local	float	___254_y	%read{74,144} %write{74,144} %derivs
+local	float	___254_z	%read{74,144} %write{74,144} %derivs
+local	matrix	___254_M	%read{74,144} %write{74,144} %derivs
+local	int	___322_n	%read{44,70} %write{41,70}
+local	int	___323_j	%read{44,70} %write{43,70}
+local	int	___325_i	%read{44,70} %write{44,70} %derivs
+local	float	___327_tf	%read{44,70} %write{44,70}
+local	point	___327_tp	%read{44,70} %write{44,70} %derivs
+local	point	___328_p	%read{15,17} %write{14,14} %derivs
+local	float	___328_xx	%read{22,39} %write{21,39} %derivs
+local	float	___328_yy	%read{22,39} %write{22,39} %derivs
+local	float	___328_xi	%read{21,39} %write{16,16} %derivs
+local	float	___328_yi	%read{22,39} %write{18,18} %derivs
+local	int	___328_i	%read{22,39} %write{19,39} %derivs
+local	vector	___332_ip	%read{22,39} %write{22,39} %derivs
+local	vector	___332_np	%read{22,39} %write{22,39} %derivs
+local	point	p	%read{12,144} %write{1,1} %derivs
+local	color	splat	%read{74,144} %write{74,144}
+local	color	result	%read{74,145} %write{71,144}
+local	float	alpha	%read{74,144} %write{74,144}
+local	int[2]	resolution	%read{6,8} %write{2,2} %derivs
+local	float	aspectratio	%read{74,144} %write{10,10} %derivs
+local	point[9]	vp	%read{44,144} %write{22,70} %derivs
+local	float[9]	z	%read{44,70} %write{22,70}
+local	int	___334_i	%read{74,144} %write{73,144} %derivs
+local	vector	___335_xy	%read{2147483647,-1} %write{74,144}
+local	vector	___335_q	%read{74,144} %write{74,144} %derivs
+temp	int	$tmp1	%read{3,3} %write{2,2}
+const	string	$const1	"resolution"		%read{2,2} %write{2147483647,-1}
+temp	int	$tmp2	%read{4,4} %write{3,3}
+const	int	$const2	0		%read{3,138} %write{2147483647,-1}
+const	int	$const3	1		%read{6,144} %write{2147483647,-1}
+temp	int	$tmp3	%read{7,7} %write{6,6} %derivs
+temp	float	$tmp4	%read{10,10} %write{7,7} %derivs
+temp	int	$tmp5	%read{9,9} %write{8,8} %derivs
+temp	float	$tmp6	%read{10,10} %write{9,9} %derivs
+const	string	$const4	"voronoip9z"		%read{11,11} %write{2147483647,-1}
+temp	float	$tmp7	%read{14,14} %write{12,12} %derivs
+temp	float	$tmp8	%read{14,14} %write{13,13} %derivs
+const	float	$const5	0		%read{14,132} %write{2147483647,-1}
+temp	float	$tmp9	%read{16,16} %write{15,15} %derivs
+temp	float	$tmp10	%read{18,18} %write{17,17} %derivs
+const	int	$const6	-1		%read{19,19} %write{2147483647,-1}
+const	float	$const7	1		%read{21,132} %write{2147483647,-1}
+temp	float	$tmp11	%read{22,39} %write{22,39}
+temp	int	$tmp12	%read{20,39} %write{21,39}
+temp	float	$tmp13	%read{22,39} %write{22,39}
+temp	int	$tmp14	%read{22,39} %write{22,39}
+temp	int	$tmp15	%read{2147483647,-1} %write{22,39}
+temp	vector	$tmp16	%read{22,39} %write{22,39} %derivs
+temp	float	$tmp17	%read{22,39} %write{22,39}
+const	float	$const9	42		%read{34,34} %write{2147483647,-1}
+temp	float	$tmp18	%read{2147483647,-1} %write{22,39}
+temp	float	$tmp19	%read{2147483647,-1} %write{22,39}
+const	int	$const10	9		%read{41,74} %write{2147483647,-1}
+const	string	$const11	"sort"		%read{40,40} %write{2147483647,-1}
+temp	int	$tmp20	%read{42,70} %write{43,70}
+temp	int	$tmp21	%read{44,70} %write{44,70}
+temp	int	$tmp22	%read{44,70} %write{44,70}
+temp	float	$tmp23	%read{44,70} %write{44,70}
+temp	float	$tmp24	%read{44,70} %write{44,70}
+temp	int	$tmp25	%read{44,70} %write{44,70}
+temp	int	$tmp26	%read{44,70} %write{44,70}
+temp	float	$tmp27	%read{44,70} %write{44,70}
+temp	int	$tmp28	%read{44,70} %write{44,70}
+temp	int	$tmp29	%read{44,70} %write{44,70} %derivs
+temp	point	$tmp30	%read{44,70} %write{44,70} %derivs
+temp	int	$tmp31	%read{44,70} %write{44,70} %derivs
+temp	int	$tmp32	%read{2147483647,-1} %write{44,70}
+temp	int	$tmp33	%read{2147483647,-1} %write{44,70}
+temp	int	$tmp34	%read{2147483647,-1} %write{44,70}
+temp	int	$tmp35	%read{72,144} %write{73,144}
+temp	float	$tmp36	%read{74,144} %write{74,144}
+temp	point	$tmp37	%read{74,144} %write{74,144}
+temp	float	$tmp38	%read{74,144} %write{74,144}
+temp	point	$tmp39	%read{74,144} %write{74,144}
+temp	point	$tmp40	%read{74,144} %write{74,144} %derivs
+const	int	$const12	2		%read{83,92} %write{2147483647,-1}
+temp	float	$tmp41	%read{74,144} %write{74,144} %derivs
+temp	point	$tmp42	%read{74,144} %write{74,144} %derivs
+const	float	$const13	6.2831855		%read{84,84} %write{2147483647,-1}
+temp	float	$tmp43	%read{74,144} %write{74,144} %derivs
+const	point	$const14	0 0 0		%read{86,135} %write{2147483647,-1}
+const	point	$const15	0 0 1		%read{86,86} %write{2147483647,-1}
+const	string	$const16	"rotate"		%read{85,85} %write{2147483647,-1}
+temp	vector	$tmp46	%read{74,144} %write{74,144} %derivs
+temp	float	$tmp47	%read{74,144} %write{74,144} %derivs
+temp	float	$tmp48	%read{74,144} %write{74,144} %derivs
+temp	float	$tmp49	%read{74,144} %write{74,144} %derivs
+temp	float	$tmp50	%read{74,144} %write{74,144} %derivs
+temp	float	$tmp51	%read{74,144} %write{74,144} %derivs
+temp	float	$tmp52	%read{74,144} %write{74,144} %derivs
+temp	float	$tmp53	%read{74,144} %write{74,144} %derivs
+temp	float	$tmp54	%read{74,144} %write{74,144} %derivs
+temp	float	$tmp55	%read{74,144} %write{74,144} %derivs
+temp	float	$tmp56	%read{74,144} %write{74,144} %derivs
+temp	float	$tmp57	%read{74,144} %write{74,144} %derivs
+temp	float	$tmp58	%read{74,144} %write{74,144} %derivs
+temp	float	$tmp59	%read{74,144} %write{74,144} %derivs
+temp	float	$tmp60	%read{74,144} %write{74,144} %derivs
+temp	float	$tmp61	%read{74,144} %write{74,144} %derivs
+temp	float	$tmp62	%read{74,144} %write{74,144} %derivs
+temp	float	$tmp63	%read{74,144} %write{74,144} %derivs
+temp	float	$tmp64	%read{74,144} %write{74,144} %derivs
+temp	float	$tmp65	%read{74,144} %write{74,144} %derivs
+temp	float	$tmp66	%read{74,144} %write{74,144} %derivs
+temp	float	$tmp67	%read{74,144} %write{74,144} %derivs
+temp	float	$tmp68	%read{74,144} %write{74,144} %derivs
+temp	float	$tmp69	%read{74,144} %write{74,144} %derivs
+temp	float	$tmp70	%read{74,144} %write{74,144} %derivs
+temp	float	$tmp71	%read{74,144} %write{74,144} %derivs
+temp	float	$tmp72	%read{74,144} %write{74,144} %derivs
+temp	float	$tmp73	%read{74,144} %write{74,144} %derivs
+temp	float	$tmp74	%read{74,144} %write{74,144} %derivs
+temp	float	$tmp75	%read{74,144} %write{74,144} %derivs
+temp	float	$tmp76	%read{74,144} %write{74,144} %derivs
+temp	float	$tmp77	%read{74,144} %write{74,144} %derivs
+temp	float	$tmp78	%read{74,144} %write{74,144} %derivs
+temp	float	$tmp79	%read{74,144} %write{74,144} %derivs
+temp	float	$tmp80	%read{74,144} %write{74,144} %derivs
+temp	float	$tmp81	%read{74,144} %write{74,144} %derivs
+temp	float	$tmp82	%read{74,144} %write{74,144} %derivs
+temp	float	$tmp83	%read{74,144} %write{74,144} %derivs
+temp	float	$tmp84	%read{74,144} %write{74,144} %derivs
+temp	float	$tmp85	%read{74,144} %write{74,144} %derivs
+temp	vector	$tmp86	%read{74,144} %write{74,144} %derivs
+temp	vector	$tmp87	%read{74,144} %write{74,144} %derivs
+const	float	$const17	0.5		%read{136,136} %write{2147483647,-1}
+temp	float	$tmp88	%read{74,144} %write{74,144} %derivs
+temp	float	$tmp89	%read{74,144} %write{74,144} %derivs
+temp	float	$tmp90	%read{74,144} %write{74,144} %derivs
+const	string	$const18	"alpha"		%read{141,141} %write{2147483647,-1}
+temp	int	$tmp91	%read{2147483647,-1} %write{74,144}
+code Vector
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:61
+#         float Scale = 1,
+	assign		Vector P 	%filename{"source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl"} %line{61} %argrw{"wr"}
+code ___main___
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:69
+# 
+	mul		p Vector Scale 	%filename{"source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl"} %line{69} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:74
+#         return;
+	gettextureinfo	$tmp1 Texture $const1 resolution 	%line{74} %argrw{"wrrw"}
+	eq		$tmp2 $tmp1 $const2 	%argrw{"wrr"}
+	if		$tmp2 6 6 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:75
+#     }
+	exit	%line{75}
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:77
+# 
+	aref		$tmp3 resolution $const3 	%line{77} %argrw{"wrr"}
+	assign		$tmp4 $tmp3 	%argrw{"wr"}
+	aref		$tmp5 resolution $const2 	%argrw{"wrr"}
+	assign		$tmp6 $tmp5 	%argrw{"wr"}
+	div		aspectratio $tmp4 $tmp6 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:81
+# 
+	functioncall	$const4 71 	%line{81} %argrw{"r"}
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:40
+# 
+	compref		$tmp7 p $const2 	%line{40} %argrw{"wrr"}
+	compref		$tmp8 p $const3 	%argrw{"wrr"}
+	point		___328_p $tmp7 $tmp8 $const5 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:44
+#     yi = floor(p[1]);
+	compref		$tmp9 ___328_p $const2 	%line{44} %argrw{"wrr"}
+	floor		___328_xi $tmp9 	%argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:45
+# 
+	compref		$tmp10 ___328_p $const3 	%line{45} %argrw{"wrr"}
+	floor		___328_yi $tmp10 	%argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:47
+#     for (xx=xi-1; xx<=xi+1; xx++){
+	assign		___328_i $const6 	%line{47} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:48
+#     for (yy=yi-1; yy<=yi+1; yy++){
+	for		$tmp12 22 24 38 40 	%line{48} %argrw{"r"}
+	sub		___328_xx ___328_xi $const7 	%argrw{"wrr"}
+	add		$tmp11 ___328_xi $const7 	%argrw{"wrr"}
+	le		$tmp12 ___328_xx $tmp11 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:49
+#         i++;
+	for		$tmp14 26 28 36 38 	%line{49} %argrw{"r"}
+	sub		___328_yy ___328_yi $const7 	%argrw{"wrr"}
+	add		$tmp13 ___328_yi $const7 	%argrw{"wrr"}
+	le		$tmp14 ___328_yy $tmp13 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:50
+#         vector ip = vector(xx, yy, 0);
+	assign		$tmp15 ___328_i 	%line{50} %argrw{"wr"}
+	add		___328_i ___328_i $const3 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:51
+#         vector np = cellnoise(ip);
+	vector		___332_ip ___328_xx ___328_yy $const5 	%line{51} %argrw{"wrrr"}
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:52
+#         vp[i] = ip + np;
+	cellnoise	___332_np ___332_ip 	%line{52} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:53
+#         z[i] = cellnoise(ip,42);
+	add		$tmp16 ___332_ip ___332_np 	%line{53} %argrw{"wrr"}
+	aassign		vp ___328_i $tmp16 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:54
+#     }
+	cellnoise	$tmp17 ___332_ip $const9 	%line{54} %argrw{"wrr"}
+	aassign		z ___328_i $tmp17 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:49
+#         i++;
+	assign		$tmp18 ___328_yy 	%line{49} %argrw{"wr"}
+	add		___328_yy ___328_yy $const7 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:48
+#     for (yy=yi-1; yy<=yi+1; yy++){
+	assign		$tmp19 ___328_xx 	%line{48} %argrw{"wr"}
+	add		___328_xx ___328_xx $const7 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:57
+# }
+	functioncall	$const11 71 	%line{57} %argrw{"r"}
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:20
+#     for(int j = 0; j < np; j++){
+	assign		___322_n $const10 	%line{20} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:21
+#         for(int i = 1; i < n; i++){
+	for		$tmp20 44 45 69 71 	%line{21} %argrw{"r"}
+	assign		___323_j $const2 	%argrw{"wr"}
+	lt		$tmp20 ___323_j $const10 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:22
+#             if( f[i-1] > f[i] ){
+	for		$tmp21 47 48 65 67 	%line{22} %argrw{"r"}
+	assign		___325_i $const3 	%argrw{"wr"}
+	lt		$tmp21 ___325_i ___322_n 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:23
+#                 float tf = f[i-1];
+	sub		$tmp22 ___325_i $const3 	%line{23} %argrw{"wrr"}
+	aref		$tmp23 z $tmp22 	%argrw{"wrr"}
+	aref		$tmp24 z ___325_i 	%argrw{"wrr"}
+	gt		$tmp25 $tmp23 $tmp24 	%argrw{"wrr"}
+	if		$tmp25 65 65 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:24
+#                 f[i-1] = f[i];
+	sub		$tmp26 ___325_i $const3 	%line{24} %argrw{"wrr"}
+	aref		___327_tf z $tmp26 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:25
+#                 f[i] = tf;
+	aref		$tmp27 z ___325_i 	%line{25} %argrw{"wrr"}
+	sub		$tmp28 ___325_i $const3 	%argrw{"wrr"}
+	aassign		z $tmp28 $tmp27 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:26
+#                 point tp = p[i-1];
+	aassign		z ___325_i ___327_tf 	%line{26} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:27
+#                 p[i-1] = p[i];
+	sub		$tmp29 ___325_i $const3 	%line{27} %argrw{"wrr"}
+	aref		___327_tp vp $tmp29 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:28
+#                 p[i] = tp;
+	aref		$tmp30 vp ___325_i 	%line{28} %argrw{"wrr"}
+	sub		$tmp31 ___325_i $const3 	%argrw{"wrr"}
+	aassign		vp $tmp31 $tmp30 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:29
+#             }
+	aassign		vp ___325_i ___327_tp 	%line{29} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:22
+#             if( f[i-1] > f[i] ){
+	assign		$tmp32 ___325_i 	%line{22} %argrw{"wr"}
+	add		___325_i ___325_i $const3 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:32
+#     }
+	assign		$tmp33 ___322_n 	%line{32} %argrw{"wr"}
+	sub		___322_n ___322_n $const3 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:21
+#         for(int i = 1; i < n; i++){
+	assign		$tmp34 ___323_j 	%line{21} %argrw{"wr"}
+	add		___323_j ___323_j $const3 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:83
+#     for(int i=0; i<9; i++){
+	assign		result Background 	%line{83} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:84
+#         vector xy = vector(vp[i][0], vp[i][1], 0);
+	for		$tmp35 74 75 143 145 	%line{84} %argrw{"r"}
+	assign		___334_i $const2 	%argrw{"wr"}
+	lt		$tmp35 ___334_i $const10 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:85
+#         vector q = vp[i] - p;
+	aref		$tmp37 vp ___334_i 	%line{85} %argrw{"wrr"}
+	compref		$tmp36 $tmp37 $const2 	%argrw{"wrr"}
+	aref		$tmp39 vp ___334_i 	%argrw{"wrr"}
+	compref		$tmp38 $tmp39 $const3 	%argrw{"wrr"}
+	vector		___335_xy $tmp36 $tmp38 $const5 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:86
+#         q = rotate(q, vp[i][2]*M_2PI, point(0,0,0), point(0,0,1));
+	aref		$tmp40 vp ___334_i 	%line{86} %argrw{"wrr"}
+	sub		___335_q $tmp40 p 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:87
+#         q = q + 0.5;
+	aref		$tmp42 vp ___334_i 	%line{87} %argrw{"wrr"}
+	compref		$tmp41 $tmp42 $const12 	%argrw{"wrr"}
+	mul		$tmp43 $tmp41 $const13 	%argrw{"wrr"}
+	functioncall	$const16 136 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:274
+#     vector axis = normalize (b - a);
+	sub		$tmp46 $const15 $const14 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{274} %argrw{"wrr"}
+	normalize	___254_axis $tmp46 	%argrw{"wr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:276
+#     sincos (angle, sinang, cosang);
+	sincos		$tmp43 ___254_sinang ___254_cosang 	%line{276} %argrw{"rww"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:277
+#     float cosang1 = 1.0 - cosang;
+	sub		___254_cosang1 $const7 ___254_cosang 	%line{277} %argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:278
+#     float x = axis[0], y = axis[1], z = axis[2];
+	compref		___254_x ___254_axis $const2 	%line{278} %argrw{"wrr"}
+	compref		___254_y ___254_axis $const3 	%argrw{"wrr"}
+	compref		___254_z ___254_axis $const12 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:279
+#     matrix M = matrix (x * x + (1.0 - x * x) * cosang,
+	mul		$tmp47 ___254_x ___254_x 	%line{279} %argrw{"wrr"}
+	mul		$tmp48 ___254_x ___254_x 	%argrw{"wrr"}
+	sub		$tmp49 $const7 $tmp48 	%argrw{"wrr"}
+	mul		$tmp50 $tmp49 ___254_cosang 	%argrw{"wrr"}
+	add		$tmp51 $tmp47 $tmp50 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:280
+#                        x * y * cosang1 + z * sinang,
+	mul		$tmp52 ___254_x ___254_y 	%line{280} %argrw{"wrr"}
+	mul		$tmp53 $tmp52 ___254_cosang1 	%argrw{"wrr"}
+	mul		$tmp54 ___254_z ___254_sinang 	%argrw{"wrr"}
+	add		$tmp55 $tmp53 $tmp54 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:281
+#                        x * z * cosang1 - y * sinang,
+	mul		$tmp56 ___254_x ___254_z 	%line{281} %argrw{"wrr"}
+	mul		$tmp57 $tmp56 ___254_cosang1 	%argrw{"wrr"}
+	mul		$tmp58 ___254_y ___254_sinang 	%argrw{"wrr"}
+	sub		$tmp59 $tmp57 $tmp58 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:283
+#                        x * y * cosang1 - z * sinang,
+	mul		$tmp60 ___254_x ___254_y 	%line{283} %argrw{"wrr"}
+	mul		$tmp61 $tmp60 ___254_cosang1 	%argrw{"wrr"}
+	mul		$tmp62 ___254_z ___254_sinang 	%argrw{"wrr"}
+	sub		$tmp63 $tmp61 $tmp62 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:284
+#                        y * y + (1.0 - y * y) * cosang,
+	mul		$tmp64 ___254_y ___254_y 	%line{284} %argrw{"wrr"}
+	mul		$tmp65 ___254_y ___254_y 	%argrw{"wrr"}
+	sub		$tmp66 $const7 $tmp65 	%argrw{"wrr"}
+	mul		$tmp67 $tmp66 ___254_cosang 	%argrw{"wrr"}
+	add		$tmp68 $tmp64 $tmp67 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:285
+#                        y * z * cosang1 + x * sinang,
+	mul		$tmp69 ___254_y ___254_z 	%line{285} %argrw{"wrr"}
+	mul		$tmp70 $tmp69 ___254_cosang1 	%argrw{"wrr"}
+	mul		$tmp71 ___254_x ___254_sinang 	%argrw{"wrr"}
+	add		$tmp72 $tmp70 $tmp71 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:287
+#                        x * z * cosang1 + y * sinang,
+	mul		$tmp73 ___254_x ___254_z 	%line{287} %argrw{"wrr"}
+	mul		$tmp74 $tmp73 ___254_cosang1 	%argrw{"wrr"}
+	mul		$tmp75 ___254_y ___254_sinang 	%argrw{"wrr"}
+	add		$tmp76 $tmp74 $tmp75 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:288
+#                        y * z * cosang1 - x * sinang,
+	mul		$tmp77 ___254_y ___254_z 	%line{288} %argrw{"wrr"}
+	mul		$tmp78 $tmp77 ___254_cosang1 	%argrw{"wrr"}
+	mul		$tmp79 ___254_x ___254_sinang 	%argrw{"wrr"}
+	sub		$tmp80 $tmp78 $tmp79 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:289
+#                        z * z + (1.0 - z * z) * cosang,
+	mul		$tmp81 ___254_z ___254_z 	%line{289} %argrw{"wrr"}
+	mul		$tmp82 ___254_z ___254_z 	%argrw{"wrr"}
+	sub		$tmp83 $const7 $tmp82 	%argrw{"wrr"}
+	mul		$tmp84 $tmp83 ___254_cosang 	%argrw{"wrr"}
+	add		$tmp85 $tmp81 $tmp84 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:291
+#                        0.0, 0.0, 0.0, 1.0);
+	matrix		___254_M $tmp51 $tmp55 $tmp59 $const5 $tmp63 $tmp68 $tmp72 $const5 $tmp76 $tmp80 $tmp85 $const5 $const5 $const5 $const5 $const7 	%line{291} %argrw{"wrrrrrrrrrrrrrrrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:292
+#     return transform (M, p-a) + a;
+	sub		$tmp87 ___335_q $const14 	%line{292} %argrw{"wrr"}
+	transformv	$tmp86 ___254_M $tmp87 	%argrw{"wrr"}
+	add		___335_q $tmp86 $const14 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:88
+#         q = q * TextureScale;
+	add		___335_q ___335_q $const17 	%filename{"source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl"} %line{88} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:89
+#         splat = texture(Texture, q[0]*aspectratio, q[1], "alpha", alpha);
+	mul		___335_q ___335_q TextureScale 	%line{89} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:90
+#         result = mix(result, splat, alpha);
+	compref		$tmp88 ___335_q $const2 	%line{90} %argrw{"wrr"}
+	mul		$tmp89 $tmp88 aspectratio 	%argrw{"wrr"}
+	compref		$tmp90 ___335_q $const3 	%argrw{"wrr"}
+	texture		splat Texture $tmp89 $tmp90 $const18 alpha 	%argrw{"wrrrrw"} %argderivs{2,3}
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:91
+#     }
+	mix		result result splat alpha 	%line{91} %argrw{"wrrr"}
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:84
+#         vector xy = vector(vp[i][0], vp[i][1], 0);
+	assign		$tmp91 ___334_i 	%line{84} %argrw{"wr"}
+	add		___334_i ___334_i $const3 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/20MABSplat/MABSplat.osl:93
+# }
+	assign		Color result 	%line{93} %argrw{"wr"}
+	end

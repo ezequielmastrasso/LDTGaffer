@@ -1,0 +1,68 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader BaiRobotMix
+param	color	Color1	0 1 0		%read{11,11} %write{2147483647,-1}
+param	color	Color2	1 0 0		%read{11,11} %write{2147483647,-1}
+param	closure color	Closure1			%read{13,13} %write{0,0} %initexpr
+param	closure color	Closure2			%read{14,14} %write{1,1} %initexpr
+param	vector	Light_Position	0 0 0		%read{5,5} %write{2,2} %initexpr
+oparam	color	Color	0 0 0		%read{2147483647,-1} %write{11,11}
+oparam	closure color	Closure			%read{2147483647,-1} %write{3,15} %initexpr
+global	point	P	%read{4,5} %write{4,4}
+global	normal	N	%read{7,7} %write{2147483647,-1}
+local	float	cosine_t	%read{11,14} %write{10,10}
+const	string	$const1	"holdout"		%read{0,3} %write{2147483647,-1}
+const	point	$const2	0 0 0		%read{2,2} %write{2147483647,-1}
+const	string	$const3	"object"		%read{4,4} %write{2147483647,-1}
+const	string	$const4	"world"		%read{4,4} %write{2147483647,-1}
+temp	float	$tmp1	%read{9,9} %write{7,7}
+temp	vector	$tmp2	%read{7,7} %write{6,6}
+temp	point	$tmp3	%read{6,6} %write{5,5}
+const	float	$const6	0		%read{10,10} %write{2147483647,-1}
+const	float	$const7	1		%read{9,12} %write{2147483647,-1}
+const	string	$const8	"clamp"		%read{8,8} %write{2147483647,-1}
+temp	float	$tmp4	%read{10,10} %write{9,9}
+temp	float	$tmp5	%read{13,13} %write{12,12}
+temp	closure color	$tmp6	%read{15,15} %write{13,13}
+temp	closure color	$tmp7	%read{15,15} %write{14,14}
+code Closure1
+# source/sambler-osl-shaders/ramps/BaiRobotMix/BaiRobotMix.osl:19
+#   closure color Closure2 = holdout(),
+	closure		Closure1 $const1 	%filename{"source/sambler-osl-shaders/ramps/BaiRobotMix/BaiRobotMix.osl"} %line{19} %argrw{"wr"}
+code Closure2
+# source/sambler-osl-shaders/ramps/BaiRobotMix/BaiRobotMix.osl:20
+#   vector Light_Position = point(0),
+	closure		Closure2 $const1 	%filename{"source/sambler-osl-shaders/ramps/BaiRobotMix/BaiRobotMix.osl"} %line{20} %argrw{"wr"}
+code Light_Position
+# source/sambler-osl-shaders/ramps/BaiRobotMix/BaiRobotMix.osl:21
+#   output color Color = color(0),
+	assign		Light_Position $const2 	%filename{"source/sambler-osl-shaders/ramps/BaiRobotMix/BaiRobotMix.osl"} %line{21} %argrw{"wr"}
+code Closure
+# source/sambler-osl-shaders/ramps/BaiRobotMix/BaiRobotMix.osl:23
+# )
+	closure		Closure $const1 	%filename{"source/sambler-osl-shaders/ramps/BaiRobotMix/BaiRobotMix.osl"} %line{23} %argrw{"wr"}
+code ___main___
+# source/sambler-osl-shaders/ramps/BaiRobotMix/BaiRobotMix.osl:26
+#   float cosine_t = clamp(dot( normalize(Light_Position - P), N ), 0, 1.0);
+	transform	P $const3 $const4 P 	%filename{"source/sambler-osl-shaders/ramps/BaiRobotMix/BaiRobotMix.osl"} %line{26} %argrw{"wrrr"}
+# source/sambler-osl-shaders/ramps/BaiRobotMix/BaiRobotMix.osl:27
+#   
+	sub		$tmp3 Light_Position P 	%line{27} %argrw{"wrr"}
+	normalize	$tmp2 $tmp3 	%argrw{"wr"}
+	dot		$tmp1 $tmp2 N 	%argrw{"wrr"}
+	functioncall	$const8 11 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:145
+# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
+	min		$tmp4 $tmp1 $const7 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{145} %argrw{"wrr"}
+	max		cosine_t $tmp4 $const6 	%argrw{"wrr"}
+# source/sambler-osl-shaders/ramps/BaiRobotMix/BaiRobotMix.osl:29
+#   Closure = (1 - cosine_t) * Closure1 + cosine_t * Closure2;
+	mix		Color Color1 Color2 cosine_t 	%filename{"source/sambler-osl-shaders/ramps/BaiRobotMix/BaiRobotMix.osl"} %line{29} %argrw{"wrrr"}
+# source/sambler-osl-shaders/ramps/BaiRobotMix/BaiRobotMix.osl:30
+# }
+	sub		$tmp5 $const7 cosine_t 	%line{30} %argrw{"wrr"}
+	mul		$tmp6 Closure1 $tmp5 	%argrw{"wrr"}
+	mul		$tmp7 Closure2 cosine_t 	%argrw{"wrr"}
+	add		Closure $tmp6 $tmp7 	%argrw{"wrr"}
+	end

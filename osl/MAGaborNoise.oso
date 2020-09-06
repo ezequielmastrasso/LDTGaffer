@@ -1,0 +1,27 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader MAGaborNoise
+param	vector	Vector	0 0 0		%read{1,1} %write{0,0} %derivs %initexpr
+param	int	Anisotropic	0		%read{1,1} %write{2147483647,-1}
+param	vector	Direction	1 0 0		%read{1,1} %write{2147483647,-1}
+param	int	Filter	1		%read{1,1} %write{2147483647,-1}
+param	float	Bandwidth	1		%read{1,1} %write{2147483647,-1}
+param	float	Impulses	16		%read{1,1} %write{2147483647,-1}
+oparam	float	Noise	0		%read{2147483647,-1} %write{1,1}
+global	point	P	%read{0,0} %write{2147483647,-1} %derivs
+const	string	$const1	"gabor"		%read{1,1} %write{2147483647,-1}
+const	string	$const2	"anisotropic"		%read{1,1} %write{2147483647,-1}
+const	string	$const3	"direction"		%read{1,1} %write{2147483647,-1}
+const	string	$const4	"do_filter"		%read{1,1} %write{2147483647,-1}
+const	string	$const5	"bandwidth"		%read{1,1} %write{2147483647,-1}
+const	string	$const6	"impulses"		%read{1,1} %write{2147483647,-1}
+code Vector
+# source/sambler-osl-shaders/random-noise/MAGaborNoise/MAGaborNoise.osl:15
+#     int Anisotropic = 0,
+	assign		Vector P 	%filename{"source/sambler-osl-shaders/random-noise/MAGaborNoise/MAGaborNoise.osl"} %line{15} %argrw{"wr"}
+code ___main___
+# source/sambler-osl-shaders/random-noise/MAGaborNoise/MAGaborNoise.osl:28
+# }
+	noise		Noise $const1 Vector $const2 Anisotropic $const3 Direction $const4 Filter $const5 Bandwidth $const6 Impulses 	%filename{"source/sambler-osl-shaders/random-noise/MAGaborNoise/MAGaborNoise.osl"} %line{28} %argrw{"wrrrrrrrrrrrr"} %argderivs{2}
+	end

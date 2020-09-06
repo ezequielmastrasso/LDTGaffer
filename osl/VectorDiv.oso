@@ -1,0 +1,12 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader VectorDiv	%meta{string,help,"Divides two vectors"} %meta{string,label,"Divide (vector)"} %meta{string,category,"Math Vector"} 
+param	vector	A	0.5 0.5 0.5		%meta{string,label,"A"}  %read{0,0} %write{2147483647,-1}
+param	vector	B	0.5 0.5 0.5		%meta{string,label,"B"}  %read{0,0} %write{2147483647,-1}
+oparam	vector	Out	0 0 0		%read{2147483647,-1} %write{0,0}
+code ___main___
+# source/3dsMax-OSL-Shaders/VectorDiv.osl:19
+# }
+	div		Out A B 	%filename{"source/3dsMax-OSL-Shaders/VectorDiv.osl"} %line{19} %argrw{"wrr"}
+	end

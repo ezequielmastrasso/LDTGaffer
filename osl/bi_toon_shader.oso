@@ -1,0 +1,82 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader bi_toon_shader
+param	float	Size	0.1		%read{15,22} %write{2147483647,-1}
+param	float	Smooth	0.80000001		%read{18,23} %write{2147483647,-1}
+param	float	Intensity	0.69999999		%read{1,26} %write{2147483647,-1}
+param	color	Color	0.5 0.5 0.5		%read{25,25} %write{2147483647,-1}
+oparam	color	Toon	0 0 0		%read{2147483647,-1} %write{26,26}
+global	vector	I	%read{4,11} %write{2147483647,-1}
+global	normal	N	%read{3,10} %write{2147483647,-1}
+local	float	t	%read{2147483647,-1} %write{2,2}
+local	float	rslt	%read{14,25} %write{13,24}
+local	float	ang	%read{15,22} %write{14,14}
+const	float	$const1	0		%read{2,21} %write{2147483647,-1}
+const	float	$const2	1		%read{1,24} %write{2147483647,-1}
+const	string	$const3	"clamp"		%read{0,0} %write{2147483647,-1}
+temp	float	$tmp1	%read{2,2} %write{1,1}
+const	int	$const4	0		%read{3,4} %write{2147483647,-1}
+temp	float	$tmp2	%read{5,5} %write{3,3}
+temp	float	$tmp3	%read{5,5} %write{4,4}
+temp	float	$tmp4	%read{9,9} %write{5,5}
+const	int	$const5	1		%read{6,7} %write{2147483647,-1}
+temp	float	$tmp5	%read{8,8} %write{6,6}
+temp	float	$tmp6	%read{8,8} %write{7,7}
+temp	float	$tmp7	%read{9,9} %write{8,8}
+temp	float	$tmp8	%read{13,13} %write{9,9}
+const	int	$const6	2		%read{10,11} %write{2147483647,-1}
+temp	float	$tmp9	%read{12,12} %write{10,10}
+temp	float	$tmp10	%read{12,12} %write{11,11}
+temp	float	$tmp11	%read{13,13} %write{12,12}
+temp	int	$tmp12	%read{16,16} %write{15,15}
+temp	float	$tmp13	%read{19,19} %write{18,18}
+temp	int	$tmp14	%read{20,20} %write{19,19}
+temp	float	$tmp15	%read{23,23} %write{22,22}
+temp	float	$tmp16	%read{24,24} %write{23,23}
+temp	color	$tmp17	%read{26,26} %write{25,25}
+code ___main___
+# source/sambler-osl-shaders/ramps/FLToon/FLToon.osl:18
+#     float rslt = N[0]*I[0]+N[1]*I[1]+N[2]*I[2];
+	functioncall	$const3 3 	%filename{"source/sambler-osl-shaders/ramps/FLToon/FLToon.osl"} %line{18} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:145
+# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
+	min		$tmp1 Intensity $const2 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{145} %argrw{"wrr"}
+	max		t $tmp1 $const1 	%argrw{"wrr"}
+# source/sambler-osl-shaders/ramps/FLToon/FLToon.osl:19
+#     float ang = acos(rslt);
+	compref		$tmp2 N $const4 	%filename{"source/sambler-osl-shaders/ramps/FLToon/FLToon.osl"} %line{19} %argrw{"wrr"}
+	compref		$tmp3 I $const4 	%argrw{"wrr"}
+	mul		$tmp4 $tmp2 $tmp3 	%argrw{"wrr"}
+	compref		$tmp5 N $const5 	%argrw{"wrr"}
+	compref		$tmp6 I $const5 	%argrw{"wrr"}
+	mul		$tmp7 $tmp5 $tmp6 	%argrw{"wrr"}
+	add		$tmp8 $tmp4 $tmp7 	%argrw{"wrr"}
+	compref		$tmp9 N $const6 	%argrw{"wrr"}
+	compref		$tmp10 I $const6 	%argrw{"wrr"}
+	mul		$tmp11 $tmp9 $tmp10 	%argrw{"wrr"}
+	add		rslt $tmp8 $tmp11 	%argrw{"wrr"}
+# source/sambler-osl-shaders/ramps/FLToon/FLToon.osl:20
+#     if (ang < Size){rslt = 1.0;}
+	acos		ang rslt 	%line{20} %argrw{"wr"}
+# source/sambler-osl-shaders/ramps/FLToon/FLToon.osl:21
+#     else if (ang >= (Size+Smooth)){rslt = 0.0;}
+	lt		$tmp12 ang Size 	%line{21} %argrw{"wrr"}
+	if		$tmp12 18 25 	%argrw{"r"}
+	assign		rslt $const2 	%argrw{"wr"}
+# source/sambler-osl-shaders/ramps/FLToon/FLToon.osl:22
+#     else{rslt = 1.0 - ((ang - Size)/Smooth);}
+	add		$tmp13 Size Smooth 	%line{22} %argrw{"wrr"}
+	ge		$tmp14 ang $tmp13 	%argrw{"wrr"}
+	if		$tmp14 22 25 	%argrw{"r"}
+	assign		rslt $const1 	%argrw{"wr"}
+# source/sambler-osl-shaders/ramps/FLToon/FLToon.osl:23
+#     Toon = (rslt * Color) * Intensity;
+	sub		$tmp15 ang Size 	%line{23} %argrw{"wrr"}
+	div		$tmp16 $tmp15 Smooth 	%argrw{"wrr"}
+	sub		rslt $const2 $tmp16 	%argrw{"wrr"}
+# source/sambler-osl-shaders/ramps/FLToon/FLToon.osl:24
+# }
+	mul		$tmp17 rslt Color 	%line{24} %argrw{"wrr"}
+	mul		Toon $tmp17 Intensity 	%argrw{"wrr"}
+	end

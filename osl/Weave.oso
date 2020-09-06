@@ -1,0 +1,362 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader Weave	%meta{string,help,"<font size=+1><b>Weave</b></font><br>A simple threaded weave shader. Can be used for everything from cloth to carbon fiber."} %meta{string,category,"Textures"} %meta{string,URL,"https://github.com/ADN-DevTech/3dsMax-OSL-Shaders"} 
+param	point	UVW	0 0 0		%read{1,1} %write{0,0} %initexpr
+param	float	Scale	0.2		%read{1,1} %write{2147483647,-1}
+param	color	U_Color	0.2 0.2 0.2		%meta{string,label,"U Color"}  %read{100,100} %write{2147483647,-1}
+param	color	V_Color	0.5 0.5 0.5		%meta{string,label,"V Color"}  %read{101,101} %write{2147483647,-1}
+param	float	Width	0.5		%meta{float,min,0} %meta{float,max,1}  %read{5,5} %write{2147483647,-1}
+param	float	Roundness	1		%meta{float,min,0} %meta{float,max,1}  %read{102,102} %write{2147483647,-1}
+param	float	RoundnessBump	1		%meta{float,min,0} %meta{float,max,2}  %read{128,128} %write{2147483647,-1}
+param	float	RoundShadow	0.5		%meta{float,min,0} %meta{float,max,1}  %read{132,132} %write{2147483647,-1}
+param	float	WeaveBump	0.5		%meta{float,min,0} %meta{float,max,2}  %read{126,126} %write{2147483647,-1}
+param	float	WeaveShadow	0.40000001		%meta{float,min,0} %meta{float,max,1}  %read{134,134} %write{2147483647,-1}
+param	float	Frizz	0		%meta{float,min,0} %meta{float,max,1}  %read{4,4} %write{2147483647,-1}
+param	float	FrizzBump	0		%meta{float,min,0} %meta{float,max,2}  %read{130,130} %write{2147483647,-1}
+param	float	FrizzScale	0.1		%read{2,2} %write{2147483647,-1}
+param	float	Bendyness	0.2		%meta{float,min,0} %meta{float,max,1}  %read{21,30} %write{2147483647,-1}
+param	float	BendynessScale	3		%read{14,23} %write{2147483647,-1}
+param	float	OpacityFade	0		%meta{float,min,0} %meta{float,max,1}  %read{123,124} %write{2147483647,-1}
+param	int	Seed	1		%read{18,89} %write{2147483647,-1}
+oparam	color	Col	0 0 0		%read{133,135} %write{100,135}
+oparam	float	Bump	0.5		%read{2147483647,-1} %write{131,131}
+oparam	int	ThreadID	0		%read{2147483647,-1} %write{98,98}
+oparam	float	Opacity	0		%read{2147483647,-1} %write{125,125}
+global	float	u	%read{0,0} %write{2147483647,-1}
+global	float	v	%read{0,0} %write{2147483647,-1}
+local	point	uvw	%read{2,109} %write{1,1}
+local	float	frizz	%read{4,130} %write{3,3}
+local	float	w2	%read{6,62} %write{5,5}
+local	float	w	%read{39,60} %write{6,6}
+local	int	uf	%read{15,82} %write{9,9}
+local	int	vf	%read{24,88} %write{12,12}
+local	float	ubend	%read{34,34} %write{21,21}
+local	float	vbend	%read{38,38} %write{30,30}
+local	float	sx	%read{49,61} %write{34,34}
+local	float	sy	%read{40,58} %write{38,38}
+local	int	onU	%read{65,119} %write{47,80}
+local	int	onV	%read{68,86} %write{56,81}
+local	float	uu	%read{115,115} %write{59,59}
+local	float	vv	%read{117,117} %write{62,62}
+local	int	oddU	%read{73,110} %write{63,63}
+local	int	oddV	%read{73,105} %write{64,64}
+local	int	U_on_top	%read{80,80} %write{74,74}
+local	float	r	%read{122,122} %write{102,102}
+local	float	weave	%read{126,134} %write{108,114}
+local	float	ubulge	%read{120,123} %write{116,116}
+local	float	vbulge	%read{121,124} %write{118,118}
+local	float	bulge	%read{128,132} %write{122,122}
+const	int	$const1	0		%read{7,104} %write{2147483647,-1}
+const	float	$const2	0		%read{0,0} %write{2147483647,-1}
+const	string	$const3	"perlin"		%read{3,29} %write{2147483647,-1}
+temp	point	$tmp1	%read{3,3} %write{2,2}
+temp	float	$tmp2	%read{5,5} %write{4,4}
+const	float	$const4	0.5		%read{6,60} %write{2147483647,-1}
+temp	float	$tmp3	%read{9,9} %write{8,8}
+temp	float	$tmp4	%read{8,8} %write{7,7}
+temp	float	$tmp5	%read{12,12} %write{11,11}
+const	int	$const5	1		%read{10,109} %write{2147483647,-1}
+temp	float	$tmp6	%read{11,11} %write{10,10}
+temp	float	$tmp7	%read{21,21} %write{20,20}
+temp	float	$tmp8	%read{14,14} %write{13,13}
+temp	float	$tmp9	%read{17,17} %write{14,14}
+const	float	$const6	13		%read{16,16} %write{2147483647,-1}
+temp	float	$tmp10	%read{17,17} %write{16,16}
+temp	float	$tmp11	%read{16,16} %write{15,15}
+temp	float	$tmp12	%read{20,20} %write{17,17}
+const	int	$const7	4		%read{18,18} %write{2147483647,-1}
+temp	int	$tmp13	%read{19,19} %write{18,18}
+temp	float	$tmp14	%read{20,20} %write{19,19}
+temp	float	$tmp15	%read{30,30} %write{29,29}
+temp	float	$tmp16	%read{23,23} %write{22,22}
+temp	float	$tmp17	%read{26,26} %write{23,23}
+const	float	$const8	23		%read{25,25} %write{2147483647,-1}
+temp	float	$tmp18	%read{26,26} %write{25,25}
+temp	float	$tmp19	%read{25,25} %write{24,24}
+temp	float	$tmp20	%read{29,29} %write{26,26}
+const	int	$const9	7		%read{27,27} %write{2147483647,-1}
+temp	int	$tmp21	%read{28,28} %write{27,27}
+temp	float	$tmp22	%read{29,29} %write{28,28}
+temp	float	$tmp23	%read{33,33} %write{31,31}
+temp	float	$tmp24	%read{34,34} %write{33,33}
+temp	float	$tmp25	%read{33,33} %write{32,32}
+temp	float	$tmp26	%read{37,37} %write{35,35}
+temp	float	$tmp27	%read{38,38} %write{37,37}
+temp	float	$tmp28	%read{37,37} %write{36,36}
+temp	float	$tmp29	%read{40,40} %write{39,39}
+temp	int	$tmp30	%read{41,41} %write{40,40}
+temp	int	$tmp31	%read{42,47} %write{41,46}
+temp	float	$tmp32	%read{44,44} %write{43,43}
+temp	int	$tmp33	%read{45,45} %write{44,44}
+temp	int	$tmp34	%read{46,46} %write{45,45}
+temp	float	$tmp35	%read{49,49} %write{48,48}
+temp	int	$tmp36	%read{50,50} %write{49,49}
+temp	int	$tmp37	%read{51,56} %write{50,55}
+temp	float	$tmp38	%read{53,53} %write{52,52}
+temp	int	$tmp39	%read{54,54} %write{53,53}
+temp	int	$tmp40	%read{55,55} %write{54,54}
+temp	float	$tmp41	%read{58,58} %write{57,57}
+temp	float	$tmp42	%read{59,59} %write{58,58}
+temp	float	$tmp43	%read{61,61} %write{60,60}
+temp	float	$tmp44	%read{62,62} %write{61,61}
+const	int	$const10	2		%read{63,64} %write{2147483647,-1}
+temp	int	$tmp45	%read{66,66} %write{65,65}
+temp	int	$tmp46	%read{67,71} %write{66,70}
+temp	int	$tmp47	%read{69,69} %write{68,68}
+temp	int	$tmp48	%read{70,70} %write{69,69}
+temp	int	$tmp49	%read{74,74} %write{73,73}
+temp	int	$tmp50	%read{76,79} %write{75,78}
+temp	int	$tmp51	%read{78,78} %write{77,77}
+temp	int	$tmp52	%read{97,97} %write{96,96}
+temp	float	$tmp53	%read{87,87} %write{85,85}
+temp	float	$tmp54	%read{85,85} %write{82,82}
+const	int	$const11	45		%read{83,83} %write{2147483647,-1}
+temp	int	$tmp55	%read{84,84} %write{83,83}
+temp	float	$tmp56	%read{85,85} %write{84,84}
+temp	float	$tmp57	%read{94,94} %write{87,87}
+temp	float	$tmp58	%read{87,87} %write{86,86}
+temp	float	$tmp59	%read{93,93} %write{91,91}
+temp	float	$tmp60	%read{91,91} %write{88,88}
+const	int	$const12	32		%read{89,89} %write{2147483647,-1}
+temp	int	$tmp61	%read{90,90} %write{89,89}
+temp	float	$tmp62	%read{91,91} %write{90,90}
+temp	float	$tmp63	%read{94,94} %write{93,93}
+temp	float	$tmp64	%read{93,93} %write{92,92}
+temp	float	$tmp65	%read{95,95} %write{94,94}
+const	float	$const13	1024		%read{95,95} %write{2147483647,-1}
+temp	float	$tmp66	%read{96,96} %write{95,95}
+temp	int	$tmp67	%read{98,98} %write{97,97}
+temp	float	$tmp68	%read{106,106} %write{104,104}
+temp	float	$tmp69	%read{107,107} %write{106,106}
+temp	float	$tmp70	%read{106,106} %write{105,105}
+const	float	$const14	3.1415927		%read{107,117} %write{2147483647,-1}
+temp	float	$tmp71	%read{108,108} %write{107,107}
+temp	float	$tmp72	%read{111,111} %write{109,109}
+temp	float	$tmp73	%read{112,112} %write{111,111}
+temp	float	$tmp74	%read{111,111} %write{110,110}
+const	float	$const15	1		%read{112,134} %write{2147483647,-1}
+temp	float	$tmp75	%read{113,113} %write{112,112}
+temp	float	$tmp76	%read{114,114} %write{113,113}
+temp	float	$tmp77	%read{116,116} %write{115,115}
+temp	float	$tmp78	%read{118,118} %write{117,117}
+temp	float	$tmp79	%read{122,122} %write{120,121}
+temp	float	$tmp80	%read{125,125} %write{123,123}
+temp	float	$tmp81	%read{125,125} %write{124,124}
+const	float	$const16	0.2		%read{127,127} %write{2147483647,-1}
+temp	float	$tmp82	%read{127,127} %write{126,126}
+temp	float	$tmp83	%read{129,129} %write{127,127}
+temp	float	$tmp84	%read{129,129} %write{128,128}
+temp	float	$tmp85	%read{131,131} %write{129,129}
+temp	float	$tmp86	%read{131,131} %write{130,130}
+temp	float	$tmp87	%read{133,133} %write{132,132}
+temp	float	$tmp88	%read{135,135} %write{134,134}
+code UVW
+# source/3dsMax-OSL-Shaders/Weave.osl:13
+# 	float Scale = 0.2,
+	point		UVW u v $const2 	%filename{"source/3dsMax-OSL-Shaders/Weave.osl"} %line{13} %argrw{"wrrr"}
+code ___main___
+# source/3dsMax-OSL-Shaders/Weave.osl:51
+# 	
+	div		uvw UVW Scale 	%filename{"source/3dsMax-OSL-Shaders/Weave.osl"} %line{51} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Weave.osl:54
+# 	float w2  = Width + frizz * Frizz;
+	div		$tmp1 uvw FrizzScale 	%line{54} %argrw{"wrr"}
+	noise		frizz $const3 $tmp1 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Weave.osl:55
+# 	float w   = w2 * 0.5;
+	mul		$tmp2 frizz Frizz 	%line{55} %argrw{"wrr"}
+	add		w2 Width $tmp2 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Weave.osl:56
+# 	
+	mul		w w2 $const4 	%line{56} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Weave.osl:58
+# 	int vf = int(floor(uvw[1]));	
+	compref		$tmp4 uvw $const1 	%line{58} %argrw{"wrr"}
+	floor		$tmp3 $tmp4 	%argrw{"wr"}
+	assign		uf $tmp3 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Weave.osl:59
+# 	
+	compref		$tmp6 uvw $const5 	%line{59} %argrw{"wrr"}
+	floor		$tmp5 $tmp6 	%argrw{"wr"}
+	assign		vf $tmp5 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Weave.osl:62
+# 	float vbend = noise("perlin", uvw[0] / BendynessScale + 23.0 * vf, Seed + 7) * Bendyness;
+	compref		$tmp8 uvw $const5 	%line{62} %argrw{"wrr"}
+	div		$tmp9 $tmp8 BendynessScale 	%argrw{"wrr"}
+	assign		$tmp11 uf 	%argrw{"wr"}
+	mul		$tmp10 $const6 $tmp11 	%argrw{"wrr"}
+	add		$tmp12 $tmp9 $tmp10 	%argrw{"wrr"}
+	add		$tmp13 Seed $const7 	%argrw{"wrr"}
+	assign		$tmp14 $tmp13 	%argrw{"wr"}
+	noise		$tmp7 $const3 $tmp12 $tmp14 	%argrw{"wrrr"}
+	mul		ubend $tmp7 Bendyness 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Weave.osl:63
+# 	
+	compref		$tmp16 uvw $const1 	%line{63} %argrw{"wrr"}
+	div		$tmp17 $tmp16 BendynessScale 	%argrw{"wrr"}
+	assign		$tmp19 vf 	%argrw{"wr"}
+	mul		$tmp18 $const8 $tmp19 	%argrw{"wrr"}
+	add		$tmp20 $tmp17 $tmp18 	%argrw{"wrr"}
+	add		$tmp21 Seed $const9 	%argrw{"wrr"}
+	assign		$tmp22 $tmp21 	%argrw{"wr"}
+	noise		$tmp15 $const3 $tmp20 $tmp22 	%argrw{"wrrr"}
+	mul		vbend $tmp15 Bendyness 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Weave.osl:66
+# 	float sy = uvw[1] - vf + vbend;
+	compref		$tmp23 uvw $const1 	%line{66} %argrw{"wrr"}
+	assign		$tmp25 uf 	%argrw{"wr"}
+	sub		$tmp24 $tmp23 $tmp25 	%argrw{"wrr"}
+	add		sx $tmp24 ubend 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Weave.osl:67
+# 	
+	compref		$tmp26 uvw $const5 	%line{67} %argrw{"wrr"}
+	assign		$tmp28 vf 	%argrw{"wr"}
+	sub		$tmp27 $tmp26 $tmp28 	%argrw{"wrr"}
+	add		sy $tmp27 vbend 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Weave.osl:69
+# 	int onV = (sx > 0.5 - w && sx < 0.5 + w);
+	sub		$tmp29 $const4 w 	%line{69} %argrw{"wrr"}
+	gt		$tmp30 sy $tmp29 	%argrw{"wrr"}
+	neq		$tmp31 $tmp30 $const1 	%argrw{"wrr"}
+	if		$tmp31 47 47 	%argrw{"r"}
+	add		$tmp32 $const4 w 	%argrw{"wrr"}
+	lt		$tmp33 sy $tmp32 	%argrw{"wrr"}
+	neq		$tmp34 $tmp33 $const1 	%argrw{"wrr"}
+	assign		$tmp31 $tmp34 	%argrw{"wr"}
+	assign		onU $tmp31 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Weave.osl:70
+# 	
+	sub		$tmp35 $const4 w 	%line{70} %argrw{"wrr"}
+	gt		$tmp36 sx $tmp35 	%argrw{"wrr"}
+	neq		$tmp37 $tmp36 $const1 	%argrw{"wrr"}
+	if		$tmp37 56 56 	%argrw{"r"}
+	add		$tmp38 $const4 w 	%argrw{"wrr"}
+	lt		$tmp39 sx $tmp38 	%argrw{"wrr"}
+	neq		$tmp40 $tmp39 $const1 	%argrw{"wrr"}
+	assign		$tmp37 $tmp40 	%argrw{"wr"}
+	assign		onV $tmp37 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Weave.osl:72
+# 	float vv = (sx - (0.5 - w)) / w2;
+	sub		$tmp41 $const4 w 	%line{72} %argrw{"wrr"}
+	sub		$tmp42 sy $tmp41 	%argrw{"wrr"}
+	div		uu $tmp42 w2 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Weave.osl:73
+# 	
+	sub		$tmp43 $const4 w 	%line{73} %argrw{"wrr"}
+	sub		$tmp44 sx $tmp43 	%argrw{"wrr"}
+	div		vv $tmp44 w2 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Weave.osl:76
+# 	int oddV = vf % 2;
+	mod		oddU uf $const10 	%line{76} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Weave.osl:77
+# 
+	mod		oddV vf $const10 	%line{77} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Weave.osl:80
+# 	
+	eq		$tmp45 onU $const1 	%line{80} %argrw{"wrr"}
+	neq		$tmp46 $tmp45 $const1 	%argrw{"wrr"}
+	if		$tmp46 71 71 	%argrw{"r"}
+	eq		$tmp47 onV $const1 	%argrw{"wrr"}
+	neq		$tmp48 $tmp47 $const1 	%argrw{"wrr"}
+	assign		$tmp46 $tmp48 	%argrw{"wr"}
+	if		$tmp46 73 73 	%argrw{"r"}
+	exit
+# source/3dsMax-OSL-Shaders/Weave.osl:82
+# 
+	xor		$tmp49 oddU oddV 	%line{82} %argrw{"wrr"}
+	eq		U_on_top $tmp49 $const1 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Weave.osl:85
+# 	{
+	neq		$tmp50 onU $const1 	%line{85} %argrw{"wrr"}
+	if		$tmp50 79 79 	%argrw{"r"}
+	neq		$tmp51 onV $const1 	%argrw{"wrr"}
+	assign		$tmp50 $tmp51 	%argrw{"wr"}
+	if		$tmp50 82 82 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Weave.osl:87
+# 		onV = onU == 0;
+	assign		onU U_on_top 	%line{87} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Weave.osl:88
+# 	}	
+	eq		onV onU $const1 	%line{88} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Weave.osl:92
+# 
+	assign		$tmp54 uf 	%line{92} %argrw{"wr"}
+	add		$tmp55 Seed $const11 	%argrw{"wrr"}
+	assign		$tmp56 $tmp55 	%argrw{"wr"}
+	cellnoise	$tmp53 $tmp54 $tmp56 	%argrw{"wrr"}
+	assign		$tmp58 onV 	%argrw{"wr"}
+	mul		$tmp57 $tmp53 $tmp58 	%argrw{"wrr"}
+	assign		$tmp60 vf 	%argrw{"wr"}
+	add		$tmp61 Seed $const12 	%argrw{"wrr"}
+	assign		$tmp62 $tmp61 	%argrw{"wr"}
+	cellnoise	$tmp59 $tmp60 $tmp62 	%argrw{"wrr"}
+	assign		$tmp64 onU 	%argrw{"wr"}
+	mul		$tmp63 $tmp59 $tmp64 	%argrw{"wrr"}
+	add		$tmp65 $tmp57 $tmp63 	%argrw{"wrr"}
+	mul		$tmp66 $tmp65 $const13 	%argrw{"wrr"}
+	assign		$tmp52 $tmp66 	%argrw{"wr"}
+	add		$tmp67 $const5 $tmp52 	%argrw{"wrr"}
+	add		ThreadID $tmp67 onU 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Weave.osl:95
+# 		Col = U_Color;
+	if		onU 101 102 	%line{95} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/Weave.osl:96
+# 	else
+	assign		Col U_Color 	%line{96} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Weave.osl:98
+# 
+	assign		Col V_Color 	%line{98} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Weave.osl:101
+# 	float weave = (onU) ? sin((uvw[0] + oddV) * M_PI) : sin((uvw[1] + oddU + 1.0) * M_PI);
+	assign		r Roundness 	%line{101} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Weave.osl:102
+# 	
+	if		onU 109 115 	%line{102} %argrw{"r"}
+	compref		$tmp68 uvw $const1 	%argrw{"wrr"}
+	assign		$tmp70 oddV 	%argrw{"wr"}
+	add		$tmp69 $tmp68 $tmp70 	%argrw{"wrr"}
+	mul		$tmp71 $tmp69 $const14 	%argrw{"wrr"}
+	sin		weave $tmp71 	%argrw{"wr"}
+	compref		$tmp72 uvw $const5 	%argrw{"wrr"}
+	assign		$tmp74 oddU 	%argrw{"wr"}
+	add		$tmp73 $tmp72 $tmp74 	%argrw{"wrr"}
+	add		$tmp75 $tmp73 $const15 	%argrw{"wrr"}
+	mul		$tmp76 $tmp75 $const14 	%argrw{"wrr"}
+	sin		weave $tmp76 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Weave.osl:104
+# 	float vbulge = sin(vv * M_PI);
+	mul		$tmp77 uu $const14 	%line{104} %argrw{"wrr"}
+	sin		ubulge $tmp77 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Weave.osl:105
+# 	
+	mul		$tmp78 vv $const14 	%line{105} %argrw{"wrr"}
+	sin		vbulge $tmp78 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Weave.osl:107
+# 	
+	if		onU 121 122 	%line{107} %argrw{"r"}
+	assign		$tmp79 ubulge 	%argrw{"wr"}
+	assign		$tmp79 vbulge 	%argrw{"wr"}
+	pow		bulge $tmp79 r 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Weave.osl:109
+# 	
+	pow		$tmp80 ubulge OpacityFade 	%line{109} %argrw{"wrr"}
+	pow		$tmp81 vbulge OpacityFade 	%argrw{"wrr"}
+	max		Opacity $tmp80 $tmp81 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Weave.osl:111
+# 	Col *= mix(1.0, bulge, RoundShadow);
+	mul		$tmp82 weave WeaveBump 	%line{111} %argrw{"wrr"}
+	add		$tmp83 $const16 $tmp82 	%argrw{"wrr"}
+	mul		$tmp84 bulge RoundnessBump 	%argrw{"wrr"}
+	add		$tmp85 $tmp83 $tmp84 	%argrw{"wrr"}
+	mul		$tmp86 frizz FrizzBump 	%argrw{"wrr"}
+	add		Bump $tmp85 $tmp86 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Weave.osl:112
+# 	Col *= mix(1.0, weave, WeaveShadow);	
+	mix		$tmp87 $const15 bulge RoundShadow 	%line{112} %argrw{"wrrr"}
+	mul		Col Col $tmp87 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Weave.osl:113
+# }
+	mix		$tmp88 $const15 weave WeaveShadow 	%line{113} %argrw{"wrrr"}
+	mul		Col Col $tmp88 	%argrw{"wrr"}
+	end

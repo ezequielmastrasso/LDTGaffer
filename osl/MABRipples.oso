@@ -1,0 +1,122 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader MABRipples
+param	point	Vector	0 0 0		%read{4,37} %write{0,0} %initexpr
+param	int	Drops	1		%read{4,4} %write{2147483647,-1}
+param	float	Time	1.5		%read{11,11} %write{2147483647,-1}
+param	float	StartTime	0		%read{7,7} %write{2147483647,-1}
+param	float	EndTime	1		%read{7,7} %write{2147483647,-1}
+param	float	Amplitude	1		%read{25,25} %write{2147483647,-1}
+param	float	Wavelength	0.2		%read{1,1} %write{2147483647,-1}
+param	float	Spread	0.5		%read{32,32} %write{2147483647,-1}
+param	float	Damping	0.89999998		%read{26,26} %write{2147483647,-1}
+oparam	float	Height	0		%read{4,37} %write{4,37}
+global	point	P	%read{0,0} %write{2147483647,-1}
+local	float	wlength	%read{4,37} %write{1,1}
+local	int	___322_i	%read{4,37} %write{3,37}
+local	vector	___323_center	%read{4,37} %write{4,37}
+local	float	___323_start	%read{4,37} %write{4,37}
+local	float	___323_peak	%read{4,37} %write{4,37}
+local	float	___323_dc	%read{4,37} %write{4,37}
+local	float	___323_t	%read{4,37} %write{4,37}
+local	float	___323_a	%read{4,37} %write{4,37}
+const	float	$const2	10		%read{1,1} %write{2147483647,-1}
+const	int	$const3	0		%read{3,13} %write{2147483647,-1}
+temp	int	$tmp1	%read{2,37} %write{3,37}
+const	string	$const4	"cell"		%read{6,9} %write{2147483647,-1}
+temp	float	$tmp2	%read{4,37} %write{4,37}
+const	int	$const5	1		%read{15,37} %write{2147483647,-1}
+const	float	$const6	1		%read{6,6} %write{2147483647,-1}
+temp	float	$tmp3	%read{4,37} %write{4,37}
+temp	float	$tmp4	%read{4,37} %write{4,37}
+temp	float	$tmp5	%read{4,37} %write{4,37}
+const	float	$const8	2		%read{9,9} %write{2147483647,-1}
+temp	float	$tmp6	%read{4,37} %write{4,37}
+temp	float	$tmp7	%read{4,37} %write{4,37}
+temp	float	$tmp8	%read{4,37} %write{4,37}
+temp	float	$tmp9	%read{4,37} %write{4,37}
+temp	float	$tmp10	%read{4,37} %write{4,37}
+temp	float	$tmp11	%read{4,37} %write{4,37}
+const	string	$const9	"hypot"		%read{18,18} %write{2147483647,-1}
+temp	float	$tmp12	%read{4,37} %write{4,37}
+temp	float	$tmp13	%read{4,37} %write{4,37}
+temp	float	$tmp14	%read{4,37} %write{4,37}
+temp	float	$tmp15	%read{4,37} %write{4,37}
+temp	float	$tmp16	%read{4,37} %write{4,37}
+temp	float	$tmp17	%read{4,37} %write{4,37}
+temp	float	$tmp18	%read{4,37} %write{4,37}
+temp	float	$tmp19	%read{4,37} %write{4,37}
+temp	float	$tmp20	%read{4,37} %write{4,37}
+temp	float	$tmp21	%read{4,37} %write{4,37}
+temp	float	$tmp22	%read{4,37} %write{4,37}
+temp	int	$tmp23	%read{2147483647,-1} %write{4,37}
+code Vector
+# source/sambler-osl-shaders/MJABook/14MABRipples/MABRipples.osl:15
+# 
+	assign		Vector P 	%filename{"source/sambler-osl-shaders/MJABook/14MABRipples/MABRipples.osl"} %line{15} %argrw{"wr"}
+code ___main___
+# source/sambler-osl-shaders/MJABook/14MABRipples/MABRipples.osl:28
+#     
+	div		wlength Wavelength $const2 	%filename{"source/sambler-osl-shaders/MJABook/14MABRipples/MABRipples.osl"} %line{28} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/14MABRipples/MABRipples.osl:30
+#         vector center = noise("cell",i,1);
+	for		$tmp1 4 5 36 38 	%line{30} %argrw{"r"}
+	assign		___322_i $const3 	%argrw{"wr"}
+	lt		$tmp1 ___322_i Drops 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/14MABRipples/MABRipples.osl:31
+#         float start = (EndTime-StartTime) * noise("cell", i, 2);
+	assign		$tmp2 ___322_i 	%line{31} %argrw{"wr"}
+	noise		___323_center $const4 $tmp2 $const6 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/MJABook/14MABRipples/MABRipples.osl:32
+#         float peak = Time - start;
+	sub		$tmp3 EndTime StartTime 	%line{32} %argrw{"wrr"}
+	assign		$tmp5 ___322_i 	%argrw{"wr"}
+	noise		$tmp4 $const4 $tmp5 $const8 	%argrw{"wrrr"}
+	mul		___323_start $tmp3 $tmp4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/14MABRipples/MABRipples.osl:33
+#         float dc = hypot(Vector[0]-center[0], Vector[1]-center[1]);
+	sub		___323_peak Time ___323_start 	%line{33} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/14MABRipples/MABRipples.osl:34
+#         float t = dc/wlength;
+	compref		$tmp6 Vector $const3 	%line{34} %argrw{"wrr"}
+	compref		$tmp7 ___323_center $const3 	%argrw{"wrr"}
+	sub		$tmp8 $tmp6 $tmp7 	%argrw{"wrr"}
+	compref		$tmp9 Vector $const5 	%argrw{"wrr"}
+	compref		$tmp10 ___323_center $const5 	%argrw{"wrr"}
+	sub		$tmp11 $tmp9 $tmp10 	%argrw{"wrr"}
+	functioncall	$const9 23 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:114
+# float hypot (float a, float b) { return sqrt (a*a + b*b); }
+	mul		$tmp12 $tmp8 $tmp8 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{114} %argrw{"wrr"}
+	mul		$tmp13 $tmp11 $tmp11 	%argrw{"wrr"}
+	add		$tmp14 $tmp12 $tmp13 	%argrw{"wrr"}
+	sqrt		___323_dc $tmp14 	%argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/14MABRipples/MABRipples.osl:35
+#         float a = Amplitude * cos(t);
+	div		___323_t ___323_dc wlength 	%filename{"source/sambler-osl-shaders/MJABook/14MABRipples/MABRipples.osl"} %line{35} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/14MABRipples/MABRipples.osl:36
+#         a *= pow(Damping, start);
+	cos		$tmp15 ___323_t 	%line{36} %argrw{"wr"}
+	mul		___323_a Amplitude $tmp15 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/14MABRipples/MABRipples.osl:37
+#         a *= exp(-(dc-peak)*(dc-peak)/Spread);
+	pow		$tmp16 Damping ___323_start 	%line{37} %argrw{"wrr"}
+	mul		___323_a ___323_a $tmp16 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/14MABRipples/MABRipples.osl:38
+#         Height += a;
+	sub		$tmp18 ___323_dc ___323_peak 	%line{38} %argrw{"wrr"}
+	neg		$tmp19 $tmp18 	%argrw{"wr"}
+	sub		$tmp20 ___323_dc ___323_peak 	%argrw{"wrr"}
+	mul		$tmp21 $tmp19 $tmp20 	%argrw{"wrr"}
+	div		$tmp22 $tmp21 Spread 	%argrw{"wrr"}
+	exp		$tmp17 $tmp22 	%argrw{"wr"}
+	mul		___323_a ___323_a $tmp17 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/14MABRipples/MABRipples.osl:39
+#     }
+	add		Height Height ___323_a 	%line{39} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/14MABRipples/MABRipples.osl:30
+#         vector center = noise("cell",i,1);
+	assign		$tmp23 ___322_i 	%line{30} %argrw{"wr"}
+	add		___322_i ___322_i $const5 	%argrw{"wrr"}
+	end

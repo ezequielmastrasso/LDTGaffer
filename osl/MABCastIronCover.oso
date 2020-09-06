@@ -1,0 +1,1744 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader MABCastIronCover
+param	point	Vector	0 0 0		%read{1,1} %write{0,0} %initexpr
+param	float	Scale	1		%read{1,1} %write{2147483647,-1}
+oparam	float	Fac	0		%read{76,665} %write{29,703}
+global	point	P	%read{0,0} %write{2147483647,-1}
+local	float	___322_rx	%read{50,696} %write{48,694}
+local	float	___322_ry	%read{51,697} %write{49,695}
+local	vector	___323_v	%read{228,233} %write{227,227}
+local	point	___323_q	%read{229,233} %write{228,232}
+local	float	___328_Mx	%read{176,642} %write{174,639}
+local	float	___328_My	%read{181,645} %write{177,641}
+local	point	___329_p	%read{86,654} %write{85,648}
+local	float	___329_a	%read{193,657} %write{113,577}
+local	float	___329_b	%read{197,661} %write{114,578}
+local	float	___329_w	%read{117,655} %write{115,579}
+local	float	___335_x	%read{194,660} %write{189,653}
+local	float	___338_x	%read{37,71} %write{27,39}
+local	float	___338_y	%read{32,72} %write{28,36}
+local	float	___338_w	%read{31,35} %write{30,30}
+local	float	___346_Fac	%read{318,521} %write{235,520}
+local	float	___346_e	%read{262,519} %write{236,439}
+local	float	___346_x	%read{240,519} %write{237,440}
+local	float	___346_y	%read{241,519} %write{238,441}
+local	int	___349_i	%read{290,519} %write{289,519}
+local	float	___350_s	%read{290,519} %write{290,519}
+local	float	___350_c	%read{290,519} %write{290,519}
+local	float	___350_angle	%read{290,519} %write{290,519}
+local	float	___350_m	%read{290,519} %write{290,519}
+local	float	___355_rs	%read{245,523} %write{210,210}
+local	float	___355_rl	%read{346,422} %write{211,211}
+local	float	___355_w	%read{236,523} %write{212,212}
+local	float	___360_Ndots	%read{684,691} %write{669,669}
+local	point	p	%read{7,690} %write{6,17}
+temp	point	$tmp1	%read{3,6} %write{1,1}
+const	float	$const1	1		%read{3,691} %write{2147483647,-1}
+const	string	$const2	"mod"		%read{2,685} %write{2147483647,-1}
+temp	point	$tmp2	%read{5,5} %write{4,4}
+temp	point	$tmp3	%read{4,4} %write{3,3}
+temp	point	$tmp4	%read{6,6} %write{5,5}
+const	int	$const3	1		%read{7,702} %write{2147483647,-1}
+temp	float	$tmp5	%read{8,8} %write{7,7}
+const	float	$const4	0.5		%read{8,703} %write{2147483647,-1}
+temp	int	$tmp6	%read{9,9} %write{8,8}
+const	string	$const5	"rotate_180"		%read{10,216} %write{2147483647,-1}
+const	int	$const6	0		%read{11,683} %write{2147483647,-1}
+temp	float	$tmp7	%read{12,12} %write{11,11}
+temp	float	$tmp8	%read{16,16} %write{12,12}
+temp	float	$tmp9	%read{14,14} %write{13,13}
+temp	float	$tmp10	%read{16,16} %write{14,14}
+const	int	$const7	2		%read{15,575} %write{2147483647,-1}
+temp	float	$tmp11	%read{16,16} %write{15,15}
+const	float	$const8	2		%read{17,692} %write{2147483647,-1}
+temp	float	$tmp12	%read{19,19} %write{18,18}
+temp	int	$tmp13	%read{20,20} %write{19,19}
+temp	point	$tmp14	%read{27,28} %write{25,25}
+temp	point	$tmp15	%read{24,24} %write{23,23}
+temp	point	$tmp16	%read{23,23} %write{22,22}
+temp	point	$tmp17	%read{25,25} %write{24,24}
+const	string	$const9	"lily"		%read{26,26} %write{2147483647,-1}
+const	float	$const10	0.12		%read{30,579} %write{2147483647,-1}
+temp	float	$tmp18	%read{32,32} %write{31,31}
+temp	int	$tmp19	%read{33,33} %write{32,32}
+temp	float	$tmp20	%read{36,36} %write{35,35}
+temp	int	$tmp21	%read{38,38} %write{37,37}
+temp	int	$tmp22	%read{41,41} %write{40,40}
+const	float	$const11	0.050000001		%read{43,69} %write{2147483647,-1}
+temp	float	$tmp23	%read{44,44} %write{43,43}
+temp	int	$tmp24	%read{45,45} %write{44,44}
+temp	int	$tmp25	%read{55,55} %write{54,54}
+const	float	$const12	0.1		%read{53,53} %write{2147483647,-1}
+const	float	$const13	0.15000001		%read{48,210} %write{2147483647,-1}
+const	float	$const14	0		%read{49,648} %write{2147483647,-1}
+const	string	$const15	"incircle"		%read{47,693} %write{2147483647,-1}
+temp	float	$tmp26	%read{52,52} %write{50,50}
+temp	float	$tmp27	%read{52,52} %write{51,51}
+temp	float	$tmp28	%read{54,54} %write{52,52}
+temp	float	$tmp29	%read{54,54} %write{53,53}
+temp	int	$tmp30	%read{65,65} %write{64,64}
+temp	float	$tmp31	%read{62,62} %write{60,60}
+temp	float	$tmp32	%read{62,62} %write{61,61}
+temp	float	$tmp33	%read{64,64} %write{62,62}
+temp	float	$tmp34	%read{64,64} %write{63,63}
+temp	int	$tmp35	%read{66,66} %write{65,65}
+temp	float	$tmp36	%read{69,69} %write{68,68}
+temp	float	$tmp37	%read{68,68} %write{67,67}
+const	float	$const17	30		%read{67,67} %write{2147483647,-1}
+temp	float	$tmp38	%read{70,70} %write{69,69}
+const	float	$const18	0.2		%read{70,533} %write{2147483647,-1}
+temp	float	$tmp39	%read{71,71} %write{70,70}
+temp	float	$tmp40	%read{72,72} %write{71,71}
+temp	int	$tmp41	%read{73,73} %write{72,72}
+temp	int	$tmp42	%read{77,77} %write{76,76}
+temp	point	$tmp43	%read{85,85} %write{82,82}
+temp	point	$tmp44	%read{81,81} %write{80,80}
+temp	point	$tmp45	%read{80,80} %write{79,79}
+temp	point	$tmp46	%read{82,82} %write{81,81}
+const	string	$const19	"rosette"		%read{83,547} %write{2147483647,-1}
+temp	float	$tmp47	%read{87,87} %write{86,86}
+temp	int	$tmp48	%read{88,88} %write{87,87}
+const	string	$const20	"mirror_h"		%read{89,553} %write{2147483647,-1}
+temp	float	$tmp49	%read{91,91} %write{90,90}
+temp	float	$tmp50	%read{94,94} %write{91,91}
+temp	float	$tmp51	%read{94,94} %write{92,92}
+temp	float	$tmp52	%read{94,94} %write{93,93}
+temp	float	$tmp53	%read{96,96} %write{95,95}
+temp	int	$tmp54	%read{97,97} %write{96,96}
+const	string	$const21	"mirror_v"		%read{98,562} %write{2147483647,-1}
+temp	float	$tmp55	%read{103,103} %write{99,99}
+temp	float	$tmp56	%read{101,101} %write{100,100}
+temp	float	$tmp57	%read{103,103} %write{101,101}
+temp	float	$tmp58	%read{103,103} %write{102,102}
+temp	float	$tmp59	%read{106,106} %write{104,104}
+temp	float	$tmp60	%read{106,106} %write{105,105}
+temp	int	$tmp61	%read{107,107} %write{106,106}
+const	string	$const22	"mirror_xy"		%read{108,572} %write{2147483647,-1}
+temp	float	$tmp62	%read{112,112} %write{109,109}
+temp	float	$tmp63	%read{112,112} %write{110,110}
+temp	float	$tmp64	%read{112,112} %write{111,111}
+const	float	$const23	0.30000001		%read{113,577} %write{2147483647,-1}
+const	int	$const24	135		%read{114,578} %write{2147483647,-1}
+temp	float	$tmp65	%read{117,117} %write{116,116}
+temp	int	$tmp66	%read{118,118} %write{117,117}
+temp	int	$tmp67	%read{119,135} %write{118,134}
+temp	int	$tmp68	%read{132,132} %write{131,131}
+temp	float	$tmp69	%read{125,125} %write{120,120}
+temp	float	$tmp70	%read{126,126} %write{121,121}
+temp	float	$tmp71	%read{123,123} %write{122,122}
+temp	float	$tmp72	%read{130,130} %write{123,123}
+temp	float	$tmp73	%read{129,129} %write{127,127}
+temp	float	$tmp74	%read{129,129} %write{128,128}
+temp	float	$tmp75	%read{131,131} %write{129,129}
+temp	float	$tmp76	%read{131,131} %write{130,130}
+temp	int	$tmp77	%read{133,133} %write{132,132}
+temp	int	$tmp78	%read{134,134} %write{133,133}
+temp	int	$tmp79	%read{154,154} %write{153,153}
+temp	float	$tmp80	%read{147,147} %write{137,137}
+temp	float	$tmp81	%read{142,142} %write{138,138}
+temp	float	$tmp82	%read{141,141} %write{139,139}
+temp	float	$tmp83	%read{141,141} %write{140,140}
+temp	float	$tmp84	%read{142,142} %write{141,141}
+temp	float	$tmp85	%read{148,148} %write{142,142}
+temp	float	$tmp86	%read{152,152} %write{143,143}
+const	float	$const25	1.2		%read{144,608} %write{2147483647,-1}
+temp	float	$tmp87	%read{145,145} %write{144,144}
+temp	float	$tmp88	%read{148,148} %write{145,145}
+temp	float	$tmp89	%read{151,151} %write{149,149}
+temp	float	$tmp90	%read{151,151} %write{150,150}
+temp	float	$tmp91	%read{153,153} %write{151,151}
+temp	float	$tmp92	%read{153,153} %write{152,152}
+temp	float	$tmp93	%read{157,157} %write{156,156}
+temp	float	$tmp94	%read{160,160} %write{157,157}
+temp	float	$tmp95	%read{159,159} %write{158,158}
+temp	float	$tmp96	%read{160,160} %write{159,159}
+temp	int	$tmp97	%read{161,161} %write{160,160}
+const	float	$const26	-0.5		%read{170,641} %write{2147483647,-1}
+const	string	$const27	"mirror_line"		%read{162,626} %write{2147483647,-1}
+temp	float	$tmp98	%read{164,164} %write{163,163}
+const	float	$const28	1e-07		%read{164,628} %write{2147483647,-1}
+temp	int	$tmp99	%read{165,165} %write{164,164}
+temp	float	$tmp100	%read{167,167} %write{166,166}
+temp	float	$tmp101	%read{169,169} %write{167,167}
+temp	float	$tmp102	%read{169,169} %write{168,168}
+temp	float	$tmp103	%read{171,171} %write{169,169}
+temp	float	$tmp104	%read{171,171} %write{170,170}
+temp	float	$tmp105	%read{174,174} %write{171,171}
+temp	float	$tmp106	%read{173,173} %write{172,172}
+temp	float	$tmp107	%read{174,174} %write{173,173}
+temp	float	$tmp108	%read{177,177} %write{176,176}
+temp	float	$tmp109	%read{180,180} %write{178,178}
+temp	float	$tmp110	%read{180,180} %write{179,179}
+temp	float	$tmp111	%read{184,184} %write{180,180}
+temp	float	$tmp112	%read{183,183} %write{181,181}
+temp	float	$tmp113	%read{183,183} %write{182,182}
+temp	float	$tmp114	%read{184,184} %write{183,183}
+temp	float	$tmp115	%read{187,187} %write{186,186}
+temp	float	$tmp116	%read{189,189} %write{187,187}
+temp	float	$tmp117	%read{189,189} %write{188,188}
+temp	float	$tmp118	%read{192,192} %write{190,190}
+temp	float	$tmp119	%read{192,192} %write{191,191}
+temp	float	$tmp120	%read{193,193} %write{192,192}
+temp	float	$tmp121	%read{198,198} %write{193,193}
+temp	float	$tmp122	%read{195,195} %write{194,194}
+temp	float	$tmp123	%read{196,196} %write{195,195}
+temp	float	$tmp124	%read{197,197} %write{196,196}
+temp	float	$tmp125	%read{198,198} %write{197,197}
+temp	int	$tmp126	%read{199,199} %write{198,198}
+temp	int	$tmp127	%read{202,202} %write{201,201}
+temp	point	$tmp128	%read{213,522} %write{207,233}
+temp	point	$tmp129	%read{206,206} %write{205,205}
+temp	point	$tmp130	%read{205,205} %write{204,204}
+temp	point	$tmp131	%read{207,207} %write{206,206}
+const	string	$const29	"dottedband"		%read{208,208} %write{2147483647,-1}
+const	float	$const30	0.43000001		%read{211,211} %write{2147483647,-1}
+const	float	$const31	0.079999998		%read{212,671} %write{2147483647,-1}
+temp	float	$tmp132	%read{214,214} %write{213,213}
+temp	int	$tmp133	%read{215,215} %write{214,214}
+temp	float	$tmp134	%read{218,218} %write{217,217}
+temp	float	$tmp135	%read{222,222} %write{218,218}
+temp	float	$tmp136	%read{220,220} %write{219,219}
+temp	float	$tmp137	%read{222,222} %write{220,220}
+temp	float	$tmp138	%read{222,222} %write{221,221}
+temp	float	$tmp139	%read{224,224} %write{223,223}
+temp	int	$tmp140	%read{225,225} %write{224,224}
+const	string	$const32	"rotate_90"		%read{226,226} %write{2147483647,-1}
+const	vector	$const33	0.5 0.5 0		%read{227,227} %write{2147483647,-1}
+temp	float	$tmp141	%read{232,232} %write{229,229}
+temp	float	$tmp142	%read{231,231} %write{230,230}
+temp	float	$tmp143	%read{232,232} %write{231,231}
+const	int	$const34	12		%read{290,495} %write{2147483647,-1}
+const	string	$const35	"dottedcircle"		%read{234,437} %write{2147483647,-1}
+const	float	$const37	4		%read{236,439} %write{2147483647,-1}
+temp	int	$tmp144	%read{247,247} %write{246,246}
+temp	float	$tmp145	%read{244,244} %write{242,242}
+temp	float	$tmp146	%read{244,244} %write{243,243}
+temp	float	$tmp147	%read{246,246} %write{244,244}
+temp	float	$tmp148	%read{246,246} %write{245,245}
+temp	int	$tmp149	%read{248,261} %write{247,260}
+temp	int	$tmp150	%read{258,258} %write{257,257}
+temp	float	$tmp151	%read{256,256} %write{249,249}
+temp	float	$tmp152	%read{255,255} %write{253,253}
+temp	float	$tmp153	%read{255,255} %write{254,254}
+temp	float	$tmp154	%read{257,257} %write{255,255}
+temp	float	$tmp155	%read{257,257} %write{256,256}
+temp	int	$tmp156	%read{259,259} %write{258,258}
+temp	int	$tmp157	%read{260,260} %write{259,259}
+temp	int	$tmp158	%read{271,271} %write{270,270}
+temp	float	$tmp159	%read{269,269} %write{262,262}
+temp	float	$tmp160	%read{268,268} %write{266,266}
+temp	float	$tmp161	%read{268,268} %write{267,267}
+temp	float	$tmp162	%read{270,270} %write{268,268}
+temp	float	$tmp163	%read{270,270} %write{269,269}
+temp	int	$tmp164	%read{272,286} %write{271,285}
+temp	int	$tmp165	%read{283,283} %write{282,282}
+temp	float	$tmp166	%read{274,274} %write{273,273}
+temp	float	$tmp167	%read{281,281} %write{274,274}
+temp	float	$tmp168	%read{280,280} %write{278,278}
+temp	float	$tmp169	%read{280,280} %write{279,279}
+temp	float	$tmp170	%read{282,282} %write{280,280}
+temp	float	$tmp171	%read{282,282} %write{281,281}
+temp	int	$tmp172	%read{284,284} %write{283,283}
+temp	int	$tmp173	%read{285,285} %write{284,284}
+temp	int	$tmp174	%read{288,316} %write{289,316}
+const	int	$const38	360		%read{291,494} %write{2147483647,-1}
+temp	int	$tmp175	%read{290,316} %write{290,316}
+temp	int	$tmp176	%read{290,316} %write{290,316}
+temp	float	$tmp177	%read{290,316} %write{290,316}
+const	string	$const39	"radians"		%read{294,497} %write{2147483647,-1}
+const	float	$const40	3.1415927		%read{295,498} %write{2147483647,-1}
+const	float	$const41	180		%read{295,498} %write{2147483647,-1}
+temp	float	$tmp178	%read{290,316} %write{290,316}
+temp	float	$tmp179	%read{290,316} %write{290,316}
+temp	int	$tmp180	%read{290,316} %write{290,316}
+temp	float	$tmp181	%read{290,316} %write{290,316}
+temp	float	$tmp182	%read{290,316} %write{290,316}
+temp	float	$tmp183	%read{290,316} %write{290,316}
+temp	float	$tmp184	%read{290,316} %write{290,316}
+temp	float	$tmp185	%read{290,316} %write{290,316}
+temp	float	$tmp186	%read{290,316} %write{290,316}
+temp	float	$tmp187	%read{290,316} %write{290,316}
+temp	float	$tmp188	%read{290,316} %write{290,316}
+temp	int	$tmp189	%read{2147483647,-1} %write{290,316}
+temp	float	$tmp190	%read{325,329} %write{319,319}
+temp	float	$tmp191	%read{325,331} %write{320,320}
+const	string	$const42	"slant"		%read{321,524} %write{2147483647,-1}
+temp	int	$tmp192	%read{323,323} %write{322,322}
+temp	int	$tmp193	%read{324,328} %write{323,327}
+temp	int	$tmp194	%read{326,326} %write{325,325}
+temp	int	$tmp195	%read{327,327} %write{326,326}
+temp	float	$tmp196	%read{330,330} %write{329,329}
+temp	float	$tmp197	%read{331,331} %write{330,330}
+temp	float	$tmp198	%read{332,332} %write{331,331}
+temp	int	$tmp199	%read{334,334} %write{333,333}
+const	int	$const43	36		%read{391,393} %write{2147483647,-1}
+temp	int	$tmp200	%read{348,348} %write{347,347}
+temp	float	$tmp201	%read{345,345} %write{343,343}
+temp	float	$tmp202	%read{345,345} %write{344,344}
+temp	float	$tmp203	%read{347,347} %write{345,345}
+temp	float	$tmp204	%read{347,347} %write{346,346}
+temp	int	$tmp205	%read{349,362} %write{348,361}
+temp	int	$tmp206	%read{359,359} %write{358,358}
+temp	float	$tmp207	%read{357,357} %write{350,350}
+temp	float	$tmp208	%read{356,356} %write{354,354}
+temp	float	$tmp209	%read{356,356} %write{355,355}
+temp	float	$tmp210	%read{358,358} %write{356,356}
+temp	float	$tmp211	%read{358,358} %write{357,357}
+temp	int	$tmp212	%read{360,360} %write{359,359}
+temp	int	$tmp213	%read{361,361} %write{360,360}
+temp	int	$tmp214	%read{372,372} %write{371,371}
+temp	float	$tmp215	%read{370,370} %write{363,363}
+temp	float	$tmp216	%read{369,369} %write{367,367}
+temp	float	$tmp217	%read{369,369} %write{368,368}
+temp	float	$tmp218	%read{371,371} %write{369,369}
+temp	float	$tmp219	%read{371,371} %write{370,370}
+temp	int	$tmp220	%read{373,387} %write{372,386}
+temp	int	$tmp221	%read{384,384} %write{383,383}
+temp	float	$tmp222	%read{375,375} %write{374,374}
+temp	float	$tmp223	%read{382,382} %write{375,375}
+temp	float	$tmp224	%read{381,381} %write{379,379}
+temp	float	$tmp225	%read{381,381} %write{380,380}
+temp	float	$tmp226	%read{383,383} %write{381,381}
+temp	float	$tmp227	%read{383,383} %write{382,382}
+temp	int	$tmp228	%read{385,385} %write{384,384}
+temp	int	$tmp229	%read{386,386} %write{385,385}
+temp	int	$tmp230	%read{389,417} %write{390,417}
+temp	int	$tmp231	%read{391,417} %write{391,417}
+temp	int	$tmp232	%read{391,417} %write{391,417}
+temp	float	$tmp233	%read{391,417} %write{391,417}
+temp	float	$tmp234	%read{391,417} %write{391,417}
+temp	float	$tmp235	%read{391,417} %write{391,417}
+temp	int	$tmp236	%read{391,417} %write{391,417}
+temp	float	$tmp237	%read{391,417} %write{391,417}
+temp	float	$tmp238	%read{391,417} %write{391,417}
+temp	float	$tmp239	%read{391,417} %write{391,417}
+temp	float	$tmp240	%read{391,417} %write{391,417}
+temp	float	$tmp241	%read{391,417} %write{391,417}
+temp	float	$tmp242	%read{391,417} %write{391,417}
+temp	float	$tmp243	%read{391,417} %write{391,417}
+temp	float	$tmp244	%read{391,417} %write{391,417}
+temp	int	$tmp245	%read{2147483647,-1} %write{391,417}
+temp	float	$tmp246	%read{427,431} %write{420,420}
+temp	float	$tmp247	%read{422,422} %write{421,421}
+temp	float	$tmp248	%read{427,433} %write{422,422}
+temp	int	$tmp249	%read{425,425} %write{424,424}
+temp	int	$tmp250	%read{426,430} %write{425,429}
+temp	int	$tmp251	%read{428,428} %write{427,427}
+temp	int	$tmp252	%read{429,429} %write{428,428}
+temp	float	$tmp253	%read{432,432} %write{431,431}
+temp	float	$tmp254	%read{433,433} %write{432,432}
+temp	float	$tmp255	%read{434,434} %write{433,433}
+temp	int	$tmp256	%read{436,436} %write{435,435}
+temp	int	$tmp257	%read{450,450} %write{449,449}
+temp	float	$tmp258	%read{447,447} %write{445,445}
+temp	float	$tmp259	%read{447,447} %write{446,446}
+temp	float	$tmp260	%read{449,449} %write{447,447}
+temp	float	$tmp261	%read{449,449} %write{448,448}
+temp	int	$tmp262	%read{451,464} %write{450,463}
+temp	int	$tmp263	%read{461,461} %write{460,460}
+temp	float	$tmp264	%read{459,459} %write{452,452}
+temp	float	$tmp265	%read{458,458} %write{456,456}
+temp	float	$tmp266	%read{458,458} %write{457,457}
+temp	float	$tmp267	%read{460,460} %write{458,458}
+temp	float	$tmp268	%read{460,460} %write{459,459}
+temp	int	$tmp269	%read{462,462} %write{461,461}
+temp	int	$tmp270	%read{463,463} %write{462,462}
+temp	int	$tmp271	%read{474,474} %write{473,473}
+temp	float	$tmp272	%read{472,472} %write{465,465}
+temp	float	$tmp273	%read{471,471} %write{469,469}
+temp	float	$tmp274	%read{471,471} %write{470,470}
+temp	float	$tmp275	%read{473,473} %write{471,471}
+temp	float	$tmp276	%read{473,473} %write{472,472}
+temp	int	$tmp277	%read{475,489} %write{474,488}
+temp	int	$tmp278	%read{486,486} %write{485,485}
+temp	float	$tmp279	%read{477,477} %write{476,476}
+temp	float	$tmp280	%read{484,484} %write{477,477}
+temp	float	$tmp281	%read{483,483} %write{481,481}
+temp	float	$tmp282	%read{483,483} %write{482,482}
+temp	float	$tmp283	%read{485,485} %write{483,483}
+temp	float	$tmp284	%read{485,485} %write{484,484}
+temp	int	$tmp285	%read{487,487} %write{486,486}
+temp	int	$tmp286	%read{488,488} %write{487,487}
+temp	int	$tmp287	%read{491,519} %write{492,519}
+temp	int	$tmp288	%read{493,519} %write{493,519}
+temp	int	$tmp289	%read{493,519} %write{493,519}
+temp	float	$tmp290	%read{493,519} %write{493,519}
+temp	float	$tmp291	%read{493,519} %write{493,519}
+temp	float	$tmp292	%read{493,519} %write{493,519}
+temp	int	$tmp293	%read{493,519} %write{493,519}
+temp	float	$tmp294	%read{493,519} %write{493,519}
+temp	float	$tmp295	%read{493,519} %write{493,519}
+temp	float	$tmp296	%read{493,519} %write{493,519}
+temp	float	$tmp297	%read{493,519} %write{493,519}
+temp	float	$tmp298	%read{493,519} %write{493,519}
+temp	float	$tmp299	%read{493,519} %write{493,519}
+temp	float	$tmp300	%read{493,519} %write{493,519}
+temp	float	$tmp301	%read{493,519} %write{493,519}
+temp	int	$tmp302	%read{2147483647,-1} %write{493,519}
+temp	float	$tmp303	%read{528,532} %write{522,522}
+temp	float	$tmp304	%read{528,534} %write{523,523}
+temp	int	$tmp305	%read{526,526} %write{525,525}
+temp	int	$tmp306	%read{527,531} %write{526,530}
+temp	int	$tmp307	%read{529,529} %write{528,528}
+temp	int	$tmp308	%read{530,530} %write{529,529}
+temp	float	$tmp309	%read{533,533} %write{532,532}
+temp	float	$tmp310	%read{534,534} %write{533,533}
+temp	float	$tmp311	%read{535,535} %write{534,534}
+temp	int	$tmp312	%read{537,537} %write{536,536}
+temp	float	$tmp313	%read{539,539} %write{538,538}
+temp	int	$tmp314	%read{540,540} %write{539,539}
+temp	point	$tmp315	%read{549,549} %write{546,546}
+temp	point	$tmp316	%read{543,546} %write{541,541}
+temp	point	$tmp317	%read{545,545} %write{544,544}
+temp	point	$tmp318	%read{544,544} %write{543,543}
+temp	point	$tmp319	%read{546,546} %write{545,545}
+temp	float	$tmp320	%read{551,551} %write{550,550}
+temp	int	$tmp321	%read{552,552} %write{551,551}
+temp	float	$tmp322	%read{555,555} %write{554,554}
+temp	float	$tmp323	%read{558,558} %write{555,555}
+temp	float	$tmp324	%read{558,558} %write{556,556}
+temp	float	$tmp325	%read{558,558} %write{557,557}
+temp	float	$tmp326	%read{560,560} %write{559,559}
+temp	int	$tmp327	%read{561,561} %write{560,560}
+temp	float	$tmp328	%read{567,567} %write{563,563}
+temp	float	$tmp329	%read{565,565} %write{564,564}
+temp	float	$tmp330	%read{567,567} %write{565,565}
+temp	float	$tmp331	%read{567,567} %write{566,566}
+temp	float	$tmp332	%read{570,570} %write{568,568}
+temp	float	$tmp333	%read{570,570} %write{569,569}
+temp	int	$tmp334	%read{571,571} %write{570,570}
+temp	float	$tmp335	%read{576,576} %write{573,573}
+temp	float	$tmp336	%read{576,576} %write{574,574}
+temp	float	$tmp337	%read{576,576} %write{575,575}
+temp	float	$tmp338	%read{581,581} %write{580,580}
+temp	int	$tmp339	%read{582,582} %write{581,581}
+temp	int	$tmp340	%read{583,599} %write{582,598}
+temp	int	$tmp341	%read{596,596} %write{595,595}
+temp	float	$tmp342	%read{589,589} %write{584,584}
+temp	float	$tmp343	%read{590,590} %write{585,585}
+temp	float	$tmp344	%read{587,587} %write{586,586}
+temp	float	$tmp345	%read{594,594} %write{587,587}
+temp	float	$tmp346	%read{593,593} %write{591,591}
+temp	float	$tmp347	%read{593,593} %write{592,592}
+temp	float	$tmp348	%read{595,595} %write{593,593}
+temp	float	$tmp349	%read{595,595} %write{594,594}
+temp	int	$tmp350	%read{597,597} %write{596,596}
+temp	int	$tmp351	%read{598,598} %write{597,597}
+temp	int	$tmp352	%read{618,618} %write{617,617}
+temp	float	$tmp353	%read{611,611} %write{601,601}
+temp	float	$tmp354	%read{606,606} %write{602,602}
+temp	float	$tmp355	%read{605,605} %write{603,603}
+temp	float	$tmp356	%read{605,605} %write{604,604}
+temp	float	$tmp357	%read{606,606} %write{605,605}
+temp	float	$tmp358	%read{612,612} %write{606,606}
+temp	float	$tmp359	%read{616,616} %write{607,607}
+temp	float	$tmp360	%read{609,609} %write{608,608}
+temp	float	$tmp361	%read{612,612} %write{609,609}
+temp	float	$tmp362	%read{615,615} %write{613,613}
+temp	float	$tmp363	%read{615,615} %write{614,614}
+temp	float	$tmp364	%read{617,617} %write{615,615}
+temp	float	$tmp365	%read{617,617} %write{616,616}
+temp	float	$tmp366	%read{621,621} %write{620,620}
+temp	float	$tmp367	%read{624,624} %write{621,621}
+temp	float	$tmp368	%read{623,623} %write{622,622}
+temp	float	$tmp369	%read{624,624} %write{623,623}
+temp	int	$tmp370	%read{625,625} %write{624,624}
+temp	float	$tmp371	%read{628,628} %write{627,627}
+temp	int	$tmp372	%read{629,629} %write{628,628}
+temp	float	$tmp373	%read{631,631} %write{630,630}
+temp	float	$tmp374	%read{633,633} %write{631,631}
+temp	float	$tmp375	%read{633,633} %write{632,632}
+temp	float	$tmp376	%read{635,635} %write{633,633}
+temp	float	$tmp377	%read{635,635} %write{634,634}
+temp	float	$tmp378	%read{638,638} %write{635,635}
+temp	float	$tmp379	%read{637,637} %write{636,636}
+temp	float	$tmp380	%read{638,638} %write{637,637}
+temp	float	$tmp381	%read{641,641} %write{640,640}
+temp	float	$tmp382	%read{644,644} %write{642,642}
+temp	float	$tmp383	%read{644,644} %write{643,643}
+temp	float	$tmp384	%read{648,648} %write{644,644}
+temp	float	$tmp385	%read{647,647} %write{645,645}
+temp	float	$tmp386	%read{647,647} %write{646,646}
+temp	float	$tmp387	%read{648,648} %write{647,647}
+temp	float	$tmp388	%read{651,651} %write{650,650}
+temp	float	$tmp389	%read{653,653} %write{651,651}
+temp	float	$tmp390	%read{653,653} %write{652,652}
+temp	float	$tmp391	%read{656,656} %write{654,654}
+temp	float	$tmp392	%read{656,656} %write{655,655}
+temp	float	$tmp393	%read{657,657} %write{656,656}
+temp	float	$tmp394	%read{662,662} %write{657,657}
+temp	float	$tmp395	%read{659,659} %write{658,658}
+temp	float	$tmp396	%read{660,660} %write{659,659}
+temp	float	$tmp397	%read{661,661} %write{660,660}
+temp	float	$tmp398	%read{662,662} %write{661,661}
+temp	int	$tmp399	%read{663,663} %write{662,662}
+temp	int	$tmp400	%read{666,666} %write{665,665}
+const	string	$const44	"dottededge"		%read{667,667} %write{2147483647,-1}
+const	int	$const45	15		%read{669,669} %write{2147483647,-1}
+temp	float	$tmp401	%read{671,671} %write{670,670}
+temp	int	$tmp402	%read{672,672} %write{671,671}
+temp	float	$tmp403	%read{674,674} %write{673,673}
+const	float	$const46	0.015		%read{674,674} %write{2147483647,-1}
+temp	int	$tmp404	%read{675,675} %write{674,674}
+temp	int	$tmp405	%read{676,681} %write{675,680}
+temp	float	$tmp406	%read{678,678} %write{677,677}
+const	float	$const47	0.064999998		%read{678,678} %write{2147483647,-1}
+temp	int	$tmp407	%read{679,679} %write{678,678}
+temp	int	$tmp408	%read{680,680} %write{679,679}
+temp	int	$tmp409	%read{701,701} %write{700,700}
+temp	float	$tmp410	%read{694,694} %write{689,689}
+temp	float	$tmp411	%read{686,689} %write{683,683}
+temp	float	$tmp412	%read{686,688} %write{684,684}
+temp	float	$tmp413	%read{688,688} %write{687,687}
+temp	float	$tmp414	%read{687,687} %write{686,686}
+temp	float	$tmp415	%read{689,689} %write{688,688}
+temp	float	$tmp416	%read{695,695} %write{690,690}
+const	float	$const48	0.02		%read{699,699} %write{2147483647,-1}
+temp	float	$tmp417	%read{692,692} %write{691,691}
+temp	float	$tmp418	%read{694,694} %write{692,692}
+const	float	$const49	0.039999999		%read{695,695} %write{2147483647,-1}
+temp	float	$tmp419	%read{698,698} %write{696,696}
+temp	float	$tmp420	%read{698,698} %write{697,697}
+temp	float	$tmp421	%read{700,700} %write{698,698}
+temp	float	$tmp422	%read{700,700} %write{699,699}
+code Vector
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:212
+#     float Scale = 1,
+	assign		Vector P 	%filename{"source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl"} %line{212} %argrw{"wr"}
+code ___main___
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:217
+# 
+	mul		$tmp1 Vector Scale 	%filename{"source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl"} %line{217} %argrw{"wrr"}
+	functioncall	$const2 7 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:132
+# point  mod (point  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp3 $tmp1 $const1 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{132} %argrw{"wrr"}
+	floor		$tmp2 $tmp3 	%argrw{"wr"}
+	mul		$tmp4 $const1 $tmp2 	%argrw{"wrr"}
+	sub		p $tmp1 $tmp4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:219
+#         p = rotate_180(p);
+	compref		$tmp5 p $const3 	%filename{"source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl"} %line{219} %argrw{"wrr"}
+	gt		$tmp6 $tmp5 $const4 	%argrw{"wrr"}
+	if		$tmp6 17 17 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:220
+#     }
+	functioncall	$const5 17 	%line{220} %argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:28
+# }
+	compref		$tmp7 p $const6 	%line{28} %argrw{"wrr"}
+	sub		$tmp8 $const1 $tmp7 	%argrw{"wrr"}
+	compref		$tmp9 p $const3 	%argrw{"wrr"}
+	sub		$tmp10 $const1 $tmp9 	%argrw{"wrr"}
+	compref		$tmp11 p $const7 	%argrw{"wrr"}
+	point		p $tmp8 $tmp10 $tmp11 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:223
+# 
+	mul		p p $const8 	%line{223} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:225
+#         lily(mod(p, 1.0), Fac);
+	compref		$tmp12 p $const3 	%line{225} %argrw{"wrr"}
+	lt		$tmp13 $tmp12 $const3 	%argrw{"wrr"}
+	if		$tmp13 76 76 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:226
+#     }
+	functioncall	$const2 26 	%line{226} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:132
+# point  mod (point  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp16 p $const1 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{132} %argrw{"wrr"}
+	floor		$tmp15 $tmp16 	%argrw{"wr"}
+	mul		$tmp17 $const1 $tmp15 	%argrw{"wrr"}
+	sub		$tmp14 p $tmp17 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:226
+#     }
+	functioncall	$const9 76 	%filename{"source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl"} %line{226} %argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:93
+#     float y = p[1];
+	compref		___338_x $tmp14 $const6 	%line{93} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:94
+# 
+	compref		___338_y $tmp14 $const3 	%line{94} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:96
+# 
+	assign		Fac $const6 	%line{96} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:98
+# 
+	assign		___338_w $const10 	%line{98} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:100
+# 
+	div		$tmp18 ___338_w $const8 	%line{100} %argrw{"wrr"}
+	lt		$tmp19 ___338_y $tmp18 	%argrw{"wrr"}
+	if		$tmp19 35 35 	%argrw{"r"}
+	return
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:102
+# 
+	div		$tmp20 ___338_w $const8 	%line{102} %argrw{"wrr"}
+	sub		___338_y ___338_y $tmp20 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:104
+# 
+	gt		$tmp21 ___338_x $const4 	%line{104} %argrw{"wrr"}
+	if		$tmp21 40 40 	%argrw{"r"}
+	sub		___338_x $const1 ___338_x 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:106
+# 
+	gt		$tmp22 ___338_y $const4 	%line{106} %argrw{"wrr"}
+	if		$tmp22 43 43 	%argrw{"r"}
+	return
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:108
+# 
+	sub		$tmp23 ___338_x $const11 	%line{108} %argrw{"wrr"}
+	lt		$tmp24 ___338_y $tmp23 	%argrw{"wrr"}
+	if		$tmp24 47 47 	%argrw{"r"}
+	return
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:110
+#         return;
+	functioncall	$const15 55 	%line{110} %argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:15
+#     float ry = y - cy;
+	sub		___322_rx ___338_x $const13 	%line{15} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:16
+#     return rx*rx+ry*ry < r*r;
+	sub		___322_ry ___338_y $const14 	%line{16} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:17
+# }
+	mul		$tmp26 ___322_rx ___322_rx 	%line{17} %argrw{"wrr"}
+	mul		$tmp27 ___322_ry ___322_ry 	%argrw{"wrr"}
+	add		$tmp28 $tmp26 $tmp27 	%argrw{"wrr"}
+	mul		$tmp29 $const12 $const12 	%argrw{"wrr"}
+	lt		$tmp25 $tmp28 $tmp29 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:110
+#         return;
+	if		$tmp25 57 57 	%line{110} %argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:111
+#     }
+	return	%line{111}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:114
+#         if(y >0.05*cos(x*30)+0.2-x ){
+	functioncall	$const15 65 	%line{114} %argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:15
+#     float ry = y - cy;
+	sub		___322_rx ___338_x $const13 	%line{15} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:16
+#     return rx*rx+ry*ry < r*r;
+	sub		___322_ry ___338_y $const14 	%line{16} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:17
+# }
+	mul		$tmp31 ___322_rx ___322_rx 	%line{17} %argrw{"wrr"}
+	mul		$tmp32 ___322_ry ___322_ry 	%argrw{"wrr"}
+	add		$tmp33 $tmp31 $tmp32 	%argrw{"wrr"}
+	mul		$tmp34 $const13 $const13 	%argrw{"wrr"}
+	lt		$tmp30 $tmp33 $tmp34 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:114
+#         if(y >0.05*cos(x*30)+0.2-x ){
+	eq		$tmp35 $tmp30 $const6 	%line{114} %argrw{"wrr"}
+	if		$tmp35 75 75 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:115
+#             return;
+	mul		$tmp37 ___338_x $const17 	%line{115} %argrw{"wrr"}
+	cos		$tmp36 $tmp37 	%argrw{"wr"}
+	mul		$tmp38 $const11 $tmp36 	%argrw{"wrr"}
+	add		$tmp39 $tmp38 $const18 	%argrw{"wrr"}
+	sub		$tmp40 $tmp39 ___338_x 	%argrw{"wrr"}
+	gt		$tmp41 ___338_y $tmp40 	%argrw{"wrr"}
+	if		$tmp41 75 75 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:116
+#         }
+	return	%line{116}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:119
+# }
+	assign		Fac $const3 	%line{119} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:229
+#         rosette(mod(p, 1.0), Fac);
+	eq		$tmp42 Fac $const6 	%line{229} %argrw{"wrr"}
+	if		$tmp42 201 201 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:230
+#     }
+	functioncall	$const2 83 	%line{230} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:132
+# point  mod (point  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp45 p $const1 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{132} %argrw{"wrr"}
+	floor		$tmp44 $tmp45 	%argrw{"wr"}
+	mul		$tmp46 $const1 $tmp44 	%argrw{"wrr"}
+	sub		$tmp43 p $tmp46 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:230
+#     }
+	functioncall	$const19 201 	%filename{"source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl"} %line{230} %argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:57
+# 
+	assign		Fac $const3 	%line{57} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:59
+#     if(p[0] > 0.5){
+	assign		___329_p $tmp43 	%line{59} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:60
+#         p = mirror_h(p);
+	compref		$tmp47 ___329_p $const6 	%line{60} %argrw{"wrr"}
+	gt		$tmp48 $tmp47 $const4 	%argrw{"wrr"}
+	if		$tmp48 95 95 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:61
+#     }
+	functioncall	$const20 95 	%line{61} %argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:32
+# }
+	compref		$tmp49 ___329_p $const6 	%line{32} %argrw{"wrr"}
+	sub		$tmp50 $const1 $tmp49 	%argrw{"wrr"}
+	compref		$tmp51 ___329_p $const3 	%argrw{"wrr"}
+	compref		$tmp52 ___329_p $const7 	%argrw{"wrr"}
+	point		___329_p $tmp50 $tmp51 $tmp52 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:63
+#         p = mirror_v(p);
+	compref		$tmp53 ___329_p $const3 	%line{63} %argrw{"wrr"}
+	gt		$tmp54 $tmp53 $const4 	%argrw{"wrr"}
+	if		$tmp54 104 104 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:64
+#     }
+	functioncall	$const21 104 	%line{64} %argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:36
+# }
+	compref		$tmp55 ___329_p $const6 	%line{36} %argrw{"wrr"}
+	compref		$tmp56 ___329_p $const3 	%argrw{"wrr"}
+	sub		$tmp57 $const1 $tmp56 	%argrw{"wrr"}
+	compref		$tmp58 ___329_p $const7 	%argrw{"wrr"}
+	point		___329_p $tmp55 $tmp57 $tmp58 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:66
+#         p = mirror_xy(p);
+	compref		$tmp59 ___329_p $const3 	%line{66} %argrw{"wrr"}
+	compref		$tmp60 ___329_p $const6 	%argrw{"wrr"}
+	gt		$tmp61 $tmp59 $tmp60 	%argrw{"wrr"}
+	if		$tmp61 113 113 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:67
+#     }
+	functioncall	$const22 113 	%line{67} %argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:40
+# }
+	compref		$tmp62 ___329_p $const3 	%line{40} %argrw{"wrr"}
+	compref		$tmp63 ___329_p $const6 	%argrw{"wrr"}
+	compref		$tmp64 ___329_p $const7 	%argrw{"wrr"}
+	point		___329_p $tmp62 $tmp63 $tmp64 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:70
+#     float b=135;
+	assign		___329_a $const23 	%line{70} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:71
+#     float w=0.12;
+	assign		___329_b $const24 	%line{71} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:72
+# 
+	assign		___329_w $const10 	%line{72} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:74
+#         Fac = 0;
+	compref		$tmp65 ___329_p $const3 	%line{74} %argrw{"wrr"}
+	gt		$tmp66 $tmp65 ___329_w 	%argrw{"wrr"}
+	neq		$tmp67 $tmp66 $const6 	%argrw{"wrr"}
+	if		$tmp67 135 135 	%argrw{"r"}
+	compref		$tmp69 ___329_p $const6 	%argrw{"wrr"}
+	compref		$tmp70 ___329_p $const3 	%argrw{"wrr"}
+	div		$tmp71 ___329_w $const8 	%argrw{"wrr"}
+	sub		$tmp72 $const4 $tmp71 	%argrw{"wrr"}
+	functioncall	$const15 132 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:15
+#     float ry = y - cy;
+	sub		___322_rx $tmp69 $const4 	%line{15} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:16
+#     return rx*rx+ry*ry < r*r;
+	sub		___322_ry $tmp70 $const14 	%line{16} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:17
+# }
+	mul		$tmp73 ___322_rx ___322_rx 	%line{17} %argrw{"wrr"}
+	mul		$tmp74 ___322_ry ___322_ry 	%argrw{"wrr"}
+	add		$tmp75 $tmp73 $tmp74 	%argrw{"wrr"}
+	mul		$tmp76 $tmp72 $tmp72 	%argrw{"wrr"}
+	lt		$tmp68 $tmp75 $tmp76 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:74
+#         Fac = 0;
+	eq		$tmp77 $tmp68 $const6 	%line{74} %argrw{"wrr"}
+	neq		$tmp78 $tmp77 $const6 	%argrw{"wrr"}
+	assign		$tmp67 $tmp78 	%argrw{"wr"}
+	if		$tmp67 137 201 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:75
+#     } else if(incircle(p[0], p[1]*(1+0.5-p[0]), w/2, 0.5,0.5-1.2*w)){
+	assign		Fac $const6 	%line{75} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:76
+#         Fac = 0;
+	compref		$tmp80 ___329_p $const6 	%line{76} %argrw{"wrr"}
+	compref		$tmp81 ___329_p $const3 	%argrw{"wrr"}
+	add		$tmp82 $const1 $const4 	%argrw{"wrr"}
+	compref		$tmp83 ___329_p $const6 	%argrw{"wrr"}
+	sub		$tmp84 $tmp82 $tmp83 	%argrw{"wrr"}
+	mul		$tmp85 $tmp81 $tmp84 	%argrw{"wrr"}
+	div		$tmp86 ___329_w $const8 	%argrw{"wrr"}
+	mul		$tmp87 $const25 ___329_w 	%argrw{"wrr"}
+	sub		$tmp88 $const4 $tmp87 	%argrw{"wrr"}
+	functioncall	$const15 154 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:15
+#     float ry = y - cy;
+	sub		___322_rx $tmp80 $const4 	%line{15} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:16
+#     return rx*rx+ry*ry < r*r;
+	sub		___322_ry $tmp85 $tmp88 	%line{16} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:17
+# }
+	mul		$tmp89 ___322_rx ___322_rx 	%line{17} %argrw{"wrr"}
+	mul		$tmp90 ___322_ry ___322_ry 	%argrw{"wrr"}
+	add		$tmp91 $tmp89 $tmp90 	%argrw{"wrr"}
+	mul		$tmp92 $tmp86 $tmp86 	%argrw{"wrr"}
+	lt		$tmp79 $tmp91 $tmp92 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:76
+#         Fac = 0;
+	if		$tmp79 156 201 	%line{76} %argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:77
+#     } else {
+	assign		Fac $const6 	%line{77} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:79
+#             p = mirror_line(p,-0.5,2);
+	compref		$tmp93 ___329_p $const3 	%line{79} %argrw{"wrr"}
+	add		$tmp94 $tmp93 $const4 	%argrw{"wrr"}
+	compref		$tmp95 ___329_p $const6 	%argrw{"wrr"}
+	mul		$tmp96 $tmp95 $const8 	%argrw{"wrr"}
+	gt		$tmp97 $tmp94 $tmp96 	%argrw{"wrr"}
+	if		$tmp97 186 186 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:80
+#         }
+	functioncall	$const27 186 	%line{80} %argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:48
+#     float My = a + b * Mx;
+	abs		$tmp98 $const8 	%line{48} %argrw{"wr"}
+	gt		$tmp99 $tmp98 $const28 	%argrw{"wrr"}
+	if		$tmp99 175 176 	%argrw{"r"}
+	compref		$tmp100 ___329_p $const3 	%argrw{"wrr"}
+	mul		$tmp101 $const8 $tmp100 	%argrw{"wrr"}
+	compref		$tmp102 ___329_p $const6 	%argrw{"wrr"}
+	add		$tmp103 $tmp101 $tmp102 	%argrw{"wrr"}
+	mul		$tmp104 $const26 $const8 	%argrw{"wrr"}
+	sub		$tmp105 $tmp103 $tmp104 	%argrw{"wrr"}
+	mul		$tmp106 $const8 $const8 	%argrw{"wrr"}
+	add		$tmp107 $tmp106 $const1 	%argrw{"wrr"}
+	div		___328_Mx $tmp105 $tmp107 	%argrw{"wrr"}
+	compref		___328_Mx ___329_p $const6 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:49
+#     return point(2 * Mx - p[0], 2 * My - p[1], 0);
+	mul		$tmp108 $const8 ___328_Mx 	%line{49} %argrw{"wrr"}
+	add		___328_My $const26 $tmp108 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:50
+# }
+	mul		$tmp109 $const8 ___328_Mx 	%line{50} %argrw{"wrr"}
+	compref		$tmp110 ___329_p $const6 	%argrw{"wrr"}
+	sub		$tmp111 $tmp109 $tmp110 	%argrw{"wrr"}
+	mul		$tmp112 $const8 ___328_My 	%argrw{"wrr"}
+	compref		$tmp113 ___329_p $const3 	%argrw{"wrr"}
+	sub		$tmp114 $tmp112 $tmp113 	%argrw{"wrr"}
+	point		___329_p $tmp111 $tmp114 $const14 	%argrw{"wrrr"}
+	return
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:82
+#         if ((p[1]-2*w)*a < -x*x*x*b){
+	compref		$tmp115 ___329_p $const6 	%line{82} %argrw{"wrr"}
+	sub		$tmp116 $tmp115 $const4 	%argrw{"wrr"}
+	div		$tmp117 ___329_w $const8 	%argrw{"wrr"}
+	add		___335_x $tmp116 $tmp117 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:83
+#             Fac = 0;
+	compref		$tmp118 ___329_p $const3 	%line{83} %argrw{"wrr"}
+	mul		$tmp119 $const8 ___329_w 	%argrw{"wrr"}
+	sub		$tmp120 $tmp118 $tmp119 	%argrw{"wrr"}
+	mul		$tmp121 $tmp120 ___329_a 	%argrw{"wrr"}
+	neg		$tmp122 ___335_x 	%argrw{"wr"}
+	mul		$tmp123 $tmp122 ___335_x 	%argrw{"wrr"}
+	mul		$tmp124 $tmp123 ___335_x 	%argrw{"wrr"}
+	mul		$tmp125 $tmp124 ___329_b 	%argrw{"wrr"}
+	lt		$tmp126 $tmp121 $tmp125 	%argrw{"wrr"}
+	if		$tmp126 201 201 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:84
+#         }
+	assign		Fac $const6 	%line{84} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:233
+#         dottedband(mod(p, 1.0), Fac);
+	eq		$tmp127 Fac $const6 	%line{233} %argrw{"wrr"}
+	if		$tmp127 536 536 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:234
+#     }
+	functioncall	$const2 208 	%line{234} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:132
+# point  mod (point  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp130 p $const1 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{132} %argrw{"wrr"}
+	floor		$tmp129 $tmp130 	%argrw{"wr"}
+	mul		$tmp131 $const1 $tmp129 	%argrw{"wrr"}
+	sub		$tmp128 p $tmp131 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:234
+#     }
+	functioncall	$const29 536 	%filename{"source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl"} %line{234} %argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:165
+# 
+	assign		Fac $const6 	%line{165} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:167
+#     float w = 0.08;
+	assign		___355_rs $const13 	%line{167} %argrw{"wr"}
+	assign		___355_rl $const30 	%argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:168
+# 
+	assign		___355_w $const31 	%line{168} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:170
+#     if(q[0] > 0.5){ q = rotate_90(q); }
+	compref		$tmp132 $tmp128 $const3 	%line{170} %argrw{"wrr"}
+	gt		$tmp133 $tmp132 $const4 	%argrw{"wrr"}
+	if		$tmp133 223 223 	%argrw{"r"}
+	functioncall	$const5 223 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:28
+# }
+	compref		$tmp134 $tmp128 $const6 	%line{28} %argrw{"wrr"}
+	sub		$tmp135 $const1 $tmp134 	%argrw{"wrr"}
+	compref		$tmp136 $tmp128 $const3 	%argrw{"wrr"}
+	sub		$tmp137 $const1 $tmp136 	%argrw{"wrr"}
+	compref		$tmp138 $tmp128 $const7 	%argrw{"wrr"}
+	point		$tmp128 $tmp135 $tmp137 $tmp138 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:171
+# 
+	compref		$tmp139 $tmp128 $const6 	%line{171} %argrw{"wrr"}
+	gt		$tmp140 $tmp139 $const4 	%argrw{"wrr"}
+	if		$tmp140 234 234 	%argrw{"r"}
+	functioncall	$const32 234 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:21
+#     point q = p - v;
+	assign		___323_v $const33 	%line{21} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:22
+#     q=point(q[1],-q[0],0);
+	sub		___323_q $tmp128 ___323_v 	%line{22} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:23
+#     return q+v;
+	compref		$tmp141 ___323_q $const3 	%line{23} %argrw{"wrr"}
+	compref		$tmp142 ___323_q $const6 	%argrw{"wrr"}
+	neg		$tmp143 $tmp142 	%argrw{"wr"}
+	point		___323_q $tmp141 $tmp143 $const14 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:24
+# }
+	add		$tmp128 ___323_q ___323_v 	%line{24} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:174
+#     slant(q[0], rs-w, Fac);
+	functioncall	$const35 319 	%line{174} %argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:127
+# 
+	assign		___346_Fac $const6 	%line{127} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:129
+#     float x = p[0], y = p[1];
+	div		___346_e ___355_w $const37 	%line{129} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:130
+#     if( incircle(x,y,r ,cx,cy) && !incircle(x,y,r-w,cx,cy)){
+	compref		___346_x $tmp128 $const6 	%line{130} %argrw{"wrr"}
+	compref		___346_y $tmp128 $const3 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:131
+#         if(incircle(x,y,r-e,cx,cy) && !incircle(x,y,r-w+e,cx,cy)){
+	functioncall	$const15 247 	%line{131} %argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:15
+#     float ry = y - cy;
+	sub		___322_rx ___346_x $const14 	%line{15} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:16
+#     return rx*rx+ry*ry < r*r;
+	sub		___322_ry ___346_y $const4 	%line{16} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:17
+# }
+	mul		$tmp145 ___322_rx ___322_rx 	%line{17} %argrw{"wrr"}
+	mul		$tmp146 ___322_ry ___322_ry 	%argrw{"wrr"}
+	add		$tmp147 $tmp145 $tmp146 	%argrw{"wrr"}
+	mul		$tmp148 ___355_rs ___355_rs 	%argrw{"wrr"}
+	lt		$tmp144 $tmp147 $tmp148 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:131
+#         if(incircle(x,y,r-e,cx,cy) && !incircle(x,y,r-w+e,cx,cy)){
+	neq		$tmp149 $tmp144 $const6 	%line{131} %argrw{"wrr"}
+	if		$tmp149 261 261 	%argrw{"r"}
+	sub		$tmp151 ___355_rs ___355_w 	%argrw{"wrr"}
+	functioncall	$const15 258 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:15
+#     float ry = y - cy;
+	sub		___322_rx ___346_x $const14 	%line{15} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:16
+#     return rx*rx+ry*ry < r*r;
+	sub		___322_ry ___346_y $const4 	%line{16} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:17
+# }
+	mul		$tmp152 ___322_rx ___322_rx 	%line{17} %argrw{"wrr"}
+	mul		$tmp153 ___322_ry ___322_ry 	%argrw{"wrr"}
+	add		$tmp154 $tmp152 $tmp153 	%argrw{"wrr"}
+	mul		$tmp155 $tmp151 $tmp151 	%argrw{"wrr"}
+	lt		$tmp150 $tmp154 $tmp155 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:131
+#         if(incircle(x,y,r-e,cx,cy) && !incircle(x,y,r-w+e,cx,cy)){
+	eq		$tmp156 $tmp150 $const6 	%line{131} %argrw{"wrr"}
+	neq		$tmp157 $tmp156 $const6 	%argrw{"wrr"}
+	assign		$tmp149 $tmp157 	%argrw{"wr"}
+	if		$tmp149 318 318 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:132
+#             Fac = 0.5;
+	sub		$tmp159 ___355_rs ___346_e 	%line{132} %argrw{"wrr"}
+	functioncall	$const15 271 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:15
+#     float ry = y - cy;
+	sub		___322_rx ___346_x $const14 	%line{15} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:16
+#     return rx*rx+ry*ry < r*r;
+	sub		___322_ry ___346_y $const4 	%line{16} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:17
+# }
+	mul		$tmp160 ___322_rx ___322_rx 	%line{17} %argrw{"wrr"}
+	mul		$tmp161 ___322_ry ___322_ry 	%argrw{"wrr"}
+	add		$tmp162 $tmp160 $tmp161 	%argrw{"wrr"}
+	mul		$tmp163 $tmp159 $tmp159 	%argrw{"wrr"}
+	lt		$tmp158 $tmp162 $tmp163 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:132
+#             Fac = 0.5;
+	neq		$tmp164 $tmp158 $const6 	%line{132} %argrw{"wrr"}
+	if		$tmp164 286 286 	%argrw{"r"}
+	sub		$tmp166 ___355_rs ___355_w 	%argrw{"wrr"}
+	add		$tmp167 $tmp166 ___346_e 	%argrw{"wrr"}
+	functioncall	$const15 283 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:15
+#     float ry = y - cy;
+	sub		___322_rx ___346_x $const14 	%line{15} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:16
+#     return rx*rx+ry*ry < r*r;
+	sub		___322_ry ___346_y $const4 	%line{16} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:17
+# }
+	mul		$tmp168 ___322_rx ___322_rx 	%line{17} %argrw{"wrr"}
+	mul		$tmp169 ___322_ry ___322_ry 	%argrw{"wrr"}
+	add		$tmp170 $tmp168 $tmp169 	%argrw{"wrr"}
+	mul		$tmp171 $tmp167 $tmp167 	%argrw{"wrr"}
+	lt		$tmp165 $tmp170 $tmp171 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:132
+#             Fac = 0.5;
+	eq		$tmp172 $tmp165 $const6 	%line{132} %argrw{"wrr"}
+	neq		$tmp173 $tmp172 $const6 	%argrw{"wrr"}
+	assign		$tmp164 $tmp173 	%argrw{"wr"}
+	if		$tmp164 317 318 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:133
+#             for(int i = 0; i < n; i++){
+	assign		___346_Fac $const4 	%line{133} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:134
+#                 float s,c;
+	for		$tmp174 290 291 315 317 	%line{134} %argrw{"r"}
+	assign		___349_i $const6 	%argrw{"wr"}
+	lt		$tmp174 ___349_i $const34 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:136
+#                 float m = r - w/2;
+	mul		$tmp175 ___349_i $const38 	%line{136} %argrw{"wrr"}
+	div		$tmp176 $tmp175 $const34 	%argrw{"wrr"}
+	assign		$tmp177 $tmp176 	%argrw{"wr"}
+	functioncall	$const39 297 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:88
+# float  radians (float x)  { return x*(M_PI/180.0); }
+	div		$tmp178 $const40 $const41 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{88} %argrw{"wrr"}
+	mul		___350_angle $tmp177 $tmp178 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:137
+#                 sincos(angle,s,c);
+	div		$tmp179 ___355_w $const8 	%filename{"source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl"} %line{137} %argrw{"wrr"}
+	sub		___350_m ___355_rs $tmp179 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:138
+#                 if(incircle(x,y,e,cx+m*s,cy+m*c)){
+	sincos		___350_angle ___350_s ___350_c 	%line{138} %argrw{"rww"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:139
+#                     Fac = 1;
+	mul		$tmp181 ___350_m ___350_s 	%line{139} %argrw{"wrr"}
+	add		$tmp182 $const14 $tmp181 	%argrw{"wrr"}
+	mul		$tmp183 ___350_m ___350_c 	%argrw{"wrr"}
+	add		$tmp184 $const4 $tmp183 	%argrw{"wrr"}
+	functioncall	$const15 312 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:15
+#     float ry = y - cy;
+	sub		___322_rx ___346_x $tmp182 	%line{15} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:16
+#     return rx*rx+ry*ry < r*r;
+	sub		___322_ry ___346_y $tmp184 	%line{16} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:17
+# }
+	mul		$tmp185 ___322_rx ___322_rx 	%line{17} %argrw{"wrr"}
+	mul		$tmp186 ___322_ry ___322_ry 	%argrw{"wrr"}
+	add		$tmp187 $tmp185 $tmp186 	%argrw{"wrr"}
+	mul		$tmp188 ___346_e ___346_e 	%argrw{"wrr"}
+	lt		$tmp180 $tmp187 $tmp188 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:139
+#                     Fac = 1;
+	if		$tmp180 315 315 	%line{139} %argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:140
+#                     break;
+	assign		___346_Fac $const3 	%line{140} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:141
+#                 }
+	break	%line{141}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:134
+#                 float s,c;
+	assign		$tmp189 ___349_i 	%line{134} %argrw{"wr"}
+	add		___349_i ___349_i $const3 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:145
+#         }
+	assign		___346_Fac $const3 	%line{145} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:148
+# }
+	assign		Fac ___346_Fac 	%line{148} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:175
+# 
+	compref		$tmp190 $tmp128 $const6 	%line{175} %argrw{"wrr"}
+	sub		$tmp191 ___355_rs ___355_w 	%argrw{"wrr"}
+	functioncall	$const42 333 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:156
+#         Fac -= 0.2*(limit-coord)/limit;
+	gt		$tmp192 Fac $const6 	%line{156} %argrw{"wrr"}
+	neq		$tmp193 $tmp192 $const6 	%argrw{"wrr"}
+	if		$tmp193 328 328 	%argrw{"r"}
+	lt		$tmp194 $tmp190 $tmp191 	%argrw{"wrr"}
+	neq		$tmp195 $tmp194 $const6 	%argrw{"wrr"}
+	assign		$tmp193 $tmp195 	%argrw{"wr"}
+	if		$tmp193 333 333 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:157
+#     }
+	sub		$tmp196 $tmp191 $tmp190 	%line{157} %argrw{"wrr"}
+	mul		$tmp197 $const18 $tmp196 	%argrw{"wrr"}
+	div		$tmp198 $tmp197 $tmp191 	%argrw{"wrr"}
+	sub		Fac Fac $tmp198 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:178
+#         Fac=dottedcircle(q, 0.5, 0.5, rl, w, 36);
+	eq		$tmp199 Fac $const6 	%line{178} %argrw{"wrr"}
+	if		$tmp199 435 435 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:179
+#         slant(q[0], rl-2*w, Fac);
+	functioncall	$const35 420 	%line{179} %argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:127
+# 
+	assign		___346_Fac $const6 	%line{127} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:129
+#     float x = p[0], y = p[1];
+	div		___346_e ___355_w $const37 	%line{129} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:130
+#     if( incircle(x,y,r ,cx,cy) && !incircle(x,y,r-w,cx,cy)){
+	compref		___346_x $tmp128 $const6 	%line{130} %argrw{"wrr"}
+	compref		___346_y $tmp128 $const3 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:131
+#         if(incircle(x,y,r-e,cx,cy) && !incircle(x,y,r-w+e,cx,cy)){
+	functioncall	$const15 348 	%line{131} %argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:15
+#     float ry = y - cy;
+	sub		___322_rx ___346_x $const4 	%line{15} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:16
+#     return rx*rx+ry*ry < r*r;
+	sub		___322_ry ___346_y $const4 	%line{16} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:17
+# }
+	mul		$tmp201 ___322_rx ___322_rx 	%line{17} %argrw{"wrr"}
+	mul		$tmp202 ___322_ry ___322_ry 	%argrw{"wrr"}
+	add		$tmp203 $tmp201 $tmp202 	%argrw{"wrr"}
+	mul		$tmp204 ___355_rl ___355_rl 	%argrw{"wrr"}
+	lt		$tmp200 $tmp203 $tmp204 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:131
+#         if(incircle(x,y,r-e,cx,cy) && !incircle(x,y,r-w+e,cx,cy)){
+	neq		$tmp205 $tmp200 $const6 	%line{131} %argrw{"wrr"}
+	if		$tmp205 362 362 	%argrw{"r"}
+	sub		$tmp207 ___355_rl ___355_w 	%argrw{"wrr"}
+	functioncall	$const15 359 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:15
+#     float ry = y - cy;
+	sub		___322_rx ___346_x $const4 	%line{15} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:16
+#     return rx*rx+ry*ry < r*r;
+	sub		___322_ry ___346_y $const4 	%line{16} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:17
+# }
+	mul		$tmp208 ___322_rx ___322_rx 	%line{17} %argrw{"wrr"}
+	mul		$tmp209 ___322_ry ___322_ry 	%argrw{"wrr"}
+	add		$tmp210 $tmp208 $tmp209 	%argrw{"wrr"}
+	mul		$tmp211 $tmp207 $tmp207 	%argrw{"wrr"}
+	lt		$tmp206 $tmp210 $tmp211 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:131
+#         if(incircle(x,y,r-e,cx,cy) && !incircle(x,y,r-w+e,cx,cy)){
+	eq		$tmp212 $tmp206 $const6 	%line{131} %argrw{"wrr"}
+	neq		$tmp213 $tmp212 $const6 	%argrw{"wrr"}
+	assign		$tmp205 $tmp213 	%argrw{"wr"}
+	if		$tmp205 419 419 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:132
+#             Fac = 0.5;
+	sub		$tmp215 ___355_rl ___346_e 	%line{132} %argrw{"wrr"}
+	functioncall	$const15 372 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:15
+#     float ry = y - cy;
+	sub		___322_rx ___346_x $const4 	%line{15} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:16
+#     return rx*rx+ry*ry < r*r;
+	sub		___322_ry ___346_y $const4 	%line{16} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:17
+# }
+	mul		$tmp216 ___322_rx ___322_rx 	%line{17} %argrw{"wrr"}
+	mul		$tmp217 ___322_ry ___322_ry 	%argrw{"wrr"}
+	add		$tmp218 $tmp216 $tmp217 	%argrw{"wrr"}
+	mul		$tmp219 $tmp215 $tmp215 	%argrw{"wrr"}
+	lt		$tmp214 $tmp218 $tmp219 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:132
+#             Fac = 0.5;
+	neq		$tmp220 $tmp214 $const6 	%line{132} %argrw{"wrr"}
+	if		$tmp220 387 387 	%argrw{"r"}
+	sub		$tmp222 ___355_rl ___355_w 	%argrw{"wrr"}
+	add		$tmp223 $tmp222 ___346_e 	%argrw{"wrr"}
+	functioncall	$const15 384 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:15
+#     float ry = y - cy;
+	sub		___322_rx ___346_x $const4 	%line{15} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:16
+#     return rx*rx+ry*ry < r*r;
+	sub		___322_ry ___346_y $const4 	%line{16} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:17
+# }
+	mul		$tmp224 ___322_rx ___322_rx 	%line{17} %argrw{"wrr"}
+	mul		$tmp225 ___322_ry ___322_ry 	%argrw{"wrr"}
+	add		$tmp226 $tmp224 $tmp225 	%argrw{"wrr"}
+	mul		$tmp227 $tmp223 $tmp223 	%argrw{"wrr"}
+	lt		$tmp221 $tmp226 $tmp227 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:132
+#             Fac = 0.5;
+	eq		$tmp228 $tmp221 $const6 	%line{132} %argrw{"wrr"}
+	neq		$tmp229 $tmp228 $const6 	%argrw{"wrr"}
+	assign		$tmp220 $tmp229 	%argrw{"wr"}
+	if		$tmp220 418 419 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:133
+#             for(int i = 0; i < n; i++){
+	assign		___346_Fac $const4 	%line{133} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:134
+#                 float s,c;
+	for		$tmp230 391 392 416 418 	%line{134} %argrw{"r"}
+	assign		___349_i $const6 	%argrw{"wr"}
+	lt		$tmp230 ___349_i $const43 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:136
+#                 float m = r - w/2;
+	mul		$tmp231 ___349_i $const38 	%line{136} %argrw{"wrr"}
+	div		$tmp232 $tmp231 $const43 	%argrw{"wrr"}
+	assign		$tmp233 $tmp232 	%argrw{"wr"}
+	functioncall	$const39 398 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:88
+# float  radians (float x)  { return x*(M_PI/180.0); }
+	div		$tmp234 $const40 $const41 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{88} %argrw{"wrr"}
+	mul		___350_angle $tmp233 $tmp234 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:137
+#                 sincos(angle,s,c);
+	div		$tmp235 ___355_w $const8 	%filename{"source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl"} %line{137} %argrw{"wrr"}
+	sub		___350_m ___355_rl $tmp235 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:138
+#                 if(incircle(x,y,e,cx+m*s,cy+m*c)){
+	sincos		___350_angle ___350_s ___350_c 	%line{138} %argrw{"rww"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:139
+#                     Fac = 1;
+	mul		$tmp237 ___350_m ___350_s 	%line{139} %argrw{"wrr"}
+	add		$tmp238 $const4 $tmp237 	%argrw{"wrr"}
+	mul		$tmp239 ___350_m ___350_c 	%argrw{"wrr"}
+	add		$tmp240 $const4 $tmp239 	%argrw{"wrr"}
+	functioncall	$const15 413 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:15
+#     float ry = y - cy;
+	sub		___322_rx ___346_x $tmp238 	%line{15} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:16
+#     return rx*rx+ry*ry < r*r;
+	sub		___322_ry ___346_y $tmp240 	%line{16} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:17
+# }
+	mul		$tmp241 ___322_rx ___322_rx 	%line{17} %argrw{"wrr"}
+	mul		$tmp242 ___322_ry ___322_ry 	%argrw{"wrr"}
+	add		$tmp243 $tmp241 $tmp242 	%argrw{"wrr"}
+	mul		$tmp244 ___346_e ___346_e 	%argrw{"wrr"}
+	lt		$tmp236 $tmp243 $tmp244 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:139
+#                     Fac = 1;
+	if		$tmp236 416 416 	%line{139} %argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:140
+#                     break;
+	assign		___346_Fac $const3 	%line{140} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:141
+#                 }
+	break	%line{141}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:134
+#                 float s,c;
+	assign		$tmp245 ___349_i 	%line{134} %argrw{"wr"}
+	add		___349_i ___349_i $const3 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:145
+#         }
+	assign		___346_Fac $const3 	%line{145} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:148
+# }
+	assign		Fac ___346_Fac 	%line{148} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:180
+#     }
+	compref		$tmp246 $tmp128 $const6 	%line{180} %argrw{"wrr"}
+	mul		$tmp247 $const8 ___355_w 	%argrw{"wrr"}
+	sub		$tmp248 ___355_rl $tmp247 	%argrw{"wrr"}
+	functioncall	$const42 435 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:156
+#         Fac -= 0.2*(limit-coord)/limit;
+	gt		$tmp249 Fac $const6 	%line{156} %argrw{"wrr"}
+	neq		$tmp250 $tmp249 $const6 	%argrw{"wrr"}
+	if		$tmp250 430 430 	%argrw{"r"}
+	lt		$tmp251 $tmp246 $tmp248 	%argrw{"wrr"}
+	neq		$tmp252 $tmp251 $const6 	%argrw{"wrr"}
+	assign		$tmp250 $tmp252 	%argrw{"wr"}
+	if		$tmp250 435 435 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:157
+#     }
+	sub		$tmp253 $tmp248 $tmp246 	%line{157} %argrw{"wrr"}
+	mul		$tmp254 $const18 $tmp253 	%argrw{"wrr"}
+	div		$tmp255 $tmp254 $tmp248 	%argrw{"wrr"}
+	sub		Fac Fac $tmp255 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:184
+#         Fac=dottedcircle(q, 0.5, 0.0, rs, w, 12);
+	eq		$tmp256 Fac $const6 	%line{184} %argrw{"wrr"}
+	if		$tmp256 536 536 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:185
+#         slant(q[1], rs-w, Fac);
+	functioncall	$const35 522 	%line{185} %argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:127
+# 
+	assign		___346_Fac $const6 	%line{127} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:129
+#     float x = p[0], y = p[1];
+	div		___346_e ___355_w $const37 	%line{129} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:130
+#     if( incircle(x,y,r ,cx,cy) && !incircle(x,y,r-w,cx,cy)){
+	compref		___346_x $tmp128 $const6 	%line{130} %argrw{"wrr"}
+	compref		___346_y $tmp128 $const3 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:131
+#         if(incircle(x,y,r-e,cx,cy) && !incircle(x,y,r-w+e,cx,cy)){
+	functioncall	$const15 450 	%line{131} %argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:15
+#     float ry = y - cy;
+	sub		___322_rx ___346_x $const4 	%line{15} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:16
+#     return rx*rx+ry*ry < r*r;
+	sub		___322_ry ___346_y $const14 	%line{16} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:17
+# }
+	mul		$tmp258 ___322_rx ___322_rx 	%line{17} %argrw{"wrr"}
+	mul		$tmp259 ___322_ry ___322_ry 	%argrw{"wrr"}
+	add		$tmp260 $tmp258 $tmp259 	%argrw{"wrr"}
+	mul		$tmp261 ___355_rs ___355_rs 	%argrw{"wrr"}
+	lt		$tmp257 $tmp260 $tmp261 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:131
+#         if(incircle(x,y,r-e,cx,cy) && !incircle(x,y,r-w+e,cx,cy)){
+	neq		$tmp262 $tmp257 $const6 	%line{131} %argrw{"wrr"}
+	if		$tmp262 464 464 	%argrw{"r"}
+	sub		$tmp264 ___355_rs ___355_w 	%argrw{"wrr"}
+	functioncall	$const15 461 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:15
+#     float ry = y - cy;
+	sub		___322_rx ___346_x $const4 	%line{15} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:16
+#     return rx*rx+ry*ry < r*r;
+	sub		___322_ry ___346_y $const14 	%line{16} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:17
+# }
+	mul		$tmp265 ___322_rx ___322_rx 	%line{17} %argrw{"wrr"}
+	mul		$tmp266 ___322_ry ___322_ry 	%argrw{"wrr"}
+	add		$tmp267 $tmp265 $tmp266 	%argrw{"wrr"}
+	mul		$tmp268 $tmp264 $tmp264 	%argrw{"wrr"}
+	lt		$tmp263 $tmp267 $tmp268 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:131
+#         if(incircle(x,y,r-e,cx,cy) && !incircle(x,y,r-w+e,cx,cy)){
+	eq		$tmp269 $tmp263 $const6 	%line{131} %argrw{"wrr"}
+	neq		$tmp270 $tmp269 $const6 	%argrw{"wrr"}
+	assign		$tmp262 $tmp270 	%argrw{"wr"}
+	if		$tmp262 521 521 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:132
+#             Fac = 0.5;
+	sub		$tmp272 ___355_rs ___346_e 	%line{132} %argrw{"wrr"}
+	functioncall	$const15 474 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:15
+#     float ry = y - cy;
+	sub		___322_rx ___346_x $const4 	%line{15} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:16
+#     return rx*rx+ry*ry < r*r;
+	sub		___322_ry ___346_y $const14 	%line{16} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:17
+# }
+	mul		$tmp273 ___322_rx ___322_rx 	%line{17} %argrw{"wrr"}
+	mul		$tmp274 ___322_ry ___322_ry 	%argrw{"wrr"}
+	add		$tmp275 $tmp273 $tmp274 	%argrw{"wrr"}
+	mul		$tmp276 $tmp272 $tmp272 	%argrw{"wrr"}
+	lt		$tmp271 $tmp275 $tmp276 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:132
+#             Fac = 0.5;
+	neq		$tmp277 $tmp271 $const6 	%line{132} %argrw{"wrr"}
+	if		$tmp277 489 489 	%argrw{"r"}
+	sub		$tmp279 ___355_rs ___355_w 	%argrw{"wrr"}
+	add		$tmp280 $tmp279 ___346_e 	%argrw{"wrr"}
+	functioncall	$const15 486 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:15
+#     float ry = y - cy;
+	sub		___322_rx ___346_x $const4 	%line{15} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:16
+#     return rx*rx+ry*ry < r*r;
+	sub		___322_ry ___346_y $const14 	%line{16} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:17
+# }
+	mul		$tmp281 ___322_rx ___322_rx 	%line{17} %argrw{"wrr"}
+	mul		$tmp282 ___322_ry ___322_ry 	%argrw{"wrr"}
+	add		$tmp283 $tmp281 $tmp282 	%argrw{"wrr"}
+	mul		$tmp284 $tmp280 $tmp280 	%argrw{"wrr"}
+	lt		$tmp278 $tmp283 $tmp284 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:132
+#             Fac = 0.5;
+	eq		$tmp285 $tmp278 $const6 	%line{132} %argrw{"wrr"}
+	neq		$tmp286 $tmp285 $const6 	%argrw{"wrr"}
+	assign		$tmp277 $tmp286 	%argrw{"wr"}
+	if		$tmp277 520 521 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:133
+#             for(int i = 0; i < n; i++){
+	assign		___346_Fac $const4 	%line{133} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:134
+#                 float s,c;
+	for		$tmp287 493 494 518 520 	%line{134} %argrw{"r"}
+	assign		___349_i $const6 	%argrw{"wr"}
+	lt		$tmp287 ___349_i $const34 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:136
+#                 float m = r - w/2;
+	mul		$tmp288 ___349_i $const38 	%line{136} %argrw{"wrr"}
+	div		$tmp289 $tmp288 $const34 	%argrw{"wrr"}
+	assign		$tmp290 $tmp289 	%argrw{"wr"}
+	functioncall	$const39 500 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:88
+# float  radians (float x)  { return x*(M_PI/180.0); }
+	div		$tmp291 $const40 $const41 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{88} %argrw{"wrr"}
+	mul		___350_angle $tmp290 $tmp291 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:137
+#                 sincos(angle,s,c);
+	div		$tmp292 ___355_w $const8 	%filename{"source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl"} %line{137} %argrw{"wrr"}
+	sub		___350_m ___355_rs $tmp292 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:138
+#                 if(incircle(x,y,e,cx+m*s,cy+m*c)){
+	sincos		___350_angle ___350_s ___350_c 	%line{138} %argrw{"rww"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:139
+#                     Fac = 1;
+	mul		$tmp294 ___350_m ___350_s 	%line{139} %argrw{"wrr"}
+	add		$tmp295 $const4 $tmp294 	%argrw{"wrr"}
+	mul		$tmp296 ___350_m ___350_c 	%argrw{"wrr"}
+	add		$tmp297 $const14 $tmp296 	%argrw{"wrr"}
+	functioncall	$const15 515 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:15
+#     float ry = y - cy;
+	sub		___322_rx ___346_x $tmp295 	%line{15} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:16
+#     return rx*rx+ry*ry < r*r;
+	sub		___322_ry ___346_y $tmp297 	%line{16} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:17
+# }
+	mul		$tmp298 ___322_rx ___322_rx 	%line{17} %argrw{"wrr"}
+	mul		$tmp299 ___322_ry ___322_ry 	%argrw{"wrr"}
+	add		$tmp300 $tmp298 $tmp299 	%argrw{"wrr"}
+	mul		$tmp301 ___346_e ___346_e 	%argrw{"wrr"}
+	lt		$tmp293 $tmp300 $tmp301 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:139
+#                     Fac = 1;
+	if		$tmp293 518 518 	%line{139} %argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:140
+#                     break;
+	assign		___346_Fac $const3 	%line{140} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:141
+#                 }
+	break	%line{141}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:134
+#                 float s,c;
+	assign		$tmp302 ___349_i 	%line{134} %argrw{"wr"}
+	add		___349_i ___349_i $const3 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:145
+#         }
+	assign		___346_Fac $const3 	%line{145} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:148
+# }
+	assign		Fac ___346_Fac 	%line{148} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:186
+#     }
+	compref		$tmp303 $tmp128 $const3 	%line{186} %argrw{"wrr"}
+	sub		$tmp304 ___355_rs ___355_w 	%argrw{"wrr"}
+	functioncall	$const42 536 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:156
+#         Fac -= 0.2*(limit-coord)/limit;
+	gt		$tmp305 Fac $const6 	%line{156} %argrw{"wrr"}
+	neq		$tmp306 $tmp305 $const6 	%argrw{"wrr"}
+	if		$tmp306 531 531 	%argrw{"r"}
+	lt		$tmp307 $tmp303 $tmp304 	%argrw{"wrr"}
+	neq		$tmp308 $tmp307 $const6 	%argrw{"wrr"}
+	assign		$tmp306 $tmp308 	%argrw{"wr"}
+	if		$tmp306 536 536 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:157
+#     }
+	sub		$tmp309 $tmp304 $tmp303 	%line{157} %argrw{"wrr"}
+	mul		$tmp310 $const18 $tmp309 	%argrw{"wrr"}
+	div		$tmp311 $tmp310 $tmp304 	%argrw{"wrr"}
+	sub		Fac Fac $tmp311 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:237
+#         if(p[1] > 0.5){
+	eq		$tmp312 Fac $const6 	%line{237} %argrw{"wrr"}
+	if		$tmp312 665 665 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:238
+#             rosette(mod(p-0.5, 1.0), Fac);
+	compref		$tmp313 p $const3 	%line{238} %argrw{"wrr"}
+	gt		$tmp314 $tmp313 $const4 	%argrw{"wrr"}
+	if		$tmp314 665 665 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:239
+#         }
+	sub		$tmp316 p $const4 	%line{239} %argrw{"wrr"}
+	functioncall	$const2 547 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:132
+# point  mod (point  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp318 $tmp316 $const1 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{132} %argrw{"wrr"}
+	floor		$tmp317 $tmp318 	%argrw{"wr"}
+	mul		$tmp319 $const1 $tmp317 	%argrw{"wrr"}
+	sub		$tmp315 $tmp316 $tmp319 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:239
+#         }
+	functioncall	$const19 665 	%filename{"source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl"} %line{239} %argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:57
+# 
+	assign		Fac $const3 	%line{57} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:59
+#     if(p[0] > 0.5){
+	assign		___329_p $tmp315 	%line{59} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:60
+#         p = mirror_h(p);
+	compref		$tmp320 ___329_p $const6 	%line{60} %argrw{"wrr"}
+	gt		$tmp321 $tmp320 $const4 	%argrw{"wrr"}
+	if		$tmp321 559 559 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:61
+#     }
+	functioncall	$const20 559 	%line{61} %argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:32
+# }
+	compref		$tmp322 ___329_p $const6 	%line{32} %argrw{"wrr"}
+	sub		$tmp323 $const1 $tmp322 	%argrw{"wrr"}
+	compref		$tmp324 ___329_p $const3 	%argrw{"wrr"}
+	compref		$tmp325 ___329_p $const7 	%argrw{"wrr"}
+	point		___329_p $tmp323 $tmp324 $tmp325 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:63
+#         p = mirror_v(p);
+	compref		$tmp326 ___329_p $const3 	%line{63} %argrw{"wrr"}
+	gt		$tmp327 $tmp326 $const4 	%argrw{"wrr"}
+	if		$tmp327 568 568 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:64
+#     }
+	functioncall	$const21 568 	%line{64} %argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:36
+# }
+	compref		$tmp328 ___329_p $const6 	%line{36} %argrw{"wrr"}
+	compref		$tmp329 ___329_p $const3 	%argrw{"wrr"}
+	sub		$tmp330 $const1 $tmp329 	%argrw{"wrr"}
+	compref		$tmp331 ___329_p $const7 	%argrw{"wrr"}
+	point		___329_p $tmp328 $tmp330 $tmp331 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:66
+#         p = mirror_xy(p);
+	compref		$tmp332 ___329_p $const3 	%line{66} %argrw{"wrr"}
+	compref		$tmp333 ___329_p $const6 	%argrw{"wrr"}
+	gt		$tmp334 $tmp332 $tmp333 	%argrw{"wrr"}
+	if		$tmp334 577 577 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:67
+#     }
+	functioncall	$const22 577 	%line{67} %argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:40
+# }
+	compref		$tmp335 ___329_p $const3 	%line{40} %argrw{"wrr"}
+	compref		$tmp336 ___329_p $const6 	%argrw{"wrr"}
+	compref		$tmp337 ___329_p $const7 	%argrw{"wrr"}
+	point		___329_p $tmp335 $tmp336 $tmp337 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:70
+#     float b=135;
+	assign		___329_a $const23 	%line{70} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:71
+#     float w=0.12;
+	assign		___329_b $const24 	%line{71} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:72
+# 
+	assign		___329_w $const10 	%line{72} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:74
+#         Fac = 0;
+	compref		$tmp338 ___329_p $const3 	%line{74} %argrw{"wrr"}
+	gt		$tmp339 $tmp338 ___329_w 	%argrw{"wrr"}
+	neq		$tmp340 $tmp339 $const6 	%argrw{"wrr"}
+	if		$tmp340 599 599 	%argrw{"r"}
+	compref		$tmp342 ___329_p $const6 	%argrw{"wrr"}
+	compref		$tmp343 ___329_p $const3 	%argrw{"wrr"}
+	div		$tmp344 ___329_w $const8 	%argrw{"wrr"}
+	sub		$tmp345 $const4 $tmp344 	%argrw{"wrr"}
+	functioncall	$const15 596 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:15
+#     float ry = y - cy;
+	sub		___322_rx $tmp342 $const4 	%line{15} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:16
+#     return rx*rx+ry*ry < r*r;
+	sub		___322_ry $tmp343 $const14 	%line{16} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:17
+# }
+	mul		$tmp346 ___322_rx ___322_rx 	%line{17} %argrw{"wrr"}
+	mul		$tmp347 ___322_ry ___322_ry 	%argrw{"wrr"}
+	add		$tmp348 $tmp346 $tmp347 	%argrw{"wrr"}
+	mul		$tmp349 $tmp345 $tmp345 	%argrw{"wrr"}
+	lt		$tmp341 $tmp348 $tmp349 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:74
+#         Fac = 0;
+	eq		$tmp350 $tmp341 $const6 	%line{74} %argrw{"wrr"}
+	neq		$tmp351 $tmp350 $const6 	%argrw{"wrr"}
+	assign		$tmp340 $tmp351 	%argrw{"wr"}
+	if		$tmp340 601 665 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:75
+#     } else if(incircle(p[0], p[1]*(1+0.5-p[0]), w/2, 0.5,0.5-1.2*w)){
+	assign		Fac $const6 	%line{75} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:76
+#         Fac = 0;
+	compref		$tmp353 ___329_p $const6 	%line{76} %argrw{"wrr"}
+	compref		$tmp354 ___329_p $const3 	%argrw{"wrr"}
+	add		$tmp355 $const1 $const4 	%argrw{"wrr"}
+	compref		$tmp356 ___329_p $const6 	%argrw{"wrr"}
+	sub		$tmp357 $tmp355 $tmp356 	%argrw{"wrr"}
+	mul		$tmp358 $tmp354 $tmp357 	%argrw{"wrr"}
+	div		$tmp359 ___329_w $const8 	%argrw{"wrr"}
+	mul		$tmp360 $const25 ___329_w 	%argrw{"wrr"}
+	sub		$tmp361 $const4 $tmp360 	%argrw{"wrr"}
+	functioncall	$const15 618 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:15
+#     float ry = y - cy;
+	sub		___322_rx $tmp353 $const4 	%line{15} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:16
+#     return rx*rx+ry*ry < r*r;
+	sub		___322_ry $tmp358 $tmp361 	%line{16} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:17
+# }
+	mul		$tmp362 ___322_rx ___322_rx 	%line{17} %argrw{"wrr"}
+	mul		$tmp363 ___322_ry ___322_ry 	%argrw{"wrr"}
+	add		$tmp364 $tmp362 $tmp363 	%argrw{"wrr"}
+	mul		$tmp365 $tmp359 $tmp359 	%argrw{"wrr"}
+	lt		$tmp352 $tmp364 $tmp365 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:76
+#         Fac = 0;
+	if		$tmp352 620 665 	%line{76} %argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:77
+#     } else {
+	assign		Fac $const6 	%line{77} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:79
+#             p = mirror_line(p,-0.5,2);
+	compref		$tmp366 ___329_p $const3 	%line{79} %argrw{"wrr"}
+	add		$tmp367 $tmp366 $const4 	%argrw{"wrr"}
+	compref		$tmp368 ___329_p $const6 	%argrw{"wrr"}
+	mul		$tmp369 $tmp368 $const8 	%argrw{"wrr"}
+	gt		$tmp370 $tmp367 $tmp369 	%argrw{"wrr"}
+	if		$tmp370 650 650 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:80
+#         }
+	functioncall	$const27 650 	%line{80} %argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:48
+#     float My = a + b * Mx;
+	abs		$tmp371 $const8 	%line{48} %argrw{"wr"}
+	gt		$tmp372 $tmp371 $const28 	%argrw{"wrr"}
+	if		$tmp372 639 640 	%argrw{"r"}
+	compref		$tmp373 ___329_p $const3 	%argrw{"wrr"}
+	mul		$tmp374 $const8 $tmp373 	%argrw{"wrr"}
+	compref		$tmp375 ___329_p $const6 	%argrw{"wrr"}
+	add		$tmp376 $tmp374 $tmp375 	%argrw{"wrr"}
+	mul		$tmp377 $const26 $const8 	%argrw{"wrr"}
+	sub		$tmp378 $tmp376 $tmp377 	%argrw{"wrr"}
+	mul		$tmp379 $const8 $const8 	%argrw{"wrr"}
+	add		$tmp380 $tmp379 $const1 	%argrw{"wrr"}
+	div		___328_Mx $tmp378 $tmp380 	%argrw{"wrr"}
+	compref		___328_Mx ___329_p $const6 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:49
+#     return point(2 * Mx - p[0], 2 * My - p[1], 0);
+	mul		$tmp381 $const8 ___328_Mx 	%line{49} %argrw{"wrr"}
+	add		___328_My $const26 $tmp381 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:50
+# }
+	mul		$tmp382 $const8 ___328_Mx 	%line{50} %argrw{"wrr"}
+	compref		$tmp383 ___329_p $const6 	%argrw{"wrr"}
+	sub		$tmp384 $tmp382 $tmp383 	%argrw{"wrr"}
+	mul		$tmp385 $const8 ___328_My 	%argrw{"wrr"}
+	compref		$tmp386 ___329_p $const3 	%argrw{"wrr"}
+	sub		$tmp387 $tmp385 $tmp386 	%argrw{"wrr"}
+	point		___329_p $tmp384 $tmp387 $const14 	%argrw{"wrrr"}
+	return
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:82
+#         if ((p[1]-2*w)*a < -x*x*x*b){
+	compref		$tmp388 ___329_p $const6 	%line{82} %argrw{"wrr"}
+	sub		$tmp389 $tmp388 $const4 	%argrw{"wrr"}
+	div		$tmp390 ___329_w $const8 	%argrw{"wrr"}
+	add		___335_x $tmp389 $tmp390 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:83
+#             Fac = 0;
+	compref		$tmp391 ___329_p $const3 	%line{83} %argrw{"wrr"}
+	mul		$tmp392 $const8 ___329_w 	%argrw{"wrr"}
+	sub		$tmp393 $tmp391 $tmp392 	%argrw{"wrr"}
+	mul		$tmp394 $tmp393 ___329_a 	%argrw{"wrr"}
+	neg		$tmp395 ___335_x 	%argrw{"wr"}
+	mul		$tmp396 $tmp395 ___335_x 	%argrw{"wrr"}
+	mul		$tmp397 $tmp396 ___335_x 	%argrw{"wrr"}
+	mul		$tmp398 $tmp397 ___329_b 	%argrw{"wrr"}
+	lt		$tmp399 $tmp394 $tmp398 	%argrw{"wrr"}
+	if		$tmp399 665 665 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:84
+#         }
+	assign		Fac $const6 	%line{84} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:243
+#         dottededge(p, Fac);
+	eq		$tmp400 Fac $const6 	%line{243} %argrw{"wrr"}
+	if		$tmp400 704 704 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:244
+#     }
+	functioncall	$const44 704 	%line{244} %argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:195
+# 
+	assign		Fac $const6 	%line{195} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:197
+#     if(p[1] < 0.08){
+	assign		___360_Ndots $const45 	%line{197} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:198
+#         if(p[1] < 0.015 || p[1] > 0.065){
+	compref		$tmp401 p $const3 	%line{198} %argrw{"wrr"}
+	lt		$tmp402 $tmp401 $const31 	%argrw{"wrr"}
+	if		$tmp402 704 704 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:199
+#             Fac = 1;
+	compref		$tmp403 p $const3 	%line{199} %argrw{"wrr"}
+	lt		$tmp404 $tmp403 $const46 	%argrw{"wrr"}
+	neq		$tmp405 $tmp404 $const6 	%argrw{"wrr"}
+	if		$tmp405 677 681 	%argrw{"r"}
+	compref		$tmp406 p $const3 	%argrw{"wrr"}
+	gt		$tmp407 $tmp406 $const47 	%argrw{"wrr"}
+	neq		$tmp408 $tmp407 $const6 	%argrw{"wrr"}
+	assign		$tmp405 $tmp408 	%argrw{"wr"}
+	if		$tmp405 683 704 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:200
+#         }else{
+	assign		Fac $const3 	%line{200} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:202
+#                 Fac = 1;
+	compref		$tmp411 p $const6 	%line{202} %argrw{"wrr"}
+	div		$tmp412 $const1 ___360_Ndots 	%argrw{"wrr"}
+	functioncall	$const2 690 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:136
+# float  mod (float  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp414 $tmp411 $tmp412 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{136} %argrw{"wrr"}
+	floor		$tmp413 $tmp414 	%argrw{"wr"}
+	mul		$tmp415 $tmp412 $tmp413 	%argrw{"wrr"}
+	sub		$tmp410 $tmp411 $tmp415 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:202
+#                 Fac = 1;
+	compref		$tmp416 p $const3 	%filename{"source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl"} %line{202} %argrw{"wrr"}
+	div		$tmp417 $const1 ___360_Ndots 	%argrw{"wrr"}
+	div		$tmp418 $tmp417 $const8 	%argrw{"wrr"}
+	functioncall	$const15 701 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:15
+#     float ry = y - cy;
+	sub		___322_rx $tmp410 $tmp418 	%line{15} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:16
+#     return rx*rx+ry*ry < r*r;
+	sub		___322_ry $tmp416 $const49 	%line{16} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:17
+# }
+	mul		$tmp419 ___322_rx ___322_rx 	%line{17} %argrw{"wrr"}
+	mul		$tmp420 ___322_ry ___322_ry 	%argrw{"wrr"}
+	add		$tmp421 $tmp419 $tmp420 	%argrw{"wrr"}
+	mul		$tmp422 $const48 $const48 	%argrw{"wrr"}
+	lt		$tmp409 $tmp421 $tmp422 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:202
+#                 Fac = 1;
+	if		$tmp409 703 704 	%line{202} %argrw{"r"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:203
+#             }else{
+	assign		Fac $const3 	%line{203} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/13MABCastIronCover/MABCastIronCover.osl:205
+#             }
+	assign		Fac $const4 	%line{205} %argrw{"wr"}
+	end

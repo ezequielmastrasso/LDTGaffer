@@ -1,0 +1,329 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader CameraProjector	%meta{string,label,"Camera Projection"} %meta{string,help,"<h3>Camera Projection</h3> Click the 'Pick a Camera' button and choose a camera to project from."} %meta{string,category,"Projection"} %meta{string,version,"1.0"} 
+param	string	INode	"<Pick Camera>"		%meta{string,widget,"max:actionButton"} %meta{string,label,"Camera to project from"} %meta{string,actionID,"selectCamera()"} %meta{int,connectable,0}  %read{2147483647,-1} %write{2147483647,-1}
+param	point	Camera	0 0 0		%meta{string,widget,"null"} %meta{int,connectable,0}  %read{1,16} %write{2147483647,-1} %derivs
+param	point	Target	0 0 0		%meta{string,widget,"null"} %meta{int,connectable,0}  %read{1,1} %write{2147483647,-1} %derivs
+param	vector	Right	0 0 0		%meta{string,widget,"null"} %meta{int,connectable,0}  %read{14,14} %write{2147483647,-1} %derivs
+param	float	FOV	0		%meta{string,widget,"null"} %meta{int,connectable,0}  %read{28,33} %write{2147483647,-1} %derivs
+param	float	OverScan	0		%meta{string,label,"OverScan (percent)"}  %read{38,42} %write{2147483647,-1} %derivs
+param	vector	Aspect	16 9 0		%read{22,23} %write{2147483647,-1} %derivs
+param	vector	Up	0 0 1		%read{2147483647,-1} %write{2147483647,-1}
+param	int	Backface	0		%meta{string,widget,"checkBox"} %meta{string,label,"Project on Back"} %meta{int,connectable,0}  %read{9,9} %write{2147483647,-1}
+param	string	Filename	"uv-grid.png"		%meta{string,widget,"filename"} %meta{int,autopop,0}  %read{77,111} %write{2147483647,-1}
+param	int	AutoGamma	1		%meta{string,widget,"checkBox"}  %read{82,82} %write{2147483647,-1}
+param	float	ManualGamma	1		%meta{string,label,"Manual Gamma"}  %read{117,119} %write{2147483647,-1}
+oparam	point	UV	0 0 0		%read{52,75} %write{49,51} %derivs
+oparam	color	Col	0 0 0		%meta{string,label,"Col (RGB)"}  %read{116,119} %write{0,119}
+oparam	float	Alpha	0		%read{2147483647,-1} %write{73,81}
+global	point	P	%read{16,16} %write{2147483647,-1} %derivs
+global	normal	N	%read{4,4} %write{2147483647,-1}
+local	vector	ToTarget	%read{5,18} %write{2,2} %derivs
+local	vector	ToRight	%read{15,25} %write{14,14} %derivs
+local	vector	ToTop	%read{26,26} %write{15,15} %derivs
+local	vector	ToPoint	%read{18,26} %write{17,21} %derivs
+local	float	dotTarget	%read{19,21} %write{18,18} %derivs
+local	float	___322_aspect	%read{27,27} %write{24,24} %derivs
+local	float	___322_x	%read{37,49} %write{25,46} %derivs
+local	float	___322_y	%read{41,50} %write{27,48} %derivs
+local	float	___322_fov	%read{34,34} %write{32,33} %derivs
+local	float	___322_foo	%read{37,41} %write{36,36} %derivs
+local	int	___323_channels	%read{79,79} %write{78,78}
+const	float	$const1	0		%read{0,69} %write{2147483647,-1}
+temp	vector	$tmp1	%read{2,2} %write{1,1} %derivs
+temp	float	$tmp2	%read{6,6} %write{5,5}
+temp	normal	$tmp3	%read{5,5} %write{4,4}
+const	string	$const2	"world"		%read{4,4} %write{2147483647,-1}
+const	string	$const3	"transform"		%read{3,3} %write{2147483647,-1}
+const	string	$const4	"common"		%read{4,4} %write{2147483647,-1}
+temp	int	$tmp4	%read{7,7} %write{6,6}
+temp	int	$tmp5	%read{8,12} %write{7,11}
+const	int	$const5	0		%read{7,113} %write{2147483647,-1}
+temp	int	$tmp6	%read{10,10} %write{9,9}
+temp	int	$tmp7	%read{11,11} %write{10,10}
+temp	vector	$tmp8	%read{17,17} %write{16,16} %derivs
+temp	int	$tmp9	%read{20,20} %write{19,19}
+const	int	$const6	1		%read{22,75} %write{2147483647,-1}
+temp	float	$tmp10	%read{24,24} %write{22,22} %derivs
+temp	float	$tmp11	%read{24,24} %write{23,23} %derivs
+temp	float	$tmp12	%read{27,27} %write{26,26} %derivs
+const	float	$const7	3.1415927		%read{28,31} %write{2147483647,-1}
+temp	int	$tmp13	%read{29,29} %write{28,28}
+const	string	$const8	"radians"		%read{30,30} %write{2147483647,-1}
+const	float	$const9	180		%read{31,31} %write{2147483647,-1}
+temp	float	$tmp14	%read{32,32} %write{31,31} %derivs
+const	float	$const10	1		%read{36,117} %write{2147483647,-1}
+temp	float	$tmp15	%read{36,36} %write{35,35} %derivs
+const	int	$const11	2		%read{51,51} %write{2147483647,-1}
+temp	float	$tmp16	%read{35,35} %write{34,34} %derivs
+const	float	$const12	2		%read{34,48} %write{2147483647,-1}
+temp	float	$tmp17	%read{40,40} %write{37,37} %derivs
+const	float	$const13	100		%read{38,42} %write{2147483647,-1}
+temp	float	$tmp18	%read{39,39} %write{38,38} %derivs
+temp	float	$tmp19	%read{40,40} %write{39,39} %derivs
+temp	float	$tmp20	%read{44,44} %write{41,41} %derivs
+temp	float	$tmp21	%read{43,43} %write{42,42} %derivs
+temp	float	$tmp22	%read{44,44} %write{43,43} %derivs
+temp	float	$tmp23	%read{46,46} %write{45,45} %derivs
+temp	float	$tmp24	%read{48,48} %write{47,47} %derivs
+temp	float	$tmp25	%read{53,53} %write{52,52}
+temp	int	$tmp26	%read{54,54} %write{53,53}
+temp	int	$tmp27	%read{55,60} %write{54,59}
+temp	float	$tmp28	%read{57,57} %write{56,56}
+temp	int	$tmp29	%read{58,58} %write{57,57}
+temp	int	$tmp30	%read{59,59} %write{58,58}
+temp	int	$tmp31	%read{61,66} %write{60,65}
+temp	float	$tmp32	%read{63,63} %write{62,62}
+temp	int	$tmp33	%read{64,64} %write{63,63}
+temp	int	$tmp34	%read{65,65} %write{64,64}
+temp	int	$tmp35	%read{67,72} %write{66,71}
+temp	float	$tmp36	%read{69,69} %write{68,68}
+temp	int	$tmp37	%read{70,70} %write{69,69}
+temp	int	$tmp38	%read{71,71} %write{70,70}
+temp	float	$tmp39	%read{77,77} %write{74,74} %derivs
+temp	float	$tmp40	%read{76,76} %write{75,75} %derivs
+temp	float	$tmp41	%read{77,77} %write{76,76} %derivs
+const	string	$const14	"alpha"		%read{77,77} %write{2147483647,-1}
+temp	int	$tmp42	%read{2147483647,-1} %write{78,78}
+const	string	$const15	"channels"		%read{78,78} %write{2147483647,-1}
+const	int	$const16	4		%read{79,79} %write{2147483647,-1}
+temp	int	$tmp43	%read{80,80} %write{79,79}
+temp	int	$tmp44	%read{84,84} %write{83,83}
+const	string	$const17	".exr"		%read{83,83} %write{2147483647,-1}
+temp	int	$tmp45	%read{85,85} %write{84,84}
+temp	int	$tmp46	%read{86,91} %write{85,90}
+temp	int	$tmp47	%read{88,88} %write{87,87}
+const	string	$const18	".EXR"		%read{87,87} %write{2147483647,-1}
+temp	int	$tmp48	%read{89,89} %write{88,88}
+temp	int	$tmp49	%read{90,90} %write{89,89}
+temp	int	$tmp50	%read{92,97} %write{91,96}
+temp	int	$tmp51	%read{94,94} %write{93,93}
+const	string	$const19	".hdr"		%read{93,93} %write{2147483647,-1}
+temp	int	$tmp52	%read{95,95} %write{94,94}
+temp	int	$tmp53	%read{96,96} %write{95,95}
+temp	int	$tmp54	%read{98,103} %write{97,102}
+temp	int	$tmp55	%read{100,100} %write{99,99}
+const	string	$const20	".HDR"		%read{99,99} %write{2147483647,-1}
+temp	int	$tmp56	%read{101,101} %write{100,100}
+temp	int	$tmp57	%read{102,102} %write{101,101}
+temp	int	$tmp58	%read{104,109} %write{103,108}
+temp	int	$tmp59	%read{106,106} %write{105,105}
+const	string	$const21	".tx"		%read{105,105} %write{2147483647,-1}
+temp	int	$tmp60	%read{107,107} %write{106,106}
+temp	int	$tmp61	%read{108,108} %write{107,107}
+temp	int	$tmp62	%read{110,115} %write{109,114}
+temp	int	$tmp63	%read{112,112} %write{111,111}
+const	string	$const22	".TX"		%read{111,111} %write{2147483647,-1}
+temp	int	$tmp64	%read{113,113} %write{112,112}
+temp	int	$tmp65	%read{114,114} %write{113,113}
+const	float	$const23	2.2		%read{116,116} %write{2147483647,-1}
+temp	int	$tmp66	%read{118,118} %write{117,117}
+code ___main___
+# source/3dsMax-OSL-Shaders/CameraProjector.osl:54
+# 	
+	assign		Col $const1 	%filename{"source/3dsMax-OSL-Shaders/CameraProjector.osl"} %line{54} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/CameraProjector.osl:57
+# 	
+	sub		$tmp1 Target Camera 	%line{57} %argrw{"wrr"}
+	normalize	ToTarget $tmp1 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/CameraProjector.osl:61
+# 		return;
+	functioncall	$const3 5 	%line{61} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:265
+# normal transform (string to, normal p) { return transform("common",to,p); }
+	transformn	$tmp3 $const4 $const2 N 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{265} %argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/CameraProjector.osl:61
+# 		return;
+	dot		$tmp2 $tmp3 ToTarget 	%filename{"source/3dsMax-OSL-Shaders/CameraProjector.osl"} %line{61} %argrw{"wrr"}
+	gt		$tmp4 $tmp2 $const1 	%argrw{"wrr"}
+	neq		$tmp5 $tmp4 $const5 	%argrw{"wrr"}
+	if		$tmp5 12 12 	%argrw{"r"}
+	eq		$tmp6 Backface $const5 	%argrw{"wrr"}
+	neq		$tmp7 $tmp6 $const5 	%argrw{"wrr"}
+	assign		$tmp5 $tmp7 	%argrw{"wr"}
+	if		$tmp5 14 14 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/CameraProjector.osl:62
+# 	
+	exit	%line{62}
+# source/3dsMax-OSL-Shaders/CameraProjector.osl:66
+# 	
+	normalize	ToRight Right 	%line{66} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/CameraProjector.osl:73
+# 
+	cross		ToTop ToRight ToTarget 	%line{73} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/CameraProjector.osl:76
+# 	float  dotTarget = dot(ToTarget, ToPoint);
+	sub		$tmp8 P Camera 	%line{76} %argrw{"wrr"}
+	normalize	ToPoint $tmp8 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/CameraProjector.osl:77
+# 
+	dot		dotTarget ToTarget ToPoint 	%line{77} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/CameraProjector.osl:80
+# 	{		
+	gt		$tmp9 dotTarget $const1 	%line{80} %argrw{"wrr"}
+	if		$tmp9 120 120 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/CameraProjector.osl:83
+# 	
+	div		ToPoint ToPoint dotTarget 	%line{83} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/CameraProjector.osl:86
+# 		float x = dot(ToPoint, ToRight);
+	compref		$tmp10 Aspect $const6 	%line{86} %argrw{"wrr"}
+	compref		$tmp11 Aspect $const5 	%argrw{"wrr"}
+	div		___322_aspect $tmp10 $tmp11 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/CameraProjector.osl:87
+# 		float y = dot(ToPoint, ToTop) / aspect;
+	dot		___322_x ToPoint ToRight 	%line{87} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/CameraProjector.osl:88
+# 	
+	dot		$tmp12 ToPoint ToTop 	%line{88} %argrw{"wrr"}
+	div		___322_y $tmp12 ___322_aspect 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/CameraProjector.osl:90
+# 		
+	gt		$tmp13 FOV $const7 	%line{90} %argrw{"wrr"}
+	if		$tmp13 33 34 	%argrw{"r"}
+	functioncall	$const8 33 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:88
+# float  radians (float x)  { return x*(M_PI/180.0); }
+	div		$tmp14 $const7 $const9 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{88} %argrw{"wrr"}
+	mul		___322_fov FOV $tmp14 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/CameraProjector.osl:90
+# 		
+	assign		___322_fov FOV 	%filename{"source/3dsMax-OSL-Shaders/CameraProjector.osl"} %line{90} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/CameraProjector.osl:93
+# 		x = x * foo / (1.0 + OverScan / 100.0);
+	div		$tmp16 ___322_fov $const12 	%line{93} %argrw{"wrr"}
+	tan		$tmp15 $tmp16 	%argrw{"wr"}
+	div		___322_foo $const10 $tmp15 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/CameraProjector.osl:94
+# 		y = y * foo / (1.0 + OverScan / 100.0);
+	mul		$tmp17 ___322_x ___322_foo 	%line{94} %argrw{"wrr"}
+	div		$tmp18 OverScan $const13 	%argrw{"wrr"}
+	add		$tmp19 $const10 $tmp18 	%argrw{"wrr"}
+	div		___322_x $tmp17 $tmp19 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/CameraProjector.osl:95
+# 	
+	mul		$tmp20 ___322_y ___322_foo 	%line{95} %argrw{"wrr"}
+	div		$tmp21 OverScan $const13 	%argrw{"wrr"}
+	add		$tmp22 $const10 $tmp21 	%argrw{"wrr"}
+	div		___322_y $tmp20 $tmp22 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/CameraProjector.osl:98
+# 		y = (y + 1) / 2;
+	add		$tmp23 ___322_x $const10 	%line{98} %argrw{"wrr"}
+	div		___322_x $tmp23 $const12 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/CameraProjector.osl:99
+# 			
+	add		$tmp24 ___322_y $const10 	%line{99} %argrw{"wrr"}
+	div		___322_y $tmp24 $const12 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/CameraProjector.osl:102
+# 		UV[1] = y; 
+	compassign	UV $const5 ___322_x 	%line{102} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/CameraProjector.osl:103
+# 		UV[2] = 0.0;	
+	compassign	UV $const6 ___322_y 	%line{103} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/CameraProjector.osl:104
+# 		
+	compassign	UV $const11 $const1 	%line{104} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/CameraProjector.osl:106
+# 		{
+	compref		$tmp25 UV $const5 	%line{106} %argrw{"wrr"}
+	le		$tmp26 $tmp25 $const10 	%argrw{"wrr"}
+	neq		$tmp27 $tmp26 $const5 	%argrw{"wrr"}
+	if		$tmp27 60 60 	%argrw{"r"}
+	compref		$tmp28 UV $const6 	%argrw{"wrr"}
+	le		$tmp29 $tmp28 $const10 	%argrw{"wrr"}
+	neq		$tmp30 $tmp29 $const5 	%argrw{"wrr"}
+	assign		$tmp27 $tmp30 	%argrw{"wr"}
+	neq		$tmp31 $tmp27 $const5 	%argrw{"wrr"}
+	if		$tmp31 66 66 	%argrw{"r"}
+	compref		$tmp32 UV $const5 	%argrw{"wrr"}
+	ge		$tmp33 $tmp32 $const1 	%argrw{"wrr"}
+	neq		$tmp34 $tmp33 $const5 	%argrw{"wrr"}
+	assign		$tmp31 $tmp34 	%argrw{"wr"}
+	neq		$tmp35 $tmp31 $const5 	%argrw{"wrr"}
+	if		$tmp35 72 72 	%argrw{"r"}
+	compref		$tmp36 UV $const6 	%argrw{"wrr"}
+	ge		$tmp37 $tmp36 $const1 	%argrw{"wrr"}
+	neq		$tmp38 $tmp37 $const5 	%argrw{"wrr"}
+	assign		$tmp35 $tmp38 	%argrw{"wr"}
+	if		$tmp35 120 120 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/CameraProjector.osl:108
+# 			Col = texture(Filename, UV[0], 1.0-UV[1], "alpha", Alpha);
+	assign		Alpha $const10 	%line{108} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/CameraProjector.osl:109
+# 			
+	compref		$tmp39 UV $const5 	%line{109} %argrw{"wrr"}
+	compref		$tmp40 UV $const6 	%argrw{"wrr"}
+	sub		$tmp41 $const10 $tmp40 	%argrw{"wrr"}
+	texture		Col Filename $tmp39 $tmp41 $const14 Alpha 	%argrw{"wrrrrw"} %argderivs{2,3}
+# source/3dsMax-OSL-Shaders/CameraProjector.osl:112
+# 			if (channels < 4) // No alpha? Set it to opaque
+	gettextureinfo	$tmp42 Filename $const15 ___323_channels 	%line{112} %argrw{"wrrw"}
+# source/3dsMax-OSL-Shaders/CameraProjector.osl:113
+# 			{
+	lt		$tmp43 ___323_channels $const16 	%line{113} %argrw{"wrr"}
+	if		$tmp43 82 82 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/CameraProjector.osl:115
+# 			}		
+	assign		Alpha $const10 	%line{115} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/CameraProjector.osl:119
+# 			{
+	if		AutoGamma 117 120 	%line{119} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/CameraProjector.osl:121
+# 					!endswith(Filename, ".EXR") &&
+	endswith	$tmp44 Filename $const17 	%line{121} %argrw{"wrr"}
+	eq		$tmp45 $tmp44 $const5 	%argrw{"wrr"}
+	neq		$tmp46 $tmp45 $const5 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/CameraProjector.osl:122
+# 					!endswith(Filename, ".hdr") &&
+	if		$tmp46 91 91 	%line{122} %argrw{"r"}
+	endswith	$tmp47 Filename $const18 	%argrw{"wrr"}
+	eq		$tmp48 $tmp47 $const5 	%argrw{"wrr"}
+	neq		$tmp49 $tmp48 $const5 	%argrw{"wrr"}
+	assign		$tmp46 $tmp49 	%argrw{"wr"}
+	neq		$tmp50 $tmp46 $const5 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/CameraProjector.osl:123
+# 					!endswith(Filename, ".HDR") &&
+	if		$tmp50 97 97 	%line{123} %argrw{"r"}
+	endswith	$tmp51 Filename $const19 	%argrw{"wrr"}
+	eq		$tmp52 $tmp51 $const5 	%argrw{"wrr"}
+	neq		$tmp53 $tmp52 $const5 	%argrw{"wrr"}
+	assign		$tmp50 $tmp53 	%argrw{"wr"}
+	neq		$tmp54 $tmp50 $const5 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/CameraProjector.osl:124
+# 					!endswith(Filename, ".tx")  &&
+	if		$tmp54 103 103 	%line{124} %argrw{"r"}
+	endswith	$tmp55 Filename $const20 	%argrw{"wrr"}
+	eq		$tmp56 $tmp55 $const5 	%argrw{"wrr"}
+	neq		$tmp57 $tmp56 $const5 	%argrw{"wrr"}
+	assign		$tmp54 $tmp57 	%argrw{"wr"}
+	neq		$tmp58 $tmp54 $const5 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/CameraProjector.osl:125
+# 					!endswith(Filename, ".TX"))
+	if		$tmp58 109 109 	%line{125} %argrw{"r"}
+	endswith	$tmp59 Filename $const21 	%argrw{"wrr"}
+	eq		$tmp60 $tmp59 $const5 	%argrw{"wrr"}
+	neq		$tmp61 $tmp60 $const5 	%argrw{"wrr"}
+	assign		$tmp58 $tmp61 	%argrw{"wr"}
+	neq		$tmp62 $tmp58 $const5 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/CameraProjector.osl:126
+# 				{
+	if		$tmp62 115 115 	%line{126} %argrw{"r"}
+	endswith	$tmp63 Filename $const22 	%argrw{"wrr"}
+	eq		$tmp64 $tmp63 $const5 	%argrw{"wrr"}
+	neq		$tmp65 $tmp64 $const5 	%argrw{"wrr"}
+	assign		$tmp62 $tmp65 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/CameraProjector.osl:121
+# 					!endswith(Filename, ".EXR") &&
+	if		$tmp62 117 117 	%line{121} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/CameraProjector.osl:129
+# 				}
+	pow		Col Col $const23 	%line{129} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/CameraProjector.osl:134
+# 					Col = pow(Col, ManualGamma);
+	neq		$tmp66 ManualGamma $const10 	%line{134} %argrw{"wrr"}
+	if		$tmp66 120 120 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/CameraProjector.osl:135
+# 			}
+	pow		Col Col ManualGamma 	%line{135} %argrw{"wrr"}
+	end

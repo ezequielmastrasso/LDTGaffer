@@ -1,0 +1,13 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader ChSmoothStep
+param	float	A	0		%read{0,0} %write{2147483647,-1}
+param	float	B	1		%read{0,0} %write{2147483647,-1}
+param	float	Value	1		%read{0,0} %write{2147483647,-1}
+oparam	float	Out	0		%read{2147483647,-1} %write{0,0}
+code ___main___
+# source/sambler-osl-shaders/lib/ChSmoothStep.osl:22
+# 
+	smoothstep	Out A B Value 	%filename{"source/sambler-osl-shaders/lib/ChSmoothStep.osl"} %line{22} %argrw{"wrrr"}
+	end

@@ -1,0 +1,67 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader Threads	%meta{string,help,"A simple shader to make threads on a bolt.<br>Apply as bump or diplacement to a cylinder.<br>"} %meta{string,category,"Textures"} %meta{string,URL,"https://RenderingTips.com"} 
+param	float	ThreadWidth	0.050000001		%meta{string,help,"The width of a thread, measured in the V texture direction"}  %read{4,4} %write{2147483647,-1}
+param	float	EndV	0.5		%meta{string,help,"The ending V coordinate for where the thread ends. Above this V value, the output will be that of BaseLevel"}  %read{1,4} %write{2147483647,-1}
+param	float	BaseLevel	0		%meta{string,help,"The output value outside the thread (when V coordinate is above EndV value). If you want the thread to appear cut 'into' the material, this needs to be 1.0. If this value is 0.0, the thread will 'stand out' from the base material."}  %read{0,17} %write{2147483647,-1}
+param	float	ThreadHeight	1		%meta{string,help,"Amplitude of the thread itself"}  %read{14,14} %write{2147483647,-1}
+oparam	color	Out	0 0 0		%read{18,18} %write{0,18}
+global	float	u	%read{10,10} %write{2147483647,-1}
+global	float	v	%read{1,3} %write{2147483647,-1}
+local	float	___322_foo	%read{7,11} %write{3,10}
+local	float	___322_Revolutions	%read{5,9} %write{4,4}
+local	float	___322_taper	%read{18,18} %write{8,8}
+temp	int	$tmp1	%read{2,2} %write{1,1}
+const	float	$const1	1		%read{6,13} %write{2147483647,-1}
+temp	float	$tmp2	%read{8,8} %write{7,7}
+const	float	$const2	0.5		%read{5,5} %write{2147483647,-1}
+temp	float	$tmp3	%read{6,6} %write{5,5}
+temp	float	$tmp4	%read{7,7} %write{6,6}
+temp	float	$tmp5	%read{13,13} %write{12,12}
+const	float	$const3	6.2831855		%read{11,11} %write{2147483647,-1}
+temp	float	$tmp6	%read{12,12} %write{11,11}
+temp	float	$tmp7	%read{15,15} %write{13,13}
+const	float	$const4	2		%read{14,14} %write{2147483647,-1}
+temp	float	$tmp8	%read{15,15} %write{14,14}
+temp	float	$tmp9	%read{16,16} %write{15,15}
+temp	color	$tmp10	%read{18,18} %write{17,17}
+code ___main___
+# source/3dsMax-OSL-Shaders/Threads.osl:25
+# 	
+	assign		Out BaseLevel 	%filename{"source/3dsMax-OSL-Shaders/Threads.osl"} %line{25} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Threads.osl:27
+# 	{
+	lt		$tmp1 v EndV 	%line{27} %argrw{"wrr"}
+	if		$tmp1 19 19 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/Threads.osl:29
+# 		
+	div		___322_foo v EndV 	%line{29} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Threads.osl:31
+# 		
+	div		___322_Revolutions EndV ThreadWidth 	%line{31} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Threads.osl:34
+# 
+	div		$tmp3 $const2 ___322_Revolutions 	%line{34} %argrw{"wrr"}
+	sub		$tmp4 $const1 $tmp3 	%argrw{"wrr"}
+	smoothstep	$tmp2 $tmp4 $const1 ___322_foo 	%argrw{"wrrr"}
+	sub		___322_taper $const1 $tmp2 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Threads.osl:37
+# 		foo -= u;
+	mul		___322_foo ___322_foo ___322_Revolutions 	%line{37} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Threads.osl:38
+# 		
+	sub		___322_foo ___322_foo u 	%line{38} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/Threads.osl:41
+# 		
+	mul		$tmp6 ___322_foo $const3 	%line{41} %argrw{"wrr"}
+	sin		$tmp5 $tmp6 	%argrw{"wr"}
+	add		$tmp7 $tmp5 $const1 	%argrw{"wrr"}
+	div		$tmp8 ThreadHeight $const4 	%argrw{"wrr"}
+	mul		$tmp9 $tmp7 $tmp8 	%argrw{"wrr"}
+	assign		Out $tmp9 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/Threads.osl:44
+# 	}	
+	assign		$tmp10 BaseLevel 	%line{44} %argrw{"wr"}
+	mix		Out $tmp10 Out ___322_taper 	%argrw{"wrrr"}
+	end

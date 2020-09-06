@@ -1,0 +1,13 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader node_combine_rgb
+param	float	R	0		%read{0,0} %write{2147483647,-1}
+param	float	G	0		%read{0,0} %write{2147483647,-1}
+param	float	B	0		%read{0,0} %write{2147483647,-1}
+oparam	color	Image	0.80000001 0.80000001 0.80000001		%read{2147483647,-1} %write{0,0}
+code ___main___
+# include/node_combine_rgb.osl:26
+# }
+	color		Image R G B 	%filename{"include/node_combine_rgb.osl"} %line{26} %argrw{"wrrr"}
+	end

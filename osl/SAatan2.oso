@@ -1,0 +1,12 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader SAatan2
+param	float	X	0		%read{0,0} %write{2147483647,-1}
+param	float	Y	0		%read{0,0} %write{2147483647,-1}
+oparam	float	result	0		%read{2147483647,-1} %write{0,0}
+code ___main___
+# source/sambler-osl-shaders/lib/SAatan2.osl:20
+# }
+	atan2		result X Y 	%filename{"source/sambler-osl-shaders/lib/SAatan2.osl"} %line{20} %argrw{"wrr"}
+	end

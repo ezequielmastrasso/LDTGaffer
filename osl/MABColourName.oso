@@ -1,0 +1,40 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader MABColourName
+param	string	Name	"aliceblue"		%read{1,1} %write{2147483647,-1}
+param	string	ColorsFile	"MJABook/23MABColourName/colours.xml"		%read{3,3} %write{2147483647,-1}
+oparam	color	Color	0 0 0		%read{7,7} %write{6,7}
+local	string	xpath	%read{3,3} %write{2,2}
+local	int	nodeid	%read{4,6} %write{3,3}
+const	string	$const1	"//color[@name='"		%read{1,1} %write{2147483647,-1}
+const	string	$const2	"']/text()"		%read{2,2} %write{2147483647,-1}
+const	string	$const3	"concat"		%read{0,0} %write{2147483647,-1}
+temp	string	$tmp1	%read{2,2} %write{1,1}
+const	int	$const4	0		%read{4,4} %write{2147483647,-1}
+temp	int	$tmp2	%read{5,5} %write{4,4}
+temp	int	$tmp3	%read{2147483647,-1} %write{6,6}
+const	string	$const5	""		%read{6,6} %write{2147483647,-1}
+const	float	$const7	255		%read{7,7} %write{2147483647,-1}
+code ___main___
+# source/sambler-osl-shaders/MJABook/23MABColourName/MABColourName.osl:19
+#     int nodeid = dict_find(ColorsFile, xpath);
+	functioncall	$const3 3 	%filename{"source/sambler-osl-shaders/MJABook/23MABColourName/MABColourName.osl"} %line{19} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:407
+#     return concat(concat(a,b), c);
+	concat		$tmp1 $const1 Name 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{407} %argrw{"wrr"}
+	concat		xpath $tmp1 $const2 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/23MABColourName/MABColourName.osl:20
+#     if(nodeid > 0) {
+	dict_find	nodeid ColorsFile xpath 	%filename{"source/sambler-osl-shaders/MJABook/23MABColourName/MABColourName.osl"} %line{20} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/23MABColourName/MABColourName.osl:21
+#         dict_value(nodeid, "", Color);
+	gt		$tmp2 nodeid $const4 	%line{21} %argrw{"wrr"}
+	if		$tmp2 8 8 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/23MABColourName/MABColourName.osl:22
+#         Color = Color/255;
+	dict_value	$tmp3 nodeid $const5 Color 	%line{22} %argrw{"wrrw"}
+# source/sambler-osl-shaders/MJABook/23MABColourName/MABColourName.osl:23
+#     }
+	div		Color Color $const7 	%line{23} %argrw{"wrr"}
+	end

@@ -1,0 +1,3770 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader node_wave_texture
+param	int	use_mapping	0		%read{2,2} %write{2147483647,-1}
+param	matrix	mapping	0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0		%read{3,3} %write{2147483647,-1}
+param	string	Type	"Bands"		%read{7,15} %write{2147483647,-1}
+param	float	Scale	5		%read{4,4} %write{2147483647,-1}
+param	float	Distortion	0		%read{19,1483} %write{2147483647,-1}
+param	float	Detail	2		%read{27,27} %write{2147483647,-1}
+param	float	DetailScale	1		%read{21,21} %write{2147483647,-1}
+param	point	Vector	0 0 0		%read{1,1} %write{0,0} %initexpr
+oparam	float	Fac	0		%read{1488,1488} %write{1487,1487}
+oparam	color	Color	0 0 0		%read{2147483647,-1} %write{1488,1488}
+global	point	P	%read{0,0} %write{2147483647,-1}
+local	float	___632_r	%read{32,1427} %write{32,1427}
+local	float	___632_g	%read{32,1427} %write{32,1427}
+local	float	___632_b	%read{32,1427} %write{32,1427}
+local	int	___633_xx	%read{32,1427} %write{32,1427}
+local	int	___633_yy	%read{32,1427} %write{32,1427}
+local	int	___633_zz	%read{32,1427} %write{32,1427}
+local	int	___633_xi	%read{32,1427} %write{32,1329}
+local	int	___633_yi	%read{32,1427} %write{32,1332}
+local	int	___633_zi	%read{32,1427} %write{32,1335}
+local	point	___639_ip	%read{32,1427} %write{32,1427}
+local	point	___639_vp	%read{32,1427} %write{32,1427}
+local	point	___639_pd	%read{32,1427} %write{32,1427}
+local	float	___639_d	%read{32,1427} %write{32,1427}
+local	float[4]	___644_da	%read{32,1203} %write{32,1202}
+local	point[4]	___644_pa	%read{32,1202} %write{32,1202}
+local	float[4]	___645_da	%read{32,1429} %write{32,1427}
+local	point[4]	___645_pa	%read{32,1427} %write{32,1427}
+local	float	___651_t	%read{32,1435} %write{32,1431}
+local	float	___658_f	%read{32,761} %write{32,755}
+local	float	___661_fscale	%read{32,746} %write{23,741}
+local	float	___661_amp	%read{32,1449} %write{24,741}
+local	float	___661_sum	%read{32,1481} %write{25,1480}
+local	int	___661_i	%read{32,741} %write{31,741}
+local	int	___661_n	%read{32,1475} %write{29,29}
+local	float	___661_octaves	%read{29,743} %write{28,28}
+local	float	___663_t	%read{32,741} %write{32,741}
+local	float	___661_rmd	%read{744,1470} %write{743,743}
+local	float	___664_t	%read{1446,1449} %write{759,1448}
+local	float	___664_sum2	%read{1467,1470} %write{1450,1467}
+local	float	___667_n	%read{1484,1485} %write{6,1484}
+local	point	p	%read{3,4} %write{1,3}
+temp	point	$tmp1	%read{9,21} %write{4,4}
+const	string	$const1	"wave"		%read{5,5} %write{2147483647,-1}
+const	float	$const2	0		%read{6,1444} %write{2147483647,-1}
+const	string	$const3	"Bands"		%read{7,7} %write{2147483647,-1}
+temp	int	$tmp2	%read{8,8} %write{7,7}
+const	int	$const4	0		%read{9,1445} %write{2147483647,-1}
+temp	float	$tmp3	%read{11,11} %write{9,9}
+const	int	$const5	1		%read{10,1477} %write{2147483647,-1}
+temp	float	$tmp4	%read{11,11} %write{10,10}
+temp	float	$tmp5	%read{13,13} %write{11,11}
+const	int	$const6	2		%read{12,1462} %write{2147483647,-1}
+temp	float	$tmp6	%read{13,13} %write{12,12}
+temp	float	$tmp7	%read{14,14} %write{13,13}
+const	float	$const7	10		%read{14,1431} %write{2147483647,-1}
+const	string	$const8	"Rings"		%read{15,15} %write{2147483647,-1}
+temp	int	$tmp8	%read{16,16} %write{15,15}
+temp	float	$tmp9	%read{18,18} %write{17,17}
+const	float	$const9	20		%read{18,18} %write{2147483647,-1}
+temp	int	$tmp10	%read{20,20} %write{19,19}
+temp	float	$tmp11	%read{1483,1483} %write{1471,1481}
+temp	point	$tmp12	%read{32,746} %write{21,21}
+const	string	$const10	"Perlin"		%read{35,1440} %write{2147483647,-1}
+const	string	$const11	"noise_turbulence"		%read{22,22} %write{2147483647,-1}
+const	float	$const12	1		%read{23,1468} %write{2147483647,-1}
+const	float	$const13	16		%read{27,27} %write{2147483647,-1}
+const	string	$const14	"clamp"		%read{26,26} %write{2147483647,-1}
+temp	float	$tmp13	%read{28,28} %write{27,27}
+temp	int	$tmp14	%read{30,741} %write{31,741}
+temp	point	$tmp15	%read{32,741} %write{32,741}
+const	string	$const15	"noise_basis"		%read{34,747} %write{2147483647,-1}
+temp	int	$tmp16	%read{32,741} %write{32,741}
+const	string	$const16	"safe_noise"		%read{37,750} %write{2147483647,-1}
+temp	int	$tmp17	%read{32,741} %write{32,741}
+const	string	$const17	"perlin"		%read{41,754} %write{2147483647,-1}
+temp	int	$tmp18	%read{32,741} %write{32,741}
+temp	int	$tmp19	%read{32,741} %write{32,741}
+const	float	$const18	0.5		%read{46,1487} %write{2147483647,-1}
+const	string	$const19	"Voronoi F1"		%read{50,763} %write{2147483647,-1}
+temp	int	$tmp20	%read{32,741} %write{32,741}
+const	string	$const20	"voronoi_F1S"		%read{52,765} %write{2147483647,-1}
+const	float	$const21	2		%read{158,1446} %write{2147483647,-1}
+temp	float	$tmp21	%read{32,741} %write{32,741}
+const	string	$const22	"voronoi_F1"		%read{53,766} %write{2147483647,-1}
+const	string	$const23	"voronoi_Fn"		%read{54,1100} %write{2147483647,-1}
+const	string	$const25	"voronoi"		%read{55,1326} %write{2147483647,-1}
+temp	float	$tmp22	%read{32,741} %write{32,741}
+temp	float	$tmp23	%read{32,741} %write{32,741}
+temp	float	$tmp24	%read{32,741} %write{32,741}
+temp	float	$tmp25	%read{32,741} %write{32,741}
+temp	float	$tmp26	%read{32,741} %write{32,741}
+temp	float	$tmp27	%read{32,741} %write{32,741}
+const	float	$const26	1e+10		%read{65,1339} %write{2147483647,-1}
+const	int	$const27	3		%read{68,1421} %write{2147483647,-1}
+temp	int	$tmp28	%read{32,741} %write{32,741}
+temp	int	$tmp29	%read{32,741} %write{32,741}
+temp	int	$tmp30	%read{32,741} %write{32,741}
+temp	int	$tmp31	%read{32,741} %write{32,741}
+temp	int	$tmp32	%read{32,741} %write{32,741}
+temp	int	$tmp33	%read{32,741} %write{32,741}
+temp	float	$tmp34	%read{32,741} %write{32,741}
+temp	float	$tmp35	%read{32,741} %write{32,741}
+temp	float	$tmp36	%read{32,741} %write{32,741}
+const	string	$const28	"cellnoise_color"		%read{85,1356} %write{2147483647,-1}
+temp	point	$tmp37	%read{32,741} %write{32,741}
+temp	float	$tmp38	%read{32,741} %write{32,741}
+temp	float	$tmp39	%read{32,741} %write{32,741}
+temp	float	$tmp40	%read{32,741} %write{32,741}
+temp	point	$tmp41	%read{32,741} %write{32,741}
+temp	float	$tmp42	%read{32,741} %write{32,741}
+temp	float	$tmp43	%read{32,741} %write{32,741}
+temp	float	$tmp44	%read{32,741} %write{32,741}
+temp	point	$tmp45	%read{32,741} %write{32,741}
+const	string	$const29	"voronoi_distance"		%read{100,1371} %write{2147483647,-1}
+temp	point	$tmp46	%read{32,741} %write{32,741}
+temp	float	$tmp47	%read{32,741} %write{32,741}
+temp	float	$tmp48	%read{32,741} %write{32,741}
+temp	float	$tmp49	%read{32,741} %write{32,741}
+temp	float	$tmp50	%read{32,741} %write{32,741}
+temp	int	$tmp51	%read{32,741} %write{32,741}
+temp	float	$tmp52	%read{32,741} %write{32,741}
+temp	float	$tmp53	%read{32,741} %write{32,741}
+temp	float	$tmp54	%read{32,741} %write{32,741}
+temp	point	$tmp55	%read{32,741} %write{32,741}
+temp	point	$tmp56	%read{32,741} %write{32,741}
+temp	point	$tmp57	%read{32,741} %write{32,741}
+temp	float	$tmp58	%read{32,741} %write{32,741}
+temp	int	$tmp59	%read{32,741} %write{32,741}
+temp	float	$tmp60	%read{32,741} %write{32,741}
+temp	float	$tmp61	%read{32,741} %write{32,741}
+temp	point	$tmp62	%read{32,741} %write{32,741}
+temp	point	$tmp63	%read{32,741} %write{32,741}
+temp	float	$tmp64	%read{32,741} %write{32,741}
+temp	int	$tmp65	%read{32,741} %write{32,741}
+temp	float	$tmp66	%read{32,741} %write{32,741}
+temp	point	$tmp67	%read{32,741} %write{32,741}
+temp	float	$tmp68	%read{32,741} %write{32,741}
+temp	int	$tmp69	%read{32,741} %write{32,741}
+temp	int	$tmp70	%read{2147483647,-1} %write{32,741}
+temp	int	$tmp71	%read{2147483647,-1} %write{32,741}
+temp	int	$tmp72	%read{2147483647,-1} %write{32,741}
+temp	float	$tmp73	%read{32,741} %write{32,741}
+const	string	$const30	"Voronoi F2"		%read{161,874} %write{2147483647,-1}
+temp	int	$tmp74	%read{32,741} %write{32,741}
+const	string	$const31	"voronoi_F2S"		%read{163,876} %write{2147483647,-1}
+temp	float	$tmp75	%read{32,741} %write{32,741}
+const	string	$const32	"voronoi_F2"		%read{164,877} %write{2147483647,-1}
+temp	float	$tmp76	%read{32,741} %write{32,741}
+temp	float	$tmp77	%read{32,741} %write{32,741}
+temp	float	$tmp78	%read{32,741} %write{32,741}
+temp	float	$tmp79	%read{32,741} %write{32,741}
+temp	float	$tmp80	%read{32,741} %write{32,741}
+temp	float	$tmp81	%read{32,741} %write{32,741}
+temp	int	$tmp82	%read{32,741} %write{32,741}
+temp	int	$tmp83	%read{32,741} %write{32,741}
+temp	int	$tmp84	%read{32,741} %write{32,741}
+temp	int	$tmp85	%read{32,741} %write{32,741}
+temp	int	$tmp86	%read{32,741} %write{32,741}
+temp	int	$tmp87	%read{32,741} %write{32,741}
+temp	float	$tmp88	%read{32,741} %write{32,741}
+temp	float	$tmp89	%read{32,741} %write{32,741}
+temp	float	$tmp90	%read{32,741} %write{32,741}
+temp	point	$tmp91	%read{32,741} %write{32,741}
+temp	float	$tmp92	%read{32,741} %write{32,741}
+temp	float	$tmp93	%read{32,741} %write{32,741}
+temp	float	$tmp94	%read{32,741} %write{32,741}
+temp	point	$tmp95	%read{32,741} %write{32,741}
+temp	float	$tmp96	%read{32,741} %write{32,741}
+temp	float	$tmp97	%read{32,741} %write{32,741}
+temp	float	$tmp98	%read{32,741} %write{32,741}
+temp	point	$tmp99	%read{32,741} %write{32,741}
+temp	point	$tmp100	%read{32,741} %write{32,741}
+temp	float	$tmp101	%read{32,741} %write{32,741}
+temp	float	$tmp102	%read{32,741} %write{32,741}
+temp	float	$tmp103	%read{32,741} %write{32,741}
+temp	float	$tmp104	%read{32,741} %write{32,741}
+temp	int	$tmp105	%read{32,741} %write{32,741}
+temp	float	$tmp106	%read{32,741} %write{32,741}
+temp	float	$tmp107	%read{32,741} %write{32,741}
+temp	float	$tmp108	%read{32,741} %write{32,741}
+temp	point	$tmp109	%read{32,741} %write{32,741}
+temp	point	$tmp110	%read{32,741} %write{32,741}
+temp	point	$tmp111	%read{32,741} %write{32,741}
+temp	float	$tmp112	%read{32,741} %write{32,741}
+temp	int	$tmp113	%read{32,741} %write{32,741}
+temp	float	$tmp114	%read{32,741} %write{32,741}
+temp	float	$tmp115	%read{32,741} %write{32,741}
+temp	point	$tmp116	%read{32,741} %write{32,741}
+temp	point	$tmp117	%read{32,741} %write{32,741}
+temp	float	$tmp118	%read{32,741} %write{32,741}
+temp	int	$tmp119	%read{32,741} %write{32,741}
+temp	float	$tmp120	%read{32,741} %write{32,741}
+temp	point	$tmp121	%read{32,741} %write{32,741}
+temp	float	$tmp122	%read{32,741} %write{32,741}
+temp	int	$tmp123	%read{32,741} %write{32,741}
+temp	int	$tmp124	%read{2147483647,-1} %write{32,741}
+temp	int	$tmp125	%read{2147483647,-1} %write{32,741}
+temp	int	$tmp126	%read{2147483647,-1} %write{32,741}
+temp	float	$tmp127	%read{32,741} %write{32,741}
+const	string	$const33	"Voronoi F3"		%read{272,985} %write{2147483647,-1}
+temp	int	$tmp128	%read{32,741} %write{32,741}
+const	string	$const34	"voronoi_F3S"		%read{274,987} %write{2147483647,-1}
+temp	float	$tmp129	%read{32,741} %write{32,741}
+const	string	$const35	"voronoi_F3"		%read{275,988} %write{2147483647,-1}
+temp	float	$tmp130	%read{32,741} %write{32,741}
+temp	float	$tmp131	%read{32,741} %write{32,741}
+temp	float	$tmp132	%read{32,741} %write{32,741}
+temp	float	$tmp133	%read{32,741} %write{32,741}
+temp	float	$tmp134	%read{32,741} %write{32,741}
+temp	float	$tmp135	%read{32,741} %write{32,741}
+temp	int	$tmp136	%read{32,741} %write{32,741}
+temp	int	$tmp137	%read{32,741} %write{32,741}
+temp	int	$tmp138	%read{32,741} %write{32,741}
+temp	int	$tmp139	%read{32,741} %write{32,741}
+temp	int	$tmp140	%read{32,741} %write{32,741}
+temp	int	$tmp141	%read{32,741} %write{32,741}
+temp	float	$tmp142	%read{32,741} %write{32,741}
+temp	float	$tmp143	%read{32,741} %write{32,741}
+temp	float	$tmp144	%read{32,741} %write{32,741}
+temp	point	$tmp145	%read{32,741} %write{32,741}
+temp	float	$tmp146	%read{32,741} %write{32,741}
+temp	float	$tmp147	%read{32,741} %write{32,741}
+temp	float	$tmp148	%read{32,741} %write{32,741}
+temp	point	$tmp149	%read{32,741} %write{32,741}
+temp	float	$tmp150	%read{32,741} %write{32,741}
+temp	float	$tmp151	%read{32,741} %write{32,741}
+temp	float	$tmp152	%read{32,741} %write{32,741}
+temp	point	$tmp153	%read{32,741} %write{32,741}
+temp	point	$tmp154	%read{32,741} %write{32,741}
+temp	float	$tmp155	%read{32,741} %write{32,741}
+temp	float	$tmp156	%read{32,741} %write{32,741}
+temp	float	$tmp157	%read{32,741} %write{32,741}
+temp	float	$tmp158	%read{32,741} %write{32,741}
+temp	int	$tmp159	%read{32,741} %write{32,741}
+temp	float	$tmp160	%read{32,741} %write{32,741}
+temp	float	$tmp161	%read{32,741} %write{32,741}
+temp	float	$tmp162	%read{32,741} %write{32,741}
+temp	point	$tmp163	%read{32,741} %write{32,741}
+temp	point	$tmp164	%read{32,741} %write{32,741}
+temp	point	$tmp165	%read{32,741} %write{32,741}
+temp	float	$tmp166	%read{32,741} %write{32,741}
+temp	int	$tmp167	%read{32,741} %write{32,741}
+temp	float	$tmp168	%read{32,741} %write{32,741}
+temp	float	$tmp169	%read{32,741} %write{32,741}
+temp	point	$tmp170	%read{32,741} %write{32,741}
+temp	point	$tmp171	%read{32,741} %write{32,741}
+temp	float	$tmp172	%read{32,741} %write{32,741}
+temp	int	$tmp173	%read{32,741} %write{32,741}
+temp	float	$tmp174	%read{32,741} %write{32,741}
+temp	point	$tmp175	%read{32,741} %write{32,741}
+temp	float	$tmp176	%read{32,741} %write{32,741}
+temp	int	$tmp177	%read{32,741} %write{32,741}
+temp	int	$tmp178	%read{2147483647,-1} %write{32,741}
+temp	int	$tmp179	%read{2147483647,-1} %write{32,741}
+temp	int	$tmp180	%read{2147483647,-1} %write{32,741}
+temp	float	$tmp181	%read{32,741} %write{32,741}
+const	string	$const36	"Voronoi F4"		%read{383,1096} %write{2147483647,-1}
+temp	int	$tmp182	%read{32,741} %write{32,741}
+const	string	$const37	"voronoi_F4S"		%read{385,1098} %write{2147483647,-1}
+temp	float	$tmp183	%read{32,741} %write{32,741}
+const	string	$const38	"voronoi_F4"		%read{386,1099} %write{2147483647,-1}
+temp	float	$tmp184	%read{32,741} %write{32,741}
+temp	float	$tmp185	%read{32,741} %write{32,741}
+temp	float	$tmp186	%read{32,741} %write{32,741}
+temp	float	$tmp187	%read{32,741} %write{32,741}
+temp	float	$tmp188	%read{32,741} %write{32,741}
+temp	float	$tmp189	%read{32,741} %write{32,741}
+temp	int	$tmp190	%read{32,741} %write{32,741}
+temp	int	$tmp191	%read{32,741} %write{32,741}
+temp	int	$tmp192	%read{32,741} %write{32,741}
+temp	int	$tmp193	%read{32,741} %write{32,741}
+temp	int	$tmp194	%read{32,741} %write{32,741}
+temp	int	$tmp195	%read{32,741} %write{32,741}
+temp	float	$tmp196	%read{32,741} %write{32,741}
+temp	float	$tmp197	%read{32,741} %write{32,741}
+temp	float	$tmp198	%read{32,741} %write{32,741}
+temp	point	$tmp199	%read{32,741} %write{32,741}
+temp	float	$tmp200	%read{32,741} %write{32,741}
+temp	float	$tmp201	%read{32,741} %write{32,741}
+temp	float	$tmp202	%read{32,741} %write{32,741}
+temp	point	$tmp203	%read{32,741} %write{32,741}
+temp	float	$tmp204	%read{32,741} %write{32,741}
+temp	float	$tmp205	%read{32,741} %write{32,741}
+temp	float	$tmp206	%read{32,741} %write{32,741}
+temp	point	$tmp207	%read{32,741} %write{32,741}
+temp	point	$tmp208	%read{32,741} %write{32,741}
+temp	float	$tmp209	%read{32,741} %write{32,741}
+temp	float	$tmp210	%read{32,741} %write{32,741}
+temp	float	$tmp211	%read{32,741} %write{32,741}
+temp	float	$tmp212	%read{32,741} %write{32,741}
+temp	int	$tmp213	%read{32,741} %write{32,741}
+temp	float	$tmp214	%read{32,741} %write{32,741}
+temp	float	$tmp215	%read{32,741} %write{32,741}
+temp	float	$tmp216	%read{32,741} %write{32,741}
+temp	point	$tmp217	%read{32,741} %write{32,741}
+temp	point	$tmp218	%read{32,741} %write{32,741}
+temp	point	$tmp219	%read{32,741} %write{32,741}
+temp	float	$tmp220	%read{32,741} %write{32,741}
+temp	int	$tmp221	%read{32,741} %write{32,741}
+temp	float	$tmp222	%read{32,741} %write{32,741}
+temp	float	$tmp223	%read{32,741} %write{32,741}
+temp	point	$tmp224	%read{32,741} %write{32,741}
+temp	point	$tmp225	%read{32,741} %write{32,741}
+temp	float	$tmp226	%read{32,741} %write{32,741}
+temp	int	$tmp227	%read{32,741} %write{32,741}
+temp	float	$tmp228	%read{32,741} %write{32,741}
+temp	point	$tmp229	%read{32,741} %write{32,741}
+temp	float	$tmp230	%read{32,741} %write{32,741}
+temp	int	$tmp231	%read{32,741} %write{32,741}
+temp	int	$tmp232	%read{2147483647,-1} %write{32,741}
+temp	int	$tmp233	%read{2147483647,-1} %write{32,741}
+temp	int	$tmp234	%read{2147483647,-1} %write{32,741}
+temp	float	$tmp235	%read{32,741} %write{32,741}
+const	string	$const39	"Voronoi F2-F1"		%read{494,1207} %write{2147483647,-1}
+temp	int	$tmp236	%read{32,741} %write{32,741}
+const	string	$const40	"voronoi_F1F2S"		%read{496,1209} %write{2147483647,-1}
+temp	float	$tmp237	%read{32,741} %write{32,741}
+const	string	$const41	"voronoi_F1F2"		%read{497,1324} %write{2147483647,-1}
+const	string	$const42	"voronoi_FnFn"		%read{498,1325} %write{2147483647,-1}
+temp	float	$tmp238	%read{32,741} %write{32,741}
+temp	float	$tmp239	%read{32,741} %write{32,741}
+temp	float	$tmp240	%read{32,741} %write{32,741}
+temp	float	$tmp241	%read{32,741} %write{32,741}
+temp	float	$tmp242	%read{32,741} %write{32,741}
+temp	float	$tmp243	%read{32,741} %write{32,741}
+temp	int	$tmp244	%read{32,741} %write{32,741}
+temp	int	$tmp245	%read{32,741} %write{32,741}
+temp	int	$tmp246	%read{32,741} %write{32,741}
+temp	int	$tmp247	%read{32,741} %write{32,741}
+temp	int	$tmp248	%read{32,741} %write{32,741}
+temp	int	$tmp249	%read{32,741} %write{32,741}
+temp	float	$tmp250	%read{32,741} %write{32,741}
+temp	float	$tmp251	%read{32,741} %write{32,741}
+temp	float	$tmp252	%read{32,741} %write{32,741}
+temp	point	$tmp253	%read{32,741} %write{32,741}
+temp	float	$tmp254	%read{32,741} %write{32,741}
+temp	float	$tmp255	%read{32,741} %write{32,741}
+temp	float	$tmp256	%read{32,741} %write{32,741}
+temp	point	$tmp257	%read{32,741} %write{32,741}
+temp	float	$tmp258	%read{32,741} %write{32,741}
+temp	float	$tmp259	%read{32,741} %write{32,741}
+temp	float	$tmp260	%read{32,741} %write{32,741}
+temp	point	$tmp261	%read{32,741} %write{32,741}
+temp	point	$tmp262	%read{32,741} %write{32,741}
+temp	float	$tmp263	%read{32,741} %write{32,741}
+temp	float	$tmp264	%read{32,741} %write{32,741}
+temp	float	$tmp265	%read{32,741} %write{32,741}
+temp	float	$tmp266	%read{32,741} %write{32,741}
+temp	int	$tmp267	%read{32,741} %write{32,741}
+temp	float	$tmp268	%read{32,741} %write{32,741}
+temp	float	$tmp269	%read{32,741} %write{32,741}
+temp	float	$tmp270	%read{32,741} %write{32,741}
+temp	point	$tmp271	%read{32,741} %write{32,741}
+temp	point	$tmp272	%read{32,741} %write{32,741}
+temp	point	$tmp273	%read{32,741} %write{32,741}
+temp	float	$tmp274	%read{32,741} %write{32,741}
+temp	int	$tmp275	%read{32,741} %write{32,741}
+temp	float	$tmp276	%read{32,741} %write{32,741}
+temp	float	$tmp277	%read{32,741} %write{32,741}
+temp	point	$tmp278	%read{32,741} %write{32,741}
+temp	point	$tmp279	%read{32,741} %write{32,741}
+temp	float	$tmp280	%read{32,741} %write{32,741}
+temp	int	$tmp281	%read{32,741} %write{32,741}
+temp	float	$tmp282	%read{32,741} %write{32,741}
+temp	point	$tmp283	%read{32,741} %write{32,741}
+temp	float	$tmp284	%read{32,741} %write{32,741}
+temp	int	$tmp285	%read{32,741} %write{32,741}
+temp	int	$tmp286	%read{2147483647,-1} %write{32,741}
+temp	int	$tmp287	%read{2147483647,-1} %write{32,741}
+temp	int	$tmp288	%read{2147483647,-1} %write{32,741}
+temp	float	$tmp289	%read{32,741} %write{32,741}
+temp	float	$tmp290	%read{32,741} %write{32,741}
+temp	float	$tmp291	%read{32,741} %write{32,741}
+const	string	$const43	"Voronoi Crackle"		%read{607,1320} %write{2147483647,-1}
+temp	int	$tmp292	%read{32,741} %write{32,741}
+const	string	$const44	"voronoi_CrS"		%read{609,1322} %write{2147483647,-1}
+temp	float	$tmp293	%read{32,741} %write{32,741}
+const	string	$const45	"voronoi_Cr"		%read{610,1323} %write{2147483647,-1}
+temp	float	$tmp294	%read{32,741} %write{32,741}
+temp	float	$tmp295	%read{32,741} %write{32,741}
+temp	float	$tmp296	%read{32,741} %write{32,741}
+temp	float	$tmp297	%read{32,741} %write{32,741}
+temp	float	$tmp298	%read{32,741} %write{32,741}
+temp	float	$tmp299	%read{32,741} %write{32,741}
+temp	float	$tmp300	%read{32,741} %write{32,741}
+temp	int	$tmp301	%read{32,741} %write{32,741}
+temp	int	$tmp302	%read{32,741} %write{32,741}
+temp	int	$tmp303	%read{32,741} %write{32,741}
+temp	int	$tmp304	%read{32,741} %write{32,741}
+temp	int	$tmp305	%read{32,741} %write{32,741}
+temp	int	$tmp306	%read{32,741} %write{32,741}
+temp	float	$tmp307	%read{32,741} %write{32,741}
+temp	float	$tmp308	%read{32,741} %write{32,741}
+temp	float	$tmp309	%read{32,741} %write{32,741}
+temp	point	$tmp310	%read{32,741} %write{32,741}
+temp	float	$tmp311	%read{32,741} %write{32,741}
+temp	float	$tmp312	%read{32,741} %write{32,741}
+temp	float	$tmp313	%read{32,741} %write{32,741}
+temp	point	$tmp314	%read{32,741} %write{32,741}
+temp	float	$tmp315	%read{32,741} %write{32,741}
+temp	float	$tmp316	%read{32,741} %write{32,741}
+temp	float	$tmp317	%read{32,741} %write{32,741}
+temp	point	$tmp318	%read{32,741} %write{32,741}
+temp	point	$tmp319	%read{32,741} %write{32,741}
+temp	float	$tmp320	%read{32,741} %write{32,741}
+temp	float	$tmp321	%read{32,741} %write{32,741}
+temp	float	$tmp322	%read{32,741} %write{32,741}
+temp	float	$tmp323	%read{32,741} %write{32,741}
+temp	int	$tmp324	%read{32,741} %write{32,741}
+temp	float	$tmp325	%read{32,741} %write{32,741}
+temp	float	$tmp326	%read{32,741} %write{32,741}
+temp	float	$tmp327	%read{32,741} %write{32,741}
+temp	point	$tmp328	%read{32,741} %write{32,741}
+temp	point	$tmp329	%read{32,741} %write{32,741}
+temp	point	$tmp330	%read{32,741} %write{32,741}
+temp	float	$tmp331	%read{32,741} %write{32,741}
+temp	int	$tmp332	%read{32,741} %write{32,741}
+temp	float	$tmp333	%read{32,741} %write{32,741}
+temp	float	$tmp334	%read{32,741} %write{32,741}
+temp	point	$tmp335	%read{32,741} %write{32,741}
+temp	point	$tmp336	%read{32,741} %write{32,741}
+temp	float	$tmp337	%read{32,741} %write{32,741}
+temp	int	$tmp338	%read{32,741} %write{32,741}
+temp	float	$tmp339	%read{32,741} %write{32,741}
+temp	point	$tmp340	%read{32,741} %write{32,741}
+temp	float	$tmp341	%read{32,741} %write{32,741}
+temp	int	$tmp342	%read{32,741} %write{32,741}
+temp	int	$tmp343	%read{2147483647,-1} %write{32,741}
+temp	int	$tmp344	%read{2147483647,-1} %write{32,741}
+temp	int	$tmp345	%read{2147483647,-1} %write{32,741}
+temp	float	$tmp346	%read{32,741} %write{32,741}
+temp	float	$tmp347	%read{32,741} %write{32,741}
+temp	int	$tmp348	%read{32,741} %write{32,741}
+temp	float	$tmp349	%read{32,741} %write{32,741}
+const	string	$const46	"Cell Noise"		%read{727,1440} %write{2147483647,-1}
+temp	int	$tmp350	%read{32,741} %write{32,741}
+temp	float	$tmp351	%read{32,741} %write{32,741}
+temp	float	$tmp352	%read{32,741} %write{32,741}
+temp	float	$tmp353	%read{32,741} %write{32,741}
+temp	int	$tmp354	%read{2147483647,-1} %write{32,741}
+temp	float	$tmp355	%read{743,743} %write{742,742}
+temp	int	$tmp356	%read{745,745} %write{744,744}
+temp	point	$tmp357	%read{754,1442} %write{746,746}
+temp	int	$tmp358	%read{749,749} %write{748,748}
+temp	int	$tmp359	%read{753,753} %write{752,752}
+temp	int	$tmp360	%read{757,757} %write{756,756}
+temp	int	$tmp361	%read{758,758} %write{757,757}
+temp	int	$tmp362	%read{764,764} %write{763,763}
+temp	float	$tmp363	%read{871,871} %write{870,870}
+temp	float	$tmp364	%read{771,771} %write{770,770}
+temp	float	$tmp365	%read{770,770} %write{769,769}
+temp	float	$tmp366	%read{774,774} %write{773,773}
+temp	float	$tmp367	%read{773,773} %write{772,772}
+temp	float	$tmp368	%read{777,777} %write{776,776}
+temp	float	$tmp369	%read{776,776} %write{775,775}
+temp	int	$tmp370	%read{784,869} %write{784,869}
+temp	int	$tmp371	%read{782,869} %write{783,869}
+temp	int	$tmp372	%read{784,869} %write{784,869}
+temp	int	$tmp373	%read{784,869} %write{784,869}
+temp	int	$tmp374	%read{784,869} %write{784,869}
+temp	int	$tmp375	%read{784,869} %write{784,869}
+temp	float	$tmp376	%read{784,869} %write{784,869}
+temp	float	$tmp377	%read{784,869} %write{784,869}
+temp	float	$tmp378	%read{784,869} %write{784,869}
+temp	point	$tmp379	%read{784,869} %write{784,869}
+temp	float	$tmp380	%read{784,869} %write{784,869}
+temp	float	$tmp381	%read{784,869} %write{784,869}
+temp	float	$tmp382	%read{784,869} %write{784,869}
+temp	point	$tmp383	%read{784,869} %write{784,869}
+temp	float	$tmp384	%read{784,869} %write{784,869}
+temp	float	$tmp385	%read{784,869} %write{784,869}
+temp	float	$tmp386	%read{784,869} %write{784,869}
+temp	point	$tmp387	%read{784,869} %write{784,869}
+temp	point	$tmp388	%read{784,869} %write{784,869}
+temp	float	$tmp389	%read{784,869} %write{784,869}
+temp	float	$tmp390	%read{784,869} %write{784,869}
+temp	float	$tmp391	%read{784,869} %write{784,869}
+temp	float	$tmp392	%read{784,869} %write{784,869}
+temp	int	$tmp393	%read{784,869} %write{784,869}
+temp	float	$tmp394	%read{784,869} %write{784,869}
+temp	float	$tmp395	%read{784,869} %write{784,869}
+temp	float	$tmp396	%read{784,869} %write{784,869}
+temp	point	$tmp397	%read{784,869} %write{784,869}
+temp	point	$tmp398	%read{784,869} %write{784,869}
+temp	point	$tmp399	%read{784,869} %write{784,869}
+temp	float	$tmp400	%read{784,869} %write{784,869}
+temp	int	$tmp401	%read{784,869} %write{784,869}
+temp	float	$tmp402	%read{784,869} %write{784,869}
+temp	float	$tmp403	%read{784,869} %write{784,869}
+temp	point	$tmp404	%read{784,869} %write{784,869}
+temp	point	$tmp405	%read{784,869} %write{784,869}
+temp	float	$tmp406	%read{784,869} %write{784,869}
+temp	int	$tmp407	%read{784,869} %write{784,869}
+temp	float	$tmp408	%read{784,869} %write{784,869}
+temp	point	$tmp409	%read{784,869} %write{784,869}
+temp	float	$tmp410	%read{784,869} %write{784,869}
+temp	int	$tmp411	%read{784,869} %write{784,869}
+temp	int	$tmp412	%read{2147483647,-1} %write{784,869}
+temp	int	$tmp413	%read{2147483647,-1} %write{784,869}
+temp	int	$tmp414	%read{2147483647,-1} %write{784,869}
+temp	float	$tmp415	%read{872,872} %write{871,871}
+temp	int	$tmp416	%read{875,875} %write{874,874}
+temp	float	$tmp417	%read{982,982} %write{981,981}
+temp	float	$tmp418	%read{882,882} %write{881,881}
+temp	float	$tmp419	%read{881,881} %write{880,880}
+temp	float	$tmp420	%read{885,885} %write{884,884}
+temp	float	$tmp421	%read{884,884} %write{883,883}
+temp	float	$tmp422	%read{888,888} %write{887,887}
+temp	float	$tmp423	%read{887,887} %write{886,886}
+temp	int	$tmp424	%read{895,980} %write{895,980}
+temp	int	$tmp425	%read{893,980} %write{894,980}
+temp	int	$tmp426	%read{895,980} %write{895,980}
+temp	int	$tmp427	%read{895,980} %write{895,980}
+temp	int	$tmp428	%read{895,980} %write{895,980}
+temp	int	$tmp429	%read{895,980} %write{895,980}
+temp	float	$tmp430	%read{895,980} %write{895,980}
+temp	float	$tmp431	%read{895,980} %write{895,980}
+temp	float	$tmp432	%read{895,980} %write{895,980}
+temp	point	$tmp433	%read{895,980} %write{895,980}
+temp	float	$tmp434	%read{895,980} %write{895,980}
+temp	float	$tmp435	%read{895,980} %write{895,980}
+temp	float	$tmp436	%read{895,980} %write{895,980}
+temp	point	$tmp437	%read{895,980} %write{895,980}
+temp	float	$tmp438	%read{895,980} %write{895,980}
+temp	float	$tmp439	%read{895,980} %write{895,980}
+temp	float	$tmp440	%read{895,980} %write{895,980}
+temp	point	$tmp441	%read{895,980} %write{895,980}
+temp	point	$tmp442	%read{895,980} %write{895,980}
+temp	float	$tmp443	%read{895,980} %write{895,980}
+temp	float	$tmp444	%read{895,980} %write{895,980}
+temp	float	$tmp445	%read{895,980} %write{895,980}
+temp	float	$tmp446	%read{895,980} %write{895,980}
+temp	int	$tmp447	%read{895,980} %write{895,980}
+temp	float	$tmp448	%read{895,980} %write{895,980}
+temp	float	$tmp449	%read{895,980} %write{895,980}
+temp	float	$tmp450	%read{895,980} %write{895,980}
+temp	point	$tmp451	%read{895,980} %write{895,980}
+temp	point	$tmp452	%read{895,980} %write{895,980}
+temp	point	$tmp453	%read{895,980} %write{895,980}
+temp	float	$tmp454	%read{895,980} %write{895,980}
+temp	int	$tmp455	%read{895,980} %write{895,980}
+temp	float	$tmp456	%read{895,980} %write{895,980}
+temp	float	$tmp457	%read{895,980} %write{895,980}
+temp	point	$tmp458	%read{895,980} %write{895,980}
+temp	point	$tmp459	%read{895,980} %write{895,980}
+temp	float	$tmp460	%read{895,980} %write{895,980}
+temp	int	$tmp461	%read{895,980} %write{895,980}
+temp	float	$tmp462	%read{895,980} %write{895,980}
+temp	point	$tmp463	%read{895,980} %write{895,980}
+temp	float	$tmp464	%read{895,980} %write{895,980}
+temp	int	$tmp465	%read{895,980} %write{895,980}
+temp	int	$tmp466	%read{2147483647,-1} %write{895,980}
+temp	int	$tmp467	%read{2147483647,-1} %write{895,980}
+temp	int	$tmp468	%read{2147483647,-1} %write{895,980}
+temp	float	$tmp469	%read{983,983} %write{982,982}
+temp	int	$tmp470	%read{986,986} %write{985,985}
+temp	float	$tmp471	%read{1093,1093} %write{1092,1092}
+temp	float	$tmp472	%read{993,993} %write{992,992}
+temp	float	$tmp473	%read{992,992} %write{991,991}
+temp	float	$tmp474	%read{996,996} %write{995,995}
+temp	float	$tmp475	%read{995,995} %write{994,994}
+temp	float	$tmp476	%read{999,999} %write{998,998}
+temp	float	$tmp477	%read{998,998} %write{997,997}
+temp	int	$tmp478	%read{1006,1091} %write{1006,1091}
+temp	int	$tmp479	%read{1004,1091} %write{1005,1091}
+temp	int	$tmp480	%read{1006,1091} %write{1006,1091}
+temp	int	$tmp481	%read{1006,1091} %write{1006,1091}
+temp	int	$tmp482	%read{1006,1091} %write{1006,1091}
+temp	int	$tmp483	%read{1006,1091} %write{1006,1091}
+temp	float	$tmp484	%read{1006,1091} %write{1006,1091}
+temp	float	$tmp485	%read{1006,1091} %write{1006,1091}
+temp	float	$tmp486	%read{1006,1091} %write{1006,1091}
+temp	point	$tmp487	%read{1006,1091} %write{1006,1091}
+temp	float	$tmp488	%read{1006,1091} %write{1006,1091}
+temp	float	$tmp489	%read{1006,1091} %write{1006,1091}
+temp	float	$tmp490	%read{1006,1091} %write{1006,1091}
+temp	point	$tmp491	%read{1006,1091} %write{1006,1091}
+temp	float	$tmp492	%read{1006,1091} %write{1006,1091}
+temp	float	$tmp493	%read{1006,1091} %write{1006,1091}
+temp	float	$tmp494	%read{1006,1091} %write{1006,1091}
+temp	point	$tmp495	%read{1006,1091} %write{1006,1091}
+temp	point	$tmp496	%read{1006,1091} %write{1006,1091}
+temp	float	$tmp497	%read{1006,1091} %write{1006,1091}
+temp	float	$tmp498	%read{1006,1091} %write{1006,1091}
+temp	float	$tmp499	%read{1006,1091} %write{1006,1091}
+temp	float	$tmp500	%read{1006,1091} %write{1006,1091}
+temp	int	$tmp501	%read{1006,1091} %write{1006,1091}
+temp	float	$tmp502	%read{1006,1091} %write{1006,1091}
+temp	float	$tmp503	%read{1006,1091} %write{1006,1091}
+temp	float	$tmp504	%read{1006,1091} %write{1006,1091}
+temp	point	$tmp505	%read{1006,1091} %write{1006,1091}
+temp	point	$tmp506	%read{1006,1091} %write{1006,1091}
+temp	point	$tmp507	%read{1006,1091} %write{1006,1091}
+temp	float	$tmp508	%read{1006,1091} %write{1006,1091}
+temp	int	$tmp509	%read{1006,1091} %write{1006,1091}
+temp	float	$tmp510	%read{1006,1091} %write{1006,1091}
+temp	float	$tmp511	%read{1006,1091} %write{1006,1091}
+temp	point	$tmp512	%read{1006,1091} %write{1006,1091}
+temp	point	$tmp513	%read{1006,1091} %write{1006,1091}
+temp	float	$tmp514	%read{1006,1091} %write{1006,1091}
+temp	int	$tmp515	%read{1006,1091} %write{1006,1091}
+temp	float	$tmp516	%read{1006,1091} %write{1006,1091}
+temp	point	$tmp517	%read{1006,1091} %write{1006,1091}
+temp	float	$tmp518	%read{1006,1091} %write{1006,1091}
+temp	int	$tmp519	%read{1006,1091} %write{1006,1091}
+temp	int	$tmp520	%read{2147483647,-1} %write{1006,1091}
+temp	int	$tmp521	%read{2147483647,-1} %write{1006,1091}
+temp	int	$tmp522	%read{2147483647,-1} %write{1006,1091}
+temp	float	$tmp523	%read{1094,1094} %write{1093,1093}
+temp	int	$tmp524	%read{1097,1097} %write{1096,1096}
+temp	float	$tmp525	%read{1204,1204} %write{1203,1203}
+temp	float	$tmp526	%read{1104,1104} %write{1103,1103}
+temp	float	$tmp527	%read{1103,1103} %write{1102,1102}
+temp	float	$tmp528	%read{1107,1107} %write{1106,1106}
+temp	float	$tmp529	%read{1106,1106} %write{1105,1105}
+temp	float	$tmp530	%read{1110,1110} %write{1109,1109}
+temp	float	$tmp531	%read{1109,1109} %write{1108,1108}
+temp	int	$tmp532	%read{1117,1202} %write{1117,1202}
+temp	int	$tmp533	%read{1115,1202} %write{1116,1202}
+temp	int	$tmp534	%read{1117,1202} %write{1117,1202}
+temp	int	$tmp535	%read{1117,1202} %write{1117,1202}
+temp	int	$tmp536	%read{1117,1202} %write{1117,1202}
+temp	int	$tmp537	%read{1117,1202} %write{1117,1202}
+temp	float	$tmp538	%read{1117,1202} %write{1117,1202}
+temp	float	$tmp539	%read{1117,1202} %write{1117,1202}
+temp	float	$tmp540	%read{1117,1202} %write{1117,1202}
+temp	point	$tmp541	%read{1117,1202} %write{1117,1202}
+temp	float	$tmp542	%read{1117,1202} %write{1117,1202}
+temp	float	$tmp543	%read{1117,1202} %write{1117,1202}
+temp	float	$tmp544	%read{1117,1202} %write{1117,1202}
+temp	point	$tmp545	%read{1117,1202} %write{1117,1202}
+temp	float	$tmp546	%read{1117,1202} %write{1117,1202}
+temp	float	$tmp547	%read{1117,1202} %write{1117,1202}
+temp	float	$tmp548	%read{1117,1202} %write{1117,1202}
+temp	point	$tmp549	%read{1117,1202} %write{1117,1202}
+temp	point	$tmp550	%read{1117,1202} %write{1117,1202}
+temp	float	$tmp551	%read{1117,1202} %write{1117,1202}
+temp	float	$tmp552	%read{1117,1202} %write{1117,1202}
+temp	float	$tmp553	%read{1117,1202} %write{1117,1202}
+temp	float	$tmp554	%read{1117,1202} %write{1117,1202}
+temp	int	$tmp555	%read{1117,1202} %write{1117,1202}
+temp	float	$tmp556	%read{1117,1202} %write{1117,1202}
+temp	float	$tmp557	%read{1117,1202} %write{1117,1202}
+temp	float	$tmp558	%read{1117,1202} %write{1117,1202}
+temp	point	$tmp559	%read{1117,1202} %write{1117,1202}
+temp	point	$tmp560	%read{1117,1202} %write{1117,1202}
+temp	point	$tmp561	%read{1117,1202} %write{1117,1202}
+temp	float	$tmp562	%read{1117,1202} %write{1117,1202}
+temp	int	$tmp563	%read{1117,1202} %write{1117,1202}
+temp	float	$tmp564	%read{1117,1202} %write{1117,1202}
+temp	float	$tmp565	%read{1117,1202} %write{1117,1202}
+temp	point	$tmp566	%read{1117,1202} %write{1117,1202}
+temp	point	$tmp567	%read{1117,1202} %write{1117,1202}
+temp	float	$tmp568	%read{1117,1202} %write{1117,1202}
+temp	int	$tmp569	%read{1117,1202} %write{1117,1202}
+temp	float	$tmp570	%read{1117,1202} %write{1117,1202}
+temp	point	$tmp571	%read{1117,1202} %write{1117,1202}
+temp	float	$tmp572	%read{1117,1202} %write{1117,1202}
+temp	int	$tmp573	%read{1117,1202} %write{1117,1202}
+temp	int	$tmp574	%read{2147483647,-1} %write{1117,1202}
+temp	int	$tmp575	%read{2147483647,-1} %write{1117,1202}
+temp	int	$tmp576	%read{2147483647,-1} %write{1117,1202}
+temp	float	$tmp577	%read{1205,1205} %write{1204,1204}
+temp	int	$tmp578	%read{1208,1208} %write{1207,1207}
+temp	float	$tmp579	%read{1317,1317} %write{1316,1316}
+temp	float	$tmp580	%read{1215,1215} %write{1214,1214}
+temp	float	$tmp581	%read{1214,1214} %write{1213,1213}
+temp	float	$tmp582	%read{1218,1218} %write{1217,1217}
+temp	float	$tmp583	%read{1217,1217} %write{1216,1216}
+temp	float	$tmp584	%read{1221,1221} %write{1220,1220}
+temp	float	$tmp585	%read{1220,1220} %write{1219,1219}
+temp	int	$tmp586	%read{1228,1313} %write{1228,1313}
+temp	int	$tmp587	%read{1226,1313} %write{1227,1313}
+temp	int	$tmp588	%read{1228,1313} %write{1228,1313}
+temp	int	$tmp589	%read{1228,1313} %write{1228,1313}
+temp	int	$tmp590	%read{1228,1313} %write{1228,1313}
+temp	int	$tmp591	%read{1228,1313} %write{1228,1313}
+temp	float	$tmp592	%read{1228,1313} %write{1228,1313}
+temp	float	$tmp593	%read{1228,1313} %write{1228,1313}
+temp	float	$tmp594	%read{1228,1313} %write{1228,1313}
+temp	point	$tmp595	%read{1228,1313} %write{1228,1313}
+temp	float	$tmp596	%read{1228,1313} %write{1228,1313}
+temp	float	$tmp597	%read{1228,1313} %write{1228,1313}
+temp	float	$tmp598	%read{1228,1313} %write{1228,1313}
+temp	point	$tmp599	%read{1228,1313} %write{1228,1313}
+temp	float	$tmp600	%read{1228,1313} %write{1228,1313}
+temp	float	$tmp601	%read{1228,1313} %write{1228,1313}
+temp	float	$tmp602	%read{1228,1313} %write{1228,1313}
+temp	point	$tmp603	%read{1228,1313} %write{1228,1313}
+temp	point	$tmp604	%read{1228,1313} %write{1228,1313}
+temp	float	$tmp605	%read{1228,1313} %write{1228,1313}
+temp	float	$tmp606	%read{1228,1313} %write{1228,1313}
+temp	float	$tmp607	%read{1228,1313} %write{1228,1313}
+temp	float	$tmp608	%read{1228,1313} %write{1228,1313}
+temp	int	$tmp609	%read{1228,1313} %write{1228,1313}
+temp	float	$tmp610	%read{1228,1313} %write{1228,1313}
+temp	float	$tmp611	%read{1228,1313} %write{1228,1313}
+temp	float	$tmp612	%read{1228,1313} %write{1228,1313}
+temp	point	$tmp613	%read{1228,1313} %write{1228,1313}
+temp	point	$tmp614	%read{1228,1313} %write{1228,1313}
+temp	point	$tmp615	%read{1228,1313} %write{1228,1313}
+temp	float	$tmp616	%read{1228,1313} %write{1228,1313}
+temp	int	$tmp617	%read{1228,1313} %write{1228,1313}
+temp	float	$tmp618	%read{1228,1313} %write{1228,1313}
+temp	float	$tmp619	%read{1228,1313} %write{1228,1313}
+temp	point	$tmp620	%read{1228,1313} %write{1228,1313}
+temp	point	$tmp621	%read{1228,1313} %write{1228,1313}
+temp	float	$tmp622	%read{1228,1313} %write{1228,1313}
+temp	int	$tmp623	%read{1228,1313} %write{1228,1313}
+temp	float	$tmp624	%read{1228,1313} %write{1228,1313}
+temp	point	$tmp625	%read{1228,1313} %write{1228,1313}
+temp	float	$tmp626	%read{1228,1313} %write{1228,1313}
+temp	int	$tmp627	%read{1228,1313} %write{1228,1313}
+temp	int	$tmp628	%read{2147483647,-1} %write{1228,1313}
+temp	int	$tmp629	%read{2147483647,-1} %write{1228,1313}
+temp	int	$tmp630	%read{2147483647,-1} %write{1228,1313}
+temp	float	$tmp631	%read{1316,1316} %write{1314,1314}
+temp	float	$tmp632	%read{1316,1316} %write{1315,1315}
+temp	float	$tmp633	%read{1318,1318} %write{1317,1317}
+temp	int	$tmp634	%read{1321,1321} %write{1320,1320}
+temp	float	$tmp635	%read{1437,1437} %write{1434,1435}
+temp	float	$tmp636	%read{1431,1431} %write{1430,1430}
+temp	float	$tmp637	%read{1329,1329} %write{1328,1328}
+temp	float	$tmp638	%read{1328,1328} %write{1327,1327}
+temp	float	$tmp639	%read{1332,1332} %write{1331,1331}
+temp	float	$tmp640	%read{1331,1331} %write{1330,1330}
+temp	float	$tmp641	%read{1335,1335} %write{1334,1334}
+temp	float	$tmp642	%read{1334,1334} %write{1333,1333}
+temp	int	$tmp643	%read{1342,1427} %write{1342,1427}
+temp	int	$tmp644	%read{1340,1427} %write{1341,1427}
+temp	int	$tmp645	%read{1342,1427} %write{1342,1427}
+temp	int	$tmp646	%read{1342,1427} %write{1342,1427}
+temp	int	$tmp647	%read{1342,1427} %write{1342,1427}
+temp	int	$tmp648	%read{1342,1427} %write{1342,1427}
+temp	float	$tmp649	%read{1342,1427} %write{1342,1427}
+temp	float	$tmp650	%read{1342,1427} %write{1342,1427}
+temp	float	$tmp651	%read{1342,1427} %write{1342,1427}
+temp	point	$tmp652	%read{1342,1427} %write{1342,1427}
+temp	float	$tmp653	%read{1342,1427} %write{1342,1427}
+temp	float	$tmp654	%read{1342,1427} %write{1342,1427}
+temp	float	$tmp655	%read{1342,1427} %write{1342,1427}
+temp	point	$tmp656	%read{1342,1427} %write{1342,1427}
+temp	float	$tmp657	%read{1342,1427} %write{1342,1427}
+temp	float	$tmp658	%read{1342,1427} %write{1342,1427}
+temp	float	$tmp659	%read{1342,1427} %write{1342,1427}
+temp	point	$tmp660	%read{1342,1427} %write{1342,1427}
+temp	point	$tmp661	%read{1342,1427} %write{1342,1427}
+temp	float	$tmp662	%read{1342,1427} %write{1342,1427}
+temp	float	$tmp663	%read{1342,1427} %write{1342,1427}
+temp	float	$tmp664	%read{1342,1427} %write{1342,1427}
+temp	float	$tmp665	%read{1342,1427} %write{1342,1427}
+temp	int	$tmp666	%read{1342,1427} %write{1342,1427}
+temp	float	$tmp667	%read{1342,1427} %write{1342,1427}
+temp	float	$tmp668	%read{1342,1427} %write{1342,1427}
+temp	float	$tmp669	%read{1342,1427} %write{1342,1427}
+temp	point	$tmp670	%read{1342,1427} %write{1342,1427}
+temp	point	$tmp671	%read{1342,1427} %write{1342,1427}
+temp	point	$tmp672	%read{1342,1427} %write{1342,1427}
+temp	float	$tmp673	%read{1342,1427} %write{1342,1427}
+temp	int	$tmp674	%read{1342,1427} %write{1342,1427}
+temp	float	$tmp675	%read{1342,1427} %write{1342,1427}
+temp	float	$tmp676	%read{1342,1427} %write{1342,1427}
+temp	point	$tmp677	%read{1342,1427} %write{1342,1427}
+temp	point	$tmp678	%read{1342,1427} %write{1342,1427}
+temp	float	$tmp679	%read{1342,1427} %write{1342,1427}
+temp	int	$tmp680	%read{1342,1427} %write{1342,1427}
+temp	float	$tmp681	%read{1342,1427} %write{1342,1427}
+temp	point	$tmp682	%read{1342,1427} %write{1342,1427}
+temp	float	$tmp683	%read{1342,1427} %write{1342,1427}
+temp	int	$tmp684	%read{1342,1427} %write{1342,1427}
+temp	int	$tmp685	%read{2147483647,-1} %write{1342,1427}
+temp	int	$tmp686	%read{2147483647,-1} %write{1342,1427}
+temp	int	$tmp687	%read{2147483647,-1} %write{1342,1427}
+temp	float	$tmp688	%read{1430,1430} %write{1428,1428}
+temp	float	$tmp689	%read{1430,1430} %write{1429,1429}
+temp	int	$tmp690	%read{1433,1433} %write{1432,1432}
+temp	float	$tmp691	%read{1438,1438} %write{1437,1437}
+temp	int	$tmp692	%read{1441,1441} %write{1440,1440}
+temp	float	$tmp693	%read{1447,1447} %write{1446,1446}
+temp	float	$tmp694	%read{1448,1448} %write{1447,1447}
+temp	float	$tmp695	%read{1450,1450} %write{1449,1449}
+temp	int	$tmp696	%read{1452,1452} %write{1451,1451}
+temp	float	$tmp697	%read{1457,1457} %write{1452,1452}
+temp	int	$tmp698	%read{1454,1454} %write{1453,1453}
+temp	int	$tmp699	%read{1455,1455} %write{1454,1454}
+temp	int	$tmp700	%read{1456,1456} %write{1455,1455}
+temp	float	$tmp701	%read{1457,1457} %write{1456,1456}
+temp	float	$tmp702	%read{1458,1458} %write{1457,1457}
+temp	int	$tmp703	%read{1460,1460} %write{1459,1459}
+temp	int	$tmp704	%read{1461,1461} %write{1460,1460}
+temp	float	$tmp705	%read{1466,1466} %write{1461,1461}
+temp	int	$tmp706	%read{1463,1463} %write{1462,1462}
+temp	int	$tmp707	%read{1464,1464} %write{1463,1463}
+temp	int	$tmp708	%read{1465,1465} %write{1464,1464}
+temp	float	$tmp709	%read{1466,1466} %write{1465,1465}
+temp	float	$tmp710	%read{1467,1467} %write{1466,1466}
+temp	float	$tmp711	%read{1469,1469} %write{1468,1468}
+temp	float	$tmp712	%read{1471,1471} %write{1469,1469}
+temp	float	$tmp713	%read{1471,1471} %write{1470,1470}
+temp	int	$tmp714	%read{1474,1474} %write{1473,1473}
+temp	float	$tmp715	%read{1479,1479} %write{1474,1474}
+temp	int	$tmp716	%read{1476,1476} %write{1475,1475}
+temp	int	$tmp717	%read{1477,1477} %write{1476,1476}
+temp	int	$tmp718	%read{1478,1478} %write{1477,1477}
+temp	float	$tmp719	%read{1479,1479} %write{1478,1478}
+temp	float	$tmp720	%read{1480,1480} %write{1479,1479}
+temp	float	$tmp721	%read{1484,1484} %write{1483,1483}
+temp	float	$tmp722	%read{1486,1486} %write{1485,1485}
+temp	float	$tmp723	%read{1487,1487} %write{1486,1486}
+code Vector
+# include/node_wave_texture.osl:48
+# 	output float Fac = 0.0,
+	assign		Vector P 	%filename{"include/node_wave_texture.osl"} %line{48} %argrw{"wr"}
+code ___main___
+# include/node_wave_texture.osl:52
+# 
+	assign		p Vector 	%filename{"include/node_wave_texture.osl"} %line{52} %argrw{"wr"}
+# include/node_wave_texture.osl:54
+# 		p = transform(mapping, p);
+	if		use_mapping 4 4 	%line{54} %argrw{"r"}
+# include/node_wave_texture.osl:55
+# 
+	transform	p mapping p 	%line{55} %argrw{"wrr"}
+# include/node_wave_texture.osl:57
+# 	Color = Fac;
+	mul		$tmp1 p Scale 	%line{57} %argrw{"wrr"}
+	functioncall	$const1 1488 	%argrw{"r"}
+# include/node_wave_texture.osl:25
+# 
+	assign		___667_n $const2 	%line{25} %argrw{"wr"}
+# include/node_wave_texture.osl:27
+# 		n = (p[0] + p[1] + p[2]) * 10.0;
+	eq		$tmp2 Type $const3 	%line{27} %argrw{"wrr"}
+	if		$tmp2 15 19 	%argrw{"r"}
+# include/node_wave_texture.osl:28
+# 	}
+	compref		$tmp3 $tmp1 $const4 	%line{28} %argrw{"wrr"}
+	compref		$tmp4 $tmp1 $const5 	%argrw{"wrr"}
+	add		$tmp5 $tmp3 $tmp4 	%argrw{"wrr"}
+	compref		$tmp6 $tmp1 $const6 	%argrw{"wrr"}
+	add		$tmp7 $tmp5 $tmp6 	%argrw{"wrr"}
+	mul		___667_n $tmp7 $const7 	%argrw{"wrr"}
+# include/node_wave_texture.osl:30
+# 		n = length(p) * 20.0;
+	eq		$tmp8 Type $const8 	%line{30} %argrw{"wrr"}
+	if		$tmp8 19 19 	%argrw{"r"}
+# include/node_wave_texture.osl:31
+# 	}
+	length		$tmp9 $tmp1 	%line{31} %argrw{"wr"}
+	mul		___667_n $tmp9 $const9 	%argrw{"wrr"}
+# include/node_wave_texture.osl:34
+# 		n = n + (distortion * noise_turbulence(p * dscale, "Perlin", detail, 0));
+	neq		$tmp10 Distortion $const2 	%line{34} %argrw{"wrr"}
+	if		$tmp10 1485 1485 	%argrw{"r"}
+# include/node_wave_texture.osl:35
+# 	}
+	mul		$tmp12 $tmp1 DetailScale 	%line{35} %argrw{"wrr"}
+	functioncall	$const11 1483 	%argrw{"r"}
+# include/node_texture.h:209
+# 	float fscale = 1.0;
+	assign		___661_fscale $const12 	%filename{"include/node_texture.h"} %line{209} %argrw{"wr"}
+# include/node_texture.h:210
+# 	float amp = 1.0;
+	assign		___661_amp $const12 	%line{210} %argrw{"wr"}
+# include/node_texture.h:211
+# 	float sum = 0.0;
+	assign		___661_sum $const2 	%line{211} %argrw{"wr"}
+# include/node_texture.h:214
+# 	float octaves = clamp(details, 0.0, 16.0);
+	functioncall	$const14 29 	%line{214} %argrw{"r"}
+# include/stdosl.h:144
+# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
+	min		$tmp13 Detail $const13 	%filename{"include/stdosl.h"} %line{144} %argrw{"wrr"}
+	max		___661_octaves $tmp13 $const2 	%argrw{"wrr"}
+# include/node_texture.h:215
+# 	n = (int)octaves;
+	assign		___661_n ___661_octaves 	%filename{"include/node_texture.h"} %line{215} %argrw{"wr"}
+# include/node_texture.h:217
+# 	for (i = 0; i <= n; i++) {
+	for		$tmp14 32 33 740 742 	%line{217} %argrw{"r"}
+	assign		___661_i $const4 	%argrw{"wr"}
+	le		$tmp14 ___661_i ___661_n 	%argrw{"wrr"}
+# include/node_texture.h:218
+# 		float t = noise_basis(fscale * p, basis);
+	mul		$tmp15 ___661_fscale $tmp12 	%line{218} %argrw{"wrr"}
+	functioncall	$const15 732 	%argrw{"r"}
+# include/node_texture.h:177
+# 	if (basis == "Perlin")
+	eq		$tmp16 $const10 $const10 	%line{177} %argrw{"wrr"}
+	if		$tmp16 50 50 	%argrw{"r"}
+# include/node_texture.h:178
+# 		return safe_noise(p, 1);
+	functioncall	$const16 49 	%line{178} %argrw{"r"}
+# include/node_texture.h:158
+# 	float f = 0.0;
+	assign		___658_f $const2 	%line{158} %argrw{"wr"}
+# include/node_texture.h:161
+# 	if (type == 0)
+	eq		$tmp17 $const5 $const4 	%line{161} %argrw{"wrr"}
+	if		$tmp17 42 43 	%argrw{"r"}
+# include/node_texture.h:162
+# 		f = noise("perlin", p);
+	noise		___658_f $const17 $tmp15 	%line{162} %argrw{"wrr"}
+# include/node_texture.h:166
+# 		f = noise(p);
+	noise		___658_f $tmp15 	%line{166} %argrw{"wr"}
+# include/node_texture.h:169
+# 	if (!isfinite(f))
+	isfinite	$tmp18 ___658_f 	%line{169} %argrw{"wr"}
+	eq		$tmp19 $tmp18 $const4 	%argrw{"wrr"}
+	if		$tmp19 48 48 	%argrw{"r"}
+# include/node_texture.h:170
+# 		return 0.5;
+	assign		___663_t $const18 	%line{170} %argrw{"wr"}
+	return
+# include/node_texture.h:172
+# 	return f;
+	assign		___663_t ___658_f 	%line{172} %argrw{"wr"}
+# include/node_texture.h:178
+# 		return safe_noise(p, 1);
+	return	%line{178}
+# include/node_texture.h:179
+# 	if (basis == "Voronoi F1")
+	eq		$tmp20 $const10 $const19 	%line{179} %argrw{"wrr"}
+	if		$tmp20 161 161 	%argrw{"r"}
+# include/node_texture.h:180
+# 		return voronoi_F1S(p);
+	functioncall	$const20 160 	%line{180} %argrw{"r"}
+# include/node_texture.h:147
+# float voronoi_F1S(point p) { return 2.0 * voronoi_F1(p) - 1.0; }
+	functioncall	$const22 158 	%line{147} %argrw{"r"}
+# include/node_texture.h:134
+# float voronoi_F1(point p) { return voronoi_Fn(p, 0); }
+	functioncall	$const23 158 	%line{134} %argrw{"r"}
+# include/node_texture.h:119
+# 	voronoi(p, "Distance Squared", 0, da, pa);
+	functioncall	$const25 157 	%line{119} %argrw{"r"}
+# include/node_texture.h:59
+# 	xi = (int)floor(p[0]);
+	compref		$tmp23 $tmp15 $const4 	%line{59} %argrw{"wrr"}
+	floor		$tmp22 $tmp23 	%argrw{"wr"}
+	assign		___633_xi $tmp22 	%argrw{"wr"}
+# include/node_texture.h:60
+# 	yi = (int)floor(p[1]);
+	compref		$tmp25 $tmp15 $const5 	%line{60} %argrw{"wrr"}
+	floor		$tmp24 $tmp25 	%argrw{"wr"}
+	assign		___633_yi $tmp24 	%argrw{"wr"}
+# include/node_texture.h:61
+# 	zi = (int)floor(p[2]);
+	compref		$tmp27 $tmp15 $const6 	%line{61} %argrw{"wrr"}
+	floor		$tmp26 $tmp27 	%argrw{"wr"}
+	assign		___633_zi $tmp26 	%argrw{"wr"}
+# include/node_texture.h:63
+# 	da[0] = 1e10;
+	aassign		___644_da $const4 $const26 	%line{63} %argrw{"wrr"}
+# include/node_texture.h:64
+# 	da[1] = 1e10;
+	aassign		___644_da $const5 $const26 	%line{64} %argrw{"wrr"}
+# include/node_texture.h:65
+# 	da[2] = 1e10;
+	aassign		___644_da $const6 $const26 	%line{65} %argrw{"wrr"}
+# include/node_texture.h:66
+# 	da[3] = 1e10;
+	aassign		___644_da $const27 $const26 	%line{66} %argrw{"wrr"}
+# include/node_texture.h:68
+# 	for (xx = xi - 1; xx <= xi + 1; xx++) {
+	for		$tmp29 71 73 155 157 	%line{68} %argrw{"r"}
+	sub		___633_xx ___633_xi $const5 	%argrw{"wrr"}
+	add		$tmp28 ___633_xi $const5 	%argrw{"wrr"}
+	le		$tmp29 ___633_xx $tmp28 	%argrw{"wrr"}
+# include/node_texture.h:69
+# 		for (yy = yi - 1; yy <= yi + 1; yy++) {
+	for		$tmp31 75 77 153 155 	%line{69} %argrw{"r"}
+	sub		___633_yy ___633_yi $const5 	%argrw{"wrr"}
+	add		$tmp30 ___633_yi $const5 	%argrw{"wrr"}
+	le		$tmp31 ___633_yy $tmp30 	%argrw{"wrr"}
+# include/node_texture.h:70
+# 			for (zz = zi - 1; zz <= zi + 1; zz++) {
+	for		$tmp33 79 81 151 153 	%line{70} %argrw{"r"}
+	sub		___633_zz ___633_zi $const5 	%argrw{"wrr"}
+	add		$tmp32 ___633_zi $const5 	%argrw{"wrr"}
+	le		$tmp33 ___633_zz $tmp32 	%argrw{"wrr"}
+# include/node_texture.h:71
+# 				point ip = point(xx, yy, zz);
+	assign		$tmp34 ___633_xx 	%line{71} %argrw{"wr"}
+	assign		$tmp35 ___633_yy 	%argrw{"wr"}
+	assign		$tmp36 ___633_zz 	%argrw{"wr"}
+	point		___639_ip $tmp34 $tmp35 $tmp36 	%argrw{"wrrr"}
+# include/node_texture.h:72
+# 				point vp = (point)cellnoise_color(ip);
+	functioncall	$const28 98 	%line{72} %argrw{"r"}
+# include/node_texture.h:47
+# 	float r = cellnoise(p);
+	cellnoise	___632_r ___639_ip 	%line{47} %argrw{"wr"}
+# include/node_texture.h:48
+# 	float g = cellnoise(point(p[1], p[0], p[2]));
+	compref		$tmp38 ___639_ip $const5 	%line{48} %argrw{"wrr"}
+	compref		$tmp39 ___639_ip $const4 	%argrw{"wrr"}
+	compref		$tmp40 ___639_ip $const6 	%argrw{"wrr"}
+	point		$tmp37 $tmp38 $tmp39 $tmp40 	%argrw{"wrrr"}
+	cellnoise	___632_g $tmp37 	%argrw{"wr"}
+# include/node_texture.h:49
+# 	float b = cellnoise(point(p[1], p[2], p[0]));
+	compref		$tmp42 ___639_ip $const5 	%line{49} %argrw{"wrr"}
+	compref		$tmp43 ___639_ip $const6 	%argrw{"wrr"}
+	compref		$tmp44 ___639_ip $const4 	%argrw{"wrr"}
+	point		$tmp41 $tmp42 $tmp43 $tmp44 	%argrw{"wrrr"}
+	cellnoise	___632_b $tmp41 	%argrw{"wr"}
+# include/node_texture.h:51
+# 	return color(r, g, b);
+	color		___639_vp ___632_r ___632_g ___632_b 	%line{51} %argrw{"wrrr"}
+# include/node_texture.h:73
+# 				point pd = p - (vp + ip);
+	add		$tmp45 ___639_vp ___639_ip 	%line{73} %argrw{"wrr"}
+	sub		___639_pd $tmp15 $tmp45 	%argrw{"wrr"}
+# include/node_texture.h:74
+# 				float d = voronoi_distance(distance_metric, pd, e);
+	functioncall	$const29 102 	%line{74} %argrw{"r"}
+# include/node_texture.h:24
+# 		return dot(d, d);
+	dot		___639_d ___639_pd ___639_pd 	%line{24} %argrw{"wrr"}
+# include/node_texture.h:76
+# 				vp += point(xx, yy, zz);
+	assign		$tmp47 ___633_xx 	%line{76} %argrw{"wr"}
+	assign		$tmp48 ___633_yy 	%argrw{"wr"}
+	assign		$tmp49 ___633_zz 	%argrw{"wr"}
+	point		$tmp46 $tmp47 $tmp48 $tmp49 	%argrw{"wrrr"}
+	add		___639_vp ___639_vp $tmp46 	%argrw{"wrr"}
+# include/node_texture.h:78
+# 				if (d < da[0]) {
+	aref		$tmp50 ___644_da $const4 	%line{78} %argrw{"wrr"}
+	lt		$tmp51 ___639_d $tmp50 	%argrw{"wrr"}
+	if		$tmp51 124 151 	%argrw{"r"}
+# include/node_texture.h:79
+# 					da[3] = da[2];
+	aref		$tmp52 ___644_da $const6 	%line{79} %argrw{"wrr"}
+	aassign		___644_da $const27 $tmp52 	%argrw{"wrr"}
+# include/node_texture.h:80
+# 					da[2] = da[1];
+	aref		$tmp53 ___644_da $const5 	%line{80} %argrw{"wrr"}
+	aassign		___644_da $const6 $tmp53 	%argrw{"wrr"}
+# include/node_texture.h:81
+# 					da[1] = da[0];
+	aref		$tmp54 ___644_da $const4 	%line{81} %argrw{"wrr"}
+	aassign		___644_da $const5 $tmp54 	%argrw{"wrr"}
+# include/node_texture.h:82
+# 					da[0] = d;
+	aassign		___644_da $const4 ___639_d 	%line{82} %argrw{"wrr"}
+# include/node_texture.h:84
+# 					pa[3] = pa[2];
+	aref		$tmp55 ___644_pa $const6 	%line{84} %argrw{"wrr"}
+	aassign		___644_pa $const27 $tmp55 	%argrw{"wrr"}
+# include/node_texture.h:85
+# 					pa[2] = pa[1];
+	aref		$tmp56 ___644_pa $const5 	%line{85} %argrw{"wrr"}
+	aassign		___644_pa $const6 $tmp56 	%argrw{"wrr"}
+# include/node_texture.h:86
+# 					pa[1] = pa[0];
+	aref		$tmp57 ___644_pa $const4 	%line{86} %argrw{"wrr"}
+	aassign		___644_pa $const5 $tmp57 	%argrw{"wrr"}
+# include/node_texture.h:87
+# 					pa[0] = vp;
+	aassign		___644_pa $const4 ___639_vp 	%line{87} %argrw{"wrr"}
+# include/node_texture.h:89
+# 				else if (d < da[1]) {
+	aref		$tmp58 ___644_da $const5 	%line{89} %argrw{"wrr"}
+	lt		$tmp59 ___639_d $tmp58 	%argrw{"wrr"}
+	if		$tmp59 137 151 	%argrw{"r"}
+# include/node_texture.h:90
+# 					da[3] = da[2];
+	aref		$tmp60 ___644_da $const6 	%line{90} %argrw{"wrr"}
+	aassign		___644_da $const27 $tmp60 	%argrw{"wrr"}
+# include/node_texture.h:91
+# 					da[2] = da[1];
+	aref		$tmp61 ___644_da $const5 	%line{91} %argrw{"wrr"}
+	aassign		___644_da $const6 $tmp61 	%argrw{"wrr"}
+# include/node_texture.h:92
+# 					da[1] = d;
+	aassign		___644_da $const5 ___639_d 	%line{92} %argrw{"wrr"}
+# include/node_texture.h:94
+# 					pa[3] = pa[2];
+	aref		$tmp62 ___644_pa $const6 	%line{94} %argrw{"wrr"}
+	aassign		___644_pa $const27 $tmp62 	%argrw{"wrr"}
+# include/node_texture.h:95
+# 					pa[2] = pa[1];
+	aref		$tmp63 ___644_pa $const5 	%line{95} %argrw{"wrr"}
+	aassign		___644_pa $const6 $tmp63 	%argrw{"wrr"}
+# include/node_texture.h:96
+# 					pa[1] = vp;
+	aassign		___644_pa $const5 ___639_vp 	%line{96} %argrw{"wrr"}
+# include/node_texture.h:98
+# 				else if (d < da[2]) {
+	aref		$tmp64 ___644_da $const6 	%line{98} %argrw{"wrr"}
+	lt		$tmp65 ___639_d $tmp64 	%argrw{"wrr"}
+	if		$tmp65 146 151 	%argrw{"r"}
+# include/node_texture.h:99
+# 					da[3] = da[2];
+	aref		$tmp66 ___644_da $const6 	%line{99} %argrw{"wrr"}
+	aassign		___644_da $const27 $tmp66 	%argrw{"wrr"}
+# include/node_texture.h:100
+# 					da[2] = d;
+	aassign		___644_da $const6 ___639_d 	%line{100} %argrw{"wrr"}
+# include/node_texture.h:102
+# 					pa[3] = pa[2];
+	aref		$tmp67 ___644_pa $const6 	%line{102} %argrw{"wrr"}
+	aassign		___644_pa $const27 $tmp67 	%argrw{"wrr"}
+# include/node_texture.h:103
+# 					pa[2] = vp;
+	aassign		___644_pa $const6 ___639_vp 	%line{103} %argrw{"wrr"}
+# include/node_texture.h:105
+# 				else if (d < da[3]) {
+	aref		$tmp68 ___644_da $const27 	%line{105} %argrw{"wrr"}
+	lt		$tmp69 ___639_d $tmp68 	%argrw{"wrr"}
+	if		$tmp69 151 151 	%argrw{"r"}
+# include/node_texture.h:106
+# 					da[3] = d;
+	aassign		___644_da $const27 ___639_d 	%line{106} %argrw{"wrr"}
+# include/node_texture.h:107
+# 					pa[3] = vp;
+	aassign		___644_pa $const27 ___639_vp 	%line{107} %argrw{"wrr"}
+# include/node_texture.h:70
+# 			for (zz = zi - 1; zz <= zi + 1; zz++) {
+	assign		$tmp70 ___633_zz 	%line{70} %argrw{"wr"}
+	add		___633_zz ___633_zz $const5 	%argrw{"wrr"}
+# include/node_texture.h:69
+# 		for (yy = yi - 1; yy <= yi + 1; yy++) {
+	assign		$tmp71 ___633_yy 	%line{69} %argrw{"wr"}
+	add		___633_yy ___633_yy $const5 	%argrw{"wrr"}
+# include/node_texture.h:68
+# 	for (xx = xi - 1; xx <= xi + 1; xx++) {
+	assign		$tmp72 ___633_xx 	%line{68} %argrw{"wr"}
+	add		___633_xx ___633_xx $const5 	%argrw{"wrr"}
+# include/node_texture.h:121
+# 	return da[n];
+	aref		$tmp21 ___644_da $const4 	%line{121} %argrw{"wrr"}
+# include/node_texture.h:147
+# float voronoi_F1S(point p) { return 2.0 * voronoi_F1(p) - 1.0; }
+	mul		$tmp73 $const21 $tmp21 	%line{147} %argrw{"wrr"}
+	sub		___663_t $tmp73 $const12 	%argrw{"wrr"}
+# include/node_texture.h:180
+# 		return voronoi_F1S(p);
+	return	%line{180}
+# include/node_texture.h:181
+# 	if (basis == "Voronoi F2")
+	eq		$tmp74 $const10 $const30 	%line{181} %argrw{"wrr"}
+	if		$tmp74 272 272 	%argrw{"r"}
+# include/node_texture.h:182
+# 		return voronoi_F2S(p);
+	functioncall	$const31 271 	%line{182} %argrw{"r"}
+# include/node_texture.h:148
+# float voronoi_F2S(point p) { return 2.0 * voronoi_F2(p) - 1.0; }
+	functioncall	$const32 269 	%line{148} %argrw{"r"}
+# include/node_texture.h:135
+# float voronoi_F2(point p) { return voronoi_Fn(p, 1); }
+	functioncall	$const23 269 	%line{135} %argrw{"r"}
+# include/node_texture.h:119
+# 	voronoi(p, "Distance Squared", 0, da, pa);
+	functioncall	$const25 268 	%line{119} %argrw{"r"}
+# include/node_texture.h:59
+# 	xi = (int)floor(p[0]);
+	compref		$tmp77 $tmp15 $const4 	%line{59} %argrw{"wrr"}
+	floor		$tmp76 $tmp77 	%argrw{"wr"}
+	assign		___633_xi $tmp76 	%argrw{"wr"}
+# include/node_texture.h:60
+# 	yi = (int)floor(p[1]);
+	compref		$tmp79 $tmp15 $const5 	%line{60} %argrw{"wrr"}
+	floor		$tmp78 $tmp79 	%argrw{"wr"}
+	assign		___633_yi $tmp78 	%argrw{"wr"}
+# include/node_texture.h:61
+# 	zi = (int)floor(p[2]);
+	compref		$tmp81 $tmp15 $const6 	%line{61} %argrw{"wrr"}
+	floor		$tmp80 $tmp81 	%argrw{"wr"}
+	assign		___633_zi $tmp80 	%argrw{"wr"}
+# include/node_texture.h:63
+# 	da[0] = 1e10;
+	aassign		___644_da $const4 $const26 	%line{63} %argrw{"wrr"}
+# include/node_texture.h:64
+# 	da[1] = 1e10;
+	aassign		___644_da $const5 $const26 	%line{64} %argrw{"wrr"}
+# include/node_texture.h:65
+# 	da[2] = 1e10;
+	aassign		___644_da $const6 $const26 	%line{65} %argrw{"wrr"}
+# include/node_texture.h:66
+# 	da[3] = 1e10;
+	aassign		___644_da $const27 $const26 	%line{66} %argrw{"wrr"}
+# include/node_texture.h:68
+# 	for (xx = xi - 1; xx <= xi + 1; xx++) {
+	for		$tmp83 182 184 266 268 	%line{68} %argrw{"r"}
+	sub		___633_xx ___633_xi $const5 	%argrw{"wrr"}
+	add		$tmp82 ___633_xi $const5 	%argrw{"wrr"}
+	le		$tmp83 ___633_xx $tmp82 	%argrw{"wrr"}
+# include/node_texture.h:69
+# 		for (yy = yi - 1; yy <= yi + 1; yy++) {
+	for		$tmp85 186 188 264 266 	%line{69} %argrw{"r"}
+	sub		___633_yy ___633_yi $const5 	%argrw{"wrr"}
+	add		$tmp84 ___633_yi $const5 	%argrw{"wrr"}
+	le		$tmp85 ___633_yy $tmp84 	%argrw{"wrr"}
+# include/node_texture.h:70
+# 			for (zz = zi - 1; zz <= zi + 1; zz++) {
+	for		$tmp87 190 192 262 264 	%line{70} %argrw{"r"}
+	sub		___633_zz ___633_zi $const5 	%argrw{"wrr"}
+	add		$tmp86 ___633_zi $const5 	%argrw{"wrr"}
+	le		$tmp87 ___633_zz $tmp86 	%argrw{"wrr"}
+# include/node_texture.h:71
+# 				point ip = point(xx, yy, zz);
+	assign		$tmp88 ___633_xx 	%line{71} %argrw{"wr"}
+	assign		$tmp89 ___633_yy 	%argrw{"wr"}
+	assign		$tmp90 ___633_zz 	%argrw{"wr"}
+	point		___639_ip $tmp88 $tmp89 $tmp90 	%argrw{"wrrr"}
+# include/node_texture.h:72
+# 				point vp = (point)cellnoise_color(ip);
+	functioncall	$const28 209 	%line{72} %argrw{"r"}
+# include/node_texture.h:47
+# 	float r = cellnoise(p);
+	cellnoise	___632_r ___639_ip 	%line{47} %argrw{"wr"}
+# include/node_texture.h:48
+# 	float g = cellnoise(point(p[1], p[0], p[2]));
+	compref		$tmp92 ___639_ip $const5 	%line{48} %argrw{"wrr"}
+	compref		$tmp93 ___639_ip $const4 	%argrw{"wrr"}
+	compref		$tmp94 ___639_ip $const6 	%argrw{"wrr"}
+	point		$tmp91 $tmp92 $tmp93 $tmp94 	%argrw{"wrrr"}
+	cellnoise	___632_g $tmp91 	%argrw{"wr"}
+# include/node_texture.h:49
+# 	float b = cellnoise(point(p[1], p[2], p[0]));
+	compref		$tmp96 ___639_ip $const5 	%line{49} %argrw{"wrr"}
+	compref		$tmp97 ___639_ip $const6 	%argrw{"wrr"}
+	compref		$tmp98 ___639_ip $const4 	%argrw{"wrr"}
+	point		$tmp95 $tmp96 $tmp97 $tmp98 	%argrw{"wrrr"}
+	cellnoise	___632_b $tmp95 	%argrw{"wr"}
+# include/node_texture.h:51
+# 	return color(r, g, b);
+	color		___639_vp ___632_r ___632_g ___632_b 	%line{51} %argrw{"wrrr"}
+# include/node_texture.h:73
+# 				point pd = p - (vp + ip);
+	add		$tmp99 ___639_vp ___639_ip 	%line{73} %argrw{"wrr"}
+	sub		___639_pd $tmp15 $tmp99 	%argrw{"wrr"}
+# include/node_texture.h:74
+# 				float d = voronoi_distance(distance_metric, pd, e);
+	functioncall	$const29 213 	%line{74} %argrw{"r"}
+# include/node_texture.h:24
+# 		return dot(d, d);
+	dot		___639_d ___639_pd ___639_pd 	%line{24} %argrw{"wrr"}
+# include/node_texture.h:76
+# 				vp += point(xx, yy, zz);
+	assign		$tmp101 ___633_xx 	%line{76} %argrw{"wr"}
+	assign		$tmp102 ___633_yy 	%argrw{"wr"}
+	assign		$tmp103 ___633_zz 	%argrw{"wr"}
+	point		$tmp100 $tmp101 $tmp102 $tmp103 	%argrw{"wrrr"}
+	add		___639_vp ___639_vp $tmp100 	%argrw{"wrr"}
+# include/node_texture.h:78
+# 				if (d < da[0]) {
+	aref		$tmp104 ___644_da $const4 	%line{78} %argrw{"wrr"}
+	lt		$tmp105 ___639_d $tmp104 	%argrw{"wrr"}
+	if		$tmp105 235 262 	%argrw{"r"}
+# include/node_texture.h:79
+# 					da[3] = da[2];
+	aref		$tmp106 ___644_da $const6 	%line{79} %argrw{"wrr"}
+	aassign		___644_da $const27 $tmp106 	%argrw{"wrr"}
+# include/node_texture.h:80
+# 					da[2] = da[1];
+	aref		$tmp107 ___644_da $const5 	%line{80} %argrw{"wrr"}
+	aassign		___644_da $const6 $tmp107 	%argrw{"wrr"}
+# include/node_texture.h:81
+# 					da[1] = da[0];
+	aref		$tmp108 ___644_da $const4 	%line{81} %argrw{"wrr"}
+	aassign		___644_da $const5 $tmp108 	%argrw{"wrr"}
+# include/node_texture.h:82
+# 					da[0] = d;
+	aassign		___644_da $const4 ___639_d 	%line{82} %argrw{"wrr"}
+# include/node_texture.h:84
+# 					pa[3] = pa[2];
+	aref		$tmp109 ___644_pa $const6 	%line{84} %argrw{"wrr"}
+	aassign		___644_pa $const27 $tmp109 	%argrw{"wrr"}
+# include/node_texture.h:85
+# 					pa[2] = pa[1];
+	aref		$tmp110 ___644_pa $const5 	%line{85} %argrw{"wrr"}
+	aassign		___644_pa $const6 $tmp110 	%argrw{"wrr"}
+# include/node_texture.h:86
+# 					pa[1] = pa[0];
+	aref		$tmp111 ___644_pa $const4 	%line{86} %argrw{"wrr"}
+	aassign		___644_pa $const5 $tmp111 	%argrw{"wrr"}
+# include/node_texture.h:87
+# 					pa[0] = vp;
+	aassign		___644_pa $const4 ___639_vp 	%line{87} %argrw{"wrr"}
+# include/node_texture.h:89
+# 				else if (d < da[1]) {
+	aref		$tmp112 ___644_da $const5 	%line{89} %argrw{"wrr"}
+	lt		$tmp113 ___639_d $tmp112 	%argrw{"wrr"}
+	if		$tmp113 248 262 	%argrw{"r"}
+# include/node_texture.h:90
+# 					da[3] = da[2];
+	aref		$tmp114 ___644_da $const6 	%line{90} %argrw{"wrr"}
+	aassign		___644_da $const27 $tmp114 	%argrw{"wrr"}
+# include/node_texture.h:91
+# 					da[2] = da[1];
+	aref		$tmp115 ___644_da $const5 	%line{91} %argrw{"wrr"}
+	aassign		___644_da $const6 $tmp115 	%argrw{"wrr"}
+# include/node_texture.h:92
+# 					da[1] = d;
+	aassign		___644_da $const5 ___639_d 	%line{92} %argrw{"wrr"}
+# include/node_texture.h:94
+# 					pa[3] = pa[2];
+	aref		$tmp116 ___644_pa $const6 	%line{94} %argrw{"wrr"}
+	aassign		___644_pa $const27 $tmp116 	%argrw{"wrr"}
+# include/node_texture.h:95
+# 					pa[2] = pa[1];
+	aref		$tmp117 ___644_pa $const5 	%line{95} %argrw{"wrr"}
+	aassign		___644_pa $const6 $tmp117 	%argrw{"wrr"}
+# include/node_texture.h:96
+# 					pa[1] = vp;
+	aassign		___644_pa $const5 ___639_vp 	%line{96} %argrw{"wrr"}
+# include/node_texture.h:98
+# 				else if (d < da[2]) {
+	aref		$tmp118 ___644_da $const6 	%line{98} %argrw{"wrr"}
+	lt		$tmp119 ___639_d $tmp118 	%argrw{"wrr"}
+	if		$tmp119 257 262 	%argrw{"r"}
+# include/node_texture.h:99
+# 					da[3] = da[2];
+	aref		$tmp120 ___644_da $const6 	%line{99} %argrw{"wrr"}
+	aassign		___644_da $const27 $tmp120 	%argrw{"wrr"}
+# include/node_texture.h:100
+# 					da[2] = d;
+	aassign		___644_da $const6 ___639_d 	%line{100} %argrw{"wrr"}
+# include/node_texture.h:102
+# 					pa[3] = pa[2];
+	aref		$tmp121 ___644_pa $const6 	%line{102} %argrw{"wrr"}
+	aassign		___644_pa $const27 $tmp121 	%argrw{"wrr"}
+# include/node_texture.h:103
+# 					pa[2] = vp;
+	aassign		___644_pa $const6 ___639_vp 	%line{103} %argrw{"wrr"}
+# include/node_texture.h:105
+# 				else if (d < da[3]) {
+	aref		$tmp122 ___644_da $const27 	%line{105} %argrw{"wrr"}
+	lt		$tmp123 ___639_d $tmp122 	%argrw{"wrr"}
+	if		$tmp123 262 262 	%argrw{"r"}
+# include/node_texture.h:106
+# 					da[3] = d;
+	aassign		___644_da $const27 ___639_d 	%line{106} %argrw{"wrr"}
+# include/node_texture.h:107
+# 					pa[3] = vp;
+	aassign		___644_pa $const27 ___639_vp 	%line{107} %argrw{"wrr"}
+# include/node_texture.h:70
+# 			for (zz = zi - 1; zz <= zi + 1; zz++) {
+	assign		$tmp124 ___633_zz 	%line{70} %argrw{"wr"}
+	add		___633_zz ___633_zz $const5 	%argrw{"wrr"}
+# include/node_texture.h:69
+# 		for (yy = yi - 1; yy <= yi + 1; yy++) {
+	assign		$tmp125 ___633_yy 	%line{69} %argrw{"wr"}
+	add		___633_yy ___633_yy $const5 	%argrw{"wrr"}
+# include/node_texture.h:68
+# 	for (xx = xi - 1; xx <= xi + 1; xx++) {
+	assign		$tmp126 ___633_xx 	%line{68} %argrw{"wr"}
+	add		___633_xx ___633_xx $const5 	%argrw{"wrr"}
+# include/node_texture.h:121
+# 	return da[n];
+	aref		$tmp75 ___644_da $const5 	%line{121} %argrw{"wrr"}
+# include/node_texture.h:148
+# float voronoi_F2S(point p) { return 2.0 * voronoi_F2(p) - 1.0; }
+	mul		$tmp127 $const21 $tmp75 	%line{148} %argrw{"wrr"}
+	sub		___663_t $tmp127 $const12 	%argrw{"wrr"}
+# include/node_texture.h:182
+# 		return voronoi_F2S(p);
+	return	%line{182}
+# include/node_texture.h:183
+# 	if (basis == "Voronoi F3")
+	eq		$tmp128 $const10 $const33 	%line{183} %argrw{"wrr"}
+	if		$tmp128 383 383 	%argrw{"r"}
+# include/node_texture.h:184
+# 		return voronoi_F3S(p);
+	functioncall	$const34 382 	%line{184} %argrw{"r"}
+# include/node_texture.h:149
+# float voronoi_F3S(point p) { return 2.0 * voronoi_F3(p) - 1.0; }
+	functioncall	$const35 380 	%line{149} %argrw{"r"}
+# include/node_texture.h:136
+# float voronoi_F3(point p) { return voronoi_Fn(p, 2); }
+	functioncall	$const23 380 	%line{136} %argrw{"r"}
+# include/node_texture.h:119
+# 	voronoi(p, "Distance Squared", 0, da, pa);
+	functioncall	$const25 379 	%line{119} %argrw{"r"}
+# include/node_texture.h:59
+# 	xi = (int)floor(p[0]);
+	compref		$tmp131 $tmp15 $const4 	%line{59} %argrw{"wrr"}
+	floor		$tmp130 $tmp131 	%argrw{"wr"}
+	assign		___633_xi $tmp130 	%argrw{"wr"}
+# include/node_texture.h:60
+# 	yi = (int)floor(p[1]);
+	compref		$tmp133 $tmp15 $const5 	%line{60} %argrw{"wrr"}
+	floor		$tmp132 $tmp133 	%argrw{"wr"}
+	assign		___633_yi $tmp132 	%argrw{"wr"}
+# include/node_texture.h:61
+# 	zi = (int)floor(p[2]);
+	compref		$tmp135 $tmp15 $const6 	%line{61} %argrw{"wrr"}
+	floor		$tmp134 $tmp135 	%argrw{"wr"}
+	assign		___633_zi $tmp134 	%argrw{"wr"}
+# include/node_texture.h:63
+# 	da[0] = 1e10;
+	aassign		___644_da $const4 $const26 	%line{63} %argrw{"wrr"}
+# include/node_texture.h:64
+# 	da[1] = 1e10;
+	aassign		___644_da $const5 $const26 	%line{64} %argrw{"wrr"}
+# include/node_texture.h:65
+# 	da[2] = 1e10;
+	aassign		___644_da $const6 $const26 	%line{65} %argrw{"wrr"}
+# include/node_texture.h:66
+# 	da[3] = 1e10;
+	aassign		___644_da $const27 $const26 	%line{66} %argrw{"wrr"}
+# include/node_texture.h:68
+# 	for (xx = xi - 1; xx <= xi + 1; xx++) {
+	for		$tmp137 293 295 377 379 	%line{68} %argrw{"r"}
+	sub		___633_xx ___633_xi $const5 	%argrw{"wrr"}
+	add		$tmp136 ___633_xi $const5 	%argrw{"wrr"}
+	le		$tmp137 ___633_xx $tmp136 	%argrw{"wrr"}
+# include/node_texture.h:69
+# 		for (yy = yi - 1; yy <= yi + 1; yy++) {
+	for		$tmp139 297 299 375 377 	%line{69} %argrw{"r"}
+	sub		___633_yy ___633_yi $const5 	%argrw{"wrr"}
+	add		$tmp138 ___633_yi $const5 	%argrw{"wrr"}
+	le		$tmp139 ___633_yy $tmp138 	%argrw{"wrr"}
+# include/node_texture.h:70
+# 			for (zz = zi - 1; zz <= zi + 1; zz++) {
+	for		$tmp141 301 303 373 375 	%line{70} %argrw{"r"}
+	sub		___633_zz ___633_zi $const5 	%argrw{"wrr"}
+	add		$tmp140 ___633_zi $const5 	%argrw{"wrr"}
+	le		$tmp141 ___633_zz $tmp140 	%argrw{"wrr"}
+# include/node_texture.h:71
+# 				point ip = point(xx, yy, zz);
+	assign		$tmp142 ___633_xx 	%line{71} %argrw{"wr"}
+	assign		$tmp143 ___633_yy 	%argrw{"wr"}
+	assign		$tmp144 ___633_zz 	%argrw{"wr"}
+	point		___639_ip $tmp142 $tmp143 $tmp144 	%argrw{"wrrr"}
+# include/node_texture.h:72
+# 				point vp = (point)cellnoise_color(ip);
+	functioncall	$const28 320 	%line{72} %argrw{"r"}
+# include/node_texture.h:47
+# 	float r = cellnoise(p);
+	cellnoise	___632_r ___639_ip 	%line{47} %argrw{"wr"}
+# include/node_texture.h:48
+# 	float g = cellnoise(point(p[1], p[0], p[2]));
+	compref		$tmp146 ___639_ip $const5 	%line{48} %argrw{"wrr"}
+	compref		$tmp147 ___639_ip $const4 	%argrw{"wrr"}
+	compref		$tmp148 ___639_ip $const6 	%argrw{"wrr"}
+	point		$tmp145 $tmp146 $tmp147 $tmp148 	%argrw{"wrrr"}
+	cellnoise	___632_g $tmp145 	%argrw{"wr"}
+# include/node_texture.h:49
+# 	float b = cellnoise(point(p[1], p[2], p[0]));
+	compref		$tmp150 ___639_ip $const5 	%line{49} %argrw{"wrr"}
+	compref		$tmp151 ___639_ip $const6 	%argrw{"wrr"}
+	compref		$tmp152 ___639_ip $const4 	%argrw{"wrr"}
+	point		$tmp149 $tmp150 $tmp151 $tmp152 	%argrw{"wrrr"}
+	cellnoise	___632_b $tmp149 	%argrw{"wr"}
+# include/node_texture.h:51
+# 	return color(r, g, b);
+	color		___639_vp ___632_r ___632_g ___632_b 	%line{51} %argrw{"wrrr"}
+# include/node_texture.h:73
+# 				point pd = p - (vp + ip);
+	add		$tmp153 ___639_vp ___639_ip 	%line{73} %argrw{"wrr"}
+	sub		___639_pd $tmp15 $tmp153 	%argrw{"wrr"}
+# include/node_texture.h:74
+# 				float d = voronoi_distance(distance_metric, pd, e);
+	functioncall	$const29 324 	%line{74} %argrw{"r"}
+# include/node_texture.h:24
+# 		return dot(d, d);
+	dot		___639_d ___639_pd ___639_pd 	%line{24} %argrw{"wrr"}
+# include/node_texture.h:76
+# 				vp += point(xx, yy, zz);
+	assign		$tmp155 ___633_xx 	%line{76} %argrw{"wr"}
+	assign		$tmp156 ___633_yy 	%argrw{"wr"}
+	assign		$tmp157 ___633_zz 	%argrw{"wr"}
+	point		$tmp154 $tmp155 $tmp156 $tmp157 	%argrw{"wrrr"}
+	add		___639_vp ___639_vp $tmp154 	%argrw{"wrr"}
+# include/node_texture.h:78
+# 				if (d < da[0]) {
+	aref		$tmp158 ___644_da $const4 	%line{78} %argrw{"wrr"}
+	lt		$tmp159 ___639_d $tmp158 	%argrw{"wrr"}
+	if		$tmp159 346 373 	%argrw{"r"}
+# include/node_texture.h:79
+# 					da[3] = da[2];
+	aref		$tmp160 ___644_da $const6 	%line{79} %argrw{"wrr"}
+	aassign		___644_da $const27 $tmp160 	%argrw{"wrr"}
+# include/node_texture.h:80
+# 					da[2] = da[1];
+	aref		$tmp161 ___644_da $const5 	%line{80} %argrw{"wrr"}
+	aassign		___644_da $const6 $tmp161 	%argrw{"wrr"}
+# include/node_texture.h:81
+# 					da[1] = da[0];
+	aref		$tmp162 ___644_da $const4 	%line{81} %argrw{"wrr"}
+	aassign		___644_da $const5 $tmp162 	%argrw{"wrr"}
+# include/node_texture.h:82
+# 					da[0] = d;
+	aassign		___644_da $const4 ___639_d 	%line{82} %argrw{"wrr"}
+# include/node_texture.h:84
+# 					pa[3] = pa[2];
+	aref		$tmp163 ___644_pa $const6 	%line{84} %argrw{"wrr"}
+	aassign		___644_pa $const27 $tmp163 	%argrw{"wrr"}
+# include/node_texture.h:85
+# 					pa[2] = pa[1];
+	aref		$tmp164 ___644_pa $const5 	%line{85} %argrw{"wrr"}
+	aassign		___644_pa $const6 $tmp164 	%argrw{"wrr"}
+# include/node_texture.h:86
+# 					pa[1] = pa[0];
+	aref		$tmp165 ___644_pa $const4 	%line{86} %argrw{"wrr"}
+	aassign		___644_pa $const5 $tmp165 	%argrw{"wrr"}
+# include/node_texture.h:87
+# 					pa[0] = vp;
+	aassign		___644_pa $const4 ___639_vp 	%line{87} %argrw{"wrr"}
+# include/node_texture.h:89
+# 				else if (d < da[1]) {
+	aref		$tmp166 ___644_da $const5 	%line{89} %argrw{"wrr"}
+	lt		$tmp167 ___639_d $tmp166 	%argrw{"wrr"}
+	if		$tmp167 359 373 	%argrw{"r"}
+# include/node_texture.h:90
+# 					da[3] = da[2];
+	aref		$tmp168 ___644_da $const6 	%line{90} %argrw{"wrr"}
+	aassign		___644_da $const27 $tmp168 	%argrw{"wrr"}
+# include/node_texture.h:91
+# 					da[2] = da[1];
+	aref		$tmp169 ___644_da $const5 	%line{91} %argrw{"wrr"}
+	aassign		___644_da $const6 $tmp169 	%argrw{"wrr"}
+# include/node_texture.h:92
+# 					da[1] = d;
+	aassign		___644_da $const5 ___639_d 	%line{92} %argrw{"wrr"}
+# include/node_texture.h:94
+# 					pa[3] = pa[2];
+	aref		$tmp170 ___644_pa $const6 	%line{94} %argrw{"wrr"}
+	aassign		___644_pa $const27 $tmp170 	%argrw{"wrr"}
+# include/node_texture.h:95
+# 					pa[2] = pa[1];
+	aref		$tmp171 ___644_pa $const5 	%line{95} %argrw{"wrr"}
+	aassign		___644_pa $const6 $tmp171 	%argrw{"wrr"}
+# include/node_texture.h:96
+# 					pa[1] = vp;
+	aassign		___644_pa $const5 ___639_vp 	%line{96} %argrw{"wrr"}
+# include/node_texture.h:98
+# 				else if (d < da[2]) {
+	aref		$tmp172 ___644_da $const6 	%line{98} %argrw{"wrr"}
+	lt		$tmp173 ___639_d $tmp172 	%argrw{"wrr"}
+	if		$tmp173 368 373 	%argrw{"r"}
+# include/node_texture.h:99
+# 					da[3] = da[2];
+	aref		$tmp174 ___644_da $const6 	%line{99} %argrw{"wrr"}
+	aassign		___644_da $const27 $tmp174 	%argrw{"wrr"}
+# include/node_texture.h:100
+# 					da[2] = d;
+	aassign		___644_da $const6 ___639_d 	%line{100} %argrw{"wrr"}
+# include/node_texture.h:102
+# 					pa[3] = pa[2];
+	aref		$tmp175 ___644_pa $const6 	%line{102} %argrw{"wrr"}
+	aassign		___644_pa $const27 $tmp175 	%argrw{"wrr"}
+# include/node_texture.h:103
+# 					pa[2] = vp;
+	aassign		___644_pa $const6 ___639_vp 	%line{103} %argrw{"wrr"}
+# include/node_texture.h:105
+# 				else if (d < da[3]) {
+	aref		$tmp176 ___644_da $const27 	%line{105} %argrw{"wrr"}
+	lt		$tmp177 ___639_d $tmp176 	%argrw{"wrr"}
+	if		$tmp177 373 373 	%argrw{"r"}
+# include/node_texture.h:106
+# 					da[3] = d;
+	aassign		___644_da $const27 ___639_d 	%line{106} %argrw{"wrr"}
+# include/node_texture.h:107
+# 					pa[3] = vp;
+	aassign		___644_pa $const27 ___639_vp 	%line{107} %argrw{"wrr"}
+# include/node_texture.h:70
+# 			for (zz = zi - 1; zz <= zi + 1; zz++) {
+	assign		$tmp178 ___633_zz 	%line{70} %argrw{"wr"}
+	add		___633_zz ___633_zz $const5 	%argrw{"wrr"}
+# include/node_texture.h:69
+# 		for (yy = yi - 1; yy <= yi + 1; yy++) {
+	assign		$tmp179 ___633_yy 	%line{69} %argrw{"wr"}
+	add		___633_yy ___633_yy $const5 	%argrw{"wrr"}
+# include/node_texture.h:68
+# 	for (xx = xi - 1; xx <= xi + 1; xx++) {
+	assign		$tmp180 ___633_xx 	%line{68} %argrw{"wr"}
+	add		___633_xx ___633_xx $const5 	%argrw{"wrr"}
+# include/node_texture.h:121
+# 	return da[n];
+	aref		$tmp129 ___644_da $const6 	%line{121} %argrw{"wrr"}
+# include/node_texture.h:149
+# float voronoi_F3S(point p) { return 2.0 * voronoi_F3(p) - 1.0; }
+	mul		$tmp181 $const21 $tmp129 	%line{149} %argrw{"wrr"}
+	sub		___663_t $tmp181 $const12 	%argrw{"wrr"}
+# include/node_texture.h:184
+# 		return voronoi_F3S(p);
+	return	%line{184}
+# include/node_texture.h:185
+# 	if (basis == "Voronoi F4")
+	eq		$tmp182 $const10 $const36 	%line{185} %argrw{"wrr"}
+	if		$tmp182 494 494 	%argrw{"r"}
+# include/node_texture.h:186
+# 		return voronoi_F4S(p);
+	functioncall	$const37 493 	%line{186} %argrw{"r"}
+# include/node_texture.h:150
+# float voronoi_F4S(point p) { return 2.0 * voronoi_F4(p) - 1.0; }
+	functioncall	$const38 491 	%line{150} %argrw{"r"}
+# include/node_texture.h:137
+# float voronoi_F4(point p) { return voronoi_Fn(p, 3); }
+	functioncall	$const23 491 	%line{137} %argrw{"r"}
+# include/node_texture.h:119
+# 	voronoi(p, "Distance Squared", 0, da, pa);
+	functioncall	$const25 490 	%line{119} %argrw{"r"}
+# include/node_texture.h:59
+# 	xi = (int)floor(p[0]);
+	compref		$tmp185 $tmp15 $const4 	%line{59} %argrw{"wrr"}
+	floor		$tmp184 $tmp185 	%argrw{"wr"}
+	assign		___633_xi $tmp184 	%argrw{"wr"}
+# include/node_texture.h:60
+# 	yi = (int)floor(p[1]);
+	compref		$tmp187 $tmp15 $const5 	%line{60} %argrw{"wrr"}
+	floor		$tmp186 $tmp187 	%argrw{"wr"}
+	assign		___633_yi $tmp186 	%argrw{"wr"}
+# include/node_texture.h:61
+# 	zi = (int)floor(p[2]);
+	compref		$tmp189 $tmp15 $const6 	%line{61} %argrw{"wrr"}
+	floor		$tmp188 $tmp189 	%argrw{"wr"}
+	assign		___633_zi $tmp188 	%argrw{"wr"}
+# include/node_texture.h:63
+# 	da[0] = 1e10;
+	aassign		___644_da $const4 $const26 	%line{63} %argrw{"wrr"}
+# include/node_texture.h:64
+# 	da[1] = 1e10;
+	aassign		___644_da $const5 $const26 	%line{64} %argrw{"wrr"}
+# include/node_texture.h:65
+# 	da[2] = 1e10;
+	aassign		___644_da $const6 $const26 	%line{65} %argrw{"wrr"}
+# include/node_texture.h:66
+# 	da[3] = 1e10;
+	aassign		___644_da $const27 $const26 	%line{66} %argrw{"wrr"}
+# include/node_texture.h:68
+# 	for (xx = xi - 1; xx <= xi + 1; xx++) {
+	for		$tmp191 404 406 488 490 	%line{68} %argrw{"r"}
+	sub		___633_xx ___633_xi $const5 	%argrw{"wrr"}
+	add		$tmp190 ___633_xi $const5 	%argrw{"wrr"}
+	le		$tmp191 ___633_xx $tmp190 	%argrw{"wrr"}
+# include/node_texture.h:69
+# 		for (yy = yi - 1; yy <= yi + 1; yy++) {
+	for		$tmp193 408 410 486 488 	%line{69} %argrw{"r"}
+	sub		___633_yy ___633_yi $const5 	%argrw{"wrr"}
+	add		$tmp192 ___633_yi $const5 	%argrw{"wrr"}
+	le		$tmp193 ___633_yy $tmp192 	%argrw{"wrr"}
+# include/node_texture.h:70
+# 			for (zz = zi - 1; zz <= zi + 1; zz++) {
+	for		$tmp195 412 414 484 486 	%line{70} %argrw{"r"}
+	sub		___633_zz ___633_zi $const5 	%argrw{"wrr"}
+	add		$tmp194 ___633_zi $const5 	%argrw{"wrr"}
+	le		$tmp195 ___633_zz $tmp194 	%argrw{"wrr"}
+# include/node_texture.h:71
+# 				point ip = point(xx, yy, zz);
+	assign		$tmp196 ___633_xx 	%line{71} %argrw{"wr"}
+	assign		$tmp197 ___633_yy 	%argrw{"wr"}
+	assign		$tmp198 ___633_zz 	%argrw{"wr"}
+	point		___639_ip $tmp196 $tmp197 $tmp198 	%argrw{"wrrr"}
+# include/node_texture.h:72
+# 				point vp = (point)cellnoise_color(ip);
+	functioncall	$const28 431 	%line{72} %argrw{"r"}
+# include/node_texture.h:47
+# 	float r = cellnoise(p);
+	cellnoise	___632_r ___639_ip 	%line{47} %argrw{"wr"}
+# include/node_texture.h:48
+# 	float g = cellnoise(point(p[1], p[0], p[2]));
+	compref		$tmp200 ___639_ip $const5 	%line{48} %argrw{"wrr"}
+	compref		$tmp201 ___639_ip $const4 	%argrw{"wrr"}
+	compref		$tmp202 ___639_ip $const6 	%argrw{"wrr"}
+	point		$tmp199 $tmp200 $tmp201 $tmp202 	%argrw{"wrrr"}
+	cellnoise	___632_g $tmp199 	%argrw{"wr"}
+# include/node_texture.h:49
+# 	float b = cellnoise(point(p[1], p[2], p[0]));
+	compref		$tmp204 ___639_ip $const5 	%line{49} %argrw{"wrr"}
+	compref		$tmp205 ___639_ip $const6 	%argrw{"wrr"}
+	compref		$tmp206 ___639_ip $const4 	%argrw{"wrr"}
+	point		$tmp203 $tmp204 $tmp205 $tmp206 	%argrw{"wrrr"}
+	cellnoise	___632_b $tmp203 	%argrw{"wr"}
+# include/node_texture.h:51
+# 	return color(r, g, b);
+	color		___639_vp ___632_r ___632_g ___632_b 	%line{51} %argrw{"wrrr"}
+# include/node_texture.h:73
+# 				point pd = p - (vp + ip);
+	add		$tmp207 ___639_vp ___639_ip 	%line{73} %argrw{"wrr"}
+	sub		___639_pd $tmp15 $tmp207 	%argrw{"wrr"}
+# include/node_texture.h:74
+# 				float d = voronoi_distance(distance_metric, pd, e);
+	functioncall	$const29 435 	%line{74} %argrw{"r"}
+# include/node_texture.h:24
+# 		return dot(d, d);
+	dot		___639_d ___639_pd ___639_pd 	%line{24} %argrw{"wrr"}
+# include/node_texture.h:76
+# 				vp += point(xx, yy, zz);
+	assign		$tmp209 ___633_xx 	%line{76} %argrw{"wr"}
+	assign		$tmp210 ___633_yy 	%argrw{"wr"}
+	assign		$tmp211 ___633_zz 	%argrw{"wr"}
+	point		$tmp208 $tmp209 $tmp210 $tmp211 	%argrw{"wrrr"}
+	add		___639_vp ___639_vp $tmp208 	%argrw{"wrr"}
+# include/node_texture.h:78
+# 				if (d < da[0]) {
+	aref		$tmp212 ___644_da $const4 	%line{78} %argrw{"wrr"}
+	lt		$tmp213 ___639_d $tmp212 	%argrw{"wrr"}
+	if		$tmp213 457 484 	%argrw{"r"}
+# include/node_texture.h:79
+# 					da[3] = da[2];
+	aref		$tmp214 ___644_da $const6 	%line{79} %argrw{"wrr"}
+	aassign		___644_da $const27 $tmp214 	%argrw{"wrr"}
+# include/node_texture.h:80
+# 					da[2] = da[1];
+	aref		$tmp215 ___644_da $const5 	%line{80} %argrw{"wrr"}
+	aassign		___644_da $const6 $tmp215 	%argrw{"wrr"}
+# include/node_texture.h:81
+# 					da[1] = da[0];
+	aref		$tmp216 ___644_da $const4 	%line{81} %argrw{"wrr"}
+	aassign		___644_da $const5 $tmp216 	%argrw{"wrr"}
+# include/node_texture.h:82
+# 					da[0] = d;
+	aassign		___644_da $const4 ___639_d 	%line{82} %argrw{"wrr"}
+# include/node_texture.h:84
+# 					pa[3] = pa[2];
+	aref		$tmp217 ___644_pa $const6 	%line{84} %argrw{"wrr"}
+	aassign		___644_pa $const27 $tmp217 	%argrw{"wrr"}
+# include/node_texture.h:85
+# 					pa[2] = pa[1];
+	aref		$tmp218 ___644_pa $const5 	%line{85} %argrw{"wrr"}
+	aassign		___644_pa $const6 $tmp218 	%argrw{"wrr"}
+# include/node_texture.h:86
+# 					pa[1] = pa[0];
+	aref		$tmp219 ___644_pa $const4 	%line{86} %argrw{"wrr"}
+	aassign		___644_pa $const5 $tmp219 	%argrw{"wrr"}
+# include/node_texture.h:87
+# 					pa[0] = vp;
+	aassign		___644_pa $const4 ___639_vp 	%line{87} %argrw{"wrr"}
+# include/node_texture.h:89
+# 				else if (d < da[1]) {
+	aref		$tmp220 ___644_da $const5 	%line{89} %argrw{"wrr"}
+	lt		$tmp221 ___639_d $tmp220 	%argrw{"wrr"}
+	if		$tmp221 470 484 	%argrw{"r"}
+# include/node_texture.h:90
+# 					da[3] = da[2];
+	aref		$tmp222 ___644_da $const6 	%line{90} %argrw{"wrr"}
+	aassign		___644_da $const27 $tmp222 	%argrw{"wrr"}
+# include/node_texture.h:91
+# 					da[2] = da[1];
+	aref		$tmp223 ___644_da $const5 	%line{91} %argrw{"wrr"}
+	aassign		___644_da $const6 $tmp223 	%argrw{"wrr"}
+# include/node_texture.h:92
+# 					da[1] = d;
+	aassign		___644_da $const5 ___639_d 	%line{92} %argrw{"wrr"}
+# include/node_texture.h:94
+# 					pa[3] = pa[2];
+	aref		$tmp224 ___644_pa $const6 	%line{94} %argrw{"wrr"}
+	aassign		___644_pa $const27 $tmp224 	%argrw{"wrr"}
+# include/node_texture.h:95
+# 					pa[2] = pa[1];
+	aref		$tmp225 ___644_pa $const5 	%line{95} %argrw{"wrr"}
+	aassign		___644_pa $const6 $tmp225 	%argrw{"wrr"}
+# include/node_texture.h:96
+# 					pa[1] = vp;
+	aassign		___644_pa $const5 ___639_vp 	%line{96} %argrw{"wrr"}
+# include/node_texture.h:98
+# 				else if (d < da[2]) {
+	aref		$tmp226 ___644_da $const6 	%line{98} %argrw{"wrr"}
+	lt		$tmp227 ___639_d $tmp226 	%argrw{"wrr"}
+	if		$tmp227 479 484 	%argrw{"r"}
+# include/node_texture.h:99
+# 					da[3] = da[2];
+	aref		$tmp228 ___644_da $const6 	%line{99} %argrw{"wrr"}
+	aassign		___644_da $const27 $tmp228 	%argrw{"wrr"}
+# include/node_texture.h:100
+# 					da[2] = d;
+	aassign		___644_da $const6 ___639_d 	%line{100} %argrw{"wrr"}
+# include/node_texture.h:102
+# 					pa[3] = pa[2];
+	aref		$tmp229 ___644_pa $const6 	%line{102} %argrw{"wrr"}
+	aassign		___644_pa $const27 $tmp229 	%argrw{"wrr"}
+# include/node_texture.h:103
+# 					pa[2] = vp;
+	aassign		___644_pa $const6 ___639_vp 	%line{103} %argrw{"wrr"}
+# include/node_texture.h:105
+# 				else if (d < da[3]) {
+	aref		$tmp230 ___644_da $const27 	%line{105} %argrw{"wrr"}
+	lt		$tmp231 ___639_d $tmp230 	%argrw{"wrr"}
+	if		$tmp231 484 484 	%argrw{"r"}
+# include/node_texture.h:106
+# 					da[3] = d;
+	aassign		___644_da $const27 ___639_d 	%line{106} %argrw{"wrr"}
+# include/node_texture.h:107
+# 					pa[3] = vp;
+	aassign		___644_pa $const27 ___639_vp 	%line{107} %argrw{"wrr"}
+# include/node_texture.h:70
+# 			for (zz = zi - 1; zz <= zi + 1; zz++) {
+	assign		$tmp232 ___633_zz 	%line{70} %argrw{"wr"}
+	add		___633_zz ___633_zz $const5 	%argrw{"wrr"}
+# include/node_texture.h:69
+# 		for (yy = yi - 1; yy <= yi + 1; yy++) {
+	assign		$tmp233 ___633_yy 	%line{69} %argrw{"wr"}
+	add		___633_yy ___633_yy $const5 	%argrw{"wrr"}
+# include/node_texture.h:68
+# 	for (xx = xi - 1; xx <= xi + 1; xx++) {
+	assign		$tmp234 ___633_xx 	%line{68} %argrw{"wr"}
+	add		___633_xx ___633_xx $const5 	%argrw{"wrr"}
+# include/node_texture.h:121
+# 	return da[n];
+	aref		$tmp183 ___644_da $const27 	%line{121} %argrw{"wrr"}
+# include/node_texture.h:150
+# float voronoi_F4S(point p) { return 2.0 * voronoi_F4(p) - 1.0; }
+	mul		$tmp235 $const21 $tmp183 	%line{150} %argrw{"wrr"}
+	sub		___663_t $tmp235 $const12 	%argrw{"wrr"}
+# include/node_texture.h:186
+# 		return voronoi_F4S(p);
+	return	%line{186}
+# include/node_texture.h:187
+# 	if (basis == "Voronoi F2-F1")
+	eq		$tmp236 $const10 $const39 	%line{187} %argrw{"wrr"}
+	if		$tmp236 607 607 	%argrw{"r"}
+# include/node_texture.h:188
+# 		return voronoi_F1F2S(p);
+	functioncall	$const40 606 	%line{188} %argrw{"r"}
+# include/node_texture.h:151
+# float voronoi_F1F2S(point p) { return 2.0 * voronoi_F1F2(p) - 1.0; }
+	functioncall	$const41 604 	%line{151} %argrw{"r"}
+# include/node_texture.h:138
+# float voronoi_F1F2(point p) { return voronoi_FnFn(p, 0, 1); }
+	functioncall	$const42 604 	%line{138} %argrw{"r"}
+# include/node_texture.h:129
+# 	voronoi(p, "Distance Squared", 0, da, pa);
+	functioncall	$const25 601 	%line{129} %argrw{"r"}
+# include/node_texture.h:59
+# 	xi = (int)floor(p[0]);
+	compref		$tmp239 $tmp15 $const4 	%line{59} %argrw{"wrr"}
+	floor		$tmp238 $tmp239 	%argrw{"wr"}
+	assign		___633_xi $tmp238 	%argrw{"wr"}
+# include/node_texture.h:60
+# 	yi = (int)floor(p[1]);
+	compref		$tmp241 $tmp15 $const5 	%line{60} %argrw{"wrr"}
+	floor		$tmp240 $tmp241 	%argrw{"wr"}
+	assign		___633_yi $tmp240 	%argrw{"wr"}
+# include/node_texture.h:61
+# 	zi = (int)floor(p[2]);
+	compref		$tmp243 $tmp15 $const6 	%line{61} %argrw{"wrr"}
+	floor		$tmp242 $tmp243 	%argrw{"wr"}
+	assign		___633_zi $tmp242 	%argrw{"wr"}
+# include/node_texture.h:63
+# 	da[0] = 1e10;
+	aassign		___645_da $const4 $const26 	%line{63} %argrw{"wrr"}
+# include/node_texture.h:64
+# 	da[1] = 1e10;
+	aassign		___645_da $const5 $const26 	%line{64} %argrw{"wrr"}
+# include/node_texture.h:65
+# 	da[2] = 1e10;
+	aassign		___645_da $const6 $const26 	%line{65} %argrw{"wrr"}
+# include/node_texture.h:66
+# 	da[3] = 1e10;
+	aassign		___645_da $const27 $const26 	%line{66} %argrw{"wrr"}
+# include/node_texture.h:68
+# 	for (xx = xi - 1; xx <= xi + 1; xx++) {
+	for		$tmp245 515 517 599 601 	%line{68} %argrw{"r"}
+	sub		___633_xx ___633_xi $const5 	%argrw{"wrr"}
+	add		$tmp244 ___633_xi $const5 	%argrw{"wrr"}
+	le		$tmp245 ___633_xx $tmp244 	%argrw{"wrr"}
+# include/node_texture.h:69
+# 		for (yy = yi - 1; yy <= yi + 1; yy++) {
+	for		$tmp247 519 521 597 599 	%line{69} %argrw{"r"}
+	sub		___633_yy ___633_yi $const5 	%argrw{"wrr"}
+	add		$tmp246 ___633_yi $const5 	%argrw{"wrr"}
+	le		$tmp247 ___633_yy $tmp246 	%argrw{"wrr"}
+# include/node_texture.h:70
+# 			for (zz = zi - 1; zz <= zi + 1; zz++) {
+	for		$tmp249 523 525 595 597 	%line{70} %argrw{"r"}
+	sub		___633_zz ___633_zi $const5 	%argrw{"wrr"}
+	add		$tmp248 ___633_zi $const5 	%argrw{"wrr"}
+	le		$tmp249 ___633_zz $tmp248 	%argrw{"wrr"}
+# include/node_texture.h:71
+# 				point ip = point(xx, yy, zz);
+	assign		$tmp250 ___633_xx 	%line{71} %argrw{"wr"}
+	assign		$tmp251 ___633_yy 	%argrw{"wr"}
+	assign		$tmp252 ___633_zz 	%argrw{"wr"}
+	point		___639_ip $tmp250 $tmp251 $tmp252 	%argrw{"wrrr"}
+# include/node_texture.h:72
+# 				point vp = (point)cellnoise_color(ip);
+	functioncall	$const28 542 	%line{72} %argrw{"r"}
+# include/node_texture.h:47
+# 	float r = cellnoise(p);
+	cellnoise	___632_r ___639_ip 	%line{47} %argrw{"wr"}
+# include/node_texture.h:48
+# 	float g = cellnoise(point(p[1], p[0], p[2]));
+	compref		$tmp254 ___639_ip $const5 	%line{48} %argrw{"wrr"}
+	compref		$tmp255 ___639_ip $const4 	%argrw{"wrr"}
+	compref		$tmp256 ___639_ip $const6 	%argrw{"wrr"}
+	point		$tmp253 $tmp254 $tmp255 $tmp256 	%argrw{"wrrr"}
+	cellnoise	___632_g $tmp253 	%argrw{"wr"}
+# include/node_texture.h:49
+# 	float b = cellnoise(point(p[1], p[2], p[0]));
+	compref		$tmp258 ___639_ip $const5 	%line{49} %argrw{"wrr"}
+	compref		$tmp259 ___639_ip $const6 	%argrw{"wrr"}
+	compref		$tmp260 ___639_ip $const4 	%argrw{"wrr"}
+	point		$tmp257 $tmp258 $tmp259 $tmp260 	%argrw{"wrrr"}
+	cellnoise	___632_b $tmp257 	%argrw{"wr"}
+# include/node_texture.h:51
+# 	return color(r, g, b);
+	color		___639_vp ___632_r ___632_g ___632_b 	%line{51} %argrw{"wrrr"}
+# include/node_texture.h:73
+# 				point pd = p - (vp + ip);
+	add		$tmp261 ___639_vp ___639_ip 	%line{73} %argrw{"wrr"}
+	sub		___639_pd $tmp15 $tmp261 	%argrw{"wrr"}
+# include/node_texture.h:74
+# 				float d = voronoi_distance(distance_metric, pd, e);
+	functioncall	$const29 546 	%line{74} %argrw{"r"}
+# include/node_texture.h:24
+# 		return dot(d, d);
+	dot		___639_d ___639_pd ___639_pd 	%line{24} %argrw{"wrr"}
+# include/node_texture.h:76
+# 				vp += point(xx, yy, zz);
+	assign		$tmp263 ___633_xx 	%line{76} %argrw{"wr"}
+	assign		$tmp264 ___633_yy 	%argrw{"wr"}
+	assign		$tmp265 ___633_zz 	%argrw{"wr"}
+	point		$tmp262 $tmp263 $tmp264 $tmp265 	%argrw{"wrrr"}
+	add		___639_vp ___639_vp $tmp262 	%argrw{"wrr"}
+# include/node_texture.h:78
+# 				if (d < da[0]) {
+	aref		$tmp266 ___645_da $const4 	%line{78} %argrw{"wrr"}
+	lt		$tmp267 ___639_d $tmp266 	%argrw{"wrr"}
+	if		$tmp267 568 595 	%argrw{"r"}
+# include/node_texture.h:79
+# 					da[3] = da[2];
+	aref		$tmp268 ___645_da $const6 	%line{79} %argrw{"wrr"}
+	aassign		___645_da $const27 $tmp268 	%argrw{"wrr"}
+# include/node_texture.h:80
+# 					da[2] = da[1];
+	aref		$tmp269 ___645_da $const5 	%line{80} %argrw{"wrr"}
+	aassign		___645_da $const6 $tmp269 	%argrw{"wrr"}
+# include/node_texture.h:81
+# 					da[1] = da[0];
+	aref		$tmp270 ___645_da $const4 	%line{81} %argrw{"wrr"}
+	aassign		___645_da $const5 $tmp270 	%argrw{"wrr"}
+# include/node_texture.h:82
+# 					da[0] = d;
+	aassign		___645_da $const4 ___639_d 	%line{82} %argrw{"wrr"}
+# include/node_texture.h:84
+# 					pa[3] = pa[2];
+	aref		$tmp271 ___645_pa $const6 	%line{84} %argrw{"wrr"}
+	aassign		___645_pa $const27 $tmp271 	%argrw{"wrr"}
+# include/node_texture.h:85
+# 					pa[2] = pa[1];
+	aref		$tmp272 ___645_pa $const5 	%line{85} %argrw{"wrr"}
+	aassign		___645_pa $const6 $tmp272 	%argrw{"wrr"}
+# include/node_texture.h:86
+# 					pa[1] = pa[0];
+	aref		$tmp273 ___645_pa $const4 	%line{86} %argrw{"wrr"}
+	aassign		___645_pa $const5 $tmp273 	%argrw{"wrr"}
+# include/node_texture.h:87
+# 					pa[0] = vp;
+	aassign		___645_pa $const4 ___639_vp 	%line{87} %argrw{"wrr"}
+# include/node_texture.h:89
+# 				else if (d < da[1]) {
+	aref		$tmp274 ___645_da $const5 	%line{89} %argrw{"wrr"}
+	lt		$tmp275 ___639_d $tmp274 	%argrw{"wrr"}
+	if		$tmp275 581 595 	%argrw{"r"}
+# include/node_texture.h:90
+# 					da[3] = da[2];
+	aref		$tmp276 ___645_da $const6 	%line{90} %argrw{"wrr"}
+	aassign		___645_da $const27 $tmp276 	%argrw{"wrr"}
+# include/node_texture.h:91
+# 					da[2] = da[1];
+	aref		$tmp277 ___645_da $const5 	%line{91} %argrw{"wrr"}
+	aassign		___645_da $const6 $tmp277 	%argrw{"wrr"}
+# include/node_texture.h:92
+# 					da[1] = d;
+	aassign		___645_da $const5 ___639_d 	%line{92} %argrw{"wrr"}
+# include/node_texture.h:94
+# 					pa[3] = pa[2];
+	aref		$tmp278 ___645_pa $const6 	%line{94} %argrw{"wrr"}
+	aassign		___645_pa $const27 $tmp278 	%argrw{"wrr"}
+# include/node_texture.h:95
+# 					pa[2] = pa[1];
+	aref		$tmp279 ___645_pa $const5 	%line{95} %argrw{"wrr"}
+	aassign		___645_pa $const6 $tmp279 	%argrw{"wrr"}
+# include/node_texture.h:96
+# 					pa[1] = vp;
+	aassign		___645_pa $const5 ___639_vp 	%line{96} %argrw{"wrr"}
+# include/node_texture.h:98
+# 				else if (d < da[2]) {
+	aref		$tmp280 ___645_da $const6 	%line{98} %argrw{"wrr"}
+	lt		$tmp281 ___639_d $tmp280 	%argrw{"wrr"}
+	if		$tmp281 590 595 	%argrw{"r"}
+# include/node_texture.h:99
+# 					da[3] = da[2];
+	aref		$tmp282 ___645_da $const6 	%line{99} %argrw{"wrr"}
+	aassign		___645_da $const27 $tmp282 	%argrw{"wrr"}
+# include/node_texture.h:100
+# 					da[2] = d;
+	aassign		___645_da $const6 ___639_d 	%line{100} %argrw{"wrr"}
+# include/node_texture.h:102
+# 					pa[3] = pa[2];
+	aref		$tmp283 ___645_pa $const6 	%line{102} %argrw{"wrr"}
+	aassign		___645_pa $const27 $tmp283 	%argrw{"wrr"}
+# include/node_texture.h:103
+# 					pa[2] = vp;
+	aassign		___645_pa $const6 ___639_vp 	%line{103} %argrw{"wrr"}
+# include/node_texture.h:105
+# 				else if (d < da[3]) {
+	aref		$tmp284 ___645_da $const27 	%line{105} %argrw{"wrr"}
+	lt		$tmp285 ___639_d $tmp284 	%argrw{"wrr"}
+	if		$tmp285 595 595 	%argrw{"r"}
+# include/node_texture.h:106
+# 					da[3] = d;
+	aassign		___645_da $const27 ___639_d 	%line{106} %argrw{"wrr"}
+# include/node_texture.h:107
+# 					pa[3] = vp;
+	aassign		___645_pa $const27 ___639_vp 	%line{107} %argrw{"wrr"}
+# include/node_texture.h:70
+# 			for (zz = zi - 1; zz <= zi + 1; zz++) {
+	assign		$tmp286 ___633_zz 	%line{70} %argrw{"wr"}
+	add		___633_zz ___633_zz $const5 	%argrw{"wrr"}
+# include/node_texture.h:69
+# 		for (yy = yi - 1; yy <= yi + 1; yy++) {
+	assign		$tmp287 ___633_yy 	%line{69} %argrw{"wr"}
+	add		___633_yy ___633_yy $const5 	%argrw{"wrr"}
+# include/node_texture.h:68
+# 	for (xx = xi - 1; xx <= xi + 1; xx++) {
+	assign		$tmp288 ___633_xx 	%line{68} %argrw{"wr"}
+	add		___633_xx ___633_xx $const5 	%argrw{"wrr"}
+# include/node_texture.h:131
+# 	return da[n2] - da[n1];
+	aref		$tmp289 ___645_da $const5 	%line{131} %argrw{"wrr"}
+	aref		$tmp290 ___645_da $const4 	%argrw{"wrr"}
+	sub		$tmp237 $tmp289 $tmp290 	%argrw{"wrr"}
+# include/node_texture.h:151
+# float voronoi_F1F2S(point p) { return 2.0 * voronoi_F1F2(p) - 1.0; }
+	mul		$tmp291 $const21 $tmp237 	%line{151} %argrw{"wrr"}
+	sub		___663_t $tmp291 $const12 	%argrw{"wrr"}
+# include/node_texture.h:188
+# 		return voronoi_F1F2S(p);
+	return	%line{188}
+# include/node_texture.h:189
+# 	if (basis == "Voronoi Crackle")
+	eq		$tmp292 $const10 $const43 	%line{189} %argrw{"wrr"}
+	if		$tmp292 727 727 	%argrw{"r"}
+# include/node_texture.h:190
+# 		return voronoi_CrS(p);
+	functioncall	$const44 726 	%line{190} %argrw{"r"}
+# include/node_texture.h:152
+# float voronoi_CrS(point p) { return 2.0 * voronoi_Cr(p) - 1.0; }
+	functioncall	$const45 724 	%line{152} %argrw{"r"}
+# include/node_texture.h:143
+# 	float t = 10.0 * voronoi_F1F2(p);
+	functioncall	$const41 718 	%line{143} %argrw{"r"}
+# include/node_texture.h:138
+# float voronoi_F1F2(point p) { return voronoi_FnFn(p, 0, 1); }
+	functioncall	$const42 718 	%line{138} %argrw{"r"}
+# include/node_texture.h:129
+# 	voronoi(p, "Distance Squared", 0, da, pa);
+	functioncall	$const25 715 	%line{129} %argrw{"r"}
+# include/node_texture.h:59
+# 	xi = (int)floor(p[0]);
+	compref		$tmp296 $tmp15 $const4 	%line{59} %argrw{"wrr"}
+	floor		$tmp295 $tmp296 	%argrw{"wr"}
+	assign		___633_xi $tmp295 	%argrw{"wr"}
+# include/node_texture.h:60
+# 	yi = (int)floor(p[1]);
+	compref		$tmp298 $tmp15 $const5 	%line{60} %argrw{"wrr"}
+	floor		$tmp297 $tmp298 	%argrw{"wr"}
+	assign		___633_yi $tmp297 	%argrw{"wr"}
+# include/node_texture.h:61
+# 	zi = (int)floor(p[2]);
+	compref		$tmp300 $tmp15 $const6 	%line{61} %argrw{"wrr"}
+	floor		$tmp299 $tmp300 	%argrw{"wr"}
+	assign		___633_zi $tmp299 	%argrw{"wr"}
+# include/node_texture.h:63
+# 	da[0] = 1e10;
+	aassign		___645_da $const4 $const26 	%line{63} %argrw{"wrr"}
+# include/node_texture.h:64
+# 	da[1] = 1e10;
+	aassign		___645_da $const5 $const26 	%line{64} %argrw{"wrr"}
+# include/node_texture.h:65
+# 	da[2] = 1e10;
+	aassign		___645_da $const6 $const26 	%line{65} %argrw{"wrr"}
+# include/node_texture.h:66
+# 	da[3] = 1e10;
+	aassign		___645_da $const27 $const26 	%line{66} %argrw{"wrr"}
+# include/node_texture.h:68
+# 	for (xx = xi - 1; xx <= xi + 1; xx++) {
+	for		$tmp302 629 631 713 715 	%line{68} %argrw{"r"}
+	sub		___633_xx ___633_xi $const5 	%argrw{"wrr"}
+	add		$tmp301 ___633_xi $const5 	%argrw{"wrr"}
+	le		$tmp302 ___633_xx $tmp301 	%argrw{"wrr"}
+# include/node_texture.h:69
+# 		for (yy = yi - 1; yy <= yi + 1; yy++) {
+	for		$tmp304 633 635 711 713 	%line{69} %argrw{"r"}
+	sub		___633_yy ___633_yi $const5 	%argrw{"wrr"}
+	add		$tmp303 ___633_yi $const5 	%argrw{"wrr"}
+	le		$tmp304 ___633_yy $tmp303 	%argrw{"wrr"}
+# include/node_texture.h:70
+# 			for (zz = zi - 1; zz <= zi + 1; zz++) {
+	for		$tmp306 637 639 709 711 	%line{70} %argrw{"r"}
+	sub		___633_zz ___633_zi $const5 	%argrw{"wrr"}
+	add		$tmp305 ___633_zi $const5 	%argrw{"wrr"}
+	le		$tmp306 ___633_zz $tmp305 	%argrw{"wrr"}
+# include/node_texture.h:71
+# 				point ip = point(xx, yy, zz);
+	assign		$tmp307 ___633_xx 	%line{71} %argrw{"wr"}
+	assign		$tmp308 ___633_yy 	%argrw{"wr"}
+	assign		$tmp309 ___633_zz 	%argrw{"wr"}
+	point		___639_ip $tmp307 $tmp308 $tmp309 	%argrw{"wrrr"}
+# include/node_texture.h:72
+# 				point vp = (point)cellnoise_color(ip);
+	functioncall	$const28 656 	%line{72} %argrw{"r"}
+# include/node_texture.h:47
+# 	float r = cellnoise(p);
+	cellnoise	___632_r ___639_ip 	%line{47} %argrw{"wr"}
+# include/node_texture.h:48
+# 	float g = cellnoise(point(p[1], p[0], p[2]));
+	compref		$tmp311 ___639_ip $const5 	%line{48} %argrw{"wrr"}
+	compref		$tmp312 ___639_ip $const4 	%argrw{"wrr"}
+	compref		$tmp313 ___639_ip $const6 	%argrw{"wrr"}
+	point		$tmp310 $tmp311 $tmp312 $tmp313 	%argrw{"wrrr"}
+	cellnoise	___632_g $tmp310 	%argrw{"wr"}
+# include/node_texture.h:49
+# 	float b = cellnoise(point(p[1], p[2], p[0]));
+	compref		$tmp315 ___639_ip $const5 	%line{49} %argrw{"wrr"}
+	compref		$tmp316 ___639_ip $const6 	%argrw{"wrr"}
+	compref		$tmp317 ___639_ip $const4 	%argrw{"wrr"}
+	point		$tmp314 $tmp315 $tmp316 $tmp317 	%argrw{"wrrr"}
+	cellnoise	___632_b $tmp314 	%argrw{"wr"}
+# include/node_texture.h:51
+# 	return color(r, g, b);
+	color		___639_vp ___632_r ___632_g ___632_b 	%line{51} %argrw{"wrrr"}
+# include/node_texture.h:73
+# 				point pd = p - (vp + ip);
+	add		$tmp318 ___639_vp ___639_ip 	%line{73} %argrw{"wrr"}
+	sub		___639_pd $tmp15 $tmp318 	%argrw{"wrr"}
+# include/node_texture.h:74
+# 				float d = voronoi_distance(distance_metric, pd, e);
+	functioncall	$const29 660 	%line{74} %argrw{"r"}
+# include/node_texture.h:24
+# 		return dot(d, d);
+	dot		___639_d ___639_pd ___639_pd 	%line{24} %argrw{"wrr"}
+# include/node_texture.h:76
+# 				vp += point(xx, yy, zz);
+	assign		$tmp320 ___633_xx 	%line{76} %argrw{"wr"}
+	assign		$tmp321 ___633_yy 	%argrw{"wr"}
+	assign		$tmp322 ___633_zz 	%argrw{"wr"}
+	point		$tmp319 $tmp320 $tmp321 $tmp322 	%argrw{"wrrr"}
+	add		___639_vp ___639_vp $tmp319 	%argrw{"wrr"}
+# include/node_texture.h:78
+# 				if (d < da[0]) {
+	aref		$tmp323 ___645_da $const4 	%line{78} %argrw{"wrr"}
+	lt		$tmp324 ___639_d $tmp323 	%argrw{"wrr"}
+	if		$tmp324 682 709 	%argrw{"r"}
+# include/node_texture.h:79
+# 					da[3] = da[2];
+	aref		$tmp325 ___645_da $const6 	%line{79} %argrw{"wrr"}
+	aassign		___645_da $const27 $tmp325 	%argrw{"wrr"}
+# include/node_texture.h:80
+# 					da[2] = da[1];
+	aref		$tmp326 ___645_da $const5 	%line{80} %argrw{"wrr"}
+	aassign		___645_da $const6 $tmp326 	%argrw{"wrr"}
+# include/node_texture.h:81
+# 					da[1] = da[0];
+	aref		$tmp327 ___645_da $const4 	%line{81} %argrw{"wrr"}
+	aassign		___645_da $const5 $tmp327 	%argrw{"wrr"}
+# include/node_texture.h:82
+# 					da[0] = d;
+	aassign		___645_da $const4 ___639_d 	%line{82} %argrw{"wrr"}
+# include/node_texture.h:84
+# 					pa[3] = pa[2];
+	aref		$tmp328 ___645_pa $const6 	%line{84} %argrw{"wrr"}
+	aassign		___645_pa $const27 $tmp328 	%argrw{"wrr"}
+# include/node_texture.h:85
+# 					pa[2] = pa[1];
+	aref		$tmp329 ___645_pa $const5 	%line{85} %argrw{"wrr"}
+	aassign		___645_pa $const6 $tmp329 	%argrw{"wrr"}
+# include/node_texture.h:86
+# 					pa[1] = pa[0];
+	aref		$tmp330 ___645_pa $const4 	%line{86} %argrw{"wrr"}
+	aassign		___645_pa $const5 $tmp330 	%argrw{"wrr"}
+# include/node_texture.h:87
+# 					pa[0] = vp;
+	aassign		___645_pa $const4 ___639_vp 	%line{87} %argrw{"wrr"}
+# include/node_texture.h:89
+# 				else if (d < da[1]) {
+	aref		$tmp331 ___645_da $const5 	%line{89} %argrw{"wrr"}
+	lt		$tmp332 ___639_d $tmp331 	%argrw{"wrr"}
+	if		$tmp332 695 709 	%argrw{"r"}
+# include/node_texture.h:90
+# 					da[3] = da[2];
+	aref		$tmp333 ___645_da $const6 	%line{90} %argrw{"wrr"}
+	aassign		___645_da $const27 $tmp333 	%argrw{"wrr"}
+# include/node_texture.h:91
+# 					da[2] = da[1];
+	aref		$tmp334 ___645_da $const5 	%line{91} %argrw{"wrr"}
+	aassign		___645_da $const6 $tmp334 	%argrw{"wrr"}
+# include/node_texture.h:92
+# 					da[1] = d;
+	aassign		___645_da $const5 ___639_d 	%line{92} %argrw{"wrr"}
+# include/node_texture.h:94
+# 					pa[3] = pa[2];
+	aref		$tmp335 ___645_pa $const6 	%line{94} %argrw{"wrr"}
+	aassign		___645_pa $const27 $tmp335 	%argrw{"wrr"}
+# include/node_texture.h:95
+# 					pa[2] = pa[1];
+	aref		$tmp336 ___645_pa $const5 	%line{95} %argrw{"wrr"}
+	aassign		___645_pa $const6 $tmp336 	%argrw{"wrr"}
+# include/node_texture.h:96
+# 					pa[1] = vp;
+	aassign		___645_pa $const5 ___639_vp 	%line{96} %argrw{"wrr"}
+# include/node_texture.h:98
+# 				else if (d < da[2]) {
+	aref		$tmp337 ___645_da $const6 	%line{98} %argrw{"wrr"}
+	lt		$tmp338 ___639_d $tmp337 	%argrw{"wrr"}
+	if		$tmp338 704 709 	%argrw{"r"}
+# include/node_texture.h:99
+# 					da[3] = da[2];
+	aref		$tmp339 ___645_da $const6 	%line{99} %argrw{"wrr"}
+	aassign		___645_da $const27 $tmp339 	%argrw{"wrr"}
+# include/node_texture.h:100
+# 					da[2] = d;
+	aassign		___645_da $const6 ___639_d 	%line{100} %argrw{"wrr"}
+# include/node_texture.h:102
+# 					pa[3] = pa[2];
+	aref		$tmp340 ___645_pa $const6 	%line{102} %argrw{"wrr"}
+	aassign		___645_pa $const27 $tmp340 	%argrw{"wrr"}
+# include/node_texture.h:103
+# 					pa[2] = vp;
+	aassign		___645_pa $const6 ___639_vp 	%line{103} %argrw{"wrr"}
+# include/node_texture.h:105
+# 				else if (d < da[3]) {
+	aref		$tmp341 ___645_da $const27 	%line{105} %argrw{"wrr"}
+	lt		$tmp342 ___639_d $tmp341 	%argrw{"wrr"}
+	if		$tmp342 709 709 	%argrw{"r"}
+# include/node_texture.h:106
+# 					da[3] = d;
+	aassign		___645_da $const27 ___639_d 	%line{106} %argrw{"wrr"}
+# include/node_texture.h:107
+# 					pa[3] = vp;
+	aassign		___645_pa $const27 ___639_vp 	%line{107} %argrw{"wrr"}
+# include/node_texture.h:70
+# 			for (zz = zi - 1; zz <= zi + 1; zz++) {
+	assign		$tmp343 ___633_zz 	%line{70} %argrw{"wr"}
+	add		___633_zz ___633_zz $const5 	%argrw{"wrr"}
+# include/node_texture.h:69
+# 		for (yy = yi - 1; yy <= yi + 1; yy++) {
+	assign		$tmp344 ___633_yy 	%line{69} %argrw{"wr"}
+	add		___633_yy ___633_yy $const5 	%argrw{"wrr"}
+# include/node_texture.h:68
+# 	for (xx = xi - 1; xx <= xi + 1; xx++) {
+	assign		$tmp345 ___633_xx 	%line{68} %argrw{"wr"}
+	add		___633_xx ___633_xx $const5 	%argrw{"wrr"}
+# include/node_texture.h:131
+# 	return da[n2] - da[n1];
+	aref		$tmp346 ___645_da $const5 	%line{131} %argrw{"wrr"}
+	aref		$tmp347 ___645_da $const4 	%argrw{"wrr"}
+	sub		$tmp294 $tmp346 $tmp347 	%argrw{"wrr"}
+# include/node_texture.h:143
+# 	float t = 10.0 * voronoi_F1F2(p);
+	mul		___651_t $const7 $tmp294 	%line{143} %argrw{"wrr"}
+# include/node_texture.h:144
+# 	return (t > 1.0) ? 1.0 : t;
+	gt		$tmp348 ___651_t $const12 	%line{144} %argrw{"wrr"}
+	if		$tmp348 722 723 	%argrw{"r"}
+	assign		$tmp293 $const12 	%argrw{"wr"}
+	assign		$tmp293 ___651_t 	%argrw{"wr"}
+	return
+# include/node_texture.h:152
+# float voronoi_CrS(point p) { return 2.0 * voronoi_Cr(p) - 1.0; }
+	mul		$tmp349 $const21 $tmp293 	%line{152} %argrw{"wrr"}
+	sub		___663_t $tmp349 $const12 	%argrw{"wrr"}
+# include/node_texture.h:190
+# 		return voronoi_CrS(p);
+	return	%line{190}
+# include/node_texture.h:191
+# 	if (basis == "Cell Noise")
+	eq		$tmp350 $const10 $const46 	%line{191} %argrw{"wrr"}
+	if		$tmp350 731 731 	%argrw{"r"}
+# include/node_texture.h:192
+# 		return cellnoise(p);
+	cellnoise	___663_t $tmp15 	%line{192} %argrw{"wr"}
+	return
+# include/node_texture.h:194
+# 	return 0.0;
+	assign		___663_t $const2 	%line{194} %argrw{"wr"}
+# include/node_texture.h:220
+# 		if (hard)
+	if		$const4 736 736 	%line{220} %argrw{"r"}
+# include/node_texture.h:221
+# 			t = fabs(2.0 * t - 1.0);
+	mul		$tmp351 $const21 ___663_t 	%line{221} %argrw{"wrr"}
+	sub		$tmp352 $tmp351 $const12 	%argrw{"wrr"}
+	fabs		___663_t $tmp352 	%argrw{"wr"}
+# include/node_texture.h:223
+# 		sum += t * amp;
+	mul		$tmp353 ___663_t ___661_amp 	%line{223} %argrw{"wrr"}
+	add		___661_sum ___661_sum $tmp353 	%argrw{"wrr"}
+# include/node_texture.h:224
+# 		amp *= 0.5;
+	mul		___661_amp ___661_amp $const18 	%line{224} %argrw{"wrr"}
+# include/node_texture.h:225
+# 		fscale *= 2.0;
+	mul		___661_fscale ___661_fscale $const21 	%line{225} %argrw{"wrr"}
+# include/node_texture.h:217
+# 	for (i = 0; i <= n; i++) {
+	assign		$tmp354 ___661_i 	%line{217} %argrw{"wr"}
+	add		___661_i ___661_i $const5 	%argrw{"wrr"}
+# include/node_texture.h:228
+# 	float rmd = octaves - floor(octaves);
+	floor		$tmp355 ___661_octaves 	%line{228} %argrw{"wr"}
+	sub		___661_rmd ___661_octaves $tmp355 	%argrw{"wrr"}
+# include/node_texture.h:230
+# 	if (rmd != 0.0) {
+	neq		$tmp356 ___661_rmd $const2 	%line{230} %argrw{"wrr"}
+	if		$tmp356 1473 1483 	%argrw{"r"}
+# include/node_texture.h:231
+# 		float t = noise_basis(fscale * p, basis);
+	mul		$tmp357 ___661_fscale $tmp12 	%line{231} %argrw{"wrr"}
+	functioncall	$const15 1445 	%argrw{"r"}
+# include/node_texture.h:177
+# 	if (basis == "Perlin")
+	eq		$tmp358 $const10 $const10 	%line{177} %argrw{"wrr"}
+	if		$tmp358 763 763 	%argrw{"r"}
+# include/node_texture.h:178
+# 		return safe_noise(p, 1);
+	functioncall	$const16 762 	%line{178} %argrw{"r"}
+# include/node_texture.h:158
+# 	float f = 0.0;
+	assign		___658_f $const2 	%line{158} %argrw{"wr"}
+# include/node_texture.h:161
+# 	if (type == 0)
+	eq		$tmp359 $const5 $const4 	%line{161} %argrw{"wrr"}
+	if		$tmp359 755 756 	%argrw{"r"}
+# include/node_texture.h:162
+# 		f = noise("perlin", p);
+	noise		___658_f $const17 $tmp357 	%line{162} %argrw{"wrr"}
+# include/node_texture.h:166
+# 		f = noise(p);
+	noise		___658_f $tmp357 	%line{166} %argrw{"wr"}
+# include/node_texture.h:169
+# 	if (!isfinite(f))
+	isfinite	$tmp360 ___658_f 	%line{169} %argrw{"wr"}
+	eq		$tmp361 $tmp360 $const4 	%argrw{"wrr"}
+	if		$tmp361 761 761 	%argrw{"r"}
+# include/node_texture.h:170
+# 		return 0.5;
+	assign		___664_t $const18 	%line{170} %argrw{"wr"}
+	return
+# include/node_texture.h:172
+# 	return f;
+	assign		___664_t ___658_f 	%line{172} %argrw{"wr"}
+# include/node_texture.h:178
+# 		return safe_noise(p, 1);
+	return	%line{178}
+# include/node_texture.h:179
+# 	if (basis == "Voronoi F1")
+	eq		$tmp362 $const10 $const19 	%line{179} %argrw{"wrr"}
+	if		$tmp362 874 874 	%argrw{"r"}
+# include/node_texture.h:180
+# 		return voronoi_F1S(p);
+	functioncall	$const20 873 	%line{180} %argrw{"r"}
+# include/node_texture.h:147
+# float voronoi_F1S(point p) { return 2.0 * voronoi_F1(p) - 1.0; }
+	functioncall	$const22 871 	%line{147} %argrw{"r"}
+# include/node_texture.h:134
+# float voronoi_F1(point p) { return voronoi_Fn(p, 0); }
+	functioncall	$const23 871 	%line{134} %argrw{"r"}
+# include/node_texture.h:119
+# 	voronoi(p, "Distance Squared", 0, da, pa);
+	functioncall	$const25 870 	%line{119} %argrw{"r"}
+# include/node_texture.h:59
+# 	xi = (int)floor(p[0]);
+	compref		$tmp365 $tmp357 $const4 	%line{59} %argrw{"wrr"}
+	floor		$tmp364 $tmp365 	%argrw{"wr"}
+	assign		___633_xi $tmp364 	%argrw{"wr"}
+# include/node_texture.h:60
+# 	yi = (int)floor(p[1]);
+	compref		$tmp367 $tmp357 $const5 	%line{60} %argrw{"wrr"}
+	floor		$tmp366 $tmp367 	%argrw{"wr"}
+	assign		___633_yi $tmp366 	%argrw{"wr"}
+# include/node_texture.h:61
+# 	zi = (int)floor(p[2]);
+	compref		$tmp369 $tmp357 $const6 	%line{61} %argrw{"wrr"}
+	floor		$tmp368 $tmp369 	%argrw{"wr"}
+	assign		___633_zi $tmp368 	%argrw{"wr"}
+# include/node_texture.h:63
+# 	da[0] = 1e10;
+	aassign		___644_da $const4 $const26 	%line{63} %argrw{"wrr"}
+# include/node_texture.h:64
+# 	da[1] = 1e10;
+	aassign		___644_da $const5 $const26 	%line{64} %argrw{"wrr"}
+# include/node_texture.h:65
+# 	da[2] = 1e10;
+	aassign		___644_da $const6 $const26 	%line{65} %argrw{"wrr"}
+# include/node_texture.h:66
+# 	da[3] = 1e10;
+	aassign		___644_da $const27 $const26 	%line{66} %argrw{"wrr"}
+# include/node_texture.h:68
+# 	for (xx = xi - 1; xx <= xi + 1; xx++) {
+	for		$tmp371 784 786 868 870 	%line{68} %argrw{"r"}
+	sub		___633_xx ___633_xi $const5 	%argrw{"wrr"}
+	add		$tmp370 ___633_xi $const5 	%argrw{"wrr"}
+	le		$tmp371 ___633_xx $tmp370 	%argrw{"wrr"}
+# include/node_texture.h:69
+# 		for (yy = yi - 1; yy <= yi + 1; yy++) {
+	for		$tmp373 788 790 866 868 	%line{69} %argrw{"r"}
+	sub		___633_yy ___633_yi $const5 	%argrw{"wrr"}
+	add		$tmp372 ___633_yi $const5 	%argrw{"wrr"}
+	le		$tmp373 ___633_yy $tmp372 	%argrw{"wrr"}
+# include/node_texture.h:70
+# 			for (zz = zi - 1; zz <= zi + 1; zz++) {
+	for		$tmp375 792 794 864 866 	%line{70} %argrw{"r"}
+	sub		___633_zz ___633_zi $const5 	%argrw{"wrr"}
+	add		$tmp374 ___633_zi $const5 	%argrw{"wrr"}
+	le		$tmp375 ___633_zz $tmp374 	%argrw{"wrr"}
+# include/node_texture.h:71
+# 				point ip = point(xx, yy, zz);
+	assign		$tmp376 ___633_xx 	%line{71} %argrw{"wr"}
+	assign		$tmp377 ___633_yy 	%argrw{"wr"}
+	assign		$tmp378 ___633_zz 	%argrw{"wr"}
+	point		___639_ip $tmp376 $tmp377 $tmp378 	%argrw{"wrrr"}
+# include/node_texture.h:72
+# 				point vp = (point)cellnoise_color(ip);
+	functioncall	$const28 811 	%line{72} %argrw{"r"}
+# include/node_texture.h:47
+# 	float r = cellnoise(p);
+	cellnoise	___632_r ___639_ip 	%line{47} %argrw{"wr"}
+# include/node_texture.h:48
+# 	float g = cellnoise(point(p[1], p[0], p[2]));
+	compref		$tmp380 ___639_ip $const5 	%line{48} %argrw{"wrr"}
+	compref		$tmp381 ___639_ip $const4 	%argrw{"wrr"}
+	compref		$tmp382 ___639_ip $const6 	%argrw{"wrr"}
+	point		$tmp379 $tmp380 $tmp381 $tmp382 	%argrw{"wrrr"}
+	cellnoise	___632_g $tmp379 	%argrw{"wr"}
+# include/node_texture.h:49
+# 	float b = cellnoise(point(p[1], p[2], p[0]));
+	compref		$tmp384 ___639_ip $const5 	%line{49} %argrw{"wrr"}
+	compref		$tmp385 ___639_ip $const6 	%argrw{"wrr"}
+	compref		$tmp386 ___639_ip $const4 	%argrw{"wrr"}
+	point		$tmp383 $tmp384 $tmp385 $tmp386 	%argrw{"wrrr"}
+	cellnoise	___632_b $tmp383 	%argrw{"wr"}
+# include/node_texture.h:51
+# 	return color(r, g, b);
+	color		___639_vp ___632_r ___632_g ___632_b 	%line{51} %argrw{"wrrr"}
+# include/node_texture.h:73
+# 				point pd = p - (vp + ip);
+	add		$tmp387 ___639_vp ___639_ip 	%line{73} %argrw{"wrr"}
+	sub		___639_pd $tmp357 $tmp387 	%argrw{"wrr"}
+# include/node_texture.h:74
+# 				float d = voronoi_distance(distance_metric, pd, e);
+	functioncall	$const29 815 	%line{74} %argrw{"r"}
+# include/node_texture.h:24
+# 		return dot(d, d);
+	dot		___639_d ___639_pd ___639_pd 	%line{24} %argrw{"wrr"}
+# include/node_texture.h:76
+# 				vp += point(xx, yy, zz);
+	assign		$tmp389 ___633_xx 	%line{76} %argrw{"wr"}
+	assign		$tmp390 ___633_yy 	%argrw{"wr"}
+	assign		$tmp391 ___633_zz 	%argrw{"wr"}
+	point		$tmp388 $tmp389 $tmp390 $tmp391 	%argrw{"wrrr"}
+	add		___639_vp ___639_vp $tmp388 	%argrw{"wrr"}
+# include/node_texture.h:78
+# 				if (d < da[0]) {
+	aref		$tmp392 ___644_da $const4 	%line{78} %argrw{"wrr"}
+	lt		$tmp393 ___639_d $tmp392 	%argrw{"wrr"}
+	if		$tmp393 837 864 	%argrw{"r"}
+# include/node_texture.h:79
+# 					da[3] = da[2];
+	aref		$tmp394 ___644_da $const6 	%line{79} %argrw{"wrr"}
+	aassign		___644_da $const27 $tmp394 	%argrw{"wrr"}
+# include/node_texture.h:80
+# 					da[2] = da[1];
+	aref		$tmp395 ___644_da $const5 	%line{80} %argrw{"wrr"}
+	aassign		___644_da $const6 $tmp395 	%argrw{"wrr"}
+# include/node_texture.h:81
+# 					da[1] = da[0];
+	aref		$tmp396 ___644_da $const4 	%line{81} %argrw{"wrr"}
+	aassign		___644_da $const5 $tmp396 	%argrw{"wrr"}
+# include/node_texture.h:82
+# 					da[0] = d;
+	aassign		___644_da $const4 ___639_d 	%line{82} %argrw{"wrr"}
+# include/node_texture.h:84
+# 					pa[3] = pa[2];
+	aref		$tmp397 ___644_pa $const6 	%line{84} %argrw{"wrr"}
+	aassign		___644_pa $const27 $tmp397 	%argrw{"wrr"}
+# include/node_texture.h:85
+# 					pa[2] = pa[1];
+	aref		$tmp398 ___644_pa $const5 	%line{85} %argrw{"wrr"}
+	aassign		___644_pa $const6 $tmp398 	%argrw{"wrr"}
+# include/node_texture.h:86
+# 					pa[1] = pa[0];
+	aref		$tmp399 ___644_pa $const4 	%line{86} %argrw{"wrr"}
+	aassign		___644_pa $const5 $tmp399 	%argrw{"wrr"}
+# include/node_texture.h:87
+# 					pa[0] = vp;
+	aassign		___644_pa $const4 ___639_vp 	%line{87} %argrw{"wrr"}
+# include/node_texture.h:89
+# 				else if (d < da[1]) {
+	aref		$tmp400 ___644_da $const5 	%line{89} %argrw{"wrr"}
+	lt		$tmp401 ___639_d $tmp400 	%argrw{"wrr"}
+	if		$tmp401 850 864 	%argrw{"r"}
+# include/node_texture.h:90
+# 					da[3] = da[2];
+	aref		$tmp402 ___644_da $const6 	%line{90} %argrw{"wrr"}
+	aassign		___644_da $const27 $tmp402 	%argrw{"wrr"}
+# include/node_texture.h:91
+# 					da[2] = da[1];
+	aref		$tmp403 ___644_da $const5 	%line{91} %argrw{"wrr"}
+	aassign		___644_da $const6 $tmp403 	%argrw{"wrr"}
+# include/node_texture.h:92
+# 					da[1] = d;
+	aassign		___644_da $const5 ___639_d 	%line{92} %argrw{"wrr"}
+# include/node_texture.h:94
+# 					pa[3] = pa[2];
+	aref		$tmp404 ___644_pa $const6 	%line{94} %argrw{"wrr"}
+	aassign		___644_pa $const27 $tmp404 	%argrw{"wrr"}
+# include/node_texture.h:95
+# 					pa[2] = pa[1];
+	aref		$tmp405 ___644_pa $const5 	%line{95} %argrw{"wrr"}
+	aassign		___644_pa $const6 $tmp405 	%argrw{"wrr"}
+# include/node_texture.h:96
+# 					pa[1] = vp;
+	aassign		___644_pa $const5 ___639_vp 	%line{96} %argrw{"wrr"}
+# include/node_texture.h:98
+# 				else if (d < da[2]) {
+	aref		$tmp406 ___644_da $const6 	%line{98} %argrw{"wrr"}
+	lt		$tmp407 ___639_d $tmp406 	%argrw{"wrr"}
+	if		$tmp407 859 864 	%argrw{"r"}
+# include/node_texture.h:99
+# 					da[3] = da[2];
+	aref		$tmp408 ___644_da $const6 	%line{99} %argrw{"wrr"}
+	aassign		___644_da $const27 $tmp408 	%argrw{"wrr"}
+# include/node_texture.h:100
+# 					da[2] = d;
+	aassign		___644_da $const6 ___639_d 	%line{100} %argrw{"wrr"}
+# include/node_texture.h:102
+# 					pa[3] = pa[2];
+	aref		$tmp409 ___644_pa $const6 	%line{102} %argrw{"wrr"}
+	aassign		___644_pa $const27 $tmp409 	%argrw{"wrr"}
+# include/node_texture.h:103
+# 					pa[2] = vp;
+	aassign		___644_pa $const6 ___639_vp 	%line{103} %argrw{"wrr"}
+# include/node_texture.h:105
+# 				else if (d < da[3]) {
+	aref		$tmp410 ___644_da $const27 	%line{105} %argrw{"wrr"}
+	lt		$tmp411 ___639_d $tmp410 	%argrw{"wrr"}
+	if		$tmp411 864 864 	%argrw{"r"}
+# include/node_texture.h:106
+# 					da[3] = d;
+	aassign		___644_da $const27 ___639_d 	%line{106} %argrw{"wrr"}
+# include/node_texture.h:107
+# 					pa[3] = vp;
+	aassign		___644_pa $const27 ___639_vp 	%line{107} %argrw{"wrr"}
+# include/node_texture.h:70
+# 			for (zz = zi - 1; zz <= zi + 1; zz++) {
+	assign		$tmp412 ___633_zz 	%line{70} %argrw{"wr"}
+	add		___633_zz ___633_zz $const5 	%argrw{"wrr"}
+# include/node_texture.h:69
+# 		for (yy = yi - 1; yy <= yi + 1; yy++) {
+	assign		$tmp413 ___633_yy 	%line{69} %argrw{"wr"}
+	add		___633_yy ___633_yy $const5 	%argrw{"wrr"}
+# include/node_texture.h:68
+# 	for (xx = xi - 1; xx <= xi + 1; xx++) {
+	assign		$tmp414 ___633_xx 	%line{68} %argrw{"wr"}
+	add		___633_xx ___633_xx $const5 	%argrw{"wrr"}
+# include/node_texture.h:121
+# 	return da[n];
+	aref		$tmp363 ___644_da $const4 	%line{121} %argrw{"wrr"}
+# include/node_texture.h:147
+# float voronoi_F1S(point p) { return 2.0 * voronoi_F1(p) - 1.0; }
+	mul		$tmp415 $const21 $tmp363 	%line{147} %argrw{"wrr"}
+	sub		___664_t $tmp415 $const12 	%argrw{"wrr"}
+# include/node_texture.h:180
+# 		return voronoi_F1S(p);
+	return	%line{180}
+# include/node_texture.h:181
+# 	if (basis == "Voronoi F2")
+	eq		$tmp416 $const10 $const30 	%line{181} %argrw{"wrr"}
+	if		$tmp416 985 985 	%argrw{"r"}
+# include/node_texture.h:182
+# 		return voronoi_F2S(p);
+	functioncall	$const31 984 	%line{182} %argrw{"r"}
+# include/node_texture.h:148
+# float voronoi_F2S(point p) { return 2.0 * voronoi_F2(p) - 1.0; }
+	functioncall	$const32 982 	%line{148} %argrw{"r"}
+# include/node_texture.h:135
+# float voronoi_F2(point p) { return voronoi_Fn(p, 1); }
+	functioncall	$const23 982 	%line{135} %argrw{"r"}
+# include/node_texture.h:119
+# 	voronoi(p, "Distance Squared", 0, da, pa);
+	functioncall	$const25 981 	%line{119} %argrw{"r"}
+# include/node_texture.h:59
+# 	xi = (int)floor(p[0]);
+	compref		$tmp419 $tmp357 $const4 	%line{59} %argrw{"wrr"}
+	floor		$tmp418 $tmp419 	%argrw{"wr"}
+	assign		___633_xi $tmp418 	%argrw{"wr"}
+# include/node_texture.h:60
+# 	yi = (int)floor(p[1]);
+	compref		$tmp421 $tmp357 $const5 	%line{60} %argrw{"wrr"}
+	floor		$tmp420 $tmp421 	%argrw{"wr"}
+	assign		___633_yi $tmp420 	%argrw{"wr"}
+# include/node_texture.h:61
+# 	zi = (int)floor(p[2]);
+	compref		$tmp423 $tmp357 $const6 	%line{61} %argrw{"wrr"}
+	floor		$tmp422 $tmp423 	%argrw{"wr"}
+	assign		___633_zi $tmp422 	%argrw{"wr"}
+# include/node_texture.h:63
+# 	da[0] = 1e10;
+	aassign		___644_da $const4 $const26 	%line{63} %argrw{"wrr"}
+# include/node_texture.h:64
+# 	da[1] = 1e10;
+	aassign		___644_da $const5 $const26 	%line{64} %argrw{"wrr"}
+# include/node_texture.h:65
+# 	da[2] = 1e10;
+	aassign		___644_da $const6 $const26 	%line{65} %argrw{"wrr"}
+# include/node_texture.h:66
+# 	da[3] = 1e10;
+	aassign		___644_da $const27 $const26 	%line{66} %argrw{"wrr"}
+# include/node_texture.h:68
+# 	for (xx = xi - 1; xx <= xi + 1; xx++) {
+	for		$tmp425 895 897 979 981 	%line{68} %argrw{"r"}
+	sub		___633_xx ___633_xi $const5 	%argrw{"wrr"}
+	add		$tmp424 ___633_xi $const5 	%argrw{"wrr"}
+	le		$tmp425 ___633_xx $tmp424 	%argrw{"wrr"}
+# include/node_texture.h:69
+# 		for (yy = yi - 1; yy <= yi + 1; yy++) {
+	for		$tmp427 899 901 977 979 	%line{69} %argrw{"r"}
+	sub		___633_yy ___633_yi $const5 	%argrw{"wrr"}
+	add		$tmp426 ___633_yi $const5 	%argrw{"wrr"}
+	le		$tmp427 ___633_yy $tmp426 	%argrw{"wrr"}
+# include/node_texture.h:70
+# 			for (zz = zi - 1; zz <= zi + 1; zz++) {
+	for		$tmp429 903 905 975 977 	%line{70} %argrw{"r"}
+	sub		___633_zz ___633_zi $const5 	%argrw{"wrr"}
+	add		$tmp428 ___633_zi $const5 	%argrw{"wrr"}
+	le		$tmp429 ___633_zz $tmp428 	%argrw{"wrr"}
+# include/node_texture.h:71
+# 				point ip = point(xx, yy, zz);
+	assign		$tmp430 ___633_xx 	%line{71} %argrw{"wr"}
+	assign		$tmp431 ___633_yy 	%argrw{"wr"}
+	assign		$tmp432 ___633_zz 	%argrw{"wr"}
+	point		___639_ip $tmp430 $tmp431 $tmp432 	%argrw{"wrrr"}
+# include/node_texture.h:72
+# 				point vp = (point)cellnoise_color(ip);
+	functioncall	$const28 922 	%line{72} %argrw{"r"}
+# include/node_texture.h:47
+# 	float r = cellnoise(p);
+	cellnoise	___632_r ___639_ip 	%line{47} %argrw{"wr"}
+# include/node_texture.h:48
+# 	float g = cellnoise(point(p[1], p[0], p[2]));
+	compref		$tmp434 ___639_ip $const5 	%line{48} %argrw{"wrr"}
+	compref		$tmp435 ___639_ip $const4 	%argrw{"wrr"}
+	compref		$tmp436 ___639_ip $const6 	%argrw{"wrr"}
+	point		$tmp433 $tmp434 $tmp435 $tmp436 	%argrw{"wrrr"}
+	cellnoise	___632_g $tmp433 	%argrw{"wr"}
+# include/node_texture.h:49
+# 	float b = cellnoise(point(p[1], p[2], p[0]));
+	compref		$tmp438 ___639_ip $const5 	%line{49} %argrw{"wrr"}
+	compref		$tmp439 ___639_ip $const6 	%argrw{"wrr"}
+	compref		$tmp440 ___639_ip $const4 	%argrw{"wrr"}
+	point		$tmp437 $tmp438 $tmp439 $tmp440 	%argrw{"wrrr"}
+	cellnoise	___632_b $tmp437 	%argrw{"wr"}
+# include/node_texture.h:51
+# 	return color(r, g, b);
+	color		___639_vp ___632_r ___632_g ___632_b 	%line{51} %argrw{"wrrr"}
+# include/node_texture.h:73
+# 				point pd = p - (vp + ip);
+	add		$tmp441 ___639_vp ___639_ip 	%line{73} %argrw{"wrr"}
+	sub		___639_pd $tmp357 $tmp441 	%argrw{"wrr"}
+# include/node_texture.h:74
+# 				float d = voronoi_distance(distance_metric, pd, e);
+	functioncall	$const29 926 	%line{74} %argrw{"r"}
+# include/node_texture.h:24
+# 		return dot(d, d);
+	dot		___639_d ___639_pd ___639_pd 	%line{24} %argrw{"wrr"}
+# include/node_texture.h:76
+# 				vp += point(xx, yy, zz);
+	assign		$tmp443 ___633_xx 	%line{76} %argrw{"wr"}
+	assign		$tmp444 ___633_yy 	%argrw{"wr"}
+	assign		$tmp445 ___633_zz 	%argrw{"wr"}
+	point		$tmp442 $tmp443 $tmp444 $tmp445 	%argrw{"wrrr"}
+	add		___639_vp ___639_vp $tmp442 	%argrw{"wrr"}
+# include/node_texture.h:78
+# 				if (d < da[0]) {
+	aref		$tmp446 ___644_da $const4 	%line{78} %argrw{"wrr"}
+	lt		$tmp447 ___639_d $tmp446 	%argrw{"wrr"}
+	if		$tmp447 948 975 	%argrw{"r"}
+# include/node_texture.h:79
+# 					da[3] = da[2];
+	aref		$tmp448 ___644_da $const6 	%line{79} %argrw{"wrr"}
+	aassign		___644_da $const27 $tmp448 	%argrw{"wrr"}
+# include/node_texture.h:80
+# 					da[2] = da[1];
+	aref		$tmp449 ___644_da $const5 	%line{80} %argrw{"wrr"}
+	aassign		___644_da $const6 $tmp449 	%argrw{"wrr"}
+# include/node_texture.h:81
+# 					da[1] = da[0];
+	aref		$tmp450 ___644_da $const4 	%line{81} %argrw{"wrr"}
+	aassign		___644_da $const5 $tmp450 	%argrw{"wrr"}
+# include/node_texture.h:82
+# 					da[0] = d;
+	aassign		___644_da $const4 ___639_d 	%line{82} %argrw{"wrr"}
+# include/node_texture.h:84
+# 					pa[3] = pa[2];
+	aref		$tmp451 ___644_pa $const6 	%line{84} %argrw{"wrr"}
+	aassign		___644_pa $const27 $tmp451 	%argrw{"wrr"}
+# include/node_texture.h:85
+# 					pa[2] = pa[1];
+	aref		$tmp452 ___644_pa $const5 	%line{85} %argrw{"wrr"}
+	aassign		___644_pa $const6 $tmp452 	%argrw{"wrr"}
+# include/node_texture.h:86
+# 					pa[1] = pa[0];
+	aref		$tmp453 ___644_pa $const4 	%line{86} %argrw{"wrr"}
+	aassign		___644_pa $const5 $tmp453 	%argrw{"wrr"}
+# include/node_texture.h:87
+# 					pa[0] = vp;
+	aassign		___644_pa $const4 ___639_vp 	%line{87} %argrw{"wrr"}
+# include/node_texture.h:89
+# 				else if (d < da[1]) {
+	aref		$tmp454 ___644_da $const5 	%line{89} %argrw{"wrr"}
+	lt		$tmp455 ___639_d $tmp454 	%argrw{"wrr"}
+	if		$tmp455 961 975 	%argrw{"r"}
+# include/node_texture.h:90
+# 					da[3] = da[2];
+	aref		$tmp456 ___644_da $const6 	%line{90} %argrw{"wrr"}
+	aassign		___644_da $const27 $tmp456 	%argrw{"wrr"}
+# include/node_texture.h:91
+# 					da[2] = da[1];
+	aref		$tmp457 ___644_da $const5 	%line{91} %argrw{"wrr"}
+	aassign		___644_da $const6 $tmp457 	%argrw{"wrr"}
+# include/node_texture.h:92
+# 					da[1] = d;
+	aassign		___644_da $const5 ___639_d 	%line{92} %argrw{"wrr"}
+# include/node_texture.h:94
+# 					pa[3] = pa[2];
+	aref		$tmp458 ___644_pa $const6 	%line{94} %argrw{"wrr"}
+	aassign		___644_pa $const27 $tmp458 	%argrw{"wrr"}
+# include/node_texture.h:95
+# 					pa[2] = pa[1];
+	aref		$tmp459 ___644_pa $const5 	%line{95} %argrw{"wrr"}
+	aassign		___644_pa $const6 $tmp459 	%argrw{"wrr"}
+# include/node_texture.h:96
+# 					pa[1] = vp;
+	aassign		___644_pa $const5 ___639_vp 	%line{96} %argrw{"wrr"}
+# include/node_texture.h:98
+# 				else if (d < da[2]) {
+	aref		$tmp460 ___644_da $const6 	%line{98} %argrw{"wrr"}
+	lt		$tmp461 ___639_d $tmp460 	%argrw{"wrr"}
+	if		$tmp461 970 975 	%argrw{"r"}
+# include/node_texture.h:99
+# 					da[3] = da[2];
+	aref		$tmp462 ___644_da $const6 	%line{99} %argrw{"wrr"}
+	aassign		___644_da $const27 $tmp462 	%argrw{"wrr"}
+# include/node_texture.h:100
+# 					da[2] = d;
+	aassign		___644_da $const6 ___639_d 	%line{100} %argrw{"wrr"}
+# include/node_texture.h:102
+# 					pa[3] = pa[2];
+	aref		$tmp463 ___644_pa $const6 	%line{102} %argrw{"wrr"}
+	aassign		___644_pa $const27 $tmp463 	%argrw{"wrr"}
+# include/node_texture.h:103
+# 					pa[2] = vp;
+	aassign		___644_pa $const6 ___639_vp 	%line{103} %argrw{"wrr"}
+# include/node_texture.h:105
+# 				else if (d < da[3]) {
+	aref		$tmp464 ___644_da $const27 	%line{105} %argrw{"wrr"}
+	lt		$tmp465 ___639_d $tmp464 	%argrw{"wrr"}
+	if		$tmp465 975 975 	%argrw{"r"}
+# include/node_texture.h:106
+# 					da[3] = d;
+	aassign		___644_da $const27 ___639_d 	%line{106} %argrw{"wrr"}
+# include/node_texture.h:107
+# 					pa[3] = vp;
+	aassign		___644_pa $const27 ___639_vp 	%line{107} %argrw{"wrr"}
+# include/node_texture.h:70
+# 			for (zz = zi - 1; zz <= zi + 1; zz++) {
+	assign		$tmp466 ___633_zz 	%line{70} %argrw{"wr"}
+	add		___633_zz ___633_zz $const5 	%argrw{"wrr"}
+# include/node_texture.h:69
+# 		for (yy = yi - 1; yy <= yi + 1; yy++) {
+	assign		$tmp467 ___633_yy 	%line{69} %argrw{"wr"}
+	add		___633_yy ___633_yy $const5 	%argrw{"wrr"}
+# include/node_texture.h:68
+# 	for (xx = xi - 1; xx <= xi + 1; xx++) {
+	assign		$tmp468 ___633_xx 	%line{68} %argrw{"wr"}
+	add		___633_xx ___633_xx $const5 	%argrw{"wrr"}
+# include/node_texture.h:121
+# 	return da[n];
+	aref		$tmp417 ___644_da $const5 	%line{121} %argrw{"wrr"}
+# include/node_texture.h:148
+# float voronoi_F2S(point p) { return 2.0 * voronoi_F2(p) - 1.0; }
+	mul		$tmp469 $const21 $tmp417 	%line{148} %argrw{"wrr"}
+	sub		___664_t $tmp469 $const12 	%argrw{"wrr"}
+# include/node_texture.h:182
+# 		return voronoi_F2S(p);
+	return	%line{182}
+# include/node_texture.h:183
+# 	if (basis == "Voronoi F3")
+	eq		$tmp470 $const10 $const33 	%line{183} %argrw{"wrr"}
+	if		$tmp470 1096 1096 	%argrw{"r"}
+# include/node_texture.h:184
+# 		return voronoi_F3S(p);
+	functioncall	$const34 1095 	%line{184} %argrw{"r"}
+# include/node_texture.h:149
+# float voronoi_F3S(point p) { return 2.0 * voronoi_F3(p) - 1.0; }
+	functioncall	$const35 1093 	%line{149} %argrw{"r"}
+# include/node_texture.h:136
+# float voronoi_F3(point p) { return voronoi_Fn(p, 2); }
+	functioncall	$const23 1093 	%line{136} %argrw{"r"}
+# include/node_texture.h:119
+# 	voronoi(p, "Distance Squared", 0, da, pa);
+	functioncall	$const25 1092 	%line{119} %argrw{"r"}
+# include/node_texture.h:59
+# 	xi = (int)floor(p[0]);
+	compref		$tmp473 $tmp357 $const4 	%line{59} %argrw{"wrr"}
+	floor		$tmp472 $tmp473 	%argrw{"wr"}
+	assign		___633_xi $tmp472 	%argrw{"wr"}
+# include/node_texture.h:60
+# 	yi = (int)floor(p[1]);
+	compref		$tmp475 $tmp357 $const5 	%line{60} %argrw{"wrr"}
+	floor		$tmp474 $tmp475 	%argrw{"wr"}
+	assign		___633_yi $tmp474 	%argrw{"wr"}
+# include/node_texture.h:61
+# 	zi = (int)floor(p[2]);
+	compref		$tmp477 $tmp357 $const6 	%line{61} %argrw{"wrr"}
+	floor		$tmp476 $tmp477 	%argrw{"wr"}
+	assign		___633_zi $tmp476 	%argrw{"wr"}
+# include/node_texture.h:63
+# 	da[0] = 1e10;
+	aassign		___644_da $const4 $const26 	%line{63} %argrw{"wrr"}
+# include/node_texture.h:64
+# 	da[1] = 1e10;
+	aassign		___644_da $const5 $const26 	%line{64} %argrw{"wrr"}
+# include/node_texture.h:65
+# 	da[2] = 1e10;
+	aassign		___644_da $const6 $const26 	%line{65} %argrw{"wrr"}
+# include/node_texture.h:66
+# 	da[3] = 1e10;
+	aassign		___644_da $const27 $const26 	%line{66} %argrw{"wrr"}
+# include/node_texture.h:68
+# 	for (xx = xi - 1; xx <= xi + 1; xx++) {
+	for		$tmp479 1006 1008 1090 1092 	%line{68} %argrw{"r"}
+	sub		___633_xx ___633_xi $const5 	%argrw{"wrr"}
+	add		$tmp478 ___633_xi $const5 	%argrw{"wrr"}
+	le		$tmp479 ___633_xx $tmp478 	%argrw{"wrr"}
+# include/node_texture.h:69
+# 		for (yy = yi - 1; yy <= yi + 1; yy++) {
+	for		$tmp481 1010 1012 1088 1090 	%line{69} %argrw{"r"}
+	sub		___633_yy ___633_yi $const5 	%argrw{"wrr"}
+	add		$tmp480 ___633_yi $const5 	%argrw{"wrr"}
+	le		$tmp481 ___633_yy $tmp480 	%argrw{"wrr"}
+# include/node_texture.h:70
+# 			for (zz = zi - 1; zz <= zi + 1; zz++) {
+	for		$tmp483 1014 1016 1086 1088 	%line{70} %argrw{"r"}
+	sub		___633_zz ___633_zi $const5 	%argrw{"wrr"}
+	add		$tmp482 ___633_zi $const5 	%argrw{"wrr"}
+	le		$tmp483 ___633_zz $tmp482 	%argrw{"wrr"}
+# include/node_texture.h:71
+# 				point ip = point(xx, yy, zz);
+	assign		$tmp484 ___633_xx 	%line{71} %argrw{"wr"}
+	assign		$tmp485 ___633_yy 	%argrw{"wr"}
+	assign		$tmp486 ___633_zz 	%argrw{"wr"}
+	point		___639_ip $tmp484 $tmp485 $tmp486 	%argrw{"wrrr"}
+# include/node_texture.h:72
+# 				point vp = (point)cellnoise_color(ip);
+	functioncall	$const28 1033 	%line{72} %argrw{"r"}
+# include/node_texture.h:47
+# 	float r = cellnoise(p);
+	cellnoise	___632_r ___639_ip 	%line{47} %argrw{"wr"}
+# include/node_texture.h:48
+# 	float g = cellnoise(point(p[1], p[0], p[2]));
+	compref		$tmp488 ___639_ip $const5 	%line{48} %argrw{"wrr"}
+	compref		$tmp489 ___639_ip $const4 	%argrw{"wrr"}
+	compref		$tmp490 ___639_ip $const6 	%argrw{"wrr"}
+	point		$tmp487 $tmp488 $tmp489 $tmp490 	%argrw{"wrrr"}
+	cellnoise	___632_g $tmp487 	%argrw{"wr"}
+# include/node_texture.h:49
+# 	float b = cellnoise(point(p[1], p[2], p[0]));
+	compref		$tmp492 ___639_ip $const5 	%line{49} %argrw{"wrr"}
+	compref		$tmp493 ___639_ip $const6 	%argrw{"wrr"}
+	compref		$tmp494 ___639_ip $const4 	%argrw{"wrr"}
+	point		$tmp491 $tmp492 $tmp493 $tmp494 	%argrw{"wrrr"}
+	cellnoise	___632_b $tmp491 	%argrw{"wr"}
+# include/node_texture.h:51
+# 	return color(r, g, b);
+	color		___639_vp ___632_r ___632_g ___632_b 	%line{51} %argrw{"wrrr"}
+# include/node_texture.h:73
+# 				point pd = p - (vp + ip);
+	add		$tmp495 ___639_vp ___639_ip 	%line{73} %argrw{"wrr"}
+	sub		___639_pd $tmp357 $tmp495 	%argrw{"wrr"}
+# include/node_texture.h:74
+# 				float d = voronoi_distance(distance_metric, pd, e);
+	functioncall	$const29 1037 	%line{74} %argrw{"r"}
+# include/node_texture.h:24
+# 		return dot(d, d);
+	dot		___639_d ___639_pd ___639_pd 	%line{24} %argrw{"wrr"}
+# include/node_texture.h:76
+# 				vp += point(xx, yy, zz);
+	assign		$tmp497 ___633_xx 	%line{76} %argrw{"wr"}
+	assign		$tmp498 ___633_yy 	%argrw{"wr"}
+	assign		$tmp499 ___633_zz 	%argrw{"wr"}
+	point		$tmp496 $tmp497 $tmp498 $tmp499 	%argrw{"wrrr"}
+	add		___639_vp ___639_vp $tmp496 	%argrw{"wrr"}
+# include/node_texture.h:78
+# 				if (d < da[0]) {
+	aref		$tmp500 ___644_da $const4 	%line{78} %argrw{"wrr"}
+	lt		$tmp501 ___639_d $tmp500 	%argrw{"wrr"}
+	if		$tmp501 1059 1086 	%argrw{"r"}
+# include/node_texture.h:79
+# 					da[3] = da[2];
+	aref		$tmp502 ___644_da $const6 	%line{79} %argrw{"wrr"}
+	aassign		___644_da $const27 $tmp502 	%argrw{"wrr"}
+# include/node_texture.h:80
+# 					da[2] = da[1];
+	aref		$tmp503 ___644_da $const5 	%line{80} %argrw{"wrr"}
+	aassign		___644_da $const6 $tmp503 	%argrw{"wrr"}
+# include/node_texture.h:81
+# 					da[1] = da[0];
+	aref		$tmp504 ___644_da $const4 	%line{81} %argrw{"wrr"}
+	aassign		___644_da $const5 $tmp504 	%argrw{"wrr"}
+# include/node_texture.h:82
+# 					da[0] = d;
+	aassign		___644_da $const4 ___639_d 	%line{82} %argrw{"wrr"}
+# include/node_texture.h:84
+# 					pa[3] = pa[2];
+	aref		$tmp505 ___644_pa $const6 	%line{84} %argrw{"wrr"}
+	aassign		___644_pa $const27 $tmp505 	%argrw{"wrr"}
+# include/node_texture.h:85
+# 					pa[2] = pa[1];
+	aref		$tmp506 ___644_pa $const5 	%line{85} %argrw{"wrr"}
+	aassign		___644_pa $const6 $tmp506 	%argrw{"wrr"}
+# include/node_texture.h:86
+# 					pa[1] = pa[0];
+	aref		$tmp507 ___644_pa $const4 	%line{86} %argrw{"wrr"}
+	aassign		___644_pa $const5 $tmp507 	%argrw{"wrr"}
+# include/node_texture.h:87
+# 					pa[0] = vp;
+	aassign		___644_pa $const4 ___639_vp 	%line{87} %argrw{"wrr"}
+# include/node_texture.h:89
+# 				else if (d < da[1]) {
+	aref		$tmp508 ___644_da $const5 	%line{89} %argrw{"wrr"}
+	lt		$tmp509 ___639_d $tmp508 	%argrw{"wrr"}
+	if		$tmp509 1072 1086 	%argrw{"r"}
+# include/node_texture.h:90
+# 					da[3] = da[2];
+	aref		$tmp510 ___644_da $const6 	%line{90} %argrw{"wrr"}
+	aassign		___644_da $const27 $tmp510 	%argrw{"wrr"}
+# include/node_texture.h:91
+# 					da[2] = da[1];
+	aref		$tmp511 ___644_da $const5 	%line{91} %argrw{"wrr"}
+	aassign		___644_da $const6 $tmp511 	%argrw{"wrr"}
+# include/node_texture.h:92
+# 					da[1] = d;
+	aassign		___644_da $const5 ___639_d 	%line{92} %argrw{"wrr"}
+# include/node_texture.h:94
+# 					pa[3] = pa[2];
+	aref		$tmp512 ___644_pa $const6 	%line{94} %argrw{"wrr"}
+	aassign		___644_pa $const27 $tmp512 	%argrw{"wrr"}
+# include/node_texture.h:95
+# 					pa[2] = pa[1];
+	aref		$tmp513 ___644_pa $const5 	%line{95} %argrw{"wrr"}
+	aassign		___644_pa $const6 $tmp513 	%argrw{"wrr"}
+# include/node_texture.h:96
+# 					pa[1] = vp;
+	aassign		___644_pa $const5 ___639_vp 	%line{96} %argrw{"wrr"}
+# include/node_texture.h:98
+# 				else if (d < da[2]) {
+	aref		$tmp514 ___644_da $const6 	%line{98} %argrw{"wrr"}
+	lt		$tmp515 ___639_d $tmp514 	%argrw{"wrr"}
+	if		$tmp515 1081 1086 	%argrw{"r"}
+# include/node_texture.h:99
+# 					da[3] = da[2];
+	aref		$tmp516 ___644_da $const6 	%line{99} %argrw{"wrr"}
+	aassign		___644_da $const27 $tmp516 	%argrw{"wrr"}
+# include/node_texture.h:100
+# 					da[2] = d;
+	aassign		___644_da $const6 ___639_d 	%line{100} %argrw{"wrr"}
+# include/node_texture.h:102
+# 					pa[3] = pa[2];
+	aref		$tmp517 ___644_pa $const6 	%line{102} %argrw{"wrr"}
+	aassign		___644_pa $const27 $tmp517 	%argrw{"wrr"}
+# include/node_texture.h:103
+# 					pa[2] = vp;
+	aassign		___644_pa $const6 ___639_vp 	%line{103} %argrw{"wrr"}
+# include/node_texture.h:105
+# 				else if (d < da[3]) {
+	aref		$tmp518 ___644_da $const27 	%line{105} %argrw{"wrr"}
+	lt		$tmp519 ___639_d $tmp518 	%argrw{"wrr"}
+	if		$tmp519 1086 1086 	%argrw{"r"}
+# include/node_texture.h:106
+# 					da[3] = d;
+	aassign		___644_da $const27 ___639_d 	%line{106} %argrw{"wrr"}
+# include/node_texture.h:107
+# 					pa[3] = vp;
+	aassign		___644_pa $const27 ___639_vp 	%line{107} %argrw{"wrr"}
+# include/node_texture.h:70
+# 			for (zz = zi - 1; zz <= zi + 1; zz++) {
+	assign		$tmp520 ___633_zz 	%line{70} %argrw{"wr"}
+	add		___633_zz ___633_zz $const5 	%argrw{"wrr"}
+# include/node_texture.h:69
+# 		for (yy = yi - 1; yy <= yi + 1; yy++) {
+	assign		$tmp521 ___633_yy 	%line{69} %argrw{"wr"}
+	add		___633_yy ___633_yy $const5 	%argrw{"wrr"}
+# include/node_texture.h:68
+# 	for (xx = xi - 1; xx <= xi + 1; xx++) {
+	assign		$tmp522 ___633_xx 	%line{68} %argrw{"wr"}
+	add		___633_xx ___633_xx $const5 	%argrw{"wrr"}
+# include/node_texture.h:121
+# 	return da[n];
+	aref		$tmp471 ___644_da $const6 	%line{121} %argrw{"wrr"}
+# include/node_texture.h:149
+# float voronoi_F3S(point p) { return 2.0 * voronoi_F3(p) - 1.0; }
+	mul		$tmp523 $const21 $tmp471 	%line{149} %argrw{"wrr"}
+	sub		___664_t $tmp523 $const12 	%argrw{"wrr"}
+# include/node_texture.h:184
+# 		return voronoi_F3S(p);
+	return	%line{184}
+# include/node_texture.h:185
+# 	if (basis == "Voronoi F4")
+	eq		$tmp524 $const10 $const36 	%line{185} %argrw{"wrr"}
+	if		$tmp524 1207 1207 	%argrw{"r"}
+# include/node_texture.h:186
+# 		return voronoi_F4S(p);
+	functioncall	$const37 1206 	%line{186} %argrw{"r"}
+# include/node_texture.h:150
+# float voronoi_F4S(point p) { return 2.0 * voronoi_F4(p) - 1.0; }
+	functioncall	$const38 1204 	%line{150} %argrw{"r"}
+# include/node_texture.h:137
+# float voronoi_F4(point p) { return voronoi_Fn(p, 3); }
+	functioncall	$const23 1204 	%line{137} %argrw{"r"}
+# include/node_texture.h:119
+# 	voronoi(p, "Distance Squared", 0, da, pa);
+	functioncall	$const25 1203 	%line{119} %argrw{"r"}
+# include/node_texture.h:59
+# 	xi = (int)floor(p[0]);
+	compref		$tmp527 $tmp357 $const4 	%line{59} %argrw{"wrr"}
+	floor		$tmp526 $tmp527 	%argrw{"wr"}
+	assign		___633_xi $tmp526 	%argrw{"wr"}
+# include/node_texture.h:60
+# 	yi = (int)floor(p[1]);
+	compref		$tmp529 $tmp357 $const5 	%line{60} %argrw{"wrr"}
+	floor		$tmp528 $tmp529 	%argrw{"wr"}
+	assign		___633_yi $tmp528 	%argrw{"wr"}
+# include/node_texture.h:61
+# 	zi = (int)floor(p[2]);
+	compref		$tmp531 $tmp357 $const6 	%line{61} %argrw{"wrr"}
+	floor		$tmp530 $tmp531 	%argrw{"wr"}
+	assign		___633_zi $tmp530 	%argrw{"wr"}
+# include/node_texture.h:63
+# 	da[0] = 1e10;
+	aassign		___644_da $const4 $const26 	%line{63} %argrw{"wrr"}
+# include/node_texture.h:64
+# 	da[1] = 1e10;
+	aassign		___644_da $const5 $const26 	%line{64} %argrw{"wrr"}
+# include/node_texture.h:65
+# 	da[2] = 1e10;
+	aassign		___644_da $const6 $const26 	%line{65} %argrw{"wrr"}
+# include/node_texture.h:66
+# 	da[3] = 1e10;
+	aassign		___644_da $const27 $const26 	%line{66} %argrw{"wrr"}
+# include/node_texture.h:68
+# 	for (xx = xi - 1; xx <= xi + 1; xx++) {
+	for		$tmp533 1117 1119 1201 1203 	%line{68} %argrw{"r"}
+	sub		___633_xx ___633_xi $const5 	%argrw{"wrr"}
+	add		$tmp532 ___633_xi $const5 	%argrw{"wrr"}
+	le		$tmp533 ___633_xx $tmp532 	%argrw{"wrr"}
+# include/node_texture.h:69
+# 		for (yy = yi - 1; yy <= yi + 1; yy++) {
+	for		$tmp535 1121 1123 1199 1201 	%line{69} %argrw{"r"}
+	sub		___633_yy ___633_yi $const5 	%argrw{"wrr"}
+	add		$tmp534 ___633_yi $const5 	%argrw{"wrr"}
+	le		$tmp535 ___633_yy $tmp534 	%argrw{"wrr"}
+# include/node_texture.h:70
+# 			for (zz = zi - 1; zz <= zi + 1; zz++) {
+	for		$tmp537 1125 1127 1197 1199 	%line{70} %argrw{"r"}
+	sub		___633_zz ___633_zi $const5 	%argrw{"wrr"}
+	add		$tmp536 ___633_zi $const5 	%argrw{"wrr"}
+	le		$tmp537 ___633_zz $tmp536 	%argrw{"wrr"}
+# include/node_texture.h:71
+# 				point ip = point(xx, yy, zz);
+	assign		$tmp538 ___633_xx 	%line{71} %argrw{"wr"}
+	assign		$tmp539 ___633_yy 	%argrw{"wr"}
+	assign		$tmp540 ___633_zz 	%argrw{"wr"}
+	point		___639_ip $tmp538 $tmp539 $tmp540 	%argrw{"wrrr"}
+# include/node_texture.h:72
+# 				point vp = (point)cellnoise_color(ip);
+	functioncall	$const28 1144 	%line{72} %argrw{"r"}
+# include/node_texture.h:47
+# 	float r = cellnoise(p);
+	cellnoise	___632_r ___639_ip 	%line{47} %argrw{"wr"}
+# include/node_texture.h:48
+# 	float g = cellnoise(point(p[1], p[0], p[2]));
+	compref		$tmp542 ___639_ip $const5 	%line{48} %argrw{"wrr"}
+	compref		$tmp543 ___639_ip $const4 	%argrw{"wrr"}
+	compref		$tmp544 ___639_ip $const6 	%argrw{"wrr"}
+	point		$tmp541 $tmp542 $tmp543 $tmp544 	%argrw{"wrrr"}
+	cellnoise	___632_g $tmp541 	%argrw{"wr"}
+# include/node_texture.h:49
+# 	float b = cellnoise(point(p[1], p[2], p[0]));
+	compref		$tmp546 ___639_ip $const5 	%line{49} %argrw{"wrr"}
+	compref		$tmp547 ___639_ip $const6 	%argrw{"wrr"}
+	compref		$tmp548 ___639_ip $const4 	%argrw{"wrr"}
+	point		$tmp545 $tmp546 $tmp547 $tmp548 	%argrw{"wrrr"}
+	cellnoise	___632_b $tmp545 	%argrw{"wr"}
+# include/node_texture.h:51
+# 	return color(r, g, b);
+	color		___639_vp ___632_r ___632_g ___632_b 	%line{51} %argrw{"wrrr"}
+# include/node_texture.h:73
+# 				point pd = p - (vp + ip);
+	add		$tmp549 ___639_vp ___639_ip 	%line{73} %argrw{"wrr"}
+	sub		___639_pd $tmp357 $tmp549 	%argrw{"wrr"}
+# include/node_texture.h:74
+# 				float d = voronoi_distance(distance_metric, pd, e);
+	functioncall	$const29 1148 	%line{74} %argrw{"r"}
+# include/node_texture.h:24
+# 		return dot(d, d);
+	dot		___639_d ___639_pd ___639_pd 	%line{24} %argrw{"wrr"}
+# include/node_texture.h:76
+# 				vp += point(xx, yy, zz);
+	assign		$tmp551 ___633_xx 	%line{76} %argrw{"wr"}
+	assign		$tmp552 ___633_yy 	%argrw{"wr"}
+	assign		$tmp553 ___633_zz 	%argrw{"wr"}
+	point		$tmp550 $tmp551 $tmp552 $tmp553 	%argrw{"wrrr"}
+	add		___639_vp ___639_vp $tmp550 	%argrw{"wrr"}
+# include/node_texture.h:78
+# 				if (d < da[0]) {
+	aref		$tmp554 ___644_da $const4 	%line{78} %argrw{"wrr"}
+	lt		$tmp555 ___639_d $tmp554 	%argrw{"wrr"}
+	if		$tmp555 1170 1197 	%argrw{"r"}
+# include/node_texture.h:79
+# 					da[3] = da[2];
+	aref		$tmp556 ___644_da $const6 	%line{79} %argrw{"wrr"}
+	aassign		___644_da $const27 $tmp556 	%argrw{"wrr"}
+# include/node_texture.h:80
+# 					da[2] = da[1];
+	aref		$tmp557 ___644_da $const5 	%line{80} %argrw{"wrr"}
+	aassign		___644_da $const6 $tmp557 	%argrw{"wrr"}
+# include/node_texture.h:81
+# 					da[1] = da[0];
+	aref		$tmp558 ___644_da $const4 	%line{81} %argrw{"wrr"}
+	aassign		___644_da $const5 $tmp558 	%argrw{"wrr"}
+# include/node_texture.h:82
+# 					da[0] = d;
+	aassign		___644_da $const4 ___639_d 	%line{82} %argrw{"wrr"}
+# include/node_texture.h:84
+# 					pa[3] = pa[2];
+	aref		$tmp559 ___644_pa $const6 	%line{84} %argrw{"wrr"}
+	aassign		___644_pa $const27 $tmp559 	%argrw{"wrr"}
+# include/node_texture.h:85
+# 					pa[2] = pa[1];
+	aref		$tmp560 ___644_pa $const5 	%line{85} %argrw{"wrr"}
+	aassign		___644_pa $const6 $tmp560 	%argrw{"wrr"}
+# include/node_texture.h:86
+# 					pa[1] = pa[0];
+	aref		$tmp561 ___644_pa $const4 	%line{86} %argrw{"wrr"}
+	aassign		___644_pa $const5 $tmp561 	%argrw{"wrr"}
+# include/node_texture.h:87
+# 					pa[0] = vp;
+	aassign		___644_pa $const4 ___639_vp 	%line{87} %argrw{"wrr"}
+# include/node_texture.h:89
+# 				else if (d < da[1]) {
+	aref		$tmp562 ___644_da $const5 	%line{89} %argrw{"wrr"}
+	lt		$tmp563 ___639_d $tmp562 	%argrw{"wrr"}
+	if		$tmp563 1183 1197 	%argrw{"r"}
+# include/node_texture.h:90
+# 					da[3] = da[2];
+	aref		$tmp564 ___644_da $const6 	%line{90} %argrw{"wrr"}
+	aassign		___644_da $const27 $tmp564 	%argrw{"wrr"}
+# include/node_texture.h:91
+# 					da[2] = da[1];
+	aref		$tmp565 ___644_da $const5 	%line{91} %argrw{"wrr"}
+	aassign		___644_da $const6 $tmp565 	%argrw{"wrr"}
+# include/node_texture.h:92
+# 					da[1] = d;
+	aassign		___644_da $const5 ___639_d 	%line{92} %argrw{"wrr"}
+# include/node_texture.h:94
+# 					pa[3] = pa[2];
+	aref		$tmp566 ___644_pa $const6 	%line{94} %argrw{"wrr"}
+	aassign		___644_pa $const27 $tmp566 	%argrw{"wrr"}
+# include/node_texture.h:95
+# 					pa[2] = pa[1];
+	aref		$tmp567 ___644_pa $const5 	%line{95} %argrw{"wrr"}
+	aassign		___644_pa $const6 $tmp567 	%argrw{"wrr"}
+# include/node_texture.h:96
+# 					pa[1] = vp;
+	aassign		___644_pa $const5 ___639_vp 	%line{96} %argrw{"wrr"}
+# include/node_texture.h:98
+# 				else if (d < da[2]) {
+	aref		$tmp568 ___644_da $const6 	%line{98} %argrw{"wrr"}
+	lt		$tmp569 ___639_d $tmp568 	%argrw{"wrr"}
+	if		$tmp569 1192 1197 	%argrw{"r"}
+# include/node_texture.h:99
+# 					da[3] = da[2];
+	aref		$tmp570 ___644_da $const6 	%line{99} %argrw{"wrr"}
+	aassign		___644_da $const27 $tmp570 	%argrw{"wrr"}
+# include/node_texture.h:100
+# 					da[2] = d;
+	aassign		___644_da $const6 ___639_d 	%line{100} %argrw{"wrr"}
+# include/node_texture.h:102
+# 					pa[3] = pa[2];
+	aref		$tmp571 ___644_pa $const6 	%line{102} %argrw{"wrr"}
+	aassign		___644_pa $const27 $tmp571 	%argrw{"wrr"}
+# include/node_texture.h:103
+# 					pa[2] = vp;
+	aassign		___644_pa $const6 ___639_vp 	%line{103} %argrw{"wrr"}
+# include/node_texture.h:105
+# 				else if (d < da[3]) {
+	aref		$tmp572 ___644_da $const27 	%line{105} %argrw{"wrr"}
+	lt		$tmp573 ___639_d $tmp572 	%argrw{"wrr"}
+	if		$tmp573 1197 1197 	%argrw{"r"}
+# include/node_texture.h:106
+# 					da[3] = d;
+	aassign		___644_da $const27 ___639_d 	%line{106} %argrw{"wrr"}
+# include/node_texture.h:107
+# 					pa[3] = vp;
+	aassign		___644_pa $const27 ___639_vp 	%line{107} %argrw{"wrr"}
+# include/node_texture.h:70
+# 			for (zz = zi - 1; zz <= zi + 1; zz++) {
+	assign		$tmp574 ___633_zz 	%line{70} %argrw{"wr"}
+	add		___633_zz ___633_zz $const5 	%argrw{"wrr"}
+# include/node_texture.h:69
+# 		for (yy = yi - 1; yy <= yi + 1; yy++) {
+	assign		$tmp575 ___633_yy 	%line{69} %argrw{"wr"}
+	add		___633_yy ___633_yy $const5 	%argrw{"wrr"}
+# include/node_texture.h:68
+# 	for (xx = xi - 1; xx <= xi + 1; xx++) {
+	assign		$tmp576 ___633_xx 	%line{68} %argrw{"wr"}
+	add		___633_xx ___633_xx $const5 	%argrw{"wrr"}
+# include/node_texture.h:121
+# 	return da[n];
+	aref		$tmp525 ___644_da $const27 	%line{121} %argrw{"wrr"}
+# include/node_texture.h:150
+# float voronoi_F4S(point p) { return 2.0 * voronoi_F4(p) - 1.0; }
+	mul		$tmp577 $const21 $tmp525 	%line{150} %argrw{"wrr"}
+	sub		___664_t $tmp577 $const12 	%argrw{"wrr"}
+# include/node_texture.h:186
+# 		return voronoi_F4S(p);
+	return	%line{186}
+# include/node_texture.h:187
+# 	if (basis == "Voronoi F2-F1")
+	eq		$tmp578 $const10 $const39 	%line{187} %argrw{"wrr"}
+	if		$tmp578 1320 1320 	%argrw{"r"}
+# include/node_texture.h:188
+# 		return voronoi_F1F2S(p);
+	functioncall	$const40 1319 	%line{188} %argrw{"r"}
+# include/node_texture.h:151
+# float voronoi_F1F2S(point p) { return 2.0 * voronoi_F1F2(p) - 1.0; }
+	functioncall	$const41 1317 	%line{151} %argrw{"r"}
+# include/node_texture.h:138
+# float voronoi_F1F2(point p) { return voronoi_FnFn(p, 0, 1); }
+	functioncall	$const42 1317 	%line{138} %argrw{"r"}
+# include/node_texture.h:129
+# 	voronoi(p, "Distance Squared", 0, da, pa);
+	functioncall	$const25 1314 	%line{129} %argrw{"r"}
+# include/node_texture.h:59
+# 	xi = (int)floor(p[0]);
+	compref		$tmp581 $tmp357 $const4 	%line{59} %argrw{"wrr"}
+	floor		$tmp580 $tmp581 	%argrw{"wr"}
+	assign		___633_xi $tmp580 	%argrw{"wr"}
+# include/node_texture.h:60
+# 	yi = (int)floor(p[1]);
+	compref		$tmp583 $tmp357 $const5 	%line{60} %argrw{"wrr"}
+	floor		$tmp582 $tmp583 	%argrw{"wr"}
+	assign		___633_yi $tmp582 	%argrw{"wr"}
+# include/node_texture.h:61
+# 	zi = (int)floor(p[2]);
+	compref		$tmp585 $tmp357 $const6 	%line{61} %argrw{"wrr"}
+	floor		$tmp584 $tmp585 	%argrw{"wr"}
+	assign		___633_zi $tmp584 	%argrw{"wr"}
+# include/node_texture.h:63
+# 	da[0] = 1e10;
+	aassign		___645_da $const4 $const26 	%line{63} %argrw{"wrr"}
+# include/node_texture.h:64
+# 	da[1] = 1e10;
+	aassign		___645_da $const5 $const26 	%line{64} %argrw{"wrr"}
+# include/node_texture.h:65
+# 	da[2] = 1e10;
+	aassign		___645_da $const6 $const26 	%line{65} %argrw{"wrr"}
+# include/node_texture.h:66
+# 	da[3] = 1e10;
+	aassign		___645_da $const27 $const26 	%line{66} %argrw{"wrr"}
+# include/node_texture.h:68
+# 	for (xx = xi - 1; xx <= xi + 1; xx++) {
+	for		$tmp587 1228 1230 1312 1314 	%line{68} %argrw{"r"}
+	sub		___633_xx ___633_xi $const5 	%argrw{"wrr"}
+	add		$tmp586 ___633_xi $const5 	%argrw{"wrr"}
+	le		$tmp587 ___633_xx $tmp586 	%argrw{"wrr"}
+# include/node_texture.h:69
+# 		for (yy = yi - 1; yy <= yi + 1; yy++) {
+	for		$tmp589 1232 1234 1310 1312 	%line{69} %argrw{"r"}
+	sub		___633_yy ___633_yi $const5 	%argrw{"wrr"}
+	add		$tmp588 ___633_yi $const5 	%argrw{"wrr"}
+	le		$tmp589 ___633_yy $tmp588 	%argrw{"wrr"}
+# include/node_texture.h:70
+# 			for (zz = zi - 1; zz <= zi + 1; zz++) {
+	for		$tmp591 1236 1238 1308 1310 	%line{70} %argrw{"r"}
+	sub		___633_zz ___633_zi $const5 	%argrw{"wrr"}
+	add		$tmp590 ___633_zi $const5 	%argrw{"wrr"}
+	le		$tmp591 ___633_zz $tmp590 	%argrw{"wrr"}
+# include/node_texture.h:71
+# 				point ip = point(xx, yy, zz);
+	assign		$tmp592 ___633_xx 	%line{71} %argrw{"wr"}
+	assign		$tmp593 ___633_yy 	%argrw{"wr"}
+	assign		$tmp594 ___633_zz 	%argrw{"wr"}
+	point		___639_ip $tmp592 $tmp593 $tmp594 	%argrw{"wrrr"}
+# include/node_texture.h:72
+# 				point vp = (point)cellnoise_color(ip);
+	functioncall	$const28 1255 	%line{72} %argrw{"r"}
+# include/node_texture.h:47
+# 	float r = cellnoise(p);
+	cellnoise	___632_r ___639_ip 	%line{47} %argrw{"wr"}
+# include/node_texture.h:48
+# 	float g = cellnoise(point(p[1], p[0], p[2]));
+	compref		$tmp596 ___639_ip $const5 	%line{48} %argrw{"wrr"}
+	compref		$tmp597 ___639_ip $const4 	%argrw{"wrr"}
+	compref		$tmp598 ___639_ip $const6 	%argrw{"wrr"}
+	point		$tmp595 $tmp596 $tmp597 $tmp598 	%argrw{"wrrr"}
+	cellnoise	___632_g $tmp595 	%argrw{"wr"}
+# include/node_texture.h:49
+# 	float b = cellnoise(point(p[1], p[2], p[0]));
+	compref		$tmp600 ___639_ip $const5 	%line{49} %argrw{"wrr"}
+	compref		$tmp601 ___639_ip $const6 	%argrw{"wrr"}
+	compref		$tmp602 ___639_ip $const4 	%argrw{"wrr"}
+	point		$tmp599 $tmp600 $tmp601 $tmp602 	%argrw{"wrrr"}
+	cellnoise	___632_b $tmp599 	%argrw{"wr"}
+# include/node_texture.h:51
+# 	return color(r, g, b);
+	color		___639_vp ___632_r ___632_g ___632_b 	%line{51} %argrw{"wrrr"}
+# include/node_texture.h:73
+# 				point pd = p - (vp + ip);
+	add		$tmp603 ___639_vp ___639_ip 	%line{73} %argrw{"wrr"}
+	sub		___639_pd $tmp357 $tmp603 	%argrw{"wrr"}
+# include/node_texture.h:74
+# 				float d = voronoi_distance(distance_metric, pd, e);
+	functioncall	$const29 1259 	%line{74} %argrw{"r"}
+# include/node_texture.h:24
+# 		return dot(d, d);
+	dot		___639_d ___639_pd ___639_pd 	%line{24} %argrw{"wrr"}
+# include/node_texture.h:76
+# 				vp += point(xx, yy, zz);
+	assign		$tmp605 ___633_xx 	%line{76} %argrw{"wr"}
+	assign		$tmp606 ___633_yy 	%argrw{"wr"}
+	assign		$tmp607 ___633_zz 	%argrw{"wr"}
+	point		$tmp604 $tmp605 $tmp606 $tmp607 	%argrw{"wrrr"}
+	add		___639_vp ___639_vp $tmp604 	%argrw{"wrr"}
+# include/node_texture.h:78
+# 				if (d < da[0]) {
+	aref		$tmp608 ___645_da $const4 	%line{78} %argrw{"wrr"}
+	lt		$tmp609 ___639_d $tmp608 	%argrw{"wrr"}
+	if		$tmp609 1281 1308 	%argrw{"r"}
+# include/node_texture.h:79
+# 					da[3] = da[2];
+	aref		$tmp610 ___645_da $const6 	%line{79} %argrw{"wrr"}
+	aassign		___645_da $const27 $tmp610 	%argrw{"wrr"}
+# include/node_texture.h:80
+# 					da[2] = da[1];
+	aref		$tmp611 ___645_da $const5 	%line{80} %argrw{"wrr"}
+	aassign		___645_da $const6 $tmp611 	%argrw{"wrr"}
+# include/node_texture.h:81
+# 					da[1] = da[0];
+	aref		$tmp612 ___645_da $const4 	%line{81} %argrw{"wrr"}
+	aassign		___645_da $const5 $tmp612 	%argrw{"wrr"}
+# include/node_texture.h:82
+# 					da[0] = d;
+	aassign		___645_da $const4 ___639_d 	%line{82} %argrw{"wrr"}
+# include/node_texture.h:84
+# 					pa[3] = pa[2];
+	aref		$tmp613 ___645_pa $const6 	%line{84} %argrw{"wrr"}
+	aassign		___645_pa $const27 $tmp613 	%argrw{"wrr"}
+# include/node_texture.h:85
+# 					pa[2] = pa[1];
+	aref		$tmp614 ___645_pa $const5 	%line{85} %argrw{"wrr"}
+	aassign		___645_pa $const6 $tmp614 	%argrw{"wrr"}
+# include/node_texture.h:86
+# 					pa[1] = pa[0];
+	aref		$tmp615 ___645_pa $const4 	%line{86} %argrw{"wrr"}
+	aassign		___645_pa $const5 $tmp615 	%argrw{"wrr"}
+# include/node_texture.h:87
+# 					pa[0] = vp;
+	aassign		___645_pa $const4 ___639_vp 	%line{87} %argrw{"wrr"}
+# include/node_texture.h:89
+# 				else if (d < da[1]) {
+	aref		$tmp616 ___645_da $const5 	%line{89} %argrw{"wrr"}
+	lt		$tmp617 ___639_d $tmp616 	%argrw{"wrr"}
+	if		$tmp617 1294 1308 	%argrw{"r"}
+# include/node_texture.h:90
+# 					da[3] = da[2];
+	aref		$tmp618 ___645_da $const6 	%line{90} %argrw{"wrr"}
+	aassign		___645_da $const27 $tmp618 	%argrw{"wrr"}
+# include/node_texture.h:91
+# 					da[2] = da[1];
+	aref		$tmp619 ___645_da $const5 	%line{91} %argrw{"wrr"}
+	aassign		___645_da $const6 $tmp619 	%argrw{"wrr"}
+# include/node_texture.h:92
+# 					da[1] = d;
+	aassign		___645_da $const5 ___639_d 	%line{92} %argrw{"wrr"}
+# include/node_texture.h:94
+# 					pa[3] = pa[2];
+	aref		$tmp620 ___645_pa $const6 	%line{94} %argrw{"wrr"}
+	aassign		___645_pa $const27 $tmp620 	%argrw{"wrr"}
+# include/node_texture.h:95
+# 					pa[2] = pa[1];
+	aref		$tmp621 ___645_pa $const5 	%line{95} %argrw{"wrr"}
+	aassign		___645_pa $const6 $tmp621 	%argrw{"wrr"}
+# include/node_texture.h:96
+# 					pa[1] = vp;
+	aassign		___645_pa $const5 ___639_vp 	%line{96} %argrw{"wrr"}
+# include/node_texture.h:98
+# 				else if (d < da[2]) {
+	aref		$tmp622 ___645_da $const6 	%line{98} %argrw{"wrr"}
+	lt		$tmp623 ___639_d $tmp622 	%argrw{"wrr"}
+	if		$tmp623 1303 1308 	%argrw{"r"}
+# include/node_texture.h:99
+# 					da[3] = da[2];
+	aref		$tmp624 ___645_da $const6 	%line{99} %argrw{"wrr"}
+	aassign		___645_da $const27 $tmp624 	%argrw{"wrr"}
+# include/node_texture.h:100
+# 					da[2] = d;
+	aassign		___645_da $const6 ___639_d 	%line{100} %argrw{"wrr"}
+# include/node_texture.h:102
+# 					pa[3] = pa[2];
+	aref		$tmp625 ___645_pa $const6 	%line{102} %argrw{"wrr"}
+	aassign		___645_pa $const27 $tmp625 	%argrw{"wrr"}
+# include/node_texture.h:103
+# 					pa[2] = vp;
+	aassign		___645_pa $const6 ___639_vp 	%line{103} %argrw{"wrr"}
+# include/node_texture.h:105
+# 				else if (d < da[3]) {
+	aref		$tmp626 ___645_da $const27 	%line{105} %argrw{"wrr"}
+	lt		$tmp627 ___639_d $tmp626 	%argrw{"wrr"}
+	if		$tmp627 1308 1308 	%argrw{"r"}
+# include/node_texture.h:106
+# 					da[3] = d;
+	aassign		___645_da $const27 ___639_d 	%line{106} %argrw{"wrr"}
+# include/node_texture.h:107
+# 					pa[3] = vp;
+	aassign		___645_pa $const27 ___639_vp 	%line{107} %argrw{"wrr"}
+# include/node_texture.h:70
+# 			for (zz = zi - 1; zz <= zi + 1; zz++) {
+	assign		$tmp628 ___633_zz 	%line{70} %argrw{"wr"}
+	add		___633_zz ___633_zz $const5 	%argrw{"wrr"}
+# include/node_texture.h:69
+# 		for (yy = yi - 1; yy <= yi + 1; yy++) {
+	assign		$tmp629 ___633_yy 	%line{69} %argrw{"wr"}
+	add		___633_yy ___633_yy $const5 	%argrw{"wrr"}
+# include/node_texture.h:68
+# 	for (xx = xi - 1; xx <= xi + 1; xx++) {
+	assign		$tmp630 ___633_xx 	%line{68} %argrw{"wr"}
+	add		___633_xx ___633_xx $const5 	%argrw{"wrr"}
+# include/node_texture.h:131
+# 	return da[n2] - da[n1];
+	aref		$tmp631 ___645_da $const5 	%line{131} %argrw{"wrr"}
+	aref		$tmp632 ___645_da $const4 	%argrw{"wrr"}
+	sub		$tmp579 $tmp631 $tmp632 	%argrw{"wrr"}
+# include/node_texture.h:151
+# float voronoi_F1F2S(point p) { return 2.0 * voronoi_F1F2(p) - 1.0; }
+	mul		$tmp633 $const21 $tmp579 	%line{151} %argrw{"wrr"}
+	sub		___664_t $tmp633 $const12 	%argrw{"wrr"}
+# include/node_texture.h:188
+# 		return voronoi_F1F2S(p);
+	return	%line{188}
+# include/node_texture.h:189
+# 	if (basis == "Voronoi Crackle")
+	eq		$tmp634 $const10 $const43 	%line{189} %argrw{"wrr"}
+	if		$tmp634 1440 1440 	%argrw{"r"}
+# include/node_texture.h:190
+# 		return voronoi_CrS(p);
+	functioncall	$const44 1439 	%line{190} %argrw{"r"}
+# include/node_texture.h:152
+# float voronoi_CrS(point p) { return 2.0 * voronoi_Cr(p) - 1.0; }
+	functioncall	$const45 1437 	%line{152} %argrw{"r"}
+# include/node_texture.h:143
+# 	float t = 10.0 * voronoi_F1F2(p);
+	functioncall	$const41 1431 	%line{143} %argrw{"r"}
+# include/node_texture.h:138
+# float voronoi_F1F2(point p) { return voronoi_FnFn(p, 0, 1); }
+	functioncall	$const42 1431 	%line{138} %argrw{"r"}
+# include/node_texture.h:129
+# 	voronoi(p, "Distance Squared", 0, da, pa);
+	functioncall	$const25 1428 	%line{129} %argrw{"r"}
+# include/node_texture.h:59
+# 	xi = (int)floor(p[0]);
+	compref		$tmp638 $tmp357 $const4 	%line{59} %argrw{"wrr"}
+	floor		$tmp637 $tmp638 	%argrw{"wr"}
+	assign		___633_xi $tmp637 	%argrw{"wr"}
+# include/node_texture.h:60
+# 	yi = (int)floor(p[1]);
+	compref		$tmp640 $tmp357 $const5 	%line{60} %argrw{"wrr"}
+	floor		$tmp639 $tmp640 	%argrw{"wr"}
+	assign		___633_yi $tmp639 	%argrw{"wr"}
+# include/node_texture.h:61
+# 	zi = (int)floor(p[2]);
+	compref		$tmp642 $tmp357 $const6 	%line{61} %argrw{"wrr"}
+	floor		$tmp641 $tmp642 	%argrw{"wr"}
+	assign		___633_zi $tmp641 	%argrw{"wr"}
+# include/node_texture.h:63
+# 	da[0] = 1e10;
+	aassign		___645_da $const4 $const26 	%line{63} %argrw{"wrr"}
+# include/node_texture.h:64
+# 	da[1] = 1e10;
+	aassign		___645_da $const5 $const26 	%line{64} %argrw{"wrr"}
+# include/node_texture.h:65
+# 	da[2] = 1e10;
+	aassign		___645_da $const6 $const26 	%line{65} %argrw{"wrr"}
+# include/node_texture.h:66
+# 	da[3] = 1e10;
+	aassign		___645_da $const27 $const26 	%line{66} %argrw{"wrr"}
+# include/node_texture.h:68
+# 	for (xx = xi - 1; xx <= xi + 1; xx++) {
+	for		$tmp644 1342 1344 1426 1428 	%line{68} %argrw{"r"}
+	sub		___633_xx ___633_xi $const5 	%argrw{"wrr"}
+	add		$tmp643 ___633_xi $const5 	%argrw{"wrr"}
+	le		$tmp644 ___633_xx $tmp643 	%argrw{"wrr"}
+# include/node_texture.h:69
+# 		for (yy = yi - 1; yy <= yi + 1; yy++) {
+	for		$tmp646 1346 1348 1424 1426 	%line{69} %argrw{"r"}
+	sub		___633_yy ___633_yi $const5 	%argrw{"wrr"}
+	add		$tmp645 ___633_yi $const5 	%argrw{"wrr"}
+	le		$tmp646 ___633_yy $tmp645 	%argrw{"wrr"}
+# include/node_texture.h:70
+# 			for (zz = zi - 1; zz <= zi + 1; zz++) {
+	for		$tmp648 1350 1352 1422 1424 	%line{70} %argrw{"r"}
+	sub		___633_zz ___633_zi $const5 	%argrw{"wrr"}
+	add		$tmp647 ___633_zi $const5 	%argrw{"wrr"}
+	le		$tmp648 ___633_zz $tmp647 	%argrw{"wrr"}
+# include/node_texture.h:71
+# 				point ip = point(xx, yy, zz);
+	assign		$tmp649 ___633_xx 	%line{71} %argrw{"wr"}
+	assign		$tmp650 ___633_yy 	%argrw{"wr"}
+	assign		$tmp651 ___633_zz 	%argrw{"wr"}
+	point		___639_ip $tmp649 $tmp650 $tmp651 	%argrw{"wrrr"}
+# include/node_texture.h:72
+# 				point vp = (point)cellnoise_color(ip);
+	functioncall	$const28 1369 	%line{72} %argrw{"r"}
+# include/node_texture.h:47
+# 	float r = cellnoise(p);
+	cellnoise	___632_r ___639_ip 	%line{47} %argrw{"wr"}
+# include/node_texture.h:48
+# 	float g = cellnoise(point(p[1], p[0], p[2]));
+	compref		$tmp653 ___639_ip $const5 	%line{48} %argrw{"wrr"}
+	compref		$tmp654 ___639_ip $const4 	%argrw{"wrr"}
+	compref		$tmp655 ___639_ip $const6 	%argrw{"wrr"}
+	point		$tmp652 $tmp653 $tmp654 $tmp655 	%argrw{"wrrr"}
+	cellnoise	___632_g $tmp652 	%argrw{"wr"}
+# include/node_texture.h:49
+# 	float b = cellnoise(point(p[1], p[2], p[0]));
+	compref		$tmp657 ___639_ip $const5 	%line{49} %argrw{"wrr"}
+	compref		$tmp658 ___639_ip $const6 	%argrw{"wrr"}
+	compref		$tmp659 ___639_ip $const4 	%argrw{"wrr"}
+	point		$tmp656 $tmp657 $tmp658 $tmp659 	%argrw{"wrrr"}
+	cellnoise	___632_b $tmp656 	%argrw{"wr"}
+# include/node_texture.h:51
+# 	return color(r, g, b);
+	color		___639_vp ___632_r ___632_g ___632_b 	%line{51} %argrw{"wrrr"}
+# include/node_texture.h:73
+# 				point pd = p - (vp + ip);
+	add		$tmp660 ___639_vp ___639_ip 	%line{73} %argrw{"wrr"}
+	sub		___639_pd $tmp357 $tmp660 	%argrw{"wrr"}
+# include/node_texture.h:74
+# 				float d = voronoi_distance(distance_metric, pd, e);
+	functioncall	$const29 1373 	%line{74} %argrw{"r"}
+# include/node_texture.h:24
+# 		return dot(d, d);
+	dot		___639_d ___639_pd ___639_pd 	%line{24} %argrw{"wrr"}
+# include/node_texture.h:76
+# 				vp += point(xx, yy, zz);
+	assign		$tmp662 ___633_xx 	%line{76} %argrw{"wr"}
+	assign		$tmp663 ___633_yy 	%argrw{"wr"}
+	assign		$tmp664 ___633_zz 	%argrw{"wr"}
+	point		$tmp661 $tmp662 $tmp663 $tmp664 	%argrw{"wrrr"}
+	add		___639_vp ___639_vp $tmp661 	%argrw{"wrr"}
+# include/node_texture.h:78
+# 				if (d < da[0]) {
+	aref		$tmp665 ___645_da $const4 	%line{78} %argrw{"wrr"}
+	lt		$tmp666 ___639_d $tmp665 	%argrw{"wrr"}
+	if		$tmp666 1395 1422 	%argrw{"r"}
+# include/node_texture.h:79
+# 					da[3] = da[2];
+	aref		$tmp667 ___645_da $const6 	%line{79} %argrw{"wrr"}
+	aassign		___645_da $const27 $tmp667 	%argrw{"wrr"}
+# include/node_texture.h:80
+# 					da[2] = da[1];
+	aref		$tmp668 ___645_da $const5 	%line{80} %argrw{"wrr"}
+	aassign		___645_da $const6 $tmp668 	%argrw{"wrr"}
+# include/node_texture.h:81
+# 					da[1] = da[0];
+	aref		$tmp669 ___645_da $const4 	%line{81} %argrw{"wrr"}
+	aassign		___645_da $const5 $tmp669 	%argrw{"wrr"}
+# include/node_texture.h:82
+# 					da[0] = d;
+	aassign		___645_da $const4 ___639_d 	%line{82} %argrw{"wrr"}
+# include/node_texture.h:84
+# 					pa[3] = pa[2];
+	aref		$tmp670 ___645_pa $const6 	%line{84} %argrw{"wrr"}
+	aassign		___645_pa $const27 $tmp670 	%argrw{"wrr"}
+# include/node_texture.h:85
+# 					pa[2] = pa[1];
+	aref		$tmp671 ___645_pa $const5 	%line{85} %argrw{"wrr"}
+	aassign		___645_pa $const6 $tmp671 	%argrw{"wrr"}
+# include/node_texture.h:86
+# 					pa[1] = pa[0];
+	aref		$tmp672 ___645_pa $const4 	%line{86} %argrw{"wrr"}
+	aassign		___645_pa $const5 $tmp672 	%argrw{"wrr"}
+# include/node_texture.h:87
+# 					pa[0] = vp;
+	aassign		___645_pa $const4 ___639_vp 	%line{87} %argrw{"wrr"}
+# include/node_texture.h:89
+# 				else if (d < da[1]) {
+	aref		$tmp673 ___645_da $const5 	%line{89} %argrw{"wrr"}
+	lt		$tmp674 ___639_d $tmp673 	%argrw{"wrr"}
+	if		$tmp674 1408 1422 	%argrw{"r"}
+# include/node_texture.h:90
+# 					da[3] = da[2];
+	aref		$tmp675 ___645_da $const6 	%line{90} %argrw{"wrr"}
+	aassign		___645_da $const27 $tmp675 	%argrw{"wrr"}
+# include/node_texture.h:91
+# 					da[2] = da[1];
+	aref		$tmp676 ___645_da $const5 	%line{91} %argrw{"wrr"}
+	aassign		___645_da $const6 $tmp676 	%argrw{"wrr"}
+# include/node_texture.h:92
+# 					da[1] = d;
+	aassign		___645_da $const5 ___639_d 	%line{92} %argrw{"wrr"}
+# include/node_texture.h:94
+# 					pa[3] = pa[2];
+	aref		$tmp677 ___645_pa $const6 	%line{94} %argrw{"wrr"}
+	aassign		___645_pa $const27 $tmp677 	%argrw{"wrr"}
+# include/node_texture.h:95
+# 					pa[2] = pa[1];
+	aref		$tmp678 ___645_pa $const5 	%line{95} %argrw{"wrr"}
+	aassign		___645_pa $const6 $tmp678 	%argrw{"wrr"}
+# include/node_texture.h:96
+# 					pa[1] = vp;
+	aassign		___645_pa $const5 ___639_vp 	%line{96} %argrw{"wrr"}
+# include/node_texture.h:98
+# 				else if (d < da[2]) {
+	aref		$tmp679 ___645_da $const6 	%line{98} %argrw{"wrr"}
+	lt		$tmp680 ___639_d $tmp679 	%argrw{"wrr"}
+	if		$tmp680 1417 1422 	%argrw{"r"}
+# include/node_texture.h:99
+# 					da[3] = da[2];
+	aref		$tmp681 ___645_da $const6 	%line{99} %argrw{"wrr"}
+	aassign		___645_da $const27 $tmp681 	%argrw{"wrr"}
+# include/node_texture.h:100
+# 					da[2] = d;
+	aassign		___645_da $const6 ___639_d 	%line{100} %argrw{"wrr"}
+# include/node_texture.h:102
+# 					pa[3] = pa[2];
+	aref		$tmp682 ___645_pa $const6 	%line{102} %argrw{"wrr"}
+	aassign		___645_pa $const27 $tmp682 	%argrw{"wrr"}
+# include/node_texture.h:103
+# 					pa[2] = vp;
+	aassign		___645_pa $const6 ___639_vp 	%line{103} %argrw{"wrr"}
+# include/node_texture.h:105
+# 				else if (d < da[3]) {
+	aref		$tmp683 ___645_da $const27 	%line{105} %argrw{"wrr"}
+	lt		$tmp684 ___639_d $tmp683 	%argrw{"wrr"}
+	if		$tmp684 1422 1422 	%argrw{"r"}
+# include/node_texture.h:106
+# 					da[3] = d;
+	aassign		___645_da $const27 ___639_d 	%line{106} %argrw{"wrr"}
+# include/node_texture.h:107
+# 					pa[3] = vp;
+	aassign		___645_pa $const27 ___639_vp 	%line{107} %argrw{"wrr"}
+# include/node_texture.h:70
+# 			for (zz = zi - 1; zz <= zi + 1; zz++) {
+	assign		$tmp685 ___633_zz 	%line{70} %argrw{"wr"}
+	add		___633_zz ___633_zz $const5 	%argrw{"wrr"}
+# include/node_texture.h:69
+# 		for (yy = yi - 1; yy <= yi + 1; yy++) {
+	assign		$tmp686 ___633_yy 	%line{69} %argrw{"wr"}
+	add		___633_yy ___633_yy $const5 	%argrw{"wrr"}
+# include/node_texture.h:68
+# 	for (xx = xi - 1; xx <= xi + 1; xx++) {
+	assign		$tmp687 ___633_xx 	%line{68} %argrw{"wr"}
+	add		___633_xx ___633_xx $const5 	%argrw{"wrr"}
+# include/node_texture.h:131
+# 	return da[n2] - da[n1];
+	aref		$tmp688 ___645_da $const5 	%line{131} %argrw{"wrr"}
+	aref		$tmp689 ___645_da $const4 	%argrw{"wrr"}
+	sub		$tmp636 $tmp688 $tmp689 	%argrw{"wrr"}
+# include/node_texture.h:143
+# 	float t = 10.0 * voronoi_F1F2(p);
+	mul		___651_t $const7 $tmp636 	%line{143} %argrw{"wrr"}
+# include/node_texture.h:144
+# 	return (t > 1.0) ? 1.0 : t;
+	gt		$tmp690 ___651_t $const12 	%line{144} %argrw{"wrr"}
+	if		$tmp690 1435 1436 	%argrw{"r"}
+	assign		$tmp635 $const12 	%argrw{"wr"}
+	assign		$tmp635 ___651_t 	%argrw{"wr"}
+	return
+# include/node_texture.h:152
+# float voronoi_CrS(point p) { return 2.0 * voronoi_Cr(p) - 1.0; }
+	mul		$tmp691 $const21 $tmp635 	%line{152} %argrw{"wrr"}
+	sub		___664_t $tmp691 $const12 	%argrw{"wrr"}
+# include/node_texture.h:190
+# 		return voronoi_CrS(p);
+	return	%line{190}
+# include/node_texture.h:191
+# 	if (basis == "Cell Noise")
+	eq		$tmp692 $const10 $const46 	%line{191} %argrw{"wrr"}
+	if		$tmp692 1444 1444 	%argrw{"r"}
+# include/node_texture.h:192
+# 		return cellnoise(p);
+	cellnoise	___664_t $tmp357 	%line{192} %argrw{"wr"}
+	return
+# include/node_texture.h:194
+# 	return 0.0;
+	assign		___664_t $const2 	%line{194} %argrw{"wr"}
+# include/node_texture.h:233
+# 		if (hard)
+	if		$const4 1449 1449 	%line{233} %argrw{"r"}
+# include/node_texture.h:234
+# 			t = fabs(2.0 * t - 1.0);
+	mul		$tmp693 $const21 ___664_t 	%line{234} %argrw{"wrr"}
+	sub		$tmp694 $tmp693 $const12 	%argrw{"wrr"}
+	fabs		___664_t $tmp694 	%argrw{"wr"}
+# include/node_texture.h:236
+# 		float sum2 = sum + t * amp;
+	mul		$tmp695 ___664_t ___661_amp 	%line{236} %argrw{"wrr"}
+	add		___664_sum2 ___661_sum $tmp695 	%argrw{"wrr"}
+# include/node_texture.h:238
+# 		sum *= ((float)(1 << n) / (float)((1 << (n + 1)) - 1));
+	shl		$tmp696 $const5 ___661_n 	%line{238} %argrw{"wrr"}
+	assign		$tmp697 $tmp696 	%argrw{"wr"}
+	add		$tmp698 ___661_n $const5 	%argrw{"wrr"}
+	shl		$tmp699 $const5 $tmp698 	%argrw{"wrr"}
+	sub		$tmp700 $tmp699 $const5 	%argrw{"wrr"}
+	assign		$tmp701 $tmp700 	%argrw{"wr"}
+	div		$tmp702 $tmp697 $tmp701 	%argrw{"wrr"}
+	mul		___661_sum ___661_sum $tmp702 	%argrw{"wrr"}
+# include/node_texture.h:239
+# 		sum2 *= ((float)(1 << (n + 1)) / (float)((1 << (n + 2)) - 1));
+	add		$tmp703 ___661_n $const5 	%line{239} %argrw{"wrr"}
+	shl		$tmp704 $const5 $tmp703 	%argrw{"wrr"}
+	assign		$tmp705 $tmp704 	%argrw{"wr"}
+	add		$tmp706 ___661_n $const6 	%argrw{"wrr"}
+	shl		$tmp707 $const5 $tmp706 	%argrw{"wrr"}
+	sub		$tmp708 $tmp707 $const5 	%argrw{"wrr"}
+	assign		$tmp709 $tmp708 	%argrw{"wr"}
+	div		$tmp710 $tmp705 $tmp709 	%argrw{"wrr"}
+	mul		___664_sum2 ___664_sum2 $tmp710 	%argrw{"wrr"}
+# include/node_texture.h:241
+# 		return (1.0 - rmd) * sum + rmd * sum2;
+	sub		$tmp711 $const12 ___661_rmd 	%line{241} %argrw{"wrr"}
+	mul		$tmp712 $tmp711 ___661_sum 	%argrw{"wrr"}
+	mul		$tmp713 ___661_rmd ___664_sum2 	%argrw{"wrr"}
+	add		$tmp11 $tmp712 $tmp713 	%argrw{"wrr"}
+	return
+# include/node_texture.h:244
+# 		sum *= ((float)(1 << n) / (float)((1 << (n + 1)) - 1));
+	shl		$tmp714 $const5 ___661_n 	%line{244} %argrw{"wrr"}
+	assign		$tmp715 $tmp714 	%argrw{"wr"}
+	add		$tmp716 ___661_n $const5 	%argrw{"wrr"}
+	shl		$tmp717 $const5 $tmp716 	%argrw{"wrr"}
+	sub		$tmp718 $tmp717 $const5 	%argrw{"wrr"}
+	assign		$tmp719 $tmp718 	%argrw{"wr"}
+	div		$tmp720 $tmp715 $tmp719 	%argrw{"wrr"}
+	mul		___661_sum ___661_sum $tmp720 	%argrw{"wrr"}
+# include/node_texture.h:245
+# 		return sum;
+	assign		$tmp11 ___661_sum 	%line{245} %argrw{"wr"}
+	return
+# include/node_wave_texture.osl:35
+# 	}
+	mul		$tmp721 Distortion $tmp11 	%filename{"include/node_wave_texture.osl"} %line{35} %argrw{"wrr"}
+	add		___667_n ___667_n $tmp721 	%argrw{"wrr"}
+# include/node_wave_texture.osl:37
+# }
+	sin		$tmp722 ___667_n 	%line{37} %argrw{"wr"}
+	mul		$tmp723 $const18 $tmp722 	%argrw{"wrr"}
+	add		Fac $const18 $tmp723 	%argrw{"wrr"}
+# include/node_wave_texture.osl:58
+# }
+	assign		Color Fac 	%line{58} %argrw{"wr"}
+	end

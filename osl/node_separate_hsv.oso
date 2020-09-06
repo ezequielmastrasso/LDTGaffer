@@ -1,0 +1,145 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader node_separate_hsv
+param	color	Color	0.80000001 0.80000001 0.80000001		%read{1,30} %write{2147483647,-1}
+oparam	float	H	0		%read{2147483647,-1} %write{46,46}
+oparam	float	S	0		%read{2147483647,-1} %write{47,47}
+oparam	float	V	0		%read{2147483647,-1} %write{48,48}
+local	float	___638_cmax	%read{11,31} %write{5,5}
+local	float	___638_cmin	%read{11,11} %write{10,10}
+local	float	___638_h	%read{41,45} %write{17,44}
+local	float	___638_s	%read{18,45} %write{15,16}
+local	float	___638_v	%read{45,45} %write{12,12}
+local	float	___638_cdelta	%read{15,23} %write{11,11}
+local	color	___638_c	%read{27,39} %write{23,23}
+local	color	col	%read{46,48} %write{45,45}
+const	string	$const1	"rgb_to_hsv"		%read{0,0} %write{2147483647,-1}
+const	int	$const2	0		%read{1,46} %write{2147483647,-1}
+temp	float	$tmp1	%read{5,5} %write{1,1}
+temp	float	$tmp2	%read{5,5} %write{4,4}
+const	int	$const3	1		%read{2,47} %write{2147483647,-1}
+temp	float	$tmp3	%read{4,4} %write{2,2}
+const	int	$const4	2		%read{3,48} %write{2147483647,-1}
+temp	float	$tmp4	%read{4,4} %write{3,3}
+temp	float	$tmp5	%read{10,10} %write{6,6}
+temp	float	$tmp6	%read{10,10} %write{9,9}
+temp	float	$tmp7	%read{9,9} %write{7,7}
+temp	float	$tmp8	%read{9,9} %write{8,8}
+const	float	$const5	0		%read{13,42} %write{2147483647,-1}
+temp	int	$tmp9	%read{14,14} %write{13,13}
+temp	int	$tmp10	%read{19,19} %write{18,18}
+temp	color	$tmp11	%read{22,22} %write{21,21}
+temp	color	$tmp12	%read{23,23} %write{22,22}
+temp	float	$tmp13	%read{25,25} %write{24,24}
+temp	int	$tmp14	%read{26,26} %write{25,25}
+temp	float	$tmp15	%read{29,29} %write{27,27}
+temp	float	$tmp16	%read{29,29} %write{28,28}
+temp	float	$tmp17	%read{31,31} %write{30,30}
+temp	int	$tmp18	%read{32,32} %write{31,31}
+const	float	$const6	2		%read{34,34} %write{2147483647,-1}
+temp	float	$tmp19	%read{34,34} %write{33,33}
+temp	float	$tmp20	%read{36,36} %write{34,34}
+temp	float	$tmp21	%read{36,36} %write{35,35}
+const	float	$const7	4		%read{38,38} %write{2147483647,-1}
+temp	float	$tmp22	%read{38,38} %write{37,37}
+temp	float	$tmp23	%read{40,40} %write{38,38}
+temp	float	$tmp24	%read{40,40} %write{39,39}
+const	float	$const8	6		%read{41,41} %write{2147483647,-1}
+temp	int	$tmp25	%read{43,43} %write{42,42}
+const	float	$const9	1		%read{44,44} %write{2147483647,-1}
+code ___main___
+# include/node_separate_hsv.osl:27
+# 	
+	functioncall	$const1 46 	%filename{"include/node_separate_hsv.osl"} %line{27} %argrw{"r"}
+# include/node_color.h:84
+# 	cmax = max(rgb[0], max(rgb[1], rgb[2]));
+	compref		$tmp1 Color $const2 	%filename{"include/node_color.h"} %line{84} %argrw{"wrr"}
+	compref		$tmp3 Color $const3 	%argrw{"wrr"}
+	compref		$tmp4 Color $const4 	%argrw{"wrr"}
+	max		$tmp2 $tmp3 $tmp4 	%argrw{"wrr"}
+	max		___638_cmax $tmp1 $tmp2 	%argrw{"wrr"}
+# include/node_color.h:85
+# 	cmin = min(rgb[0], min(rgb[1], rgb[2]));
+	compref		$tmp5 Color $const2 	%line{85} %argrw{"wrr"}
+	compref		$tmp7 Color $const3 	%argrw{"wrr"}
+	compref		$tmp8 Color $const4 	%argrw{"wrr"}
+	min		$tmp6 $tmp7 $tmp8 	%argrw{"wrr"}
+	min		___638_cmin $tmp5 $tmp6 	%argrw{"wrr"}
+# include/node_color.h:86
+# 	cdelta = cmax - cmin;
+	sub		___638_cdelta ___638_cmax ___638_cmin 	%line{86} %argrw{"wrr"}
+# include/node_color.h:88
+# 	v = cmax;
+	assign		___638_v ___638_cmax 	%line{88} %argrw{"wr"}
+# include/node_color.h:90
+# 	if (cmax != 0.0) {
+	neq		$tmp9 ___638_cmax $const5 	%line{90} %argrw{"wrr"}
+	if		$tmp9 16 18 	%argrw{"r"}
+# include/node_color.h:91
+# 		s = cdelta / cmax;
+	div		___638_s ___638_cdelta ___638_cmax 	%line{91} %argrw{"wrr"}
+# include/node_color.h:94
+# 		s = 0.0;
+	assign		___638_s $const5 	%line{94} %argrw{"wr"}
+# include/node_color.h:95
+# 		h = 0.0;
+	assign		___638_h $const5 	%line{95} %argrw{"wr"}
+# include/node_color.h:98
+# 	if (s == 0.0) {
+	eq		$tmp10 ___638_s $const5 	%line{98} %argrw{"wrr"}
+	if		$tmp10 21 45 	%argrw{"r"}
+# include/node_color.h:99
+# 		h = 0.0;
+	assign		___638_h $const5 	%line{99} %argrw{"wr"}
+# include/node_color.h:102
+# 		c = (color(cmax, cmax, cmax) - rgb) / cdelta;
+	color		$tmp11 ___638_cmax ___638_cmax ___638_cmax 	%line{102} %argrw{"wrrr"}
+	sub		$tmp12 $tmp11 Color 	%argrw{"wrr"}
+	div		___638_c $tmp12 ___638_cdelta 	%argrw{"wrr"}
+# include/node_color.h:104
+# 		if (rgb[0] == cmax) h = c[2] - c[1];
+	compref		$tmp13 Color $const2 	%line{104} %argrw{"wrr"}
+	eq		$tmp14 $tmp13 ___638_cmax 	%argrw{"wrr"}
+	if		$tmp14 30 41 	%argrw{"r"}
+	compref		$tmp15 ___638_c $const4 	%argrw{"wrr"}
+	compref		$tmp16 ___638_c $const3 	%argrw{"wrr"}
+	sub		___638_h $tmp15 $tmp16 	%argrw{"wrr"}
+# include/node_color.h:105
+# 		else if (rgb[1] == cmax) h = 2.0 + c[0] -  c[2];
+	compref		$tmp17 Color $const3 	%line{105} %argrw{"wrr"}
+	eq		$tmp18 $tmp17 ___638_cmax 	%argrw{"wrr"}
+	if		$tmp18 37 41 	%argrw{"r"}
+	compref		$tmp19 ___638_c $const2 	%argrw{"wrr"}
+	add		$tmp20 $const6 $tmp19 	%argrw{"wrr"}
+	compref		$tmp21 ___638_c $const4 	%argrw{"wrr"}
+	sub		___638_h $tmp20 $tmp21 	%argrw{"wrr"}
+# include/node_color.h:106
+# 		else h = 4.0 + c[1] - c[0];
+	compref		$tmp22 ___638_c $const3 	%line{106} %argrw{"wrr"}
+	add		$tmp23 $const7 $tmp22 	%argrw{"wrr"}
+	compref		$tmp24 ___638_c $const2 	%argrw{"wrr"}
+	sub		___638_h $tmp23 $tmp24 	%argrw{"wrr"}
+# include/node_color.h:108
+# 		h /= 6.0;
+	div		___638_h ___638_h $const8 	%line{108} %argrw{"wrr"}
+# include/node_color.h:110
+# 		if (h < 0.0)
+	lt		$tmp25 ___638_h $const5 	%line{110} %argrw{"wrr"}
+	if		$tmp25 45 45 	%argrw{"r"}
+# include/node_color.h:111
+# 			h += 1.0;
+	add		___638_h ___638_h $const9 	%line{111} %argrw{"wrr"}
+# include/node_color.h:114
+# 	return color(h, s, v);
+	color		col ___638_h ___638_s ___638_v 	%line{114} %argrw{"wrrr"}
+# include/node_separate_hsv.osl:29
+# 	S = col[1];
+	compref		H col $const2 	%filename{"include/node_separate_hsv.osl"} %line{29} %argrw{"wrr"}
+# include/node_separate_hsv.osl:30
+# 	V = col[2];
+	compref		S col $const3 	%line{30} %argrw{"wrr"}
+# include/node_separate_hsv.osl:31
+# }
+	compref		V col $const4 	%line{31} %argrw{"wrr"}
+	end

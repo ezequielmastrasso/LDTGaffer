@@ -1,0 +1,13 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader Interpolate	%meta{string,help,"Interpolates two colors based on a third"} %meta{string,label,"Interpolate (color)"} %meta{string,category,"Math Color"} 
+param	color	Input	0 0 0		%read{0,0} %write{2147483647,-1}
+param	color	Min	0 0 0		%read{0,0} %write{2147483647,-1}
+param	color	Max	1 1 1		%read{0,0} %write{2147483647,-1}
+oparam	color	Out	0 0 0		%read{2147483647,-1} %write{0,0}
+code ___main___
+# source/3dsMax-OSL-Shaders/Interpolate.osl:19
+# }
+	mix		Out Min Max Input 	%filename{"source/3dsMax-OSL-Shaders/Interpolate.osl"} %line{19} %argrw{"wrrr"}
+	end

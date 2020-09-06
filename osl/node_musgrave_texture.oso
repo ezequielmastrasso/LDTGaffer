@@ -1,0 +1,901 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader node_musgrave_texture
+param	int	use_mapping	0		%read{9,9} %write{2147483647,-1}
+param	matrix	mapping	0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0		%read{10,10} %write{2147483647,-1}
+param	string	Type	"fBM"		%read{12,246} %write{2147483647,-1}
+param	float	Dimension	2		%read{1,1} %write{2147483647,-1}
+param	float	Lacunarity	1		%read{5,5} %write{2147483647,-1}
+param	float	Detail	2		%read{3,3} %write{2147483647,-1}
+param	float	Offset	0		%read{132,306} %write{2147483647,-1}
+param	float	Gain	1		%read{133,219} %write{2147483647,-1}
+param	float	Scale	5		%read{11,11} %write{2147483647,-1}
+param	point	Vector	0 0 0		%read{8,8} %write{0,0} %initexpr
+oparam	float	Fac	0		%read{313,313} %write{63,312}
+oparam	color	Color	0 0 0		%read{2147483647,-1} %write{313,313}
+global	point	P	%read{0,0} %write{2147483647,-1}
+local	float	___658_f	%read{21,305} %write{21,299}
+local	float	___667_rmd	%read{95,109} %write{94,94}
+local	float	___667_value	%read{73,112} %write{67,111}
+local	float	___667_pwr	%read{73,110} %write{68,92}
+local	float	___667_pwHL	%read{73,92} %write{70,70}
+local	int	___667_i	%read{73,92} %write{72,92}
+local	float	___670_rmd	%read{44,46} %write{43,43}
+local	float	___670_value	%read{21,62} %write{15,61}
+local	float	___670_pwr	%read{21,46} %write{16,41}
+local	float	___670_pwHL	%read{21,41} %write{18,18}
+local	int	___670_i	%read{21,41} %write{20,41}
+local	float	___673_value	%read{268,311} %write{264,310}
+local	float	___673_increment	%read{268,309} %write{268,308}
+local	float	___673_rmd	%read{292,309} %write{291,291}
+local	float	___673_pwHL	%read{251,289} %write{250,250}
+local	float	___673_pwr	%read{268,307} %write{251,289}
+local	int	___673_i	%read{268,289} %write{267,289}
+local	float	___677_result	%read{133,189} %write{132,188}
+local	float	___677_signal	%read{137,168} %write{137,168}
+local	float	___677_weight	%read{137,168} %write{133,168}
+local	float	___677_rmd	%read{171,187} %write{170,170}
+local	float	___677_pwHL	%read{119,168} %write{118,118}
+local	float	___677_pwr	%read{137,186} %write{119,168}
+local	int	___677_i	%read{137,168} %write{136,168}
+local	float	___680_result	%read{216,244} %write{212,243}
+local	float	___680_signal	%read{211,243} %write{210,243}
+local	float	___680_weight	%read{216,243} %write{213,243}
+local	float	___680_pwHL	%read{196,243} %write{195,195}
+local	float	___680_pwr	%read{216,243} %write{196,243}
+local	int	___680_i	%read{216,243} %write{215,243}
+local	float	dimension	%read{17,249} %write{1,1}
+local	float	octaves	%read{21,291} %write{4,4}
+local	float	lacunarity	%read{18,289} %write{5,5}
+local	string	Basis	%read{2147483647,-1} %write{6,6}
+local	float	intensity	%read{63,312} %write{7,7}
+local	point	p	%read{10,299} %write{8,289}
+const	float	$const1	9.9999997e-06		%read{1,5} %write{2147483647,-1}
+const	float	$const2	0		%read{4,295} %write{2147483647,-1}
+const	float	$const3	16		%read{3,3} %write{2147483647,-1}
+const	string	$const4	"clamp"		%read{2,220} %write{2147483647,-1}
+temp	float	$tmp1	%read{4,4} %write{3,3}
+const	string	$const5	"Perlin"		%read{6,6} %write{2147483647,-1}
+const	float	$const6	1		%read{7,221} %write{2147483647,-1}
+const	string	$const7	"Multifractal"		%read{12,12} %write{2147483647,-1}
+temp	int	$tmp2	%read{13,13} %write{12,12}
+temp	float	$tmp3	%read{63,63} %write{62,62}
+const	string	$const8	"noise_musgrave_multi_fractal"		%read{14,14} %write{2147483647,-1}
+temp	float	$tmp4	%read{18,18} %write{17,17}
+const	int	$const9	0		%read{20,301} %write{2147483647,-1}
+temp	int	$tmp5	%read{21,41} %write{21,41}
+temp	int	$tmp6	%read{19,41} %write{20,41}
+temp	float	$tmp7	%read{21,41} %write{21,41}
+const	string	$const10	"safe_noise"		%read{23,294} %write{2147483647,-1}
+temp	int	$tmp8	%read{21,41} %write{21,41}
+const	string	$const11	"perlin"		%read{27,298} %write{2147483647,-1}
+temp	int	$tmp9	%read{21,41} %write{21,41}
+temp	int	$tmp10	%read{21,41} %write{21,41}
+const	float	$const12	0.5		%read{32,303} %write{2147483647,-1}
+temp	float	$tmp11	%read{21,41} %write{21,41}
+temp	float	$tmp12	%read{21,41} %write{21,41}
+const	int	$const13	1		%read{41,289} %write{2147483647,-1}
+temp	int	$tmp13	%read{2147483647,-1} %write{21,41}
+temp	float	$tmp14	%read{43,43} %write{42,42}
+temp	int	$tmp15	%read{45,45} %write{44,44}
+temp	float	$tmp16	%read{59,59} %write{46,46}
+temp	float	$tmp17	%read{59,59} %write{56,58}
+temp	int	$tmp18	%read{50,50} %write{49,49}
+temp	int	$tmp19	%read{54,54} %write{53,53}
+temp	int	$tmp20	%read{55,55} %write{54,54}
+temp	float	$tmp21	%read{60,60} %write{59,59}
+temp	float	$tmp22	%read{61,61} %write{60,60}
+const	string	$const14	"fBM"		%read{64,64} %write{2147483647,-1}
+temp	int	$tmp23	%read{65,65} %write{64,64}
+temp	float	$tmp24	%read{113,113} %write{112,112}
+const	string	$const15	"noise_musgrave_fBm"		%read{66,66} %write{2147483647,-1}
+temp	float	$tmp25	%read{70,70} %write{69,69}
+temp	int	$tmp26	%read{73,92} %write{73,92}
+temp	int	$tmp27	%read{71,92} %write{72,92}
+temp	float	$tmp28	%read{73,92} %write{73,92}
+temp	int	$tmp29	%read{73,92} %write{73,92}
+temp	int	$tmp30	%read{73,92} %write{73,92}
+temp	int	$tmp31	%read{73,92} %write{73,92}
+temp	float	$tmp32	%read{73,92} %write{73,92}
+temp	int	$tmp33	%read{2147483647,-1} %write{73,92}
+temp	float	$tmp34	%read{94,94} %write{93,93}
+temp	int	$tmp35	%read{96,96} %write{95,95}
+temp	float	$tmp36	%read{109,109} %write{106,108}
+temp	int	$tmp37	%read{100,100} %write{99,99}
+temp	int	$tmp38	%read{104,104} %write{103,103}
+temp	int	$tmp39	%read{105,105} %write{104,104}
+temp	float	$tmp40	%read{110,110} %write{109,109}
+temp	float	$tmp41	%read{111,111} %write{110,110}
+const	string	$const16	"Hybrid Multifractal"		%read{114,114} %write{2147483647,-1}
+temp	int	$tmp42	%read{115,115} %write{114,114}
+temp	float	$tmp43	%read{190,190} %write{189,189}
+const	string	$const17	"noise_musgrave_hybrid_multi_fractal"		%read{116,116} %write{2147483647,-1}
+temp	float	$tmp44	%read{118,118} %write{117,117}
+temp	float	$tmp45	%read{132,132} %write{129,131}
+temp	int	$tmp46	%read{123,123} %write{122,122}
+temp	int	$tmp47	%read{127,127} %write{126,126}
+temp	int	$tmp48	%read{128,128} %write{127,127}
+const	float	$const18	0.001		%read{137,137} %write{2147483647,-1}
+temp	int	$tmp49	%read{137,168} %write{137,168}
+temp	int	$tmp50	%read{135,168} %write{136,168}
+temp	int	$tmp51	%read{137,168} %write{137,168}
+temp	int	$tmp52	%read{137,168} %write{137,168}
+temp	int	$tmp53	%read{137,168} %write{137,168}
+temp	int	$tmp54	%read{137,168} %write{137,168}
+temp	float	$tmp55	%read{137,168} %write{137,168}
+temp	int	$tmp56	%read{137,168} %write{137,168}
+temp	int	$tmp57	%read{137,168} %write{137,168}
+temp	int	$tmp58	%read{137,168} %write{137,168}
+temp	float	$tmp59	%read{137,168} %write{137,168}
+temp	float	$tmp60	%read{137,168} %write{137,168}
+temp	float	$tmp61	%read{137,168} %write{137,168}
+temp	int	$tmp62	%read{2147483647,-1} %write{137,168}
+temp	float	$tmp63	%read{170,170} %write{169,169}
+temp	int	$tmp64	%read{172,172} %write{171,171}
+temp	float	$tmp65	%read{185,185} %write{182,184}
+temp	int	$tmp66	%read{176,176} %write{175,175}
+temp	int	$tmp67	%read{180,180} %write{179,179}
+temp	int	$tmp68	%read{181,181} %write{180,180}
+temp	float	$tmp69	%read{186,186} %write{185,185}
+temp	float	$tmp70	%read{187,187} %write{186,186}
+temp	float	$tmp71	%read{188,188} %write{187,187}
+const	string	$const19	"Ridged Multifractal"		%read{191,191} %write{2147483647,-1}
+temp	int	$tmp72	%read{192,192} %write{191,191}
+temp	float	$tmp73	%read{245,245} %write{244,244}
+const	string	$const20	"noise_musgrave_ridged_multi_fractal"		%read{193,193} %write{2147483647,-1}
+temp	float	$tmp74	%read{195,195} %write{194,194}
+temp	float	$tmp75	%read{210,210} %write{209,209}
+temp	float	$tmp76	%read{209,209} %write{206,208}
+temp	int	$tmp77	%read{200,200} %write{199,199}
+temp	int	$tmp78	%read{204,204} %write{203,203}
+temp	int	$tmp79	%read{205,205} %write{204,204}
+temp	int	$tmp80	%read{216,243} %write{216,243}
+temp	int	$tmp81	%read{214,243} %write{215,243}
+temp	float	$tmp82	%read{216,243} %write{216,243}
+temp	float	$tmp83	%read{216,243} %write{216,243}
+temp	float	$tmp84	%read{216,243} %write{216,243}
+temp	float	$tmp85	%read{216,243} %write{216,243}
+temp	int	$tmp86	%read{216,243} %write{216,243}
+temp	int	$tmp87	%read{216,243} %write{216,243}
+temp	int	$tmp88	%read{216,243} %write{216,243}
+temp	float	$tmp89	%read{216,243} %write{216,243}
+temp	int	$tmp90	%read{2147483647,-1} %write{216,243}
+const	string	$const21	"Hetero Terrain"		%read{246,246} %write{2147483647,-1}
+temp	int	$tmp91	%read{247,247} %write{246,246}
+temp	float	$tmp92	%read{312,312} %write{311,311}
+const	string	$const22	"noise_musgrave_hetero_terrain"		%read{248,248} %write{2147483647,-1}
+temp	float	$tmp93	%read{250,250} %write{249,249}
+temp	float	$tmp94	%read{264,264} %write{261,263}
+temp	int	$tmp95	%read{255,255} %write{254,254}
+temp	int	$tmp96	%read{259,259} %write{258,258}
+temp	int	$tmp97	%read{260,260} %write{259,259}
+temp	int	$tmp98	%read{268,289} %write{268,289}
+temp	int	$tmp99	%read{266,289} %write{267,289}
+temp	float	$tmp100	%read{268,289} %write{268,289}
+temp	int	$tmp101	%read{268,289} %write{268,289}
+temp	int	$tmp102	%read{268,289} %write{268,289}
+temp	int	$tmp103	%read{268,289} %write{268,289}
+temp	float	$tmp104	%read{268,289} %write{268,289}
+temp	float	$tmp105	%read{268,289} %write{268,289}
+temp	int	$tmp106	%read{2147483647,-1} %write{268,289}
+temp	float	$tmp107	%read{291,291} %write{290,290}
+temp	int	$tmp108	%read{293,293} %write{292,292}
+temp	float	$tmp109	%read{306,306} %write{303,305}
+temp	int	$tmp110	%read{297,297} %write{296,296}
+temp	int	$tmp111	%read{301,301} %write{300,300}
+temp	int	$tmp112	%read{302,302} %write{301,301}
+temp	float	$tmp113	%read{307,307} %write{306,306}
+temp	float	$tmp114	%read{308,308} %write{307,307}
+temp	float	$tmp115	%read{310,310} %write{309,309}
+code Vector
+# include/node_musgrave_texture.osl:198
+# 	output float Fac = 0.0,
+	assign		Vector P 	%filename{"include/node_musgrave_texture.osl"} %line{198} %argrw{"wr"}
+code ___main___
+# include/node_musgrave_texture.osl:202
+# 	float octaves = clamp(Detail, 0.0, 16.0);
+	max		dimension Dimension $const1 	%filename{"include/node_musgrave_texture.osl"} %line{202} %argrw{"wrr"}
+# include/node_musgrave_texture.osl:203
+# 	float lacunarity = max(Lacunarity, 1e-5);
+	functioncall	$const4 5 	%line{203} %argrw{"r"}
+# include/stdosl.h:144
+# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
+	min		$tmp1 Detail $const3 	%filename{"include/stdosl.h"} %line{144} %argrw{"wrr"}
+	max		octaves $tmp1 $const2 	%argrw{"wrr"}
+# include/node_musgrave_texture.osl:204
+# 	string Basis = "Perlin";
+	max		lacunarity Lacunarity $const1 	%filename{"include/node_musgrave_texture.osl"} %line{204} %argrw{"wrr"}
+# include/node_musgrave_texture.osl:205
+# 	float intensity = 1.0;
+	assign		Basis $const5 	%line{205} %argrw{"wr"}
+# include/node_musgrave_texture.osl:206
+# 
+	assign		intensity $const6 	%line{206} %argrw{"wr"}
+# include/node_musgrave_texture.osl:208
+# 
+	assign		p Vector 	%line{208} %argrw{"wr"}
+# include/node_musgrave_texture.osl:210
+# 		p = transform(mapping, p);
+	if		use_mapping 11 11 	%line{210} %argrw{"r"}
+# include/node_musgrave_texture.osl:211
+# 
+	transform	p mapping p 	%line{211} %argrw{"wrr"}
+# include/node_musgrave_texture.osl:213
+# 
+	mul		p p Scale 	%line{213} %argrw{"wrr"}
+# include/node_musgrave_texture.osl:215
+# 		Fac = intensity * noise_musgrave_multi_fractal(p, Basis, dimension, lacunarity, octaves);
+	eq		$tmp2 Type $const7 	%line{215} %argrw{"wrr"}
+	if		$tmp2 64 313 	%argrw{"r"}
+# include/node_musgrave_texture.osl:216
+# 	else if (Type == "fBM")
+	functioncall	$const8 63 	%line{216} %argrw{"r"}
+# include/node_musgrave_texture.osl:61
+# 	float pwr = 1.0;
+	assign		___670_value $const6 	%line{61} %argrw{"wr"}
+# include/node_musgrave_texture.osl:62
+# 	float pwHL = pow(lacunarity, -H);
+	assign		___670_pwr $const6 	%line{62} %argrw{"wr"}
+# include/node_musgrave_texture.osl:63
+# 	int i;
+	neg		$tmp4 dimension 	%line{63} %argrw{"wr"}
+	pow		___670_pwHL lacunarity $tmp4 	%argrw{"wrr"}
+# include/node_musgrave_texture.osl:66
+# 		value *= (pwr * safe_noise(p, 0) + 1.0);
+	for		$tmp6 21 23 40 42 	%line{66} %argrw{"r"}
+	assign		___670_i $const9 	%argrw{"wr"}
+	assign		$tmp5 octaves 	%argrw{"wr"}
+	lt		$tmp6 ___670_i $tmp5 	%argrw{"wrr"}
+# include/node_musgrave_texture.osl:67
+# 		pwr *= pwHL;
+	functioncall	$const10 35 	%line{67} %argrw{"r"}
+# include/node_texture.h:158
+# 	float f = 0.0;
+	assign		___658_f $const2 	%filename{"include/node_texture.h"} %line{158} %argrw{"wr"}
+# include/node_texture.h:161
+# 	if (type == 0)
+	eq		$tmp8 $const9 $const9 	%line{161} %argrw{"wrr"}
+	if		$tmp8 28 29 	%argrw{"r"}
+# include/node_texture.h:162
+# 		f = noise("perlin", p);
+	noise		___658_f $const11 p 	%line{162} %argrw{"wrr"}
+# include/node_texture.h:166
+# 		f = noise(p);
+	noise		___658_f p 	%line{166} %argrw{"wr"}
+# include/node_texture.h:169
+# 	if (!isfinite(f))
+	isfinite	$tmp9 ___658_f 	%line{169} %argrw{"wr"}
+	eq		$tmp10 $tmp9 $const9 	%argrw{"wrr"}
+	if		$tmp10 34 34 	%argrw{"r"}
+# include/node_texture.h:170
+# 		return 0.5;
+	assign		$tmp7 $const12 	%line{170} %argrw{"wr"}
+	return
+# include/node_texture.h:172
+# 	return f;
+	assign		$tmp7 ___658_f 	%line{172} %argrw{"wr"}
+# include/node_musgrave_texture.osl:67
+# 		pwr *= pwHL;
+	mul		$tmp11 ___670_pwr $tmp7 	%filename{"include/node_musgrave_texture.osl"} %line{67} %argrw{"wrr"}
+	add		$tmp12 $tmp11 $const6 	%argrw{"wrr"}
+	mul		___670_value ___670_value $tmp12 	%argrw{"wrr"}
+# include/node_musgrave_texture.osl:68
+# 		p *= lacunarity;
+	mul		___670_pwr ___670_pwr ___670_pwHL 	%line{68} %argrw{"wrr"}
+# include/node_musgrave_texture.osl:69
+# 	}
+	mul		p p lacunarity 	%line{69} %argrw{"wrr"}
+# include/node_musgrave_texture.osl:66
+# 		value *= (pwr * safe_noise(p, 0) + 1.0);
+	assign		$tmp13 ___670_i 	%line{66} %argrw{"wr"}
+	add		___670_i ___670_i $const13 	%argrw{"wrr"}
+# include/node_musgrave_texture.osl:72
+# 	if (rmd != 0.0)
+	floor		$tmp14 octaves 	%line{72} %argrw{"wr"}
+	sub		___670_rmd octaves $tmp14 	%argrw{"wrr"}
+# include/node_musgrave_texture.osl:73
+# 		value *= (rmd * pwr * safe_noise(p, 0) + 1.0); /* correct? */
+	neq		$tmp15 ___670_rmd $const2 	%line{73} %argrw{"wrr"}
+	if		$tmp15 62 62 	%argrw{"r"}
+# include/node_musgrave_texture.osl:74
+# 
+	mul		$tmp16 ___670_rmd ___670_pwr 	%line{74} %argrw{"wrr"}
+	functioncall	$const10 59 	%argrw{"r"}
+# include/node_texture.h:158
+# 	float f = 0.0;
+	assign		___658_f $const2 	%filename{"include/node_texture.h"} %line{158} %argrw{"wr"}
+# include/node_texture.h:161
+# 	if (type == 0)
+	eq		$tmp18 $const9 $const9 	%line{161} %argrw{"wrr"}
+	if		$tmp18 52 53 	%argrw{"r"}
+# include/node_texture.h:162
+# 		f = noise("perlin", p);
+	noise		___658_f $const11 p 	%line{162} %argrw{"wrr"}
+# include/node_texture.h:166
+# 		f = noise(p);
+	noise		___658_f p 	%line{166} %argrw{"wr"}
+# include/node_texture.h:169
+# 	if (!isfinite(f))
+	isfinite	$tmp19 ___658_f 	%line{169} %argrw{"wr"}
+	eq		$tmp20 $tmp19 $const9 	%argrw{"wrr"}
+	if		$tmp20 58 58 	%argrw{"r"}
+# include/node_texture.h:170
+# 		return 0.5;
+	assign		$tmp17 $const12 	%line{170} %argrw{"wr"}
+	return
+# include/node_texture.h:172
+# 	return f;
+	assign		$tmp17 ___658_f 	%line{172} %argrw{"wr"}
+# include/node_musgrave_texture.osl:74
+# 
+	mul		$tmp21 $tmp16 $tmp17 	%filename{"include/node_musgrave_texture.osl"} %line{74} %argrw{"wrr"}
+	add		$tmp22 $tmp21 $const6 	%argrw{"wrr"}
+	mul		___670_value ___670_value $tmp22 	%argrw{"wrr"}
+# include/node_musgrave_texture.osl:76
+# }
+	assign		$tmp3 ___670_value 	%line{76} %argrw{"wr"}
+# include/node_musgrave_texture.osl:216
+# 	else if (Type == "fBM")
+	mul		Fac intensity $tmp3 	%line{216} %argrw{"wrr"}
+# include/node_musgrave_texture.osl:217
+# 		Fac = intensity * noise_musgrave_fBm(p, Basis, dimension, lacunarity, octaves);
+	eq		$tmp23 Type $const14 	%line{217} %argrw{"wrr"}
+	if		$tmp23 114 313 	%argrw{"r"}
+# include/node_musgrave_texture.osl:218
+# 	else if (Type == "Hybrid Multifractal")
+	functioncall	$const15 113 	%line{218} %argrw{"r"}
+# include/node_musgrave_texture.osl:33
+# 	float pwr = 1.0;
+	assign		___667_value $const2 	%line{33} %argrw{"wr"}
+# include/node_musgrave_texture.osl:34
+# 	float pwHL = pow(lacunarity, -H);
+	assign		___667_pwr $const6 	%line{34} %argrw{"wr"}
+# include/node_musgrave_texture.osl:35
+# 	int i;
+	neg		$tmp25 dimension 	%line{35} %argrw{"wr"}
+	pow		___667_pwHL lacunarity $tmp25 	%argrw{"wrr"}
+# include/node_musgrave_texture.osl:38
+# 		value += safe_noise(p, 0) * pwr;
+	for		$tmp27 73 75 91 93 	%line{38} %argrw{"r"}
+	assign		___667_i $const9 	%argrw{"wr"}
+	assign		$tmp26 octaves 	%argrw{"wr"}
+	lt		$tmp27 ___667_i $tmp26 	%argrw{"wrr"}
+# include/node_musgrave_texture.osl:39
+# 		pwr *= pwHL;
+	functioncall	$const10 87 	%line{39} %argrw{"r"}
+# include/node_texture.h:158
+# 	float f = 0.0;
+	assign		___658_f $const2 	%filename{"include/node_texture.h"} %line{158} %argrw{"wr"}
+# include/node_texture.h:161
+# 	if (type == 0)
+	eq		$tmp29 $const9 $const9 	%line{161} %argrw{"wrr"}
+	if		$tmp29 80 81 	%argrw{"r"}
+# include/node_texture.h:162
+# 		f = noise("perlin", p);
+	noise		___658_f $const11 p 	%line{162} %argrw{"wrr"}
+# include/node_texture.h:166
+# 		f = noise(p);
+	noise		___658_f p 	%line{166} %argrw{"wr"}
+# include/node_texture.h:169
+# 	if (!isfinite(f))
+	isfinite	$tmp30 ___658_f 	%line{169} %argrw{"wr"}
+	eq		$tmp31 $tmp30 $const9 	%argrw{"wrr"}
+	if		$tmp31 86 86 	%argrw{"r"}
+# include/node_texture.h:170
+# 		return 0.5;
+	assign		$tmp28 $const12 	%line{170} %argrw{"wr"}
+	return
+# include/node_texture.h:172
+# 	return f;
+	assign		$tmp28 ___658_f 	%line{172} %argrw{"wr"}
+# include/node_musgrave_texture.osl:39
+# 		pwr *= pwHL;
+	mul		$tmp32 $tmp28 ___667_pwr 	%filename{"include/node_musgrave_texture.osl"} %line{39} %argrw{"wrr"}
+	add		___667_value ___667_value $tmp32 	%argrw{"wrr"}
+# include/node_musgrave_texture.osl:40
+# 		p *= lacunarity;
+	mul		___667_pwr ___667_pwr ___667_pwHL 	%line{40} %argrw{"wrr"}
+# include/node_musgrave_texture.osl:41
+# 	}
+	mul		p p lacunarity 	%line{41} %argrw{"wrr"}
+# include/node_musgrave_texture.osl:38
+# 		value += safe_noise(p, 0) * pwr;
+	assign		$tmp33 ___667_i 	%line{38} %argrw{"wr"}
+	add		___667_i ___667_i $const13 	%argrw{"wrr"}
+# include/node_musgrave_texture.osl:44
+# 	if (rmd != 0.0)
+	floor		$tmp34 octaves 	%line{44} %argrw{"wr"}
+	sub		___667_rmd octaves $tmp34 	%argrw{"wrr"}
+# include/node_musgrave_texture.osl:45
+# 		value += rmd * safe_noise(p, 0) * pwr;
+	neq		$tmp35 ___667_rmd $const2 	%line{45} %argrw{"wrr"}
+	if		$tmp35 112 112 	%argrw{"r"}
+# include/node_musgrave_texture.osl:46
+# 
+	functioncall	$const10 109 	%line{46} %argrw{"r"}
+# include/node_texture.h:158
+# 	float f = 0.0;
+	assign		___658_f $const2 	%filename{"include/node_texture.h"} %line{158} %argrw{"wr"}
+# include/node_texture.h:161
+# 	if (type == 0)
+	eq		$tmp37 $const9 $const9 	%line{161} %argrw{"wrr"}
+	if		$tmp37 102 103 	%argrw{"r"}
+# include/node_texture.h:162
+# 		f = noise("perlin", p);
+	noise		___658_f $const11 p 	%line{162} %argrw{"wrr"}
+# include/node_texture.h:166
+# 		f = noise(p);
+	noise		___658_f p 	%line{166} %argrw{"wr"}
+# include/node_texture.h:169
+# 	if (!isfinite(f))
+	isfinite	$tmp38 ___658_f 	%line{169} %argrw{"wr"}
+	eq		$tmp39 $tmp38 $const9 	%argrw{"wrr"}
+	if		$tmp39 108 108 	%argrw{"r"}
+# include/node_texture.h:170
+# 		return 0.5;
+	assign		$tmp36 $const12 	%line{170} %argrw{"wr"}
+	return
+# include/node_texture.h:172
+# 	return f;
+	assign		$tmp36 ___658_f 	%line{172} %argrw{"wr"}
+# include/node_musgrave_texture.osl:46
+# 
+	mul		$tmp40 ___667_rmd $tmp36 	%filename{"include/node_musgrave_texture.osl"} %line{46} %argrw{"wrr"}
+	mul		$tmp41 $tmp40 ___667_pwr 	%argrw{"wrr"}
+	add		___667_value ___667_value $tmp41 	%argrw{"wrr"}
+# include/node_musgrave_texture.osl:48
+# }
+	assign		$tmp24 ___667_value 	%line{48} %argrw{"wr"}
+# include/node_musgrave_texture.osl:218
+# 	else if (Type == "Hybrid Multifractal")
+	mul		Fac intensity $tmp24 	%line{218} %argrw{"wrr"}
+# include/node_musgrave_texture.osl:219
+# 		Fac = intensity * noise_musgrave_hybrid_multi_fractal(p, Basis, dimension, lacunarity, octaves, Offset, Gain);
+	eq		$tmp42 Type $const16 	%line{219} %argrw{"wrr"}
+	if		$tmp42 191 313 	%argrw{"r"}
+# include/node_musgrave_texture.osl:220
+# 	else if (Type == "Ridged Multifractal")
+	functioncall	$const17 190 	%line{220} %argrw{"r"}
+# include/node_musgrave_texture.osl:126
+# 	float pwr = pwHL;
+	neg		$tmp44 dimension 	%line{126} %argrw{"wr"}
+	pow		___677_pwHL lacunarity $tmp44 	%argrw{"wrr"}
+# include/node_musgrave_texture.osl:127
+# 	int i;
+	assign		___677_pwr ___677_pwHL 	%line{127} %argrw{"wr"}
+# include/node_musgrave_texture.osl:130
+# 	weight = gain * result;
+	functioncall	$const10 132 	%line{130} %argrw{"r"}
+# include/node_texture.h:158
+# 	float f = 0.0;
+	assign		___658_f $const2 	%filename{"include/node_texture.h"} %line{158} %argrw{"wr"}
+# include/node_texture.h:161
+# 	if (type == 0)
+	eq		$tmp46 $const9 $const9 	%line{161} %argrw{"wrr"}
+	if		$tmp46 125 126 	%argrw{"r"}
+# include/node_texture.h:162
+# 		f = noise("perlin", p);
+	noise		___658_f $const11 p 	%line{162} %argrw{"wrr"}
+# include/node_texture.h:166
+# 		f = noise(p);
+	noise		___658_f p 	%line{166} %argrw{"wr"}
+# include/node_texture.h:169
+# 	if (!isfinite(f))
+	isfinite	$tmp47 ___658_f 	%line{169} %argrw{"wr"}
+	eq		$tmp48 $tmp47 $const9 	%argrw{"wrr"}
+	if		$tmp48 131 131 	%argrw{"r"}
+# include/node_texture.h:170
+# 		return 0.5;
+	assign		$tmp45 $const12 	%line{170} %argrw{"wr"}
+	return
+# include/node_texture.h:172
+# 	return f;
+	assign		$tmp45 ___658_f 	%line{172} %argrw{"wr"}
+# include/node_musgrave_texture.osl:130
+# 	weight = gain * result;
+	add		___677_result $tmp45 Offset 	%filename{"include/node_musgrave_texture.osl"} %line{130} %argrw{"wrr"}
+# include/node_musgrave_texture.osl:131
+# 	p *= lacunarity;
+	mul		___677_weight Gain ___677_result 	%line{131} %argrw{"wrr"}
+# include/node_musgrave_texture.osl:132
+# 
+	mul		p p lacunarity 	%line{132} %argrw{"wrr"}
+# include/node_musgrave_texture.osl:134
+# 		if (weight > 1.0)
+	for		$tmp50 137 144 167 169 	%line{134} %argrw{"r"}
+	assign		___677_i $const13 	%argrw{"wr"}
+	gt		$tmp49 ___677_weight $const18 	%argrw{"wrr"}
+	neq		$tmp50 $tmp49 $const9 	%argrw{"wrr"}
+	if		$tmp50 144 144 	%argrw{"r"}
+	assign		$tmp51 octaves 	%argrw{"wr"}
+	lt		$tmp52 ___677_i $tmp51 	%argrw{"wrr"}
+	neq		$tmp53 $tmp52 $const9 	%argrw{"wrr"}
+	assign		$tmp50 $tmp53 	%argrw{"wr"}
+# include/node_musgrave_texture.osl:135
+# 			weight = 1.0;
+	gt		$tmp54 ___677_weight $const6 	%line{135} %argrw{"wrr"}
+	if		$tmp54 147 147 	%argrw{"r"}
+# include/node_musgrave_texture.osl:136
+# 
+	assign		___677_weight $const6 	%line{136} %argrw{"wr"}
+# include/node_musgrave_texture.osl:138
+# 		pwr *= pwHL;
+	functioncall	$const10 159 	%line{138} %argrw{"r"}
+# include/node_texture.h:158
+# 	float f = 0.0;
+	assign		___658_f $const2 	%filename{"include/node_texture.h"} %line{158} %argrw{"wr"}
+# include/node_texture.h:161
+# 	if (type == 0)
+	eq		$tmp56 $const9 $const9 	%line{161} %argrw{"wrr"}
+	if		$tmp56 152 153 	%argrw{"r"}
+# include/node_texture.h:162
+# 		f = noise("perlin", p);
+	noise		___658_f $const11 p 	%line{162} %argrw{"wrr"}
+# include/node_texture.h:166
+# 		f = noise(p);
+	noise		___658_f p 	%line{166} %argrw{"wr"}
+# include/node_texture.h:169
+# 	if (!isfinite(f))
+	isfinite	$tmp57 ___658_f 	%line{169} %argrw{"wr"}
+	eq		$tmp58 $tmp57 $const9 	%argrw{"wrr"}
+	if		$tmp58 158 158 	%argrw{"r"}
+# include/node_texture.h:170
+# 		return 0.5;
+	assign		$tmp55 $const12 	%line{170} %argrw{"wr"}
+	return
+# include/node_texture.h:172
+# 	return f;
+	assign		$tmp55 ___658_f 	%line{172} %argrw{"wr"}
+# include/node_musgrave_texture.osl:138
+# 		pwr *= pwHL;
+	add		$tmp59 $tmp55 Offset 	%filename{"include/node_musgrave_texture.osl"} %line{138} %argrw{"wrr"}
+	mul		___677_signal $tmp59 ___677_pwr 	%argrw{"wrr"}
+# include/node_musgrave_texture.osl:139
+# 		result += weight * signal;
+	mul		___677_pwr ___677_pwr ___677_pwHL 	%line{139} %argrw{"wrr"}
+# include/node_musgrave_texture.osl:140
+# 		weight *= gain * signal;
+	mul		$tmp60 ___677_weight ___677_signal 	%line{140} %argrw{"wrr"}
+	add		___677_result ___677_result $tmp60 	%argrw{"wrr"}
+# include/node_musgrave_texture.osl:141
+# 		p *= lacunarity;
+	mul		$tmp61 Gain ___677_signal 	%line{141} %argrw{"wrr"}
+	mul		___677_weight ___677_weight $tmp61 	%argrw{"wrr"}
+# include/node_musgrave_texture.osl:142
+# 	}
+	mul		p p lacunarity 	%line{142} %argrw{"wrr"}
+# include/node_musgrave_texture.osl:134
+# 		if (weight > 1.0)
+	assign		$tmp62 ___677_i 	%line{134} %argrw{"wr"}
+	add		___677_i ___677_i $const13 	%argrw{"wrr"}
+# include/node_musgrave_texture.osl:145
+# 	if (rmd != 0.0)
+	floor		$tmp63 octaves 	%line{145} %argrw{"wr"}
+	sub		___677_rmd octaves $tmp63 	%argrw{"wrr"}
+# include/node_musgrave_texture.osl:146
+# 		result += rmd * ((safe_noise(p, 0) + offset) * pwr);
+	neq		$tmp64 ___677_rmd $const2 	%line{146} %argrw{"wrr"}
+	if		$tmp64 189 189 	%argrw{"r"}
+# include/node_musgrave_texture.osl:147
+# 
+	functioncall	$const10 185 	%line{147} %argrw{"r"}
+# include/node_texture.h:158
+# 	float f = 0.0;
+	assign		___658_f $const2 	%filename{"include/node_texture.h"} %line{158} %argrw{"wr"}
+# include/node_texture.h:161
+# 	if (type == 0)
+	eq		$tmp66 $const9 $const9 	%line{161} %argrw{"wrr"}
+	if		$tmp66 178 179 	%argrw{"r"}
+# include/node_texture.h:162
+# 		f = noise("perlin", p);
+	noise		___658_f $const11 p 	%line{162} %argrw{"wrr"}
+# include/node_texture.h:166
+# 		f = noise(p);
+	noise		___658_f p 	%line{166} %argrw{"wr"}
+# include/node_texture.h:169
+# 	if (!isfinite(f))
+	isfinite	$tmp67 ___658_f 	%line{169} %argrw{"wr"}
+	eq		$tmp68 $tmp67 $const9 	%argrw{"wrr"}
+	if		$tmp68 184 184 	%argrw{"r"}
+# include/node_texture.h:170
+# 		return 0.5;
+	assign		$tmp65 $const12 	%line{170} %argrw{"wr"}
+	return
+# include/node_texture.h:172
+# 	return f;
+	assign		$tmp65 ___658_f 	%line{172} %argrw{"wr"}
+# include/node_musgrave_texture.osl:147
+# 
+	add		$tmp69 $tmp65 Offset 	%filename{"include/node_musgrave_texture.osl"} %line{147} %argrw{"wrr"}
+	mul		$tmp70 $tmp69 ___677_pwr 	%argrw{"wrr"}
+	mul		$tmp71 ___677_rmd $tmp70 	%argrw{"wrr"}
+	add		___677_result ___677_result $tmp71 	%argrw{"wrr"}
+# include/node_musgrave_texture.osl:149
+# }
+	assign		$tmp43 ___677_result 	%line{149} %argrw{"wr"}
+# include/node_musgrave_texture.osl:220
+# 	else if (Type == "Ridged Multifractal")
+	mul		Fac intensity $tmp43 	%line{220} %argrw{"wrr"}
+# include/node_musgrave_texture.osl:221
+# 		Fac = intensity * noise_musgrave_ridged_multi_fractal(p, Basis, dimension, lacunarity, octaves, Offset, Gain);
+	eq		$tmp72 Type $const19 	%line{221} %argrw{"wrr"}
+	if		$tmp72 246 313 	%argrw{"r"}
+# include/node_musgrave_texture.osl:222
+# 	else if (Type == "Hetero Terrain")
+	functioncall	$const20 245 	%line{222} %argrw{"r"}
+# include/node_musgrave_texture.osl:164
+# 	float pwr = pwHL;
+	neg		$tmp74 dimension 	%line{164} %argrw{"wr"}
+	pow		___680_pwHL lacunarity $tmp74 	%argrw{"wrr"}
+# include/node_musgrave_texture.osl:165
+# 	int i;
+	assign		___680_pwr ___680_pwHL 	%line{165} %argrw{"wr"}
+# include/node_musgrave_texture.osl:168
+# 	signal *= signal;
+	functioncall	$const10 209 	%line{168} %argrw{"r"}
+# include/node_texture.h:158
+# 	float f = 0.0;
+	assign		___658_f $const2 	%filename{"include/node_texture.h"} %line{158} %argrw{"wr"}
+# include/node_texture.h:161
+# 	if (type == 0)
+	eq		$tmp77 $const9 $const9 	%line{161} %argrw{"wrr"}
+	if		$tmp77 202 203 	%argrw{"r"}
+# include/node_texture.h:162
+# 		f = noise("perlin", p);
+	noise		___658_f $const11 p 	%line{162} %argrw{"wrr"}
+# include/node_texture.h:166
+# 		f = noise(p);
+	noise		___658_f p 	%line{166} %argrw{"wr"}
+# include/node_texture.h:169
+# 	if (!isfinite(f))
+	isfinite	$tmp78 ___658_f 	%line{169} %argrw{"wr"}
+	eq		$tmp79 $tmp78 $const9 	%argrw{"wrr"}
+	if		$tmp79 208 208 	%argrw{"r"}
+# include/node_texture.h:170
+# 		return 0.5;
+	assign		$tmp76 $const12 	%line{170} %argrw{"wr"}
+	return
+# include/node_texture.h:172
+# 	return f;
+	assign		$tmp76 ___658_f 	%line{172} %argrw{"wr"}
+# include/node_musgrave_texture.osl:168
+# 	signal *= signal;
+	fabs		$tmp75 $tmp76 	%filename{"include/node_musgrave_texture.osl"} %line{168} %argrw{"wr"}
+	sub		___680_signal Offset $tmp75 	%argrw{"wrr"}
+# include/node_musgrave_texture.osl:169
+# 	result = signal;
+	mul		___680_signal ___680_signal ___680_signal 	%line{169} %argrw{"wrr"}
+# include/node_musgrave_texture.osl:170
+# 	weight = 1.0;
+	assign		___680_result ___680_signal 	%line{170} %argrw{"wr"}
+# include/node_musgrave_texture.osl:171
+# 
+	assign		___680_weight $const6 	%line{171} %argrw{"wr"}
+# include/node_musgrave_texture.osl:173
+# 		p *= lacunarity;
+	for		$tmp81 216 218 242 244 	%line{173} %argrw{"r"}
+	assign		___680_i $const13 	%argrw{"wr"}
+	assign		$tmp80 octaves 	%argrw{"wr"}
+	lt		$tmp81 ___680_i $tmp80 	%argrw{"wrr"}
+# include/node_musgrave_texture.osl:174
+# 		weight = clamp(signal * gain, 0.0, 1.0);
+	mul		p p lacunarity 	%line{174} %argrw{"wrr"}
+# include/node_musgrave_texture.osl:175
+# 		signal = offset - fabs(safe_noise(p, 0));
+	mul		$tmp82 ___680_signal Gain 	%line{175} %argrw{"wrr"}
+	functioncall	$const4 223 	%argrw{"r"}
+# include/stdosl.h:144
+# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
+	min		$tmp83 $tmp82 $const6 	%filename{"include/stdosl.h"} %line{144} %argrw{"wrr"}
+	max		___680_weight $tmp83 $const2 	%argrw{"wrr"}
+# include/node_musgrave_texture.osl:176
+# 		signal *= signal;
+	functioncall	$const10 235 	%filename{"include/node_musgrave_texture.osl"} %line{176} %argrw{"r"}
+# include/node_texture.h:158
+# 	float f = 0.0;
+	assign		___658_f $const2 	%filename{"include/node_texture.h"} %line{158} %argrw{"wr"}
+# include/node_texture.h:161
+# 	if (type == 0)
+	eq		$tmp86 $const9 $const9 	%line{161} %argrw{"wrr"}
+	if		$tmp86 228 229 	%argrw{"r"}
+# include/node_texture.h:162
+# 		f = noise("perlin", p);
+	noise		___658_f $const11 p 	%line{162} %argrw{"wrr"}
+# include/node_texture.h:166
+# 		f = noise(p);
+	noise		___658_f p 	%line{166} %argrw{"wr"}
+# include/node_texture.h:169
+# 	if (!isfinite(f))
+	isfinite	$tmp87 ___658_f 	%line{169} %argrw{"wr"}
+	eq		$tmp88 $tmp87 $const9 	%argrw{"wrr"}
+	if		$tmp88 234 234 	%argrw{"r"}
+# include/node_texture.h:170
+# 		return 0.5;
+	assign		$tmp85 $const12 	%line{170} %argrw{"wr"}
+	return
+# include/node_texture.h:172
+# 	return f;
+	assign		$tmp85 ___658_f 	%line{172} %argrw{"wr"}
+# include/node_musgrave_texture.osl:176
+# 		signal *= signal;
+	fabs		$tmp84 $tmp85 	%filename{"include/node_musgrave_texture.osl"} %line{176} %argrw{"wr"}
+	sub		___680_signal Offset $tmp84 	%argrw{"wrr"}
+# include/node_musgrave_texture.osl:177
+# 		signal *= weight;
+	mul		___680_signal ___680_signal ___680_signal 	%line{177} %argrw{"wrr"}
+# include/node_musgrave_texture.osl:178
+# 		result += signal * pwr;
+	mul		___680_signal ___680_signal ___680_weight 	%line{178} %argrw{"wrr"}
+# include/node_musgrave_texture.osl:179
+# 		pwr *= pwHL;
+	mul		$tmp89 ___680_signal ___680_pwr 	%line{179} %argrw{"wrr"}
+	add		___680_result ___680_result $tmp89 	%argrw{"wrr"}
+# include/node_musgrave_texture.osl:180
+# 	}
+	mul		___680_pwr ___680_pwr ___680_pwHL 	%line{180} %argrw{"wrr"}
+# include/node_musgrave_texture.osl:173
+# 		p *= lacunarity;
+	assign		$tmp90 ___680_i 	%line{173} %argrw{"wr"}
+	add		___680_i ___680_i $const13 	%argrw{"wrr"}
+# include/node_musgrave_texture.osl:183
+# }
+	assign		$tmp73 ___680_result 	%line{183} %argrw{"wr"}
+# include/node_musgrave_texture.osl:222
+# 	else if (Type == "Hetero Terrain")
+	mul		Fac intensity $tmp73 	%line{222} %argrw{"wrr"}
+# include/node_musgrave_texture.osl:223
+# 		Fac = intensity * noise_musgrave_hetero_terrain(p, Basis, dimension, lacunarity, octaves, Offset);
+	eq		$tmp91 Type $const21 	%line{223} %argrw{"wrr"}
+	if		$tmp91 313 313 	%argrw{"r"}
+# include/node_musgrave_texture.osl:224
+# 	
+	functioncall	$const22 312 	%line{224} %argrw{"r"}
+# include/node_musgrave_texture.osl:90
+# 	float pwr = pwHL;
+	neg		$tmp93 dimension 	%line{90} %argrw{"wr"}
+	pow		___673_pwHL lacunarity $tmp93 	%argrw{"wrr"}
+# include/node_musgrave_texture.osl:91
+# 	int i;
+	assign		___673_pwr ___673_pwHL 	%line{91} %argrw{"wr"}
+# include/node_musgrave_texture.osl:95
+# 	p *= lacunarity;
+	functioncall	$const10 264 	%line{95} %argrw{"r"}
+# include/node_texture.h:158
+# 	float f = 0.0;
+	assign		___658_f $const2 	%filename{"include/node_texture.h"} %line{158} %argrw{"wr"}
+# include/node_texture.h:161
+# 	if (type == 0)
+	eq		$tmp95 $const9 $const9 	%line{161} %argrw{"wrr"}
+	if		$tmp95 257 258 	%argrw{"r"}
+# include/node_texture.h:162
+# 		f = noise("perlin", p);
+	noise		___658_f $const11 p 	%line{162} %argrw{"wrr"}
+# include/node_texture.h:166
+# 		f = noise(p);
+	noise		___658_f p 	%line{166} %argrw{"wr"}
+# include/node_texture.h:169
+# 	if (!isfinite(f))
+	isfinite	$tmp96 ___658_f 	%line{169} %argrw{"wr"}
+	eq		$tmp97 $tmp96 $const9 	%argrw{"wrr"}
+	if		$tmp97 263 263 	%argrw{"r"}
+# include/node_texture.h:170
+# 		return 0.5;
+	assign		$tmp94 $const12 	%line{170} %argrw{"wr"}
+	return
+# include/node_texture.h:172
+# 	return f;
+	assign		$tmp94 ___658_f 	%line{172} %argrw{"wr"}
+# include/node_musgrave_texture.osl:95
+# 	p *= lacunarity;
+	add		___673_value Offset $tmp94 	%filename{"include/node_musgrave_texture.osl"} %line{95} %argrw{"wrr"}
+# include/node_musgrave_texture.osl:96
+# 
+	mul		p p lacunarity 	%line{96} %argrw{"wrr"}
+# include/node_musgrave_texture.osl:98
+# 		increment = (safe_noise(p, 0) + offset) * pwr * value;
+	for		$tmp99 268 270 288 290 	%line{98} %argrw{"r"}
+	assign		___673_i $const13 	%argrw{"wr"}
+	assign		$tmp98 octaves 	%argrw{"wr"}
+	lt		$tmp99 ___673_i $tmp98 	%argrw{"wrr"}
+# include/node_musgrave_texture.osl:99
+# 		value += increment;
+	functioncall	$const10 282 	%line{99} %argrw{"r"}
+# include/node_texture.h:158
+# 	float f = 0.0;
+	assign		___658_f $const2 	%filename{"include/node_texture.h"} %line{158} %argrw{"wr"}
+# include/node_texture.h:161
+# 	if (type == 0)
+	eq		$tmp101 $const9 $const9 	%line{161} %argrw{"wrr"}
+	if		$tmp101 275 276 	%argrw{"r"}
+# include/node_texture.h:162
+# 		f = noise("perlin", p);
+	noise		___658_f $const11 p 	%line{162} %argrw{"wrr"}
+# include/node_texture.h:166
+# 		f = noise(p);
+	noise		___658_f p 	%line{166} %argrw{"wr"}
+# include/node_texture.h:169
+# 	if (!isfinite(f))
+	isfinite	$tmp102 ___658_f 	%line{169} %argrw{"wr"}
+	eq		$tmp103 $tmp102 $const9 	%argrw{"wrr"}
+	if		$tmp103 281 281 	%argrw{"r"}
+# include/node_texture.h:170
+# 		return 0.5;
+	assign		$tmp100 $const12 	%line{170} %argrw{"wr"}
+	return
+# include/node_texture.h:172
+# 	return f;
+	assign		$tmp100 ___658_f 	%line{172} %argrw{"wr"}
+# include/node_musgrave_texture.osl:99
+# 		value += increment;
+	add		$tmp104 $tmp100 Offset 	%filename{"include/node_musgrave_texture.osl"} %line{99} %argrw{"wrr"}
+	mul		$tmp105 $tmp104 ___673_pwr 	%argrw{"wrr"}
+	mul		___673_increment $tmp105 ___673_value 	%argrw{"wrr"}
+# include/node_musgrave_texture.osl:100
+# 		pwr *= pwHL;
+	add		___673_value ___673_value ___673_increment 	%line{100} %argrw{"wrr"}
+# include/node_musgrave_texture.osl:101
+# 		p *= lacunarity;
+	mul		___673_pwr ___673_pwr ___673_pwHL 	%line{101} %argrw{"wrr"}
+# include/node_musgrave_texture.osl:102
+# 	}
+	mul		p p lacunarity 	%line{102} %argrw{"wrr"}
+# include/node_musgrave_texture.osl:98
+# 		increment = (safe_noise(p, 0) + offset) * pwr * value;
+	assign		$tmp106 ___673_i 	%line{98} %argrw{"wr"}
+	add		___673_i ___673_i $const13 	%argrw{"wrr"}
+# include/node_musgrave_texture.osl:105
+# 	if (rmd != 0.0) {
+	floor		$tmp107 octaves 	%line{105} %argrw{"wr"}
+	sub		___673_rmd octaves $tmp107 	%argrw{"wrr"}
+# include/node_musgrave_texture.osl:106
+# 		increment = (safe_noise(p, 0) + offset) * pwr * value;
+	neq		$tmp108 ___673_rmd $const2 	%line{106} %argrw{"wrr"}
+	if		$tmp108 311 311 	%argrw{"r"}
+# include/node_musgrave_texture.osl:107
+# 		value += rmd * increment;
+	functioncall	$const10 306 	%line{107} %argrw{"r"}
+# include/node_texture.h:158
+# 	float f = 0.0;
+	assign		___658_f $const2 	%filename{"include/node_texture.h"} %line{158} %argrw{"wr"}
+# include/node_texture.h:161
+# 	if (type == 0)
+	eq		$tmp110 $const9 $const9 	%line{161} %argrw{"wrr"}
+	if		$tmp110 299 300 	%argrw{"r"}
+# include/node_texture.h:162
+# 		f = noise("perlin", p);
+	noise		___658_f $const11 p 	%line{162} %argrw{"wrr"}
+# include/node_texture.h:166
+# 		f = noise(p);
+	noise		___658_f p 	%line{166} %argrw{"wr"}
+# include/node_texture.h:169
+# 	if (!isfinite(f))
+	isfinite	$tmp111 ___658_f 	%line{169} %argrw{"wr"}
+	eq		$tmp112 $tmp111 $const9 	%argrw{"wrr"}
+	if		$tmp112 305 305 	%argrw{"r"}
+# include/node_texture.h:170
+# 		return 0.5;
+	assign		$tmp109 $const12 	%line{170} %argrw{"wr"}
+	return
+# include/node_texture.h:172
+# 	return f;
+	assign		$tmp109 ___658_f 	%line{172} %argrw{"wr"}
+# include/node_musgrave_texture.osl:107
+# 		value += rmd * increment;
+	add		$tmp113 $tmp109 Offset 	%filename{"include/node_musgrave_texture.osl"} %line{107} %argrw{"wrr"}
+	mul		$tmp114 $tmp113 ___673_pwr 	%argrw{"wrr"}
+	mul		___673_increment $tmp114 ___673_value 	%argrw{"wrr"}
+# include/node_musgrave_texture.osl:108
+# 	}
+	mul		$tmp115 ___673_rmd ___673_increment 	%line{108} %argrw{"wrr"}
+	add		___673_value ___673_value $tmp115 	%argrw{"wrr"}
+# include/node_musgrave_texture.osl:111
+# }
+	assign		$tmp92 ___673_value 	%line{111} %argrw{"wr"}
+# include/node_musgrave_texture.osl:224
+# 	
+	mul		Fac intensity $tmp92 	%line{224} %argrw{"wrr"}
+# include/node_musgrave_texture.osl:226
+# }
+	color		Color Fac Fac Fac 	%line{226} %argrw{"wrrr"}
+	end

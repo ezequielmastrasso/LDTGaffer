@@ -1,0 +1,190 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader MABRain
+param	point	Vector	0 0 0		%read{4,4} %write{0,0} %initexpr
+param	float	Scale	5		%read{4,4} %write{2147483647,-1}
+param	int	Drops	4		%read{17,17} %write{2147483647,-1}
+param	float	Time	0.1		%read{27,27} %write{2147483647,-1}
+param	float	StartTime	0		%read{21,21} %write{2147483647,-1}
+param	float	EndTime	2		%read{21,21} %write{2147483647,-1}
+param	float	Amplitude	0.40000001		%read{41,41} %write{2147483647,-1}
+param	float	Wavelength	0.30000001		%read{39,39} %write{2147483647,-1}
+param	float	Spread	0.1		%read{49,49} %write{2147483647,-1}
+param	float	Limit	0.80000001		%read{1,43} %write{2147483647,-1}
+param	float	Damping	0.30000001		%read{44,44} %write{2147483647,-1}
+oparam	float	Height	0		%read{2147483647,-1} %write{62,62}
+global	point	P	%read{0,0} %write{2147483647,-1}
+local	float	L	%read{8,61} %write{3,3}
+local	vector	Pos	%read{5,61} %write{4,4}
+local	vector	ip	%read{9,61} %write{5,5}
+local	float	h	%read{9,62} %write{6,61}
+local	float	___322_dx	%read{9,61} %write{8,61}
+local	float	___324_dy	%read{9,61} %write{9,61}
+local	vector	___325_p	%read{9,61} %write{9,61}
+local	int	___326_i	%read{9,61} %write{9,61}
+local	vector	___327_center	%read{9,61} %write{9,61}
+local	float	___327_start	%read{9,61} %write{9,61}
+local	float	___327_peak	%read{9,61} %write{9,61}
+local	float	___327_dc	%read{9,61} %write{9,61}
+local	float	___327_t	%read{9,61} %write{9,61}
+local	float	___327_a	%read{9,61} %write{9,61}
+local	float	___327_dr	%read{9,61} %write{9,61}
+local	float	___327_dm	%read{9,61} %write{9,61}
+temp	float	$tmp1	%read{3,3} %write{2,2}
+temp	float	$tmp2	%read{2,2} %write{1,1}
+const	int	$const1	1		%read{23,57} %write{2147483647,-1}
+const	float	$const2	1		%read{3,61} %write{2147483647,-1}
+const	int	$const3	0		%read{6,52} %write{2147483647,-1}
+temp	int	$tmp3	%read{7,61} %write{8,61}
+temp	int	$tmp4	%read{9,61} %write{9,61}
+temp	vector	$tmp5	%read{9,61} %write{9,61}
+const	float	$const4	0		%read{13,13} %write{2147483647,-1}
+temp	int	$tmp6	%read{9,61} %write{9,61}
+temp	vector	$tmp7	%read{9,61} %write{9,61}
+const	string	$const5	"cell"		%read{19,25} %write{2147483647,-1}
+temp	float	$tmp8	%read{9,61} %write{9,61}
+temp	float	$tmp9	%read{9,61} %write{9,61}
+temp	float	$tmp10	%read{9,61} %write{9,61}
+temp	int	$tmp11	%read{9,61} %write{9,61}
+temp	int	$tmp12	%read{9,61} %write{9,61}
+temp	float	$tmp13	%read{9,61} %write{9,61}
+temp	float	$tmp14	%read{9,61} %write{9,61}
+temp	float	$tmp15	%read{9,61} %write{9,61}
+temp	float	$tmp16	%read{9,61} %write{9,61}
+temp	float	$tmp17	%read{9,61} %write{9,61}
+temp	float	$tmp18	%read{9,61} %write{9,61}
+temp	float	$tmp19	%read{9,61} %write{9,61}
+const	string	$const6	"hypot"		%read{34,34} %write{2147483647,-1}
+temp	float	$tmp20	%read{9,61} %write{9,61}
+temp	float	$tmp21	%read{9,61} %write{9,61}
+temp	float	$tmp22	%read{9,61} %write{9,61}
+temp	float	$tmp23	%read{9,61} %write{9,61}
+temp	float	$tmp24	%read{9,61} %write{9,61}
+temp	float	$tmp25	%read{9,61} %write{9,61}
+temp	float	$tmp26	%read{9,61} %write{9,61}
+temp	float	$tmp27	%read{9,61} %write{9,61}
+temp	float	$tmp28	%read{9,61} %write{9,61}
+temp	float	$tmp29	%read{9,61} %write{9,61}
+temp	float	$tmp30	%read{9,61} %write{9,61}
+temp	int	$tmp31	%read{9,61} %write{9,61}
+temp	float	$tmp32	%read{9,61} %write{9,61}
+temp	int	$tmp33	%read{2147483647,-1} %write{9,61}
+temp	float	$tmp34	%read{2147483647,-1} %write{9,61}
+temp	float	$tmp35	%read{2147483647,-1} %write{9,61}
+code Vector
+# source/sambler-osl-shaders/MJABook/15MABRain/MABRain.osl:15
+#         float Scale = 5.0,
+	assign		Vector P 	%filename{"source/sambler-osl-shaders/MJABook/15MABRain/MABRain.osl"} %line{15} %argrw{"wr"}
+code ___main___
+# source/sambler-osl-shaders/MJABook/15MABRain/MABRain.osl:30
+# 
+	abs		$tmp2 Limit 	%filename{"source/sambler-osl-shaders/MJABook/15MABRain/MABRain.osl"} %line{30} %argrw{"wr"}
+	ceil		$tmp1 $tmp2 	%argrw{"wr"}
+	max		L $tmp1 $const2 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/15MABRain/MABRain.osl:32
+#     vector ip = floor(Pos);
+	mul		Pos Vector Scale 	%line{32} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/15MABRain/MABRain.osl:33
+# 
+	floor		ip Pos 	%line{33} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/15MABRain/MABRain.osl:35
+#     for(float dx = -L; dx<=L; dx++) {
+	assign		h $const3 	%line{35} %argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/15MABRain/MABRain.osl:36
+#     for(float dy = -L; dy<=L; dy++) {
+	for		$tmp3 9 10 60 62 	%line{36} %argrw{"r"}
+	neg		___322_dx L 	%argrw{"wr"}
+	le		$tmp3 ___322_dx L 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/15MABRain/MABRain.osl:37
+#         vector p = ip+vector(dx,dy,0);
+	for		$tmp4 12 13 58 60 	%line{37} %argrw{"r"}
+	neg		___324_dy L 	%argrw{"wr"}
+	le		$tmp4 ___324_dy L 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/15MABRain/MABRain.osl:38
+#         for(int i = 0; i<Drops; i++) {
+	vector		$tmp5 ___322_dx ___324_dy $const4 	%line{38} %argrw{"wrrr"}
+	add		___325_p ip $tmp5 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/15MABRain/MABRain.osl:39
+#             vector center = noise("cell",p,i) + p;
+	for		$tmp6 17 18 56 58 	%line{39} %argrw{"r"}
+	assign		___326_i $const3 	%argrw{"wr"}
+	lt		$tmp6 ___326_i Drops 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/15MABRain/MABRain.osl:40
+#             float start = (EndTime-StartTime)*noise("cell",p,-i-1);
+	assign		$tmp8 ___326_i 	%line{40} %argrw{"wr"}
+	noise		$tmp7 $const5 ___325_p $tmp8 	%argrw{"wrrr"}
+	add		___327_center $tmp7 ___325_p 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/15MABRain/MABRain.osl:41
+#             float peak = Time - start;
+	sub		$tmp9 EndTime StartTime 	%line{41} %argrw{"wrr"}
+	neg		$tmp11 ___326_i 	%argrw{"wr"}
+	sub		$tmp12 $tmp11 $const1 	%argrw{"wrr"}
+	assign		$tmp13 $tmp12 	%argrw{"wr"}
+	noise		$tmp10 $const5 ___325_p $tmp13 	%argrw{"wrrr"}
+	mul		___327_start $tmp9 $tmp10 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/15MABRain/MABRain.osl:42
+#             float dc = hypot(Pos[0]-center[0],Pos[1]-center[1]);
+	sub		___327_peak Time ___327_start 	%line{42} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/15MABRain/MABRain.osl:43
+#             float t = dc/Wavelength;
+	compref		$tmp14 Pos $const3 	%line{43} %argrw{"wrr"}
+	compref		$tmp15 ___327_center $const3 	%argrw{"wrr"}
+	sub		$tmp16 $tmp14 $tmp15 	%argrw{"wrr"}
+	compref		$tmp17 Pos $const1 	%argrw{"wrr"}
+	compref		$tmp18 ___327_center $const1 	%argrw{"wrr"}
+	sub		$tmp19 $tmp17 $tmp18 	%argrw{"wrr"}
+	functioncall	$const6 39 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:114
+# float hypot (float a, float b) { return sqrt (a*a + b*b); }
+	mul		$tmp20 $tmp16 $tmp16 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{114} %argrw{"wrr"}
+	mul		$tmp21 $tmp19 $tmp19 	%argrw{"wrr"}
+	add		$tmp22 $tmp20 $tmp21 	%argrw{"wrr"}
+	sqrt		___327_dc $tmp22 	%argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/15MABRain/MABRain.osl:44
+#             float a = Amplitude*cos(t);
+	div		___327_t ___327_dc Wavelength 	%filename{"source/sambler-osl-shaders/MJABook/15MABRain/MABRain.osl"} %line{44} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/15MABRain/MABRain.osl:45
+#             float dr = (Limit-peak)/Limit;
+	cos		$tmp23 ___327_t 	%line{45} %argrw{"wr"}
+	mul		___327_a Amplitude $tmp23 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/15MABRain/MABRain.osl:46
+#             float dm = pow(dr,Damping);
+	sub		$tmp24 Limit ___327_peak 	%line{46} %argrw{"wrr"}
+	div		___327_dr $tmp24 Limit 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/15MABRain/MABRain.osl:47
+#             dm *= exp(-(dc-peak)*(dc-peak)/Spread);
+	pow		___327_dm ___327_dr Damping 	%line{47} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/15MABRain/MABRain.osl:48
+#             if( dm >0 ) {
+	sub		$tmp26 ___327_dc ___327_peak 	%line{48} %argrw{"wrr"}
+	neg		$tmp27 $tmp26 	%argrw{"wr"}
+	sub		$tmp28 ___327_dc ___327_peak 	%argrw{"wrr"}
+	mul		$tmp29 $tmp27 $tmp28 	%argrw{"wrr"}
+	div		$tmp30 $tmp29 Spread 	%argrw{"wrr"}
+	exp		$tmp25 $tmp30 	%argrw{"wr"}
+	mul		___327_dm ___327_dm $tmp25 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/15MABRain/MABRain.osl:49
+#                 h += a*dm;
+	gt		$tmp31 ___327_dm $const3 	%line{49} %argrw{"wrr"}
+	if		$tmp31 56 56 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/15MABRain/MABRain.osl:50
+#             }
+	mul		$tmp32 ___327_a ___327_dm 	%line{50} %argrw{"wrr"}
+	add		h h $tmp32 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/15MABRain/MABRain.osl:39
+#             vector center = noise("cell",p,i) + p;
+	assign		$tmp33 ___326_i 	%line{39} %argrw{"wr"}
+	add		___326_i ___326_i $const1 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/15MABRain/MABRain.osl:37
+#         vector p = ip+vector(dx,dy,0);
+	assign		$tmp34 ___324_dy 	%line{37} %argrw{"wr"}
+	add		___324_dy ___324_dy $const2 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/15MABRain/MABRain.osl:36
+#     for(float dy = -L; dy<=L; dy++) {
+	assign		$tmp35 ___322_dx 	%line{36} %argrw{"wr"}
+	add		___322_dx ___322_dx $const2 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/15MABRain/MABRain.osl:55
+# }
+	assign		Height h 	%line{55} %argrw{"wr"}
+	end

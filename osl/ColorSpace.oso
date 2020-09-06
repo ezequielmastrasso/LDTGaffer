@@ -1,0 +1,13 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader ColorSpace	%meta{string,help,"Convert RGB / HSV / YIQ / XYZ / xyY"} %meta{string,label,"Color Space"} %meta{string,category,"Math Color"} 
+param	string	FromSpace	"hsv"		%meta{string,widget,"mapper"} %meta{string,options,"rgb:rgb|hsv (hue, saturation, and value):hsv|hsl (hue, saturation, and lightness):hsl|YIQ (for the NTSC television standard):YIQ|XYZ (CIE XYZ coordinates):XYZ|xyY (CIE xyY coordinates):xyY"} %meta{string,label,"From space:"}  %read{0,0} %write{2147483647,-1}
+param	string	ToSpace	"rgb"		%meta{string,widget,"mapper"} %meta{string,options,"rgb:rgb|hsv (hue, saturation, and value):hsv|hsl (hue, saturation, and lightness):hsl|YIQ (for the NTSC television standard):YIQ|XYZ (CIE XYZ coordinates):XYZ|xyY (CIE xyY coordinates):xyY"} %meta{string,label,"To space:"}  %read{0,0} %write{2147483647,-1}
+param	vector	In	0 0 0		%read{0,0} %write{2147483647,-1}
+oparam	color	Out	0 0 0		%read{2147483647,-1} %write{0,0}
+code ___main___
+# source/3dsMax-OSL-Shaders/ColorSpace.osl:26
+# }
+	transformc	Out FromSpace ToSpace In 	%filename{"source/3dsMax-OSL-Shaders/ColorSpace.osl"} %line{26} %argrw{"wrrr"}
+	end

@@ -1,0 +1,11 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader SetFloat	%meta{string,help,"A Folor value passthrough.<br>Can be used to instance one value in many places."} %meta{string,label,"Float Value"} %meta{string,category,"Values"} 
+param	float	In	0		%meta{string,label,"Float"}  %read{0,0} %write{2147483647,-1}
+oparam	float	Out	0		%read{2147483647,-1} %write{0,0}
+code ___main___
+# source/3dsMax-OSL-Shaders/SetFloat.osl:17
+# }
+	assign		Out In 	%filename{"source/3dsMax-OSL-Shaders/SetFloat.osl"} %line{17} %argrw{"wr"}
+	end

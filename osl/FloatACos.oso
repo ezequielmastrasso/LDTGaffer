@@ -1,0 +1,11 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader FloatACos	%meta{string,help,"Arc Cosine (in radians) of a float"} %meta{string,label,"ACos"} %meta{string,category,"Math Float"} 
+param	float	Input	0		%read{0,0} %write{2147483647,-1}
+oparam	float	Out	0		%meta{string,label,"Angle (radians)"}  %read{2147483647,-1} %write{0,0}
+code ___main___
+# source/3dsMax-OSL-Shaders/FloatACos.osl:17
+# }
+	acos		Out Input 	%filename{"source/3dsMax-OSL-Shaders/FloatACos.osl"} %line{17} %argrw{"wr"}
+	end

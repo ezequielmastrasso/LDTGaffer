@@ -1,0 +1,41 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader VectorJuggler	%meta{string,help,"A utility to combine or split vector components"} %meta{string,label,"Components (vector)"} %meta{string,category,"Math Vector"} 
+param	vector	Input	0 0 0		%meta{string,label,"Input (XYZ)"}  %read{0,2} %write{2147483647,-1}
+param	float	Xi	0		%meta{string,label,"X"}  %read{3,3} %write{0,0} %initexpr
+param	float	Yi	0		%meta{string,label,"Y"}  %read{3,3} %write{1,1} %initexpr
+param	float	Zi	0		%meta{string,label,"Z"}  %read{3,3} %write{2,2} %initexpr
+oparam	vector	Out	0 0 0		%meta{string,label,"Out (XYZ)"}  %read{4,6} %write{3,3}
+oparam	float	X	0		%read{2147483647,-1} %write{4,4}
+oparam	float	Y	0		%read{2147483647,-1} %write{5,5}
+oparam	float	Z	0		%read{2147483647,-1} %write{6,6}
+const	int	$const1	0		%read{0,4} %write{2147483647,-1}
+const	int	$const2	1		%read{1,5} %write{2147483647,-1}
+const	int	$const3	2		%read{2,6} %write{2147483647,-1}
+code Xi
+# source/3dsMax-OSL-Shaders/VectorJuggler.osl:14
+# 	float  Yi = Input[1]  [[ string label="Y" ]],
+	compref		Xi Input $const1 	%filename{"source/3dsMax-OSL-Shaders/VectorJuggler.osl"} %line{14} %argrw{"wrr"}
+code Yi
+# source/3dsMax-OSL-Shaders/VectorJuggler.osl:15
+# 	float  Zi = Input[2]  [[ string label="Z" ]],
+	compref		Yi Input $const2 	%filename{"source/3dsMax-OSL-Shaders/VectorJuggler.osl"} %line{15} %argrw{"wrr"}
+code Zi
+# source/3dsMax-OSL-Shaders/VectorJuggler.osl:16
+# 	output vector Out = 0 [[ string label="Out (XYZ)" ]],
+	compref		Zi Input $const3 	%filename{"source/3dsMax-OSL-Shaders/VectorJuggler.osl"} %line{16} %argrw{"wrr"}
+code ___main___
+# source/3dsMax-OSL-Shaders/VectorJuggler.osl:23
+# 	X = Out[0];
+	vector		Out Xi Yi Zi 	%filename{"source/3dsMax-OSL-Shaders/VectorJuggler.osl"} %line{23} %argrw{"wrrr"}
+# source/3dsMax-OSL-Shaders/VectorJuggler.osl:24
+# 	Y = Out[1];
+	compref		X Out $const1 	%line{24} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/VectorJuggler.osl:25
+# 	Z = Out[2];
+	compref		Y Out $const2 	%line{25} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/VectorJuggler.osl:26
+# }
+	compref		Z Out $const3 	%line{26} %argrw{"wrr"}
+	end

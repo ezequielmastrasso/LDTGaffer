@@ -1,0 +1,19 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader FloatClamp	%meta{string,help,"Clamps a float"} %meta{string,label,"Clamp"} %meta{string,category,"Math Float"} 
+param	float	Input	0		%read{1,1} %write{2147483647,-1}
+param	float	Min	0		%read{2,2} %write{2147483647,-1}
+param	float	Max	1		%read{1,1} %write{2147483647,-1}
+oparam	float	Out	0		%read{2147483647,-1} %write{2,2}
+const	string	$const1	"clamp"		%read{0,0} %write{2147483647,-1}
+temp	float	$tmp1	%read{2,2} %write{1,1}
+code ___main___
+# source/3dsMax-OSL-Shaders/FloatClamp.osl:19
+# }
+	functioncall	$const1 3 	%filename{"source/3dsMax-OSL-Shaders/FloatClamp.osl"} %line{19} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:145
+# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
+	min		$tmp1 Input Max 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{145} %argrw{"wrr"}
+	max		Out $tmp1 Min 	%argrw{"wrr"}
+	end

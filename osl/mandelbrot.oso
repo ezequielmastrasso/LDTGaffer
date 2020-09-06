@@ -1,0 +1,131 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader mandelbrot
+param	vector	Vector	0 0 0		%read{4,12} %write{0,0} %initexpr
+param	int	maxIterations	100		%read{2147483647,-1} %write{2147483647,-1}
+oparam	float	Fac	0		%read{2147483647,-1} %write{42,42}
+global	point	P	%read{0,0} %write{2147483647,-1}
+local	int	max_iterations	%read{22,41} %write{1,1}
+local	float	x	%read{22,39} %write{2,39}
+local	float	y	%read{22,39} %write{3,39}
+local	float	tu	%read{22,39} %write{11,11}
+local	float	tv	%read{22,39} %write{19,19}
+local	int	i	%read{22,40} %write{20,39}
+local	float	___322_t	%read{22,39} %write{22,39}
+const	int	$const1	100		%read{1,1} %write{2147483647,-1}
+const	float	$const2	0		%read{2,3} %write{2147483647,-1}
+temp	float	$tmp1	%read{10,10} %write{9,9}
+const	int	$const3	0		%read{4,29} %write{2147483647,-1}
+temp	float	$tmp2	%read{6,9} %write{4,4}
+const	float	$const4	1		%read{6,16} %write{2147483647,-1}
+const	string	$const5	"mod"		%read{5,13} %write{2147483647,-1}
+temp	float	$tmp3	%read{8,8} %write{7,7}
+temp	float	$tmp4	%read{7,7} %write{6,6}
+temp	float	$tmp5	%read{9,9} %write{8,8}
+const	float	$const6	3		%read{10,18} %write{2147483647,-1}
+temp	float	$tmp6	%read{11,11} %write{10,10}
+const	float	$const7	1.5		%read{11,11} %write{2147483647,-1}
+temp	float	$tmp7	%read{18,18} %write{17,17}
+const	int	$const8	1		%read{12,39} %write{2147483647,-1}
+temp	float	$tmp8	%read{14,17} %write{12,12}
+temp	float	$tmp9	%read{16,16} %write{15,15}
+temp	float	$tmp10	%read{15,15} %write{14,14}
+temp	float	$tmp11	%read{17,17} %write{16,16}
+temp	float	$tmp12	%read{19,19} %write{18,18}
+const	float	$const9	2		%read{19,35} %write{2147483647,-1}
+temp	float	$tmp13	%read{22,39} %write{22,39}
+temp	float	$tmp14	%read{22,39} %write{22,39}
+temp	float	$tmp15	%read{22,39} %write{22,39}
+const	int	$const10	4		%read{25,25} %write{2147483647,-1}
+temp	int	$tmp16	%read{22,39} %write{22,39}
+temp	int	$tmp17	%read{21,39} %write{22,39}
+temp	int	$tmp18	%read{22,39} %write{22,39}
+temp	int	$tmp19	%read{22,39} %write{22,39}
+temp	float	$tmp20	%read{22,39} %write{22,39}
+temp	float	$tmp21	%read{22,39} %write{22,39}
+temp	float	$tmp22	%read{22,39} %write{22,39}
+temp	float	$tmp23	%read{22,39} %write{22,39}
+temp	float	$tmp24	%read{22,39} %write{22,39}
+temp	float	$tmp25	%read{42,42} %write{40,40}
+temp	float	$tmp26	%read{42,42} %write{41,41}
+code Vector
+# source/sambler-osl-shaders/patterns/SAMandelbrot/SAMandelbrot.osl:16
+#     int maxIterations = 100,
+	assign		Vector P 	%filename{"source/sambler-osl-shaders/patterns/SAMandelbrot/SAMandelbrot.osl"} %line{16} %argrw{"wr"}
+code ___main___
+# source/sambler-osl-shaders/patterns/SAMandelbrot/SAMandelbrot.osl:20
+#     float x = 0.0;
+	assign		max_iterations $const1 	%filename{"source/sambler-osl-shaders/patterns/SAMandelbrot/SAMandelbrot.osl"} %line{20} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/SAMandelbrot/SAMandelbrot.osl:21
+#     float y = 0.0;
+	assign		x $const2 	%line{21} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/SAMandelbrot/SAMandelbrot.osl:22
+# 
+	assign		y $const2 	%line{22} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/SAMandelbrot/SAMandelbrot.osl:24
+#     float tv = (mod(Vector[1],1.0)*3.0)-2.0;
+	compref		$tmp2 Vector $const3 	%line{24} %argrw{"wrr"}
+	functioncall	$const5 10 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:136
+# float  mod (float  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp4 $tmp2 $const4 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{136} %argrw{"wrr"}
+	floor		$tmp3 $tmp4 	%argrw{"wr"}
+	mul		$tmp5 $const4 $tmp3 	%argrw{"wrr"}
+	sub		$tmp1 $tmp2 $tmp5 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/SAMandelbrot/SAMandelbrot.osl:24
+#     float tv = (mod(Vector[1],1.0)*3.0)-2.0;
+	mul		$tmp6 $tmp1 $const6 	%filename{"source/sambler-osl-shaders/patterns/SAMandelbrot/SAMandelbrot.osl"} %line{24} %argrw{"wrr"}
+	sub		tu $tmp6 $const7 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/SAMandelbrot/SAMandelbrot.osl:25
+#     
+	compref		$tmp8 Vector $const8 	%line{25} %argrw{"wrr"}
+	functioncall	$const5 18 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:136
+# float  mod (float  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp10 $tmp8 $const4 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{136} %argrw{"wrr"}
+	floor		$tmp9 $tmp10 	%argrw{"wr"}
+	mul		$tmp11 $const4 $tmp9 	%argrw{"wrr"}
+	sub		$tmp7 $tmp8 $tmp11 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/SAMandelbrot/SAMandelbrot.osl:25
+#     
+	mul		$tmp12 $tmp7 $const6 	%filename{"source/sambler-osl-shaders/patterns/SAMandelbrot/SAMandelbrot.osl"} %line{25} %argrw{"wrr"}
+	sub		tv $tmp12 $const9 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/SAMandelbrot/SAMandelbrot.osl:27
+#     while (x*x + y*y < 4 && i < max_iterations) {
+	assign		i $const3 	%line{27} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/SAMandelbrot/SAMandelbrot.osl:28
+#         float t = x*x - y*y + tv;
+	while		$tmp17 22 31 40 40 	%line{28} %argrw{"r"}
+	mul		$tmp13 x x 	%argrw{"wrr"}
+	mul		$tmp14 y y 	%argrw{"wrr"}
+	add		$tmp15 $tmp13 $tmp14 	%argrw{"wrr"}
+	lt		$tmp16 $tmp15 $const10 	%argrw{"wrr"}
+	neq		$tmp17 $tmp16 $const3 	%argrw{"wrr"}
+	if		$tmp17 31 31 	%argrw{"r"}
+	lt		$tmp18 i max_iterations 	%argrw{"wrr"}
+	neq		$tmp19 $tmp18 $const3 	%argrw{"wrr"}
+	assign		$tmp17 $tmp19 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/SAMandelbrot/SAMandelbrot.osl:29
+#         y = 2*x*y + tu;
+	mul		$tmp20 x x 	%line{29} %argrw{"wrr"}
+	mul		$tmp21 y y 	%argrw{"wrr"}
+	sub		$tmp22 $tmp20 $tmp21 	%argrw{"wrr"}
+	add		___322_t $tmp22 tv 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/SAMandelbrot/SAMandelbrot.osl:30
+#         x = t;
+	mul		$tmp23 $const9 x 	%line{30} %argrw{"wrr"}
+	mul		$tmp24 $tmp23 y 	%argrw{"wrr"}
+	add		y $tmp24 tu 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/SAMandelbrot/SAMandelbrot.osl:31
+# 
+	assign		x ___322_t 	%line{31} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/SAMandelbrot/SAMandelbrot.osl:33
+#     }
+	add		i i $const8 	%line{33} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/SAMandelbrot/SAMandelbrot.osl:36
+# }
+	assign		$tmp25 i 	%line{36} %argrw{"wr"}
+	assign		$tmp26 max_iterations 	%argrw{"wr"}
+	div		Fac $tmp25 $tmp26 	%argrw{"wrr"}
+	end

@@ -1,0 +1,18 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader VectorSub	%meta{string,help,"Subtracts (and optionaly scales) two vectors"} %meta{string,label,"Subtract (vector)"} %meta{string,category,"Math Vector"} 
+param	vector	A	0.5 0.5 0.5		%meta{string,label,"A"}  %read{0,0} %write{2147483647,-1}
+param	vector	B	0.5 0.5 0.5		%meta{string,label,"B"}  %read{1,1} %write{2147483647,-1}
+param	float	A_Amount	1		%meta{string,label,"A scale"}  %read{0,0} %write{2147483647,-1}
+param	float	B_Amount	1		%meta{string,label,"B scale"}  %read{1,1} %write{2147483647,-1}
+oparam	vector	Out	0 0 0		%read{2147483647,-1} %write{2,2}
+temp	vector	$tmp1	%read{2,2} %write{0,0}
+temp	vector	$tmp2	%read{2,2} %write{1,1}
+code ___main___
+# source/3dsMax-OSL-Shaders/VectorSub.osl:21
+# }
+	mul		$tmp1 A A_Amount 	%filename{"source/3dsMax-OSL-Shaders/VectorSub.osl"} %line{21} %argrw{"wrr"}
+	mul		$tmp2 B B_Amount 	%argrw{"wrr"}
+	sub		Out $tmp1 $tmp2 	%argrw{"wrr"}
+	end

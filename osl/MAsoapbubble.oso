@@ -1,0 +1,127 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader MAsoapbubble
+param	float	InteriorIOR	1		%read{0,0} %write{2147483647,-1}
+param	float	SurfaceIOR	1.3		%read{0,21} %write{2147483647,-1}
+param	float	Thickness	1000		%read{22,22} %write{2147483647,-1}
+oparam	color	Color	0 0 0		%read{2147483647,-1} %write{40,40}
+global	vector	I	%read{2,19} %write{2147483647,-1}
+global	normal	N	%read{2,15} %write{2147483647,-1}
+local	float	___237_IdotN	%read{4,12} %write{2,2}
+local	float	___237_k	%read{8,13} %write{7,7}
+local	float	eta	%read{3,12} %write{0,0}
+local	vector	T	%read{20,20} %write{18,18}
+local	float	cost2	%read{23,23} %write{20,20}
+local	float	opd	%read{24,38} %write{23,23}
+local	int	mmin	%read{32,32} %write{27,27}
+local	int	mmax	%read{32,32} %write{31,31}
+local	int	m	%read{34,36} %write{33,33}
+local	float	___322_lambda	%read{39,39} %write{38,38}
+local	color	___322_c	%read{40,40} %write{39,39}
+temp	vector	$tmp1	%read{18,18} %write{10,16}
+const	string	$const1	"refract"		%read{1,1} %write{2147483647,-1}
+temp	float	$tmp2	%read{6,6} %write{3,3}
+temp	float	$tmp3	%read{5,5} %write{4,4}
+temp	float	$tmp4	%read{6,6} %write{5,5}
+const	float	$const3	1		%read{5,7} %write{2147483647,-1}
+temp	float	$tmp5	%read{7,7} %write{6,6}
+const	int	$const4	0		%read{8,34} %write{2147483647,-1}
+temp	int	$tmp6	%read{9,9} %write{8,8}
+const	vector	$const5	0 0 0		%read{10,10} %write{2147483647,-1}
+temp	vector	$tmp7	%read{16,16} %write{11,11}
+temp	float	$tmp8	%read{14,14} %write{12,12}
+temp	float	$tmp9	%read{14,14} %write{13,13}
+temp	float	$tmp10	%read{15,15} %write{14,14}
+temp	vector	$tmp11	%read{16,16} %write{15,15}
+temp	vector	$tmp12	%read{20,20} %write{19,19}
+const	int	$const6	2		%read{33,33} %write{2147483647,-1}
+temp	float	$tmp13	%read{22,22} %write{21,21}
+const	float	$const7	2		%read{21,21} %write{2147483647,-1}
+temp	float	$tmp14	%read{23,23} %write{22,22}
+temp	float	$tmp15	%read{27,27} %write{26,26}
+temp	float	$tmp16	%read{25,25} %write{24,24}
+const	float	$const9	750		%read{24,24} %write{2147483647,-1}
+const	float	$const10	0.5		%read{25,37} %write{2147483647,-1}
+temp	float	$tmp17	%read{26,26} %write{25,25}
+temp	float	$tmp18	%read{31,31} %write{30,30}
+temp	float	$tmp19	%read{29,29} %write{28,28}
+const	float	$const12	350		%read{28,28} %write{2147483647,-1}
+temp	float	$tmp20	%read{30,30} %write{29,29}
+temp	int	$tmp21	%read{33,33} %write{32,32}
+temp	int	$tmp22	%read{35,35} %write{34,34}
+temp	float	$tmp23	%read{38,38} %write{37,37}
+temp	float	$tmp24	%read{37,37} %write{36,36}
+code ___main___
+# source/sambler-osl-shaders/ramps/MAsoap_bubble/MAsoap_bubble.osl:23
+#         // note that N should be the perturbed normal
+	div		eta InteriorIOR SurfaceIOR 	%filename{"source/sambler-osl-shaders/ramps/MAsoap_bubble/MAsoap_bubble.osl"} %line{23} %argrw{"wrr"}
+# source/sambler-osl-shaders/ramps/MAsoap_bubble/MAsoap_bubble.osl:25
+#         // no need to divide by (len(-I) * len(T)) as these are normalized
+	functioncall	$const1 18 	%line{25} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:218
+#     float IdotN = dot (I, N);
+	dot		___237_IdotN I N 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{218} %argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:219
+#     float k = 1 - eta*eta * (1 - IdotN*IdotN);
+	mul		$tmp2 eta eta 	%line{219} %argrw{"wrr"}
+	mul		$tmp3 ___237_IdotN ___237_IdotN 	%argrw{"wrr"}
+	sub		$tmp4 $const3 $tmp3 	%argrw{"wrr"}
+	mul		$tmp5 $tmp2 $tmp4 	%argrw{"wrr"}
+	sub		___237_k $const3 $tmp5 	%argrw{"wrr"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:220
+#     return (k < 0) ? vector(0,0,0) : (eta*I - N * (eta*IdotN + sqrt(k)));
+	lt		$tmp6 ___237_k $const4 	%line{220} %argrw{"wrr"}
+	if		$tmp6 11 17 	%argrw{"r"}
+	assign		$tmp1 $const5 	%argrw{"wr"}
+	mul		$tmp7 eta I 	%argrw{"wrr"}
+	mul		$tmp8 eta ___237_IdotN 	%argrw{"wrr"}
+	sqrt		$tmp9 ___237_k 	%argrw{"wr"}
+	add		$tmp10 $tmp8 $tmp9 	%argrw{"wrr"}
+	mul		$tmp11 N $tmp10 	%argrw{"wrr"}
+	sub		$tmp1 $tmp7 $tmp11 	%argrw{"wrr"}
+	return
+# source/sambler-osl-shaders/ramps/MAsoap_bubble/MAsoap_bubble.osl:25
+#         // no need to divide by (len(-I) * len(T)) as these are normalized
+	normalize	T $tmp1 	%filename{"source/sambler-osl-shaders/ramps/MAsoap_bubble/MAsoap_bubble.osl"} %line{25} %argrw{"wr"}
+# source/sambler-osl-shaders/ramps/MAsoap_bubble/MAsoap_bubble.osl:27
+#     float opd = 2*SurfaceIOR*Thickness*cost2;
+	neg		$tmp12 I 	%line{27} %argrw{"wr"}
+	dot		cost2 $tmp12 T 	%argrw{"wrr"}
+# source/sambler-osl-shaders/ramps/MAsoap_bubble/MAsoap_bubble.osl:28
+#     
+	mul		$tmp13 $const7 SurfaceIOR 	%line{28} %argrw{"wrr"}
+	mul		$tmp14 $tmp13 Thickness 	%argrw{"wrr"}
+	mul		opd $tmp14 cost2 	%argrw{"wrr"}
+# source/sambler-osl-shaders/ramps/MAsoap_bubble/MAsoap_bubble.osl:30
+#     int mmax = int(floor(opd/350+0.5));
+	div		$tmp16 opd $const9 	%line{30} %argrw{"wrr"}
+	add		$tmp17 $tmp16 $const10 	%argrw{"wrr"}
+	ceil		$tmp15 $tmp17 	%argrw{"wr"}
+	assign		mmin $tmp15 	%argrw{"wr"}
+# source/sambler-osl-shaders/ramps/MAsoap_bubble/MAsoap_bubble.osl:31
+#         // if mmax < mmin the film is too thin to show an effect
+	div		$tmp19 opd $const12 	%line{31} %argrw{"wrr"}
+	add		$tmp20 $tmp19 $const10 	%argrw{"wrr"}
+	floor		$tmp18 $tmp20 	%argrw{"wr"}
+	assign		mmax $tmp18 	%argrw{"wr"}
+# source/sambler-osl-shaders/ramps/MAsoap_bubble/MAsoap_bubble.osl:33
+#     
+	add		$tmp21 mmin mmax 	%line{33} %argrw{"wrr"}
+	div		m $tmp21 $const6 	%argrw{"wrr"}
+# source/sambler-osl-shaders/ramps/MAsoap_bubble/MAsoap_bubble.osl:35
+#      float lambda = opd / (m - 0.5);
+	gt		$tmp22 m $const4 	%line{35} %argrw{"wrr"}
+	if		$tmp22 41 41 	%argrw{"r"}
+# source/sambler-osl-shaders/ramps/MAsoap_bubble/MAsoap_bubble.osl:36
+#             color c = wavelength_color(lambda);
+	assign		$tmp24 m 	%line{36} %argrw{"wr"}
+	sub		$tmp23 $tmp24 $const10 	%argrw{"wrr"}
+	div		___322_lambda opd $tmp23 	%argrw{"wrr"}
+# source/sambler-osl-shaders/ramps/MAsoap_bubble/MAsoap_bubble.osl:37
+#             Color =  c;
+	wavelength_color	___322_c ___322_lambda 	%line{37} %argrw{"wr"}
+# source/sambler-osl-shaders/ramps/MAsoap_bubble/MAsoap_bubble.osl:38
+#     }
+	assign		Color ___322_c 	%line{38} %argrw{"wr"}
+	end

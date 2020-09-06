@@ -1,0 +1,12 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader GetFrame	%meta{string,help,"Returns the current frame number."} %meta{string,label,"Frame Number"} %meta{string,category,"Scene Attributes"} 
+param	int	In	0		%meta{string,label,"Frame #"} %meta{int,timeValue,1}  %read{0,0} %write{2147483647,-1}
+param	int	Offset	0		%read{0,0} %write{2147483647,-1}
+oparam	int	FrameNumber	0		%read{2147483647,-1} %write{0,0}
+code ___main___
+# source/3dsMax-OSL-Shaders/GetFrame.osl:20
+# }
+	add		FrameNumber In Offset 	%filename{"source/3dsMax-OSL-Shaders/GetFrame.osl"} %line{20} %argrw{"wrr"}
+	end

@@ -1,0 +1,12 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader FloatAngle	%meta{string,help,"Angle (in radians) of 2D Vector"} %meta{string,label,"Angle"} %meta{string,category,"Math Float"} 
+param	float	X	0		%read{0,0} %write{2147483647,-1}
+param	float	Y	0		%read{0,0} %write{2147483647,-1}
+oparam	float	Out	0		%meta{string,label,"Angle (radians)"}  %read{2147483647,-1} %write{0,0}
+code ___main___
+# source/3dsMax-OSL-Shaders/FloatAngle.osl:18
+# }
+	atan2		Out X Y 	%filename{"source/3dsMax-OSL-Shaders/FloatAngle.osl"} %line{18} %argrw{"wrr"}
+	end

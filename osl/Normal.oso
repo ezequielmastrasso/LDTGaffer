@@ -1,0 +1,17 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader Normal	%meta{string,help,"Get the Normal in the specified coordinate space"} %meta{string,label,"Normal"} %meta{string,category,"Scene Attributes"} 
+param	string	Coordspace	"object"		%meta{string,widget,"popup"} %meta{string,help,"world, object, camera, shader, screen, NDC, raster, or an explicitly named coordinate system"} %meta{string,options,"world|object|camera|shader|screen|NDC|raster"} %meta{int,editable,1}  %read{1,1} %write{2147483647,-1}
+oparam	vector	Out	0 0 0		%read{2147483647,-1} %write{1,1}
+global	normal	N	%read{1,1} %write{2147483647,-1}
+const	string	$const1	"transform"		%read{0,0} %write{2147483647,-1}
+const	string	$const2	"common"		%read{1,1} %write{2147483647,-1}
+code ___main___
+# source/3dsMax-OSL-Shaders/Normal.osl:21
+# }
+	functioncall	$const1 2 	%filename{"source/3dsMax-OSL-Shaders/Normal.osl"} %line{21} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:265
+# normal transform (string to, normal p) { return transform("common",to,p); }
+	transformn	Out $const2 Coordspace N 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{265} %argrw{"wrrr"}
+	end

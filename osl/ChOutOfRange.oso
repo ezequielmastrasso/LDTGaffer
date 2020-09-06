@@ -1,0 +1,32 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader ChOutOfRange
+param	float	In	0		%read{0,3} %write{2147483647,-1}
+param	color	Over	0 1 0		%read{2,2} %write{2147483647,-1}
+param	float	MaxValue	1		%read{0,0} %write{2147483647,-1}
+param	color	InRange	1 1 1		%read{6,6} %write{2147483647,-1}
+param	float	MinValue	0		%read{3,3} %write{2147483647,-1}
+param	color	Under	1 0 0		%read{5,5} %write{2147483647,-1}
+oparam	color	Color	0 0 0		%read{2147483647,-1} %write{2,6}
+temp	int	$tmp1	%read{1,1} %write{0,0}
+temp	int	$tmp2	%read{4,4} %write{3,3}
+code ___main___
+# source/sambler-osl-shaders/lib/ChOutOfRange.osl:26
+#             Color = Over;
+	gt		$tmp1 In MaxValue 	%filename{"source/sambler-osl-shaders/lib/ChOutOfRange.osl"} %line{26} %argrw{"wrr"}
+	if		$tmp1 3 7 	%argrw{"r"}
+# source/sambler-osl-shaders/lib/ChOutOfRange.osl:27
+#        }
+	assign		Color Over 	%line{27} %argrw{"wr"}
+# source/sambler-osl-shaders/lib/ChOutOfRange.osl:29
+#             Color = Under;
+	lt		$tmp2 In MinValue 	%line{29} %argrw{"wrr"}
+	if		$tmp2 6 7 	%argrw{"r"}
+# source/sambler-osl-shaders/lib/ChOutOfRange.osl:30
+#        }
+	assign		Color Under 	%line{30} %argrw{"wr"}
+# source/sambler-osl-shaders/lib/ChOutOfRange.osl:33
+#        }
+	assign		Color InRange 	%line{33} %argrw{"wr"}
+	end

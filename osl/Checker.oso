@@ -1,0 +1,103 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader Checker	%meta{string,help,"A simple Checkboard OSL sample shader"} %meta{string,category,"Textures"} 
+param	point	UVW	0 0 0		%meta{string,help,"The position to shade. Default to the standard UV space."}  %read{1,1} %write{0,0} %initexpr
+param	float	Scale	0.25		%read{1,1} %write{2147483647,-1}
+param	color	Color1	1 1 0.2		%read{29,29} %write{2147483647,-1}
+param	color	Color2	0.2 0.2 1		%read{30,30} %write{2147483647,-1}
+oparam	color	Col	0 0 0		%read{2147483647,-1} %write{29,30}
+global	float	u	%read{0,0} %write{2147483647,-1}
+global	float	v	%read{0,0} %write{2147483647,-1}
+local	point	p	%read{2,16} %write{1,1}
+local	int	x	%read{23,23} %write{8,8}
+local	int	y	%read{24,24} %write{15,15}
+local	int	z	%read{26,26} %write{22,22}
+const	int	$const1	0		%read{2,2} %write{2147483647,-1}
+const	float	$const2	0		%read{0,0} %write{2147483647,-1}
+temp	float	$tmp1	%read{8,8} %write{7,7}
+temp	float	$tmp2	%read{4,7} %write{2,2}
+const	float	$const3	2		%read{4,20} %write{2147483647,-1}
+const	string	$const4	"mod"		%read{3,17} %write{2147483647,-1}
+temp	float	$tmp3	%read{6,6} %write{5,5}
+temp	float	$tmp4	%read{5,5} %write{4,4}
+temp	float	$tmp5	%read{7,7} %write{6,6}
+temp	float	$tmp6	%read{15,15} %write{14,14}
+const	int	$const5	1		%read{9,9} %write{2147483647,-1}
+temp	float	$tmp7	%read{11,14} %write{9,9}
+temp	float	$tmp8	%read{13,13} %write{12,12}
+temp	float	$tmp9	%read{12,12} %write{11,11}
+temp	float	$tmp10	%read{14,14} %write{13,13}
+temp	float	$tmp11	%read{22,22} %write{21,21}
+const	int	$const6	2		%read{16,26} %write{2147483647,-1}
+temp	float	$tmp12	%read{18,21} %write{16,16}
+temp	float	$tmp13	%read{20,20} %write{19,19}
+temp	float	$tmp14	%read{19,19} %write{18,18}
+temp	float	$tmp15	%read{21,21} %write{20,20}
+temp	int	$tmp16	%read{25,25} %write{23,23}
+temp	int	$tmp17	%read{25,25} %write{24,24}
+temp	int	$tmp18	%read{27,27} %write{25,25}
+temp	int	$tmp19	%read{27,27} %write{26,26}
+temp	int	$tmp20	%read{28,28} %write{27,27}
+code UVW
+# source/3dsMax-OSL-Shaders/checker.osl:13
+#   	[[ string help="The position to shade. Default to the standard UV space." ]],
+	vector		UVW u v $const2 	%filename{"source/3dsMax-OSL-Shaders/checker.osl"} %line{13} %argrw{"wrrr"}
+code ___main___
+# source/3dsMax-OSL-Shaders/checker.osl:22
+# 	int x = (int)mod(p[0],2.0);
+	div		p UVW Scale 	%filename{"source/3dsMax-OSL-Shaders/checker.osl"} %line{22} %argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/checker.osl:23
+# 	int y = (int)mod(p[1],2.0);
+	compref		$tmp2 p $const1 	%line{23} %argrw{"wrr"}
+	functioncall	$const4 8 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:136
+# float  mod (float  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp4 $tmp2 $const3 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{136} %argrw{"wrr"}
+	floor		$tmp3 $tmp4 	%argrw{"wr"}
+	mul		$tmp5 $const3 $tmp3 	%argrw{"wrr"}
+	sub		$tmp1 $tmp2 $tmp5 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/checker.osl:23
+# 	int y = (int)mod(p[1],2.0);
+	assign		x $tmp1 	%filename{"source/3dsMax-OSL-Shaders/checker.osl"} %line{23} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/checker.osl:24
+# 	int z = (int)mod(p[2],2.0);
+	compref		$tmp7 p $const5 	%line{24} %argrw{"wrr"}
+	functioncall	$const4 15 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:136
+# float  mod (float  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp9 $tmp7 $const3 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{136} %argrw{"wrr"}
+	floor		$tmp8 $tmp9 	%argrw{"wr"}
+	mul		$tmp10 $const3 $tmp8 	%argrw{"wrr"}
+	sub		$tmp6 $tmp7 $tmp10 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/checker.osl:24
+# 	int z = (int)mod(p[2],2.0);
+	assign		y $tmp6 	%filename{"source/3dsMax-OSL-Shaders/checker.osl"} %line{24} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/checker.osl:25
+# 
+	compref		$tmp12 p $const6 	%line{25} %argrw{"wrr"}
+	functioncall	$const4 22 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:136
+# float  mod (float  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp14 $tmp12 $const3 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{136} %argrw{"wrr"}
+	floor		$tmp13 $tmp14 	%argrw{"wr"}
+	mul		$tmp15 $const3 $tmp13 	%argrw{"wrr"}
+	sub		$tmp11 $tmp12 $tmp15 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/checker.osl:25
+# 
+	assign		z $tmp11 	%filename{"source/3dsMax-OSL-Shaders/checker.osl"} %line{25} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/checker.osl:27
+# 		Col = Color1;
+	mod		$tmp16 x $const6 	%line{27} %argrw{"wrr"}
+	mod		$tmp17 y $const6 	%argrw{"wrr"}
+	xor		$tmp18 $tmp16 $tmp17 	%argrw{"wrr"}
+	mod		$tmp19 z $const6 	%argrw{"wrr"}
+	eq		$tmp20 $tmp18 $tmp19 	%argrw{"wrr"}
+	if		$tmp20 30 31 	%argrw{"r"}
+# source/3dsMax-OSL-Shaders/checker.osl:28
+# 	} else {
+	assign		Col Color1 	%line{28} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/checker.osl:30
+# 	}
+	assign		Col Color2 	%line{30} %argrw{"wr"}
+	end

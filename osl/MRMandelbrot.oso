@@ -1,0 +1,149 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader MRMandelbrot
+param	vector	Vector	0 0 0		%read{1,7} %write{0,0} %initexpr
+param	int	maxiteration	500		%read{22,22} %write{2147483647,-1}
+oparam	float	Fac	1		%read{2147483647,-1} %write{49,49}
+global	point	P	%read{0,0} %write{2147483647,-1}
+local	float	lt	%read{15,15} %write{12,12}
+local	float	ls	%read{13,13} %write{6,6}
+local	float	real	%read{18,43} %write{14,43}
+local	float	imag	%read{19,43} %write{16,43}
+local	float	got_away	%read{22,43} %write{17,43}
+local	float	iter	%read{22,44} %write{21,43}
+local	float	tempreal	%read{22,43} %write{22,43}
+local	float	tempimag	%read{22,43} %write{22,43}
+local	float	Creal	%read{22,43} %write{18,18}
+local	float	Cimag	%read{22,43} %write{19,19}
+local	float	r2	%read{22,43} %write{22,43}
+const	int	$const1	1		%read{1,42} %write{2147483647,-1}
+temp	float	$tmp1	%read{3,6} %write{1,1}
+const	float	$const2	1		%read{3,48} %write{2147483647,-1}
+const	string	$const3	"mod"		%read{2,45} %write{2147483647,-1}
+temp	float	$tmp2	%read{5,5} %write{4,4}
+temp	float	$tmp3	%read{4,4} %write{3,3}
+temp	float	$tmp4	%read{6,6} %write{5,5}
+const	int	$const4	0		%read{7,26} %write{2147483647,-1}
+temp	float	$tmp5	%read{9,12} %write{7,7}
+temp	float	$tmp6	%read{11,11} %write{10,10}
+temp	float	$tmp7	%read{10,10} %write{9,9}
+temp	float	$tmp8	%read{12,12} %write{11,11}
+const	float	$const5	3		%read{13,15} %write{2147483647,-1}
+temp	float	$tmp9	%read{14,14} %write{13,13}
+const	float	$const6	2		%read{14,33} %write{2147483647,-1}
+temp	float	$tmp10	%read{16,16} %write{15,15}
+const	float	$const7	1.5		%read{16,16} %write{2147483647,-1}
+temp	int	$tmp11	%read{22,43} %write{22,43}
+temp	int	$tmp12	%read{20,43} %write{21,43}
+temp	int	$tmp13	%read{22,43} %write{22,43}
+temp	int	$tmp14	%read{22,43} %write{22,43}
+temp	float	$tmp15	%read{22,43} %write{22,43}
+temp	float	$tmp16	%read{22,43} %write{22,43}
+temp	float	$tmp17	%read{22,43} %write{22,43}
+temp	float	$tmp18	%read{22,43} %write{22,43}
+temp	float	$tmp19	%read{22,43} %write{22,43}
+const	int	$const9	4		%read{40,40} %write{2147483647,-1}
+temp	int	$tmp20	%read{22,43} %write{22,43}
+temp	float	$tmp21	%read{46,49} %write{44,44}
+const	float	$const11	10		%read{44,44} %write{2147483647,-1}
+temp	float	$tmp22	%read{48,48} %write{47,47}
+temp	float	$tmp23	%read{47,47} %write{46,46}
+temp	float	$tmp24	%read{49,49} %write{48,48}
+code Vector
+# source/sambler-osl-shaders/patterns/MRMandelbrot/MRMandelbrot.osl:33
+#         int maxiteration = 500,
+	assign		Vector P 	%filename{"source/sambler-osl-shaders/patterns/MRMandelbrot/MRMandelbrot.osl"} %line{33} %argrw{"wr"}
+code ___main___
+# source/sambler-osl-shaders/patterns/MRMandelbrot/MRMandelbrot.osl:42
+#     lt = mod(Vector[0], 1.0);
+	compref		$tmp1 Vector $const1 	%filename{"source/sambler-osl-shaders/patterns/MRMandelbrot/MRMandelbrot.osl"} %line{42} %argrw{"wrr"}
+	functioncall	$const3 7 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:136
+# float  mod (float  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp3 $tmp1 $const2 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{136} %argrw{"wrr"}
+	floor		$tmp2 $tmp3 	%argrw{"wr"}
+	mul		$tmp4 $const2 $tmp2 	%argrw{"wrr"}
+	sub		ls $tmp1 $tmp4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MRMandelbrot/MRMandelbrot.osl:43
+# 
+	compref		$tmp5 Vector $const4 	%filename{"source/sambler-osl-shaders/patterns/MRMandelbrot/MRMandelbrot.osl"} %line{43} %argrw{"wrr"}
+	functioncall	$const3 13 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:136
+# float  mod (float  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp7 $tmp5 $const2 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{136} %argrw{"wrr"}
+	floor		$tmp6 $tmp7 	%argrw{"wr"}
+	mul		$tmp8 $const2 $tmp6 	%argrw{"wrr"}
+	sub		lt $tmp5 $tmp8 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MRMandelbrot/MRMandelbrot.osl:45
+#     float imag = ( lt * 3.0 ) - 1.5;
+	mul		$tmp9 ls $const5 	%filename{"source/sambler-osl-shaders/patterns/MRMandelbrot/MRMandelbrot.osl"} %line{45} %argrw{"wrr"}
+	sub		real $tmp9 $const6 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MRMandelbrot/MRMandelbrot.osl:46
+#     float tmpval;
+	mul		$tmp10 lt $const5 	%line{46} %argrw{"wrr"}
+	sub		imag $tmp10 $const7 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MRMandelbrot/MRMandelbrot.osl:48
+#     float tempreal, tempimag, Creal, Cimag;
+	assign		got_away $const4 	%line{48} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MRMandelbrot/MRMandelbrot.osl:51
+#     Cimag = imag;
+	assign		Creal real 	%line{51} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MRMandelbrot/MRMandelbrot.osl:52
+# 
+	assign		Cimag imag 	%line{52} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MRMandelbrot/MRMandelbrot.osl:54
+#     {
+	for		$tmp12 22 28 43 44 	%line{54} %argrw{"r"}
+	assign		iter $const4 	%argrw{"wr"}
+	lt		$tmp11 iter maxiteration 	%argrw{"wrr"}
+	neq		$tmp12 $tmp11 $const4 	%argrw{"wrr"}
+	if		$tmp12 28 28 	%argrw{"r"}
+	eq		$tmp13 got_away $const4 	%argrw{"wrr"}
+	neq		$tmp14 $tmp13 $const4 	%argrw{"wrr"}
+	assign		$tmp12 $tmp14 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MRMandelbrot/MRMandelbrot.osl:57
+#         tempimag = imag;
+	assign		tempreal real 	%line{57} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MRMandelbrot/MRMandelbrot.osl:58
+#         real = (tempreal * tempreal) -  (tempimag * tempimag);
+	assign		tempimag imag 	%line{58} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MRMandelbrot/MRMandelbrot.osl:59
+#         imag = 2 * tempreal * tempimag;
+	mul		$tmp15 tempreal tempreal 	%line{59} %argrw{"wrr"}
+	mul		$tmp16 tempimag tempimag 	%argrw{"wrr"}
+	sub		real $tmp15 $tmp16 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MRMandelbrot/MRMandelbrot.osl:60
+#         real += Creal;
+	mul		$tmp17 $const6 tempreal 	%line{60} %argrw{"wrr"}
+	mul		imag $tmp17 tempimag 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MRMandelbrot/MRMandelbrot.osl:61
+#         imag += Cimag;
+	add		real real Creal 	%line{61} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MRMandelbrot/MRMandelbrot.osl:62
+#         r2 = (real*real) + (imag*imag);
+	add		imag imag Cimag 	%line{62} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MRMandelbrot/MRMandelbrot.osl:63
+# 
+	mul		$tmp18 real real 	%line{63} %argrw{"wrr"}
+	mul		$tmp19 imag imag 	%argrw{"wrr"}
+	add		r2 $tmp18 $tmp19 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MRMandelbrot/MRMandelbrot.osl:65
+#     }
+	ge		$tmp20 r2 $const9 	%line{65} %argrw{"wrr"}
+	if		$tmp20 43 43 	%argrw{"r"}
+	assign		got_away $const1 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MRMandelbrot/MRMandelbrot.osl:54
+#     {
+	add		iter iter $const2 	%line{54} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MRMandelbrot/MRMandelbrot.osl:68
+#     
+	div		$tmp21 iter $const11 	%line{68} %argrw{"wrr"}
+	functioncall	$const3 50 	%argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:136
+# float  mod (float  a, float  b) { return a - b*floor(a/b); }
+	div		$tmp23 $tmp21 $const2 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{136} %argrw{"wrr"}
+	floor		$tmp22 $tmp23 	%argrw{"wr"}
+	mul		$tmp24 $const2 $tmp22 	%argrw{"wrr"}
+	sub		Fac $tmp21 $tmp24 	%argrw{"wrr"}
+	end

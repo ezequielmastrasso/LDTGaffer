@@ -1,0 +1,102 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader MABDots
+param	point	Vector	0 0 0		%read{1,1} %write{0,0} %initexpr
+param	float	Scale	1		%read{1,1} %write{2147483647,-1}
+param	float	Radius	0.050000001		%read{18,22} %write{2147483647,-1}
+oparam	color	Color	0 0 0		%read{2147483647,-1} %write{4,31}
+oparam	float	Fac	0		%read{2147483647,-1} %write{4,31}
+global	point	P	%read{0,0} %write{2147483647,-1}
+local	point	p	%read{4,31} %write{1,1}
+local	float	x	%read{4,31} %write{3,31}
+local	float	y	%read{4,31} %write{4,31}
+local	float	z	%read{4,31} %write{4,31}
+local	vector	___327_offset	%read{4,31} %write{4,31}
+local	point	___327_dotposition	%read{4,31} %write{4,31}
+local	float	___327_d	%read{4,31} %write{4,31}
+const	int	$const1	-1		%read{3,9} %write{2147483647,-1}
+const	int	$const2	1		%read{4,10} %write{2147483647,-1}
+temp	int	$tmp1	%read{2,31} %write{3,31}
+temp	int	$tmp2	%read{4,31} %write{4,31}
+temp	int	$tmp3	%read{4,31} %write{4,31}
+temp	point	$tmp4	%read{4,31} %write{4,31}
+temp	point	$tmp5	%read{4,31} %write{4,31}
+temp	color	$tmp6	%read{4,31} %write{4,31}
+const	string	$const3	"cell"		%read{15,21} %write{2147483647,-1}
+temp	point	$tmp7	%read{4,31} %write{4,31}
+const	float	$const4	1		%read{15,31} %write{2147483647,-1}
+temp	int	$tmp8	%read{4,31} %write{4,31}
+temp	point	$tmp9	%read{4,31} %write{4,31}
+const	int	$const5	2		%read{23,24} %write{2147483647,-1}
+const	float	$const6	2		%read{21,21} %write{2147483647,-1}
+temp	float	$tmp10	%read{2147483647,-1} %write{4,31}
+temp	float	$tmp11	%read{2147483647,-1} %write{4,31}
+temp	float	$tmp12	%read{2147483647,-1} %write{4,31}
+code Vector
+# source/sambler-osl-shaders/MJABook/09MABDots/MABDots.osl:15
+#     float Scale = 1,
+	assign		Vector P 	%filename{"source/sambler-osl-shaders/MJABook/09MABDots/MABDots.osl"} %line{15} %argrw{"wr"}
+code ___main___
+# source/sambler-osl-shaders/MJABook/09MABDots/MABDots.osl:22
+# 
+	mul		p Vector Scale 	%filename{"source/sambler-osl-shaders/MJABook/09MABDots/MABDots.osl"} %line{22} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/09MABDots/MABDots.osl:25
+#         for(y=-1; y<=1; y++){
+	for		$tmp1 4 5 30 32 	%line{25} %argrw{"r"}
+	assign		x $const1 	%argrw{"wr"}
+	le		$tmp1 x $const2 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/09MABDots/MABDots.osl:26
+#             for(z=-1; z<=1; z++){
+	for		$tmp2 7 8 28 30 	%line{26} %argrw{"r"}
+	assign		y $const1 	%argrw{"wr"}
+	le		$tmp2 y $const2 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/09MABDots/MABDots.osl:27
+#                 vector offset = vector(x,y,z);
+	for		$tmp3 10 11 26 28 	%line{27} %argrw{"r"}
+	assign		z $const1 	%argrw{"wr"}
+	le		$tmp3 z $const2 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/09MABDots/MABDots.osl:28
+#                 point dotposition = floor(p+offset) + noise("cell", p+offset,1);
+	vector		___327_offset x y z 	%line{28} %argrw{"wrrr"}
+# source/sambler-osl-shaders/MJABook/09MABDots/MABDots.osl:29
+#                 float d = distance(p, dotposition);
+	add		$tmp5 p ___327_offset 	%line{29} %argrw{"wrr"}
+	floor		$tmp4 $tmp5 	%argrw{"wr"}
+	add		$tmp7 p ___327_offset 	%argrw{"wrr"}
+	noise		$tmp6 $const3 $tmp7 $const4 	%argrw{"wrrr"}
+	add		___327_dotposition $tmp4 $tmp6 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/09MABDots/MABDots.osl:30
+#                 if( d < Radius ){
+	distance	___327_d p ___327_dotposition 	%line{30} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/09MABDots/MABDots.osl:31
+#                     Color = noise("cell",p+offset,2);
+	lt		$tmp8 ___327_d Radius 	%line{31} %argrw{"wrr"}
+	if		$tmp8 26 26 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/09MABDots/MABDots.osl:32
+#                     Fac = Radius - d;
+	add		$tmp9 p ___327_offset 	%line{32} %argrw{"wrr"}
+	noise		Color $const3 $tmp9 $const6 	%argrw{"wrrr"}
+# source/sambler-osl-shaders/MJABook/09MABDots/MABDots.osl:33
+#                     y=2; x=2;
+	sub		Fac Radius ___327_d 	%line{33} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/09MABDots/MABDots.osl:34
+#                     return;
+	assign		y $const5 	%line{34} %argrw{"wr"}
+	assign		x $const5 	%argrw{"wr"}
+# source/sambler-osl-shaders/MJABook/09MABDots/MABDots.osl:35
+#                 }
+	exit	%line{35}
+# source/sambler-osl-shaders/MJABook/09MABDots/MABDots.osl:27
+#                 vector offset = vector(x,y,z);
+	assign		$tmp10 z 	%line{27} %argrw{"wr"}
+	add		z z $const4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/09MABDots/MABDots.osl:26
+#             for(z=-1; z<=1; z++){
+	assign		$tmp11 y 	%line{26} %argrw{"wr"}
+	add		y y $const4 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/09MABDots/MABDots.osl:25
+#         for(y=-1; y<=1; y++){
+	assign		$tmp12 x 	%line{25} %argrw{"wr"}
+	add		x x $const4 	%argrw{"wrr"}
+	end

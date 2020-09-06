@@ -1,0 +1,16 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader GetParticleAge	%meta{string,help,"Get the normalized Particle Age"} %meta{string,label,"Particle Age"} %meta{string,category,"Scene Attributes"} 
+param	float	Scale	1		%read{1,1} %write{2147483647,-1}
+oparam	float	Age	1		%read{1,1} %write{0,1}
+temp	int	$tmp1	%read{2147483647,-1} %write{0,0}
+const	string	$const1	"paLife"		%read{0,0} %write{2147483647,-1}
+code ___main___
+# source/3dsMax-OSL-Shaders/GetParticleAge.osl:17
+# 	Age *= Scale;
+	getattribute	$tmp1 $const1 Age 	%filename{"source/3dsMax-OSL-Shaders/GetParticleAge.osl"} %line{17} %argrw{"wrw"}
+# source/3dsMax-OSL-Shaders/GetParticleAge.osl:18
+# }
+	mul		Age Age Scale 	%line{18} %argrw{"wrr"}
+	end

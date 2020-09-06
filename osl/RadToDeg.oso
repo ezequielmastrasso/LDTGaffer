@@ -1,0 +1,19 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader RadToDeg	%meta{string,help,"Convert radians to degrees"} %meta{string,label,"Radians-to-Degrees"} %meta{string,category,"Math Float"} 
+param	float	Input	0		%meta{string,label,"Angle (radians)"}  %read{2,2} %write{2147483647,-1}
+oparam	float	Out	0		%meta{string,label,"Angle (degrees)"}  %read{2147483647,-1} %write{2,2}
+const	string	$const1	"degrees"		%read{0,0} %write{2147483647,-1}
+const	float	$const2	180		%read{1,1} %write{2147483647,-1}
+const	float	$const3	3.1415927		%read{1,1} %write{2147483647,-1}
+temp	float	$tmp1	%read{2,2} %write{1,1}
+code ___main___
+# source/3dsMax-OSL-Shaders/RadToDeg.osl:17
+# }
+	functioncall	$const1 3 	%filename{"source/3dsMax-OSL-Shaders/RadToDeg.osl"} %line{17} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:83
+# float  degrees (float x)  { return x*(180.0/M_PI); }
+	div		$tmp1 $const2 $const3 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{83} %argrw{"wrr"}
+	mul		Out Input $tmp1 	%argrw{"wrr"}
+	end

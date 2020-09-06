@@ -1,0 +1,144 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader sine_pattern
+param	float	Hue	1		%read{32,40} %write{2147483647,-1}
+param	float	Intensity	1		%read{25,25} %write{2147483647,-1}
+param	float	Rayon	1		%read{13,13} %write{2147483647,-1}
+param	float	Rotation	1		%read{11,11} %write{2147483647,-1}
+param	float	Movement	1		%read{7,7} %write{2147483647,-1}
+param	int	Stripes	35		%read{2,4} %write{2147483647,-1}
+param	point	Vector	0 0 0		%read{4,29} %write{0,0} %initexpr
+oparam	color	Color	0.80000001 0.80000001 0.80000001		%read{2147483647,-1} %write{50,50}
+oparam	float	Fac	0		%read{4,49} %write{4,29}
+global	point	P	%read{0,0} %write{2147483647,-1}
+local	float	___322_i	%read{4,29} %write{3,29}
+local	point	___323_Pos	%read{4,29} %write{4,29}
+local	float	ar	%read{2147483647,-1} %write{34,34}
+local	color	C	%read{46,48} %write{43,45}
+temp	int	$tmp1	%read{3,29} %write{2,29}
+temp	int	$tmp2	%read{1,29} %write{2,29}
+const	int	$const1	0		%read{6,46} %write{2147483647,-1}
+temp	float	$tmp3	%read{4,29} %write{4,29}
+temp	float	$tmp4	%read{4,29} %write{4,29}
+temp	float	$tmp5	%read{4,29} %write{4,29}
+temp	float	$tmp6	%read{4,29} %write{4,29}
+const	int	$const2	1		%read{9,47} %write{2147483647,-1}
+temp	float	$tmp7	%read{4,29} %write{4,29}
+temp	float	$tmp8	%read{4,29} %write{4,29}
+temp	float	$tmp9	%read{4,29} %write{4,29}
+temp	float	$tmp10	%read{4,29} %write{4,29}
+const	int	$const3	2		%read{45,48} %write{2147483647,-1}
+temp	float	$tmp11	%read{4,29} %write{4,29}
+const	float	$const4	2		%read{14,14} %write{2147483647,-1}
+temp	float	$tmp12	%read{4,29} %write{4,29}
+temp	float	$tmp13	%read{4,29} %write{4,29}
+temp	float	$tmp14	%read{4,29} %write{4,29}
+temp	float	$tmp15	%read{4,29} %write{4,29}
+temp	float	$tmp16	%read{4,29} %write{4,29}
+temp	float	$tmp17	%read{4,29} %write{4,29}
+temp	float	$tmp18	%read{4,29} %write{4,29}
+temp	float	$tmp19	%read{4,29} %write{4,29}
+temp	float	$tmp20	%read{4,29} %write{4,29}
+temp	float	$tmp21	%read{4,29} %write{4,29}
+const	float	$const5	1000		%read{26,26} %write{2147483647,-1}
+temp	float	$tmp22	%read{4,29} %write{4,29}
+const	float	$const6	1		%read{29,36} %write{2147483647,-1}
+const	float	$const7	2.5		%read{30,35} %write{2147483647,-1}
+const	float	$const8	3.1415927		%read{30,40} %write{2147483647,-1}
+temp	float	$tmp23	%read{31,31} %write{30,30}
+temp	float	$tmp24	%read{32,32} %write{31,31}
+temp	float	$tmp25	%read{33,33} %write{32,32}
+const	float	$const9	1.5707964		%read{33,38} %write{2147483647,-1}
+temp	float	$tmp26	%read{34,34} %write{33,33}
+temp	float	$tmp27	%read{42,42} %write{39,39}
+temp	float	$tmp28	%read{36,36} %write{35,35}
+temp	float	$tmp29	%read{37,37} %write{36,36}
+temp	float	$tmp30	%read{38,38} %write{37,37}
+temp	float	$tmp31	%read{39,39} %write{38,38}
+temp	float	$tmp32	%read{42,42} %write{41,41}
+temp	float	$tmp33	%read{41,41} %write{40,40}
+temp	float	$tmp34	%read{43,43} %write{42,42}
+const	string	$const10	"hsv"		%read{50,50} %write{2147483647,-1}
+temp	float	$tmp35	%read{50,50} %write{46,46}
+temp	float	$tmp36	%read{50,50} %write{47,47}
+temp	float	$tmp37	%read{49,49} %write{48,48}
+temp	float	$tmp38	%read{50,50} %write{49,49}
+code Vector
+# source/sambler-osl-shaders/patterns/MASineWave/MASineWave.osl:20
+#         output color Color = color(0.8),
+	assign		Vector P 	%filename{"source/sambler-osl-shaders/patterns/MASineWave/MASineWave.osl"} %line{20} %argrw{"wr"}
+code ___main___
+# source/sambler-osl-shaders/patterns/MASineWave/MASineWave.osl:25
+#     {
+	for		$tmp2 4 5 29 30 	%filename{"source/sambler-osl-shaders/patterns/MASineWave/MASineWave.osl"} %line{25} %argrw{"r"}
+	neg		$tmp1 Stripes 	%argrw{"wr"}
+	assign		___322_i $tmp1 	%argrw{"wr"}
+	lt		$tmp2 ___322_i Stripes 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MASineWave/MASineWave.osl:28
+# 
+	assign		___323_Pos Vector 	%line{28} %argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MASineWave/MASineWave.osl:30
+#         Pos[0] += Pos[0] + Pos[1];
+	compref		$tmp3 ___323_Pos $const1 	%line{30} %argrw{"wrr"}
+	add		$tmp5 ___322_i Movement 	%argrw{"wrr"}
+	cos		$tmp4 $tmp5 	%argrw{"wr"}
+	compref		$tmp7 ___323_Pos $const2 	%argrw{"wrr"}
+	add		$tmp8 $tmp7 ___322_i 	%argrw{"wrr"}
+	mul		$tmp9 $tmp8 Rotation 	%argrw{"wrr"}
+	sin		$tmp6 $tmp9 	%argrw{"wr"}
+	mul		$tmp10 $tmp6 Rayon 	%argrw{"wrr"}
+	div		$tmp11 $tmp10 $const4 	%argrw{"wrr"}
+	add		$tmp12 $tmp4 $tmp11 	%argrw{"wrr"}
+	mul		$tmp13 $tmp3 $tmp12 	%argrw{"wrr"}
+	compassign	___323_Pos $const1 $tmp13 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MASineWave/MASineWave.osl:31
+# 
+	compref		$tmp14 ___323_Pos $const1 	%line{31} %argrw{"wrr"}
+	compref		$tmp15 ___323_Pos $const1 	%argrw{"wrr"}
+	compref		$tmp16 ___323_Pos $const2 	%argrw{"wrr"}
+	add		$tmp17 $tmp15 $tmp16 	%argrw{"wrr"}
+	add		$tmp18 $tmp14 $tmp17 	%argrw{"wrr"}
+	compassign	___323_Pos $const1 $tmp18 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MASineWave/MASineWave.osl:33
+#     }
+	compref		$tmp20 ___323_Pos $const1 	%line{33} %argrw{"wrr"}
+	div		$tmp21 Intensity $tmp20 	%argrw{"wrr"}
+	div		$tmp22 $tmp21 $const5 	%argrw{"wrr"}
+	abs		$tmp19 $tmp22 	%argrw{"wr"}
+	add		Fac Fac $tmp19 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MASineWave/MASineWave.osl:25
+#     {
+	add		___322_i ___322_i $const6 	%line{25} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MASineWave/MASineWave.osl:35
+# 
+	mul		$tmp23 $const7 $const8 	%line{35} %argrw{"wrr"}
+	div		$tmp24 $const6 $tmp23 	%argrw{"wrr"}
+	mul		$tmp25 $tmp24 Hue 	%argrw{"wrr"}
+	add		$tmp26 $tmp25 $const9 	%argrw{"wrr"}
+	sin		ar $tmp26 	%argrw{"wr"}
+# source/sambler-osl-shaders/patterns/MASineWave/MASineWave.osl:39
+#     C[1] = 1;
+	mul		$tmp28 $const7 $const8 	%line{39} %argrw{"wrr"}
+	div		$tmp29 $const6 $tmp28 	%argrw{"wrr"}
+	mul		$tmp30 $tmp29 Hue 	%argrw{"wrr"}
+	add		$tmp31 $tmp30 $const9 	%argrw{"wrr"}
+	sin		$tmp27 $tmp31 	%argrw{"wr"}
+	div		$tmp33 Hue $const8 	%argrw{"wrr"}
+	abs		$tmp32 $tmp33 	%argrw{"wr"}
+	add		$tmp34 $tmp27 $tmp32 	%argrw{"wrr"}
+	compassign	C $const1 $tmp34 	%argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MASineWave/MASineWave.osl:40
+#     C[2] = 1;
+	compassign	C $const2 $const2 	%line{40} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MASineWave/MASineWave.osl:41
+# 
+	compassign	C $const3 $const2 	%line{41} %argrw{"wrr"}
+# source/sambler-osl-shaders/patterns/MASineWave/MASineWave.osl:43
+# }
+	compref		$tmp35 C $const1 	%line{43} %argrw{"wrr"}
+	compref		$tmp36 C $const2 	%argrw{"wrr"}
+	compref		$tmp37 C $const3 	%argrw{"wrr"}
+	mul		$tmp38 Fac $tmp37 	%argrw{"wrr"}
+	color		Color $const10 $tmp35 $tmp36 $tmp38 	%argrw{"wrrrr"}
+	end

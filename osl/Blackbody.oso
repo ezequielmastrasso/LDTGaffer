@@ -1,0 +1,33 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader Blackbody	%meta{string,help,"Modulates a color between two Kelvin temperatures"} %meta{string,category,"Utility"} 
+param	float	Input	0		%read{1,1} %write{0,0} %initexpr
+param	float	Min	0		%meta{float,min,0} %meta{float,max,10000}  %read{1,1} %write{2147483647,-1}
+param	float	Max	5000		%meta{float,min,0} %meta{float,max,10000}  %read{1,1} %write{2147483647,-1}
+param	int	Normalize	1		%meta{string,widget,"checkBox"}  %read{3,3} %write{2147483647,-1}
+param	float	Intensity	1		%read{6,6} %write{2147483647,-1}
+oparam	color	Col	0 0 0		%read{4,6} %write{2,6}
+global	float	u	%read{0,0} %write{2147483647,-1}
+temp	float	$tmp1	%read{2,2} %write{1,1}
+temp	vector	$tmp2	%read{5,5} %write{4,4}
+code Input
+# source/3dsMax-OSL-Shaders/BlackBody.osl:13
+# 	float  Min   = 0.0     [[ float min = 0.0, float max = 10000.0 ]],
+	assign		Input u 	%filename{"source/3dsMax-OSL-Shaders/BlackBody.osl"} %line{13} %argrw{"wr"}
+code ___main___
+# source/3dsMax-OSL-Shaders/BlackBody.osl:21
+# 	if (Normalize) 
+	mix		$tmp1 Min Max Input 	%filename{"source/3dsMax-OSL-Shaders/BlackBody.osl"} %line{21} %argrw{"wrrr"}
+	blackbody	Col $tmp1 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/BlackBody.osl:22
+# 		Col = normalize(vector(Col));
+	if		Normalize 6 6 	%line{22} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/BlackBody.osl:23
+# 	Col *= Intensity;
+	assign		$tmp2 Col 	%line{23} %argrw{"wr"}
+	normalize	Col $tmp2 	%argrw{"wr"}
+# source/3dsMax-OSL-Shaders/BlackBody.osl:24
+# }
+	mul		Col Col Intensity 	%line{24} %argrw{"wrr"}
+	end

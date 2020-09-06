@@ -1,0 +1,32 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader TDSeparateHSV
+param	color	Color	0.80000001 0.80000001 0.80000001		%read{1,1} %write{2147483647,-1}
+oparam	float	H	0		%read{2147483647,-1} %write{2,2}
+oparam	float	S	0		%read{2147483647,-1} %write{3,3}
+oparam	float	V	0		%read{2147483647,-1} %write{4,4}
+local	color	HSV	%read{2,4} %write{1,1}
+const	string	$const1	"hsv"		%read{1,1} %write{2147483647,-1}
+const	string	$const2	"transformc"		%read{0,0} %write{2147483647,-1}
+const	string	$const3	"rgb"		%read{1,1} %write{2147483647,-1}
+const	int	$const4	0		%read{2,2} %write{2147483647,-1}
+const	int	$const5	1		%read{3,3} %write{2147483647,-1}
+const	int	$const6	2		%read{4,4} %write{2147483647,-1}
+code ___main___
+# source/sambler-osl-shaders/lib/TDSeparateHSV.osl:18
+#     H = HSV[0];
+	functioncall	$const2 2 	%filename{"source/sambler-osl-shaders/lib/TDSeparateHSV.osl"} %line{18} %argrw{"r"}
+# /opt/gaffer-0.58.0.1-linux/shaders/stdosl.h:303
+# color transformc (string to, color c) { return transformc ("rgb", to, c); }
+	transformc	HSV $const3 $const1 Color 	%filename{"/opt/gaffer-0.58.0.1-linux/shaders/stdosl.h"} %line{303} %argrw{"wrrr"}
+# source/sambler-osl-shaders/lib/TDSeparateHSV.osl:19
+#     S = HSV[1];
+	compref		H HSV $const4 	%filename{"source/sambler-osl-shaders/lib/TDSeparateHSV.osl"} %line{19} %argrw{"wrr"}
+# source/sambler-osl-shaders/lib/TDSeparateHSV.osl:20
+#     V = HSV[2];
+	compref		S HSV $const5 	%line{20} %argrw{"wrr"}
+# source/sambler-osl-shaders/lib/TDSeparateHSV.osl:21
+# }
+	compref		V HSV $const6 	%line{21} %argrw{"wrr"}
+	end

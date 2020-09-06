@@ -1,0 +1,84 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+surface globals
+oparam	point	Point_P	0 0 0		%read{2147483647,-1} %write{0,0} %initexpr
+oparam	vector	Vector_I	0 0 0		%read{2147483647,-1} %write{1,1} %initexpr
+oparam	normal	Normal_N	0 0 0		%read{2147483647,-1} %write{2,2} %initexpr
+oparam	normal	Normal_Ng	0 0 0		%read{2147483647,-1} %write{3,3} %initexpr
+oparam	float	Float_u	0		%read{2147483647,-1} %write{4,4} %initexpr
+oparam	float	Float_v	0		%read{2147483647,-1} %write{5,5} %initexpr
+oparam	vector	Vector_dPdu	0 0 0		%read{2147483647,-1} %write{6,6} %initexpr
+oparam	vector	Vector_dPdv	0 0 0		%read{2147483647,-1} %write{7,7} %initexpr
+oparam	point	Point_Ps	0 0 0		%read{2147483647,-1} %write{8,8} %initexpr
+oparam	float	Float_time	0		%read{2147483647,-1} %write{9,9} %initexpr
+oparam	float	Float_dtime	0		%read{2147483647,-1} %write{10,10} %initexpr
+oparam	vector	Vector_dPdtime	0 0 0		%read{2147483647,-1} %write{11,11} %initexpr
+oparam	closure color	Closure_Ci			%read{2147483647,-1} %write{12,12} %initexpr
+global	point	P	%read{0,0} %write{2147483647,-1}
+global	vector	I	%read{1,1} %write{2147483647,-1}
+global	normal	N	%read{2,2} %write{2147483647,-1}
+global	normal	Ng	%read{3,3} %write{2147483647,-1}
+global	float	u	%read{4,4} %write{2147483647,-1}
+global	float	v	%read{5,5} %write{2147483647,-1}
+global	vector	dPdu	%read{6,6} %write{2147483647,-1}
+global	vector	dPdv	%read{7,7} %write{2147483647,-1}
+global	point	Ps	%read{8,8} %write{2147483647,-1}
+global	closure color	Ci	%read{12,12} %write{2147483647,-1}
+global	float	time	%read{9,9} %write{2147483647,-1}
+global	float	dtime	%read{10,10} %write{2147483647,-1}
+global	vector	dPdtime	%read{11,11} %write{2147483647,-1}
+code Point_P
+# source/sambler-osl-shaders/lib/ChGlobals.osl:14
+#     output vector Vector_I = I,
+	assign		Point_P P 	%filename{"source/sambler-osl-shaders/lib/ChGlobals.osl"} %line{14} %argrw{"wr"}
+code Vector_I
+# source/sambler-osl-shaders/lib/ChGlobals.osl:15
+#     output normal Normal_N = N,
+	assign		Vector_I I 	%filename{"source/sambler-osl-shaders/lib/ChGlobals.osl"} %line{15} %argrw{"wr"}
+code Normal_N
+# source/sambler-osl-shaders/lib/ChGlobals.osl:16
+#     output normal Normal_Ng = Ng,
+	assign		Normal_N N 	%filename{"source/sambler-osl-shaders/lib/ChGlobals.osl"} %line{16} %argrw{"wr"}
+code Normal_Ng
+# source/sambler-osl-shaders/lib/ChGlobals.osl:17
+#     output float Float_u = u ,
+	assign		Normal_Ng Ng 	%filename{"source/sambler-osl-shaders/lib/ChGlobals.osl"} %line{17} %argrw{"wr"}
+code Float_u
+# source/sambler-osl-shaders/lib/ChGlobals.osl:18
+#     output float Float_v = v ,
+	assign		Float_u u 	%filename{"source/sambler-osl-shaders/lib/ChGlobals.osl"} %line{18} %argrw{"wr"}
+code Float_v
+# source/sambler-osl-shaders/lib/ChGlobals.osl:19
+#     output vector Vector_dPdu = dPdu,
+	assign		Float_v v 	%filename{"source/sambler-osl-shaders/lib/ChGlobals.osl"} %line{19} %argrw{"wr"}
+code Vector_dPdu
+# source/sambler-osl-shaders/lib/ChGlobals.osl:20
+#     output vector Vector_dPdv = dPdv,
+	assign		Vector_dPdu dPdu 	%filename{"source/sambler-osl-shaders/lib/ChGlobals.osl"} %line{20} %argrw{"wr"}
+code Vector_dPdv
+# source/sambler-osl-shaders/lib/ChGlobals.osl:21
+#     output point Point_Ps = Ps,
+	assign		Vector_dPdv dPdv 	%filename{"source/sambler-osl-shaders/lib/ChGlobals.osl"} %line{21} %argrw{"wr"}
+code Point_Ps
+# source/sambler-osl-shaders/lib/ChGlobals.osl:22
+#     output float Float_time = time ,
+	assign		Point_Ps Ps 	%filename{"source/sambler-osl-shaders/lib/ChGlobals.osl"} %line{22} %argrw{"wr"}
+code Float_time
+# source/sambler-osl-shaders/lib/ChGlobals.osl:23
+#     output float Float_dtime = dtime ,
+	assign		Float_time time 	%filename{"source/sambler-osl-shaders/lib/ChGlobals.osl"} %line{23} %argrw{"wr"}
+code Float_dtime
+# source/sambler-osl-shaders/lib/ChGlobals.osl:24
+#     output vector Vector_dPdtime = dPdtime ,
+	assign		Float_dtime dtime 	%filename{"source/sambler-osl-shaders/lib/ChGlobals.osl"} %line{24} %argrw{"wr"}
+code Vector_dPdtime
+# source/sambler-osl-shaders/lib/ChGlobals.osl:25
+#     output closure color Closure_Ci = Ci
+	assign		Vector_dPdtime dPdtime 	%filename{"source/sambler-osl-shaders/lib/ChGlobals.osl"} %line{25} %argrw{"wr"}
+code Closure_Ci
+# source/sambler-osl-shaders/lib/ChGlobals.osl:28
+# {
+	assign		Closure_Ci Ci 	%filename{"source/sambler-osl-shaders/lib/ChGlobals.osl"} %line{28} %argrw{"wr"}
+code ___main___
+	end

@@ -1,0 +1,54 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader GetObjectID	%meta{string,help,"Get the Object ID (as set in the object properties dialog) as a color or a number"} %meta{string,label,"Object ID"} %meta{string,category,"Scene Attributes"} 
+oparam	color	Col	0 0 0		%read{2147483647,-1} %write{12,12}
+oparam	int	Index	1		%read{4,8} %write{0,0}
+local	int[256]	___322_iPPermute	%read{5,5} %write{2,2}
+local	float	___322_kMaxColor	%read{7,10} %write{3,3}
+local	float	___322_h	%read{12,12} %write{7,7}
+local	float	___322_s	%read{12,12} %write{11,11}
+temp	int	$tmp1	%read{2147483647,-1} %write{0,0}
+const	string	$const1	"gBufID"		%read{0,0} %write{2147483647,-1}
+const	string	$const2	"colorById"		%read{1,1} %write{2147483647,-1}
+const	int[256]	$const3	170 85 0 43 128 213 64 149 234 191 106 21 180 95 10 53 138 223 74 159 244 201 116 31 175 90 5 48 133 218 69 154 239 196 111 26 185 100 15 58 143 228 79 164 249 206 121 36 173 88 3 46 131 216 67 152 237 194 109 24 255 183 98 13 56 141 226 77 162 247 204 119 34 63 178 93 8 51 136 221 72 157 242 199 114 29 84 188 103 18 61 146 231 82 167 252 209 124 39 105 172 87 2 45 130 215 66 151 236 193 108 23 42 182 97 12 55 140 225 76 161 246 203 118 33 126 177 92 7 50 135 220 71 156 241 198 113 28 127 187 102 17 60 145 230 81 166 251 208 123 38 148 174 89 4 47 132 217 68 153 238 195 110 25 169 184 99 14 57 142 227 78 163 248 205 120 35 190 179 94 9 52 137 222 73 158 243 200 115 30 211 189 104 19 62 147 232 83 168 253 210 125 40 20 171 86 1 44 129 214 65 150 235 192 107 22 41 181 96 11 54 139 224 75 160 245 202 117 32 212 176 91 6 49 134 219 70 155 240 197 112 27 254 186 101 16 59 144 229 80 165 250 207 122 37 233 		%read{2,2} %write{2147483647,-1}
+const	float	$const4	255		%read{3,3} %write{2147483647,-1}
+const	int	$const5	255		%read{4,4} %write{2147483647,-1}
+temp	int	$tmp2	%read{5,5} %write{4,4}
+temp	int	$tmp3	%read{6,6} %write{5,5}
+temp	float	$tmp4	%read{7,7} %write{6,6}
+const	int	$const7	8		%read{8,8} %write{2147483647,-1}
+temp	int	$tmp5	%read{9,9} %write{8,8}
+temp	float	$tmp6	%read{11,11} %write{10,10}
+temp	float	$tmp7	%read{10,10} %write{9,9}
+const	float	$const8	1		%read{11,12} %write{2147483647,-1}
+const	string	$const9	"hsv"		%read{12,12} %write{2147483647,-1}
+code ___main___
+# source/3dsMax-OSL-Shaders/GetObjectID.osl:52
+# 	colorById(Index, Col);
+	getattribute	$tmp1 $const1 Index 	%filename{"source/3dsMax-OSL-Shaders/GetObjectID.osl"} %line{52} %argrw{"wrw"}
+# source/3dsMax-OSL-Shaders/GetObjectID.osl:53
+# }
+	functioncall	$const2 13 	%line{53} %argrw{"r"}
+# source/3dsMax-OSL-Shaders/GetObjectID.osl:32
+# 
+	assign		___322_iPPermute $const3 	%line{32} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/GetObjectID.osl:34
+# 	float h = (iPPermute[(id & 255)]) / kMaxColor;
+	assign		___322_kMaxColor $const4 	%line{34} %argrw{"wr"}
+# source/3dsMax-OSL-Shaders/GetObjectID.osl:35
+# 	float s = 1 - ( id >> 8 ) / kMaxColor;
+	bitand		$tmp2 Index $const5 	%line{35} %argrw{"wrr"}
+	aref		$tmp3 ___322_iPPermute $tmp2 	%argrw{"wrr"}
+	assign		$tmp4 $tmp3 	%argrw{"wr"}
+	div		___322_h $tmp4 ___322_kMaxColor 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/GetObjectID.osl:36
+# 	
+	shr		$tmp5 Index $const7 	%line{36} %argrw{"wrr"}
+	assign		$tmp7 $tmp5 	%argrw{"wr"}
+	div		$tmp6 $tmp7 ___322_kMaxColor 	%argrw{"wrr"}
+	sub		___322_s $const8 $tmp6 	%argrw{"wrr"}
+# source/3dsMax-OSL-Shaders/GetObjectID.osl:40
+# }
+	color		Col $const9 ___322_h ___322_s $const8 	%line{40} %argrw{"wrrrr"}
+	end

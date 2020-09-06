@@ -1,0 +1,38 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.9.9
+# options: -Ipath
+shader MABRandomCircle
+param	point	Vector	0 0 0		%read{4,4} %write{0,0} %initexpr
+param	int	Seed	1		%read{1,1} %write{2147483647,-1}
+oparam	color	Color	0 0 0		%read{2147483647,-1} %write{7,7}
+global	point	P	%read{0,0} %write{2147483647,-1}
+local	point	center	%read{4,4} %write{2,3}
+const	string	$const1	"cell"		%read{2,2} %write{2147483647,-1}
+temp	float	$tmp1	%read{2,2} %write{1,1}
+const	int	$const2	0		%read{3,3} %write{2147483647,-1}
+const	int	$const3	2		%read{3,3} %write{2147483647,-1}
+temp	float	$tmp2	%read{5,5} %write{4,4}
+const	float	$const4	0.2		%read{5,5} %write{2147483647,-1}
+temp	int	$tmp3	%read{6,6} %write{5,5}
+const	int	$const5	1		%read{7,7} %write{2147483647,-1}
+code Vector
+# source/sambler-osl-shaders/MJABook/08MABRandomCircle/MABRandomCircle.osl:15
+#     int Seed = 1,
+	assign		Vector P 	%filename{"source/sambler-osl-shaders/MJABook/08MABRandomCircle/MABRandomCircle.osl"} %line{15} %argrw{"wr"}
+code ___main___
+# source/sambler-osl-shaders/MJABook/08MABRandomCircle/MABRandomCircle.osl:20
+#     center[2] = 0;
+	assign		$tmp1 Seed 	%filename{"source/sambler-osl-shaders/MJABook/08MABRandomCircle/MABRandomCircle.osl"} %line{20} %argrw{"wr"}
+	noise		center $const1 $tmp1 	%argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/08MABRandomCircle/MABRandomCircle.osl:21
+#     if(distance(Vector, center) < 0.2){
+	compassign	center $const3 $const2 	%line{21} %argrw{"wrr"}
+# source/sambler-osl-shaders/MJABook/08MABRandomCircle/MABRandomCircle.osl:22
+#         Color = 1;
+	distance	$tmp2 Vector center 	%line{22} %argrw{"wrr"}
+	lt		$tmp3 $tmp2 $const4 	%argrw{"wrr"}
+	if		$tmp3 8 8 	%argrw{"r"}
+# source/sambler-osl-shaders/MJABook/08MABRandomCircle/MABRandomCircle.osl:23
+#     }
+	assign		Color $const5 	%line{23} %argrw{"wr"}
+	end
