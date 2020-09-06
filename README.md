@@ -33,7 +33,7 @@ Default Gaffer export extension example. Might not work with Spreadsheets, etc.
 ##### Annotation
 Set selected nodes Metadata `annotation:greeting:text`
 
-### SceneView:PhongShader
+### SceneView:Phong and graph editor OpenGL phong Shader
 Tired of the facing ratio look?
 You can thank [Irene Hernández](https://www.linkedin.com/in/ireneher/) for this.
 
