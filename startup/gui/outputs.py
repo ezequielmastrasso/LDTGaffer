@@ -2,9 +2,11 @@ import GafferScene
 import IECore
 import IECoreScene
 
+
+print ("LDTGAFFER:startup:gui:outputs")
+
 # Re-register outputs to change the default fileName plug
 # ${output_fileName} is set on the customVariables
-
 
 with IECore.IgnoredExceptions( ImportError ) :
 
