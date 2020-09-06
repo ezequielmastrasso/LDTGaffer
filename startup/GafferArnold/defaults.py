@@ -34,9 +34,3 @@ Gaffer.Metadata.registerValue(
 Gaffer.Metadata.registerValue(
     "ai:surface:standard_surface:aov_id8", "userDefault", "id_8"
 )
-
-# Nodes Default Colors
-Gaffer.Metadata.registerValue(
-    GafferArnold.ArnoldLight,
-    "nodeGadget:color", imath.Color3f( 0.69, 0.60, 0.2255 )
-)
