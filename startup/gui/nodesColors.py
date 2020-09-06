@@ -1,6 +1,8 @@
 import Gaffer
 import GafferScene
 import GafferDispatch
+import GafferArnold
+
 import imath
 
 print ("LDTGAFFER:startup:gui:nodesColors")
