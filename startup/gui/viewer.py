@@ -64,6 +64,8 @@ def __createPhongShader() :
         '''
         in vec3 fragmentN;
         in vec3 geometryP;
+        in vec3 geometryCs;
+
         vec3 ADSLightModel(in vec3 normal, in vec3 pos){
             vec3 lightPos = vec3(1.0, 0.5, 0.0);
             vec3 lightAmbient = vec3(0.3, 0.3, 0.3);
@@ -88,6 +90,9 @@ def __createPhongShader() :
         }
         void main(){
             vec3 colour = ADSLightModel(fragmentN, geometryP);
+            if (geometryCs != vec3(0.0, 0.0, 0.0)){
+                colour = colour * geometryCs;
+                }
             gl_FragColor = vec4(colour, 1.0);
         }
     '''
