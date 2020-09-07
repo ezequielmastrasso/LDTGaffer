@@ -15,9 +15,9 @@ def __LDTShaderBallScenePostCreator( node, menu ) :
 		os.path.expandvars( "LDTShaderBallScene.grf" )
 	)
 
-def __phong ():
-	shader_node = GafferScene.OpenGLShader( "phong" )
-	shader_node.loadShader( "phong" )
+def __Phong ():
+	shader_node = GafferScene.OpenGLShader( "Phong" )
+	shader_node.loadShader( "Phong" )
 	return shader_node
 
 nodeMenu = GafferUI.NodeMenu.acquire( application )
@@ -30,7 +30,7 @@ nodeMenu.append(
 )
 
 nodeMenu.append(
-	path = "/LDT/OpenGL/phong",
-	nodeCreator = __phong,
-	searchText = "phong"
+	path = "/LDT/OpenGL/Phong",
+	nodeCreator = __Phong,
+	searchText = "Phong"
 )

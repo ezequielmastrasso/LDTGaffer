@@ -1,6 +1,7 @@
 in vec3 fragmentN;
 in vec3 geometryP;
 in vec3 geometryCs;
+uniform float transparency;
 
 vec3 ADSLightModel(in vec3 normal, in vec3 pos){
     vec3 lightPos = vec3(1.0, 0.5, 0.0);
@@ -30,5 +31,5 @@ void main(){
     if (geometryCs != vec3(0.0, 0.0, 0.0)){
         colour = colour * geometryCs;
         }
-    gl_FragColor = vec4(colour, 1.0);
+    gl_FragColor = vec4(colour, transparency);
 }
