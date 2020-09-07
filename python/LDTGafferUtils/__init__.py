@@ -23,6 +23,25 @@ def registerAnnotation( menu):
         for node in selected:
             if text:
                 Gaffer.Metadata.registerValue(node, "annotation:greeting:text", text)
+            else:
+                Gaffer.Metadata.deregisterValue(node, "annotation:greeting:text")
+
+def registerEditScopeProcessorType( menu):
+    scriptWindow = menu.ancestor( GafferUI.ScriptWindow )
+    script = scriptWindow.scriptNode()
+    mainWindow = GafferUI.ScriptWindow.acquire( script )
+
+    selected = script.selection()
+    if selected.size():
+        current_editScopeProcessorType = Gaffer.Metadata.value(selected[0], "editScope:processorType")
+        d = GafferUI.TextInputDialogue( initialText="LDT", title="Annotation", confirmLabel="Set" )
+        text = d.waitForText( parentWindow =  mainWindow )
+        for node in selected:
+            if text:
+                Gaffer.Metadata.registerValue(node, "editScope:processorType", text)
+            else:
+                Gaffer.Metadata.deregisterValue(node, "editScope:processorType")
+
 
 
 
