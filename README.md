@@ -6,7 +6,9 @@ My gaffer toolset, presets, and configs.
 ### Miscelaneous
 * Custom Variables LDT resources
 * Bookmarks LDT folders
-* LDT Menu: Export Extension, Node Annotations
+* LDT Menu: Export Extension
+* LDT Menu: Node Annotations
+* LDT Menu: register Editscope preprocessor metadata
 * Gaffer Cache MemoryLimit
 * Arnold Outputs: Custom lightgroup_[a-g], and lightgroup_denoise[a-g] using optix filter.
 
@@ -21,7 +23,8 @@ ${layer}
 ```
 
 ### nodeGadget:color
-Same as Gaffer Defaults (except lights, and filters), but easier on the eye.
+Same as Gaffer Defaults, but paler colours easier on the eye.
+Except lights (yellow color), and filters (similar color to the Filter plugs colors)
 <img src="docs/nodeGadget_color.png" alt="EZSurfacing Tools" style="" />
 
 ## Python
@@ -32,6 +35,12 @@ Default Gaffer export extension example. Might not work with Spreadsheets, etc.
 
 ##### Annotation
 Set selected nodes Metadata `annotation:greeting:text`
+<img src="docs/annotations.png" alt="EZSurfacing Tools" style="" />
+
+##### Editscopes register nodes
+Set selected nodes and add register Editscope preprocessor metadata to make nodes accesible from the editscope menu. Default LDT.
+<img src="docs/editscopes_1.png" alt="EZSurfacing Tools" style="" /> <img src="docs/editscopes_2.png" alt="EZSurfacing Tools" style="" />
+
 
 ### SceneView:Phong and graph editor OpenGL phong Shader
 Tired of the facing ratio look?
