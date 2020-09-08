@@ -24,7 +24,8 @@ ${layer}
 
 ### nodeGadget:color
 Same as Gaffer Defaults, but paler colours easier on the eye.
-Except lights (yellow color), and filters (similar color to the Filter plugs colors)
+Except lights (yellow color), and filters (similar color to the Filter plugs colors).   
+
 <img src="docs/nodeGadget_color.png" alt="EZSurfacing Tools" style="" />
 
 ## Python
@@ -34,11 +35,13 @@ Except lights (yellow color), and filters (similar color to the Filter plugs col
 Default Gaffer export extension example. Might not work with Spreadsheets, etc.
 
 ##### Annotation
-Set selected nodes Metadata `annotation:greeting:text`
+Set selected nodes Metadata `annotation:greeting:text`   
+
 <img src="docs/annotations.png" alt="EZSurfacing Tools" style="" />
 
 ##### Editscopes register nodes
-Set selected nodes and add register Editscope preprocessor metadata to make nodes accesible from the editscope menu. Default LDT.
+Set selected nodes and add register Editscope preprocessor metadata to make nodes accesible from the editscope menu. Default LDT.   
+
 <img src="docs/editscopes_1.png" alt="EZSurfacing Tools" style="" /> <img src="docs/editscopes_2.png" alt="EZSurfacing Tools" style="" />
 
 
