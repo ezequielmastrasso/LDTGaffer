@@ -21,16 +21,13 @@ Except lights (yellow color), and filters (similar color to the Filter plugs col
 ### Viewer:
 ##### SceneView:Phong, graph Editor Phong, and Diagnostics 2k/4k textures
 
-<img width="31%" src="docs/sceneViewPhong.png" alt="EZSurfacing Tools" style="" />
-<img width="31%" src="docs/sceneViewPhong_2.png" alt="EZSurfacing Tools" style="" />
-<img width="32%" src="docs/gafferDiagnosticPatterns.png" alt="EZSurfacing Tools" style="" />
+<img width="31%" src="docs/sceneViewPhong.png" alt="EZSurfacing Tools" style="" /><img width="31%" src="docs/sceneViewPhong_2.png" alt="EZSurfacing Tools" style="" /><img width="32%" src="docs/gafferDiagnosticPatterns.png" alt="EZSurfacing Tools" style="" />
 
 Phong courtesy of [Irene Hernández](https://www.linkedin.com/in/ireneher/).  
 Cs and transparency plugs.
 
 ### ShaderView:Shader Balls and 
-<img width="40%" src="docs/gafferShaderView2.png" alt="EZSurfacing Tools" style="" />
-<img width="50.5%" src="docs/gafferShaderTeapot.png" alt="EZSurfacing Tools" style="" />
+<img width="40%" src="docs/gafferShaderView2.png" alt="EZSurfacing Tools" style="" /><img width="50.5%" src="docs/gafferShaderTeapot.png" alt="EZSurfacing Tools" style="" />
 
 ### Arnold Outputs
 * Lightgroup_[a-g]
