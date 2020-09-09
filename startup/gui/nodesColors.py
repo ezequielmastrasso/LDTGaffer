@@ -35,5 +35,5 @@ Gaffer.Metadata.registerValue(
 # Nodes Default Colors GafferArnold
 Gaffer.Metadata.registerValue(
     GafferArnold.ArnoldLight,
-    "nodeGadget:color", imath.Color3f( 0.69, 0.60, 0.2255 )
+    "nodeGadget:color", imath.Color3f( 0.75, 0.56, 0 )
 )
