@@ -23,10 +23,10 @@ GafferUI.ScriptWindow.menuDefinition(application).append(
 )
 
 GafferUI.ScriptWindow.menuDefinition(application).append(
-	"/LDT/tools/" + "registerEditScopeProcessorType",
+	"/LDT/tools/" + "registerEditScopeIncludeInNavigationMenu",
 	{
-		"command" : functools.partial( LDTGafferUtils.registerEditScopeProcessorType), #stream data during loop
-		"label" : "registerEditScopeProcessorType"
+		"command" : functools.partial( LDTGafferUtils.registerEditScopeIncludeInNavigationMenu), #stream data during loop
+		"label" : "registerEditScopeIncludeInNavigationMenu"
 	}
 )
 
