@@ -3,6 +3,8 @@ My gaffer toolset, presets, and configs.
 
 ```Requires Gaffer 0.58.1.0```
 
+###### All tools presented here are based solely on examples shared on the [Gaffer community mailing list](https://www.gafferhq.org/community/)
+
 ### Folders and Variables
 * Custom Variables LDT resources
 * Bookmarks LDT folders
