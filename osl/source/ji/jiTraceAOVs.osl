@@ -1,0 +1,52 @@
+//Traces secondary outputs for use in comp in a single render layer
+//currently only works reliably with later versions of Arnold
+//Julius Ihle 2021
+
+shader jiTraceAOVs(
+    string trace_component = "P" 
+        [[ string help = "The name of the component to reflect. OSL globals such as P, N, u, v as well as arbitrary userdata such as Pref are supported." ]],
+    color trace_color = 1
+        [[ string help = "The color to be used if trace_component is not found." ]],
+    string traceset = ""
+        [[ string help = "The name of the traceset (optional). Can be used to exclude all geo of an environment if it contains multiple shapes." ]],
+    int inclusive = 1 
+        [[ string widget = "checkBox",
+        string help = "ON is inclusive. OFF is exclusive." ]],
+    output color out = 0
+)
+
+{
+    color out_component;
+    string traceset_name;
+    
+    //prep traceset
+    if (inclusive < 1)
+        traceset_name = format("-%s", traceset);
+    else
+        traceset_name = traceset;
+
+    //trace reflection
+    int hit = trace(P, reflect(I,N), "traceset", traceset_name);
+    if (hit)
+    {
+        //calc trace distance
+        if (trace_component == "distance" || trace_component == "dist")
+        {
+            point trace_P; 
+            getmessage("trace", "P", trace_P);
+            out = length( (trace_P - P) * abs(N)) / 100;
+        }
+        else
+        {
+            //get reflected component
+            int trace_msg = getmessage("trace", trace_component, out_component);
+            //set to "trace_color" if component doesn't exist
+            if (trace_msg == 1)  
+                out = out_component;
+            else 
+                out = trace_color;
+        }
+    }
+
+}
+
