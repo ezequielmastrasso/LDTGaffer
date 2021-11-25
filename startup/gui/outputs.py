@@ -18,7 +18,8 @@ with IECore.IgnoredExceptions( ImportError ) :
 					"displayHost" : "localhost",
 					"displayPort" : "${image:catalogue:port}",
 					"remoteDisplayType" : "GafferImage::GafferDisplayDriver",
-					"filter" : "box"
+					"filter" : "box",
+					"layerName": "" # Needs to be populated per output
 				}
 	batch_plugs = {
 				}
@@ -63,7 +64,7 @@ with IECore.IgnoredExceptions( ImportError ) :
 		label = lightgroup.replace( "_", " " ).title().replace( " ", "_" )
 
 		lightgroup_letter = lightgroup.split("_")[1]
-
+		interactive_plugs["layerName"] = lightgroup
 		# Main Lightgroups OUTPUT
 		GafferScene.Outputs.registerOutput(
 			"Interactive/Arnold/" + label,
@@ -88,6 +89,7 @@ with IECore.IgnoredExceptions( ImportError ) :
 			component_label = label + "_" + component
 			component_name = lightgroup + "_" + component
 			data = lightgroup_components[component].replace("lightgroup", lightgroup_letter)
+			interactive_plugs["layerName"] = component_name
 			GafferScene.Outputs.registerOutput(
 				"Interactive/Arnold/" + component_label,
 				IECoreScene.Output(
@@ -109,7 +111,8 @@ with IECore.IgnoredExceptions( ImportError ) :
 
 	# Other custom outputs
 	custom_outputs = {
-		"denoise_albedo":"denoise_albedo",
+		"denoise_albedo":"denoise_albedo",                        #((C<TD>A)|(CVA)|(C<RD>A))
+		"denoise_albedo_surfaces":"lpe ((C<TD>A)|(CA)|(C<RD>A))", #((C<TD>A)|(CA)|(C<RD>A)) No volumes
 		"emission_indirect":"lpe C.O",
 		"Pref":"Pref vector",
 		"raycount":"raycount float",
@@ -119,7 +122,7 @@ with IECore.IgnoredExceptions( ImportError ) :
 
 	for output in custom_outputs.keys():
 		label = output.replace( "_", " " ).title().replace( " ", "_" )
-
+		interactive_plugs["layerName"] = output
 		GafferScene.Outputs.registerOutput(
 			"Interactive/Arnold/" + label,
 			IECoreScene.Output(
