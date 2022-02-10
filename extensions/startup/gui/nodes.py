@@ -48,7 +48,7 @@ with IECore.IgnoredExceptions(ImportError):
     GafferSceneUI.ShaderView.registerScene(
         "ai", "LDTShaderBall", LDTShaderBall.LDTShaderBall
     )
-    print "LDTShaderBall: GafferSceneUI.ShaderView.registerScene"
+    print ("LDTShaderBall: GafferSceneUI.ShaderView.registerScene")
 
 with IECore.IgnoredExceptions(ImportError):
     GafferSceneUI.ShaderView.registerRenderer(
@@ -68,5 +68,5 @@ with IECore.IgnoredExceptions(ImportError):
     GafferSceneUI.ShaderView.registerScene(
         "ai", "LDTShaderTeapot", LDTShaderBall.LDTShaderTeapot
     )
-    print "LDTShaderTeapot: GafferSceneUI.ShaderView.registerScene"
+    print ("LDTShaderTeapot: GafferSceneUI.ShaderView.registerScene")
 
