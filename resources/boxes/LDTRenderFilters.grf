@@ -147,7 +147,7 @@ __children["options_resolutionMultiplier"] = Gaffer.NameValuePlug( "render:resol
 parent.addChild( __children["options_resolutionMultiplier"] )
 __children["LDTLightsMuteSolo"] = Gaffer.Reference( "LDTLightsMuteSolo" )
 parent.addChild( __children["LDTLightsMuteSolo"] )
-__children["LDTLightsMuteSolo"].load( "/home/ezequielm/Documents/dev/gaffer-examples/LDTGaffer/resources/boxes/LDTLightsMuteSolo.grf" )
+__children["LDTLightsMuteSolo"].load( "LDTLightsMuteSolo.grf" )
 __children["LDTLightsMuteSolo"].addChild( Gaffer.V2fPlug( "__uiPosition", defaultValue = imath.V2f( 0, 0 ), flags = Gaffer.Plug.Flags.Default | Gaffer.Plug.Flags.Dynamic, ) )
 __children["Backdrop6"] = Gaffer.Backdrop( "Backdrop6" )
 parent.addChild( __children["Backdrop6"] )
